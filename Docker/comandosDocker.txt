@@ -1,0 +1,2 @@
+CREAR CONTENEDOR BASE DE DATOS
+	docker run --name Data-Burst -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root mariadb
