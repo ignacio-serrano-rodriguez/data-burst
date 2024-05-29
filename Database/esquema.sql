@@ -67,7 +67,7 @@ CREATE TABLE Usuario_Gestiona_Elemento (
   elemento_id INT UNSIGNED NOT NULL,
   momento_gestion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   nombre_antiguo VARCHAR(255) NOT NULL,
-  fecha_aparicion DATE NOT NULL,
+  fecha_aparicion_antigua DATE NOT NULL,
   informacion_extra_antigua VARCHAR(255) NOT NULL,
   descripcion_antigua TEXT NOT NULL,
   FOREIGN KEY (usuario_administrador_id) REFERENCES Usuario(id),
