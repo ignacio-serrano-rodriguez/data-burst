@@ -1,2 +1,4 @@
 CREAR CONTENEDOR BASE DE DATOS
-	docker run --name Data-Burst_baseDeDatos -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root mariadb
+	docker run --name data_burst-BD -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root mariadb
+
+DATABASE_URL="mysql://root:root@127.0.0.1:3306/db_name?serverVersion=1:11.3.2+maria~ubu2204"
