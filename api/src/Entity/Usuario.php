@@ -61,6 +61,9 @@ class Usuario
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idioma = null;
 
+    #[ORM\OneToOne(mappedBy: 'id_usuario', cascade: ['persist', 'remove'])]
+    private ?Elemento $elemento = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -249,6 +252,23 @@ class Usuario
     public function setIdioma(?string $idioma): static
     {
         $this->idioma = $idioma;
+
+        return $this;
+    }
+
+    public function getElemento(): ?Elemento
+    {
+        return $this->elemento;
+    }
+
+    public function setElemento(Elemento $elemento): static
+    {
+        // set the owning side of the relation if necessary
+        if ($elemento->getIdUsuario() !== $this) {
+            $elemento->setIdUsuario($this);
+        }
+
+        $this->elemento = $elemento;
 
         return $this;
     }
