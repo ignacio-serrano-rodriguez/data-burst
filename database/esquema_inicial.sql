@@ -1,6 +1,6 @@
-CREATE DATABASE data_burst;
+CREATE DATABASE data_burst_inicial;
 
-USE data_burst;
+USE data_burst_inicial;
 
 CREATE TABLE Usuario (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
