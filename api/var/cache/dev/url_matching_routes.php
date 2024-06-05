@@ -42,18 +42,29 @@ return [
                                 .'|(*:467)'
                             .')'
                         .')'
-                        .'|usuarios(?'
-                            .'|/([^/\\.]++)(?:\\.([^/]++))?(*:514)'
-                            .'|(?:\\.([^/]++))?(?'
-                                .'|(*:540)'
+                        .'|usuario(?'
+                            .'|s(?'
+                                .'|/([^/\\.]++)(?:\\.([^/]++))?(*:517)'
+                                .'|(?:\\.([^/]++))?(?'
+                                    .'|(*:543)'
+                                .')'
+                                .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
+                                    .'|(*:581)'
+                                .')'
                             .')'
-                            .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
-                                .'|(*:578)'
+                            .'|_manipula_listas(?'
+                                .'|/([^/\\.]++)(?:\\.([^/]++))?(*:636)'
+                                .'|(?:\\.([^/]++))?(?'
+                                    .'|(*:662)'
+                                .')'
+                                .'|/([^/\\.]++)(?:\\.([^/]++))?(?'
+                                    .'|(*:700)'
+                                .')'
                             .')'
                         .')'
                     .')'
                 .')'
-                .'|/_error/(\\d+)(?:\\.([^/]++))?(*:618)'
+                .'|/_error/(\\d+)(?:\\.([^/]++))?(*:741)'
             .')/?$}sDu',
     ],
     [ // $dynamicRoutes
@@ -88,17 +99,27 @@ return [
             [['_route' => '_api_/listas/{id}{._format}_patch', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Lista', '_api_operation_name' => '_api_/listas/{id}{._format}_patch'], ['id', '_format'], ['PATCH' => 0], null, false, true, null],
             [['_route' => '_api_/listas/{id}{._format}_delete', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Lista', '_api_operation_name' => '_api_/listas/{id}{._format}_delete'], ['id', '_format'], ['DELETE' => 0], null, false, true, null],
         ],
-        514 => [[['_route' => '_api_/usuarios/{id}{._format}_get', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios/{id}{._format}_get'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
-        540 => [
+        517 => [[['_route' => '_api_/usuarios/{id}{._format}_get', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios/{id}{._format}_get'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        543 => [
             [['_route' => '_api_/usuarios{._format}_get_collection', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios{._format}_get_collection'], ['_format'], ['GET' => 0], null, false, true, null],
             [['_route' => '_api_/usuarios{._format}_post', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios{._format}_post'], ['_format'], ['POST' => 0], null, false, true, null],
         ],
-        578 => [
+        581 => [
             [['_route' => '_api_/usuarios/{id}{._format}_put', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios/{id}{._format}_put'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
             [['_route' => '_api_/usuarios/{id}{._format}_patch', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios/{id}{._format}_patch'], ['id', '_format'], ['PATCH' => 0], null, false, true, null],
             [['_route' => '_api_/usuarios/{id}{._format}_delete', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\Usuario', '_api_operation_name' => '_api_/usuarios/{id}{._format}_delete'], ['id', '_format'], ['DELETE' => 0], null, false, true, null],
         ],
-        618 => [
+        636 => [[['_route' => '_api_/usuario_manipula_listas/{id}{._format}_get', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\UsuarioManipulaLista', '_api_operation_name' => '_api_/usuario_manipula_listas/{id}{._format}_get'], ['id', '_format'], ['GET' => 0], null, false, true, null]],
+        662 => [
+            [['_route' => '_api_/usuario_manipula_listas{._format}_get_collection', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\UsuarioManipulaLista', '_api_operation_name' => '_api_/usuario_manipula_listas{._format}_get_collection'], ['_format'], ['GET' => 0], null, false, true, null],
+            [['_route' => '_api_/usuario_manipula_listas{._format}_post', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\UsuarioManipulaLista', '_api_operation_name' => '_api_/usuario_manipula_listas{._format}_post'], ['_format'], ['POST' => 0], null, false, true, null],
+        ],
+        700 => [
+            [['_route' => '_api_/usuario_manipula_listas/{id}{._format}_put', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\UsuarioManipulaLista', '_api_operation_name' => '_api_/usuario_manipula_listas/{id}{._format}_put'], ['id', '_format'], ['PUT' => 0], null, false, true, null],
+            [['_route' => '_api_/usuario_manipula_listas/{id}{._format}_patch', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\UsuarioManipulaLista', '_api_operation_name' => '_api_/usuario_manipula_listas/{id}{._format}_patch'], ['id', '_format'], ['PATCH' => 0], null, false, true, null],
+            [['_route' => '_api_/usuario_manipula_listas/{id}{._format}_delete', '_controller' => 'api_platform.action.placeholder', '_format' => null, '_stateless' => true, '_api_resource_class' => 'App\\Entity\\UsuarioManipulaLista', '_api_operation_name' => '_api_/usuario_manipula_listas/{id}{._format}_delete'], ['id', '_format'], ['DELETE' => 0], null, false, true, null],
+        ],
+        741 => [
             [['_route' => '_preview_error', '_controller' => 'error_controller::preview', '_format' => 'html'], ['code', '_format'], null, null, false, true, null],
             [null, null, null, null, false, false, 0],
         ],

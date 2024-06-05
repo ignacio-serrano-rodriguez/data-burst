@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ListaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ListaRepository::class)]
@@ -20,6 +22,17 @@ class Lista
 
     #[ORM\Column]
     private ?bool $publica = null;
+
+    /**
+     * @var Collection<int, UsuarioManipulaLista>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioManipulaLista::class, mappedBy: 'lista', orphanRemoval: true)]
+    private Collection $usuarioManipulaListas;
+
+    public function __construct()
+    {
+        $this->usuarioManipulaListas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -53,6 +66,36 @@ class Lista
     public function setPublica(bool $publica): static
     {
         $this->publica = $publica;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioManipulaLista>
+     */
+    public function getUsuarioManipulaListas(): Collection
+    {
+        return $this->usuarioManipulaListas;
+    }
+
+    public function addUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
+    {
+        if (!$this->usuarioManipulaListas->contains($usuarioManipulaLista)) {
+            $this->usuarioManipulaListas->add($usuarioManipulaLista);
+            $usuarioManipulaLista->setLista($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
+    {
+        if ($this->usuarioManipulaListas->removeElement($usuarioManipulaLista)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioManipulaLista->getLista() === $this) {
+                $usuarioManipulaLista->setLista(null);
+            }
+        }
 
         return $this;
     }

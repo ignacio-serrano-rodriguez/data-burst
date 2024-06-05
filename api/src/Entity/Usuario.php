@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -60,6 +62,17 @@ class Usuario
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idioma = null;
+
+    /**
+     * @var Collection<int, UsuarioManipulaLista>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioManipulaLista::class, mappedBy: 'usuario', orphanRemoval: true)]
+    private Collection $usuarioManipulaListas;
+
+    public function __construct()
+    {
+        $this->usuarioManipulaListas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -249,6 +262,36 @@ class Usuario
     public function setIdioma(?string $idioma): static
     {
         $this->idioma = $idioma;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioManipulaLista>
+     */
+    public function getUsuarioManipulaListas(): Collection
+    {
+        return $this->usuarioManipulaListas;
+    }
+
+    public function addUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
+    {
+        if (!$this->usuarioManipulaListas->contains($usuarioManipulaLista)) {
+            $this->usuarioManipulaListas->add($usuarioManipulaLista);
+            $usuarioManipulaLista->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
+    {
+        if ($this->usuarioManipulaListas->removeElement($usuarioManipulaLista)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioManipulaLista->getUsuario() === $this) {
+                $usuarioManipulaLista->setUsuario(null);
+            }
+        }
 
         return $this;
     }
