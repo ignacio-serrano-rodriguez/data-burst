@@ -1,4 +1,4 @@
-CREATE DATABASE `data_burst` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE `data_burst`
 
 USE data_burst_inicial;
 

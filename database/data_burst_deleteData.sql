@@ -1,0 +1,11 @@
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE elemento;
+TRUNCATE TABLE lista;
+TRUNCATE TABLE usuario;
+TRUNCATE TABLE lista_contiene_elemento;
+TRUNCATE TABLE usuario_agrega_usuario;
+TRUNCATE TABLE usuario_gestiona_elemento;
+TRUNCATE TABLE usuario_gestiona_usuario;
+TRUNCATE TABLE usuario_manipula_lista;
+TRUNCATE TABLE usuario_reporta_elemento;
+SET FOREIGN_KEY_CHECKS=1;
