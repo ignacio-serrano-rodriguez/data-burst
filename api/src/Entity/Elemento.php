@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ElementoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,17 @@ class Elemento
     #[ORM\OneToOne(inversedBy: 'elemento', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $id_usuario = null;
+
+    /**
+     * @var Collection<int, Usuario>
+     */
+    #[ORM\ManyToMany(targetEntity: Usuario::class, mappedBy: 'Lista_Contiene_Elemento')]
+    private Collection $test1;
+
+    public function __construct()
+    {
+        $this->test1 = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -130,6 +143,33 @@ class Elemento
     public function setIdUsuario(Usuario $id_usuario): static
     {
         $this->id_usuario = $id_usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Usuario>
+     */
+    public function getTest1(): Collection
+    {
+        return $this->test1;
+    }
+
+    public function addTest1(Usuario $test1): static
+    {
+        if (!$this->test1->contains($test1)) {
+            $this->test1->add($test1);
+            $test1->addListaContieneElemento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTest1(Usuario $test1): static
+    {
+        if ($this->test1->removeElement($test1)) {
+            $test1->removeListaContieneElemento($this);
+        }
 
         return $this;
     }

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -63,6 +65,17 @@ class Usuario
 
     #[ORM\OneToOne(mappedBy: 'id_usuario', cascade: ['persist', 'remove'])]
     private ?Elemento $elemento = null;
+
+    /**
+     * @var Collection<int, Elemento>
+     */
+    #[ORM\ManyToMany(targetEntity: Elemento::class, inversedBy: 'test1')]
+    private Collection $Lista_Contiene_Elemento;
+
+    public function __construct()
+    {
+        $this->Lista_Contiene_Elemento = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -269,6 +282,30 @@ class Usuario
         }
 
         $this->elemento = $elemento;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Elemento>
+     */
+    public function getListaContieneElemento(): Collection
+    {
+        return $this->Lista_Contiene_Elemento;
+    }
+
+    public function addListaContieneElemento(Elemento $listaContieneElemento): static
+    {
+        if (!$this->Lista_Contiene_Elemento->contains($listaContieneElemento)) {
+            $this->Lista_Contiene_Elemento->add($listaContieneElemento);
+        }
+
+        return $this;
+    }
+
+    public function removeListaContieneElemento(Elemento $listaContieneElemento): static
+    {
+        $this->Lista_Contiene_Elemento->removeElement($listaContieneElemento);
 
         return $this;
     }
