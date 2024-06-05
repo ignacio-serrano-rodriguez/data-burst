@@ -16,7 +16,7 @@ if (!\class_exists(App_KernelDevDebugContainer::class, false)) {
 
 return new \ContainerKimaac5\App_KernelDevDebugContainer([
     'container.build_hash' => 'Kimaac5',
-    'container.build_id' => 'a9e54681',
-    'container.build_time' => 1717528194,
+    'container.build_id' => 'db4cd664',
+    'container.build_time' => 1717615000,
     'container.runtime_mode' => \in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) ? 'web=0' : 'web=1',
 ], __DIR__.\DIRECTORY_SEPARATOR.'ContainerKimaac5');
