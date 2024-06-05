@@ -404,6 +404,10 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\UsuarioReportaElementoRepository" class="App\Repository\UsuarioReportaElementoRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\UsuarioRepository" class="App\Repository\UsuarioRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -2902,7 +2906,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.8BRTfUp"/>
+      <argument type="service" id=".service_locator.x8ciGGA"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -5561,6 +5565,8 @@
     <service id=".abstract.instanceof.App\Repository\ListaRepository" class="App\Repository\ListaRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioManipulaListaRepository" class="App\Repository\UsuarioManipulaListaRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UsuarioManipulaListaRepository" class="App\Repository\UsuarioManipulaListaRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioReportaElementoRepository" class="App\Repository\UsuarioReportaElementoRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\UsuarioReportaElementoRepository" class="App\Repository\UsuarioReportaElementoRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioRepository" class="App\Repository\UsuarioRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UsuarioRepository" class="App\Repository\UsuarioRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".service_locator.1W6W_dF" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -6211,13 +6217,14 @@
         <argument key="doctrine.orm.listeners.pdo_session_handler_schema_listener" type="service_closure" id="doctrine.orm.listeners.pdo_session_handler_schema_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.8BRTfUp" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.x8ciGGA" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\ElementoRepository" type="service_closure" id="App\Repository\ElementoRepository"/>
         <argument key="App\Repository\ListaContieneElementoRepository" type="service_closure" id="App\Repository\ListaContieneElementoRepository"/>
         <argument key="App\Repository\ListaRepository" type="service_closure" id="App\Repository\ListaRepository"/>
         <argument key="App\Repository\UsuarioManipulaListaRepository" type="service_closure" id="App\Repository\UsuarioManipulaListaRepository"/>
+        <argument key="App\Repository\UsuarioReportaElementoRepository" type="service_closure" id="App\Repository\UsuarioReportaElementoRepository"/>
         <argument key="App\Repository\UsuarioRepository" type="service_closure" id="App\Repository\UsuarioRepository"/>
       </argument>
     </service>
