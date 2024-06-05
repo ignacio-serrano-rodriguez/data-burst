@@ -16,7 +16,6 @@ VALUES
   ('Curso básico de Python', '2023-01-01', '20 horas estimadas', 4, 'Curso online gratuito para aprender los fundamentos del lenguaje de programación Python.', '2024-04-12 09:10:00'),
   ('Hamburguesa vegetariana con lentejas', '2024-02-22', 'Fácil y rápida', 4, 'Deliciosa receta de hamburguesa vegetariana a base de lentejas.', '2024-05-20 17:45:12');
 
--- Link Elementos to Listas (using Lista_contiene_elemento table)
 INSERT INTO `lista_contiene_elemento` (lista_id, elemento_id, positivo, comentario, momento_contencion)
 VALUES
   (1, 1, 1, 'Una de las mejores películas de fantasía jamás rodadas.', '2024-05-10 15:24:12'),
@@ -25,9 +24,9 @@ VALUES
 
 INSERT INTO `usuario_manipula_lista` (usuario_id, lista_id)
 VALUES
-  (1, 1),  -- user1 creates list 1
-  (2, 2),  -- user2 creates list 2
-  (3, 3);  -- admin creates list 3
+  (1, 1),  
+  (2, 2),  
+  (3, 3);  
 
 INSERT INTO `usuario_reporta_elemento` (usuario_id, elemento_id, descripcion, momento_reporte)
 VALUES
