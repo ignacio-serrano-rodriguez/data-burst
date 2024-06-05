@@ -87,12 +87,19 @@ class Usuario
     #[ORM\OneToMany(targetEntity: UsuarioAgregaUsuario::class, mappedBy: 'usuario_1', orphanRemoval: true)]
     private Collection $usuarioAgregaUsuarios;
 
+    /**
+     * @var Collection<int, UsuarioGestionaUsuario>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioGestionaUsuario::class, mappedBy: 'usuario_normal', orphanRemoval: true)]
+    private Collection $usuarioGestionaUsuarios;
+
     public function __construct()
     {
         $this->usuarioManipulaListas = new ArrayCollection();
         $this->usuarioReportaElementos = new ArrayCollection();
         $this->usuarioGestionaElementos = new ArrayCollection();
         $this->usuarioAgregaUsuarios = new ArrayCollection();
+        $this->usuarioGestionaUsuarios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -401,6 +408,36 @@ class Usuario
             // set the owning side to null (unless already changed)
             if ($usuarioAgregaUsuario->getUsuario1() === $this) {
                 $usuarioAgregaUsuario->setUsuario1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioGestionaUsuario>
+     */
+    public function getUsuarioGestionaUsuarios(): Collection
+    {
+        return $this->usuarioGestionaUsuarios;
+    }
+
+    public function addUsuarioGestionaUsuario(UsuarioGestionaUsuario $usuarioGestionaUsuario): static
+    {
+        if (!$this->usuarioGestionaUsuarios->contains($usuarioGestionaUsuario)) {
+            $this->usuarioGestionaUsuarios->add($usuarioGestionaUsuario);
+            $usuarioGestionaUsuario->setUsuarioNormal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioGestionaUsuario(UsuarioGestionaUsuario $usuarioGestionaUsuario): static
+    {
+        if ($this->usuarioGestionaUsuarios->removeElement($usuarioGestionaUsuario)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioGestionaUsuario->getUsuarioNormal() === $this) {
+                $usuarioGestionaUsuario->setUsuarioNormal(null);
             }
         }
 

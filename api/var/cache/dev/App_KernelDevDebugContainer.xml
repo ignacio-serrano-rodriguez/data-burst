@@ -408,6 +408,10 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\UsuarioGestionaUsuarioRepository" class="App\Repository\UsuarioGestionaUsuarioRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\UsuarioManipulaListaRepository" class="App\Repository\UsuarioManipulaListaRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -2914,7 +2918,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator..FrSC5d"/>
+      <argument type="service" id=".service_locator.tuPa9_Y"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -5575,6 +5579,8 @@
     <service id=".abstract.instanceof.App\Repository\UsuarioAgregaUsuarioRepository" class="App\Repository\UsuarioAgregaUsuarioRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioGestionaElementoRepository" class="App\Repository\UsuarioGestionaElementoRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UsuarioGestionaElementoRepository" class="App\Repository\UsuarioGestionaElementoRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioGestionaUsuarioRepository" class="App\Repository\UsuarioGestionaUsuarioRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\UsuarioGestionaUsuarioRepository" class="App\Repository\UsuarioGestionaUsuarioRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioManipulaListaRepository" class="App\Repository\UsuarioManipulaListaRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UsuarioManipulaListaRepository" class="App\Repository\UsuarioManipulaListaRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UsuarioReportaElementoRepository" class="App\Repository\UsuarioReportaElementoRepository" autowire="true" abstract="true"/>
@@ -6229,7 +6235,7 @@
         <argument key="doctrine.orm.listeners.pdo_session_handler_schema_listener" type="service_closure" id="doctrine.orm.listeners.pdo_session_handler_schema_listener"/>
       </argument>
     </service>
-    <service id=".service_locator..FrSC5d" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.tuPa9_Y" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\ElementoRepository" type="service_closure" id="App\Repository\ElementoRepository"/>
@@ -6237,6 +6243,7 @@
         <argument key="App\Repository\ListaRepository" type="service_closure" id="App\Repository\ListaRepository"/>
         <argument key="App\Repository\UsuarioAgregaUsuarioRepository" type="service_closure" id="App\Repository\UsuarioAgregaUsuarioRepository"/>
         <argument key="App\Repository\UsuarioGestionaElementoRepository" type="service_closure" id="App\Repository\UsuarioGestionaElementoRepository"/>
+        <argument key="App\Repository\UsuarioGestionaUsuarioRepository" type="service_closure" id="App\Repository\UsuarioGestionaUsuarioRepository"/>
         <argument key="App\Repository\UsuarioManipulaListaRepository" type="service_closure" id="App\Repository\UsuarioManipulaListaRepository"/>
         <argument key="App\Repository\UsuarioReportaElementoRepository" type="service_closure" id="App\Repository\UsuarioReportaElementoRepository"/>
         <argument key="App\Repository\UsuarioRepository" type="service_closure" id="App\Repository\UsuarioRepository"/>
