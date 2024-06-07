@@ -54,6 +54,10 @@ class Elemento
     #[ORM\OneToMany(targetEntity: UsuarioGestionaElemento::class, mappedBy: 'elemento', orphanRemoval: true)]
     private Collection $usuarioGestionaElementos;
 
+    #[ORM\ManyToOne(inversedBy: 'elementos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Usuario $usuario = null;
+
     public function __construct()
     {
         $this->listaContieneElementos = new ArrayCollection();
@@ -231,6 +235,18 @@ class Elemento
                 $usuarioGestionaElemento->setElemento(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUsuario(): ?Usuario
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?Usuario $usuario): static
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }
