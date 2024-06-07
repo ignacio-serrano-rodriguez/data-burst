@@ -1,0 +1,4 @@
+BACKEND
+symfony api new
+composer require doctrine
+composer require api
