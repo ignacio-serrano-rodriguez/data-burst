@@ -1,5 +1,11 @@
 BACKEND
-symfony api new
-composer require doctrine
-composer require api
-composer require symfony/maker-bundle --dev
+	symfony api new
+	composer require doctrine
+	composer require api
+	composer require symfony/maker-bundle --dev
+
+	php bin/console doctrine:database:create
+	php bin/console make:entity
+	php bin/console make:migration
+	php bin/console doctrine:migrations:migrate		
+	php bin/console doctrine:database:drop --force
