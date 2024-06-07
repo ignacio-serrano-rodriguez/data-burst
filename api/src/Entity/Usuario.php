@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -60,6 +62,17 @@ class Usuario
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idioma = null;
+
+    /**
+     * @var Collection<int, Elemento>
+     */
+    #[ORM\OneToMany(targetEntity: Elemento::class, mappedBy: 'usuario', orphanRemoval: true)]
+    private Collection $elementos;
+
+    public function __construct()
+    {
+        $this->elementos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -249,6 +262,36 @@ class Usuario
     public function setIdioma(?string $idioma): static
     {
         $this->idioma = $idioma;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Elemento>
+     */
+    public function getElementos(): Collection
+    {
+        return $this->elementos;
+    }
+
+    public function addElemento(Elemento $elemento): static
+    {
+        if (!$this->elementos->contains($elemento)) {
+            $this->elementos->add($elemento);
+            $elemento->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElemento(Elemento $elemento): static
+    {
+        if ($this->elementos->removeElement($elemento)) {
+            // set the owning side to null (unless already changed)
+            if ($elemento->getUsuario() === $this) {
+                $elemento->setUsuario(null);
+            }
+        }
 
         return $this;
     }
