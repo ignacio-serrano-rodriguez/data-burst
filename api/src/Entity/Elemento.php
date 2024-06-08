@@ -46,9 +46,16 @@ class Elemento
     #[ORM\OneToMany(targetEntity: ListaContieneElemento::class, mappedBy: 'elemento', orphanRemoval: true)]
     private Collection $listaContieneElementos;
 
+    /**
+     * @var Collection<int, UsuarioReportaElemento>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioReportaElemento::class, mappedBy: 'elemento', orphanRemoval: true)]
+    private Collection $usuarioReportaElementos;
+
     public function __construct()
     {
         $this->listaContieneElementos = new ArrayCollection();
+        $this->usuarioReportaElementos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,6 +178,36 @@ class Elemento
             // set the owning side to null (unless already changed)
             if ($listaContieneElemento->getElemento() === $this) {
                 $listaContieneElemento->setElemento(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioReportaElemento>
+     */
+    public function getUsuarioReportaElementos(): Collection
+    {
+        return $this->usuarioReportaElementos;
+    }
+
+    public function addUsuarioReportaElemento(UsuarioReportaElemento $usuarioReportaElemento): static
+    {
+        if (!$this->usuarioReportaElementos->contains($usuarioReportaElemento)) {
+            $this->usuarioReportaElementos->add($usuarioReportaElemento);
+            $usuarioReportaElemento->setElemento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioReportaElemento(UsuarioReportaElemento $usuarioReportaElemento): static
+    {
+        if ($this->usuarioReportaElementos->removeElement($usuarioReportaElemento)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioReportaElemento->getElemento() === $this) {
+                $usuarioReportaElemento->setElemento(null);
             }
         }
 

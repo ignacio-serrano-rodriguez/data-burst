@@ -75,10 +75,17 @@ class Usuario
     #[ORM\OneToMany(targetEntity: UsuarioManipulaLista::class, mappedBy: 'usuario', orphanRemoval: true)]
     private Collection $usuarioManipulaListas;
 
+    /**
+     * @var Collection<int, UsuarioReportaElemento>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioReportaElemento::class, mappedBy: 'usuario', orphanRemoval: true)]
+    private Collection $usuarioReportaElementos;
+
     public function __construct()
     {
         $this->elementos = new ArrayCollection();
         $this->usuarioManipulaListas = new ArrayCollection();
+        $this->usuarioReportaElementos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -327,6 +334,36 @@ class Usuario
             // set the owning side to null (unless already changed)
             if ($usuarioManipulaLista->getUsuario() === $this) {
                 $usuarioManipulaLista->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioReportaElemento>
+     */
+    public function getUsuarioReportaElementos(): Collection
+    {
+        return $this->usuarioReportaElementos;
+    }
+
+    public function addUsuarioReportaElemento(UsuarioReportaElemento $usuarioReportaElemento): static
+    {
+        if (!$this->usuarioReportaElementos->contains($usuarioReportaElemento)) {
+            $this->usuarioReportaElementos->add($usuarioReportaElemento);
+            $usuarioReportaElemento->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioReportaElemento(UsuarioReportaElemento $usuarioReportaElemento): static
+    {
+        if ($this->usuarioReportaElementos->removeElement($usuarioReportaElemento)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioReportaElemento->getUsuario() === $this) {
+                $usuarioReportaElemento->setUsuario(null);
             }
         }
 
