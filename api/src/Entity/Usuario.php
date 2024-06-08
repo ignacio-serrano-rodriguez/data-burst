@@ -87,12 +87,19 @@ class Usuario
     #[ORM\OneToMany(targetEntity: UsuarioGestionaElemento::class, mappedBy: 'usuario_administrador', orphanRemoval: true)]
     private Collection $usuarioGestionaElementos;
 
+    /**
+     * @var Collection<int, UsuarioAgregaUsuario>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioAgregaUsuario::class, mappedBy: 'usuario_1', orphanRemoval: true)]
+    private Collection $usuarioAgregaUsuarios;
+
     public function __construct()
     {
         $this->elementos = new ArrayCollection();
         $this->usuarioManipulaListas = new ArrayCollection();
         $this->usuarioReportaElementos = new ArrayCollection();
         $this->usuarioGestionaElementos = new ArrayCollection();
+        $this->usuarioAgregaUsuarios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -401,6 +408,36 @@ class Usuario
             // set the owning side to null (unless already changed)
             if ($usuarioGestionaElemento->getUsuarioAdministrador() === $this) {
                 $usuarioGestionaElemento->setUsuarioAdministrador(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioAgregaUsuario>
+     */
+    public function getUsuarioAgregaUsuarios(): Collection
+    {
+        return $this->usuarioAgregaUsuarios;
+    }
+
+    public function addUsuarioAgregaUsuario(UsuarioAgregaUsuario $usuarioAgregaUsuario): static
+    {
+        if (!$this->usuarioAgregaUsuarios->contains($usuarioAgregaUsuario)) {
+            $this->usuarioAgregaUsuarios->add($usuarioAgregaUsuario);
+            $usuarioAgregaUsuario->setUsuario1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioAgregaUsuario(UsuarioAgregaUsuario $usuarioAgregaUsuario): static
+    {
+        if ($this->usuarioAgregaUsuarios->removeElement($usuarioAgregaUsuario)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioAgregaUsuario->getUsuario1() === $this) {
+                $usuarioAgregaUsuario->setUsuario1(null);
             }
         }
 
