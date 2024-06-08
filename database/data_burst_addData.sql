@@ -10,11 +10,11 @@ VALUES
   ('Cursos', 0),
   ('Recetas', 1);
 
-INSERT INTO `elemento` (nombre, fecha_aparicion, informacion_extra, puntuacion, descripcion, momento_creacion)
+INSERT INTO `elemento` (usuario_id, nombre, fecha_aparicion, informacion_extra, puntuacion, descripcion, momento_creacion)
 VALUES
-  ('El Señor de los Anillos: La Comunidad del Anillo', '2001-12-19', 'Escritor: J.R.R. Tolkien', 5, 'Primera entrega de la trilogía épica de fantasía heroica escrita por el filólogo y catedrático británico J. R. R. Tolkien.', '2024-05-10 15:23:42'),
-  ('Curso básico de Python', '2023-01-01', 'Autor: Juan', 4, 'Curso online gratuito para aprender los fundamentos del lenguaje de programación Python.', '2024-04-12 09:10:00'),
-  ('Hamburguesa vegetariana con lentejas', '2024-02-22', 'Autor: Manuel', 4, 'Deliciosa receta de hamburguesa vegetariana a base de lentejas.', '2024-05-20 17:45:12');
+  (1, 'El Señor de los Anillos: La Comunidad del Anillo', '2001-12-19', 'Escritor: J.R.R. Tolkien', 5, 'Primera entrega de la trilogía épica de fantasía heroica escrita por el filólogo y catedrático británico J. R. R. Tolkien.', '2024-05-10 15:23:42'),
+  (2, 'Curso básico de Python', '2023-01-01', 'Autor: Juan', 4, 'Curso online gratuito para aprender los fundamentos del lenguaje de programación Python.', '2024-04-12 09:10:00'),
+  (3, 'Hamburguesa vegetariana con lentejas', '2024-02-22', 'Autor: Manuel', 4, 'Deliciosa receta de hamburguesa vegetariana a base de lentejas.', '2024-05-20 17:45:12');
 
 INSERT INTO `lista_contiene_elemento` (lista_id, elemento_id, positivo, comentario, momento_contencion)
 VALUES
