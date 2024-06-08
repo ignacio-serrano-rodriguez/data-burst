@@ -12,15 +12,15 @@ VALUES
 
 INSERT INTO `elemento` (usuario_id, nombre, fecha_aparicion, informacion_extra, puntuacion, descripcion, momento_creacion)
 VALUES
-  (1, 'El Señor de los Anillos: La Comunidad del Anillo', '2001-12-19', 'Escritor: J.R.R. Tolkien', 5, 'Primera entrega de la trilogía épica de fantasía heroica escrita por el filólogo y catedrático británico J. R. R. Tolkien.', '2024-05-10 15:23:42'),
-  (2, 'Curso básico de Python', '2023-01-01', 'Autor: Juan', 4, 'Curso online gratuito para aprender los fundamentos del lenguaje de programación Python.', '2024-04-12 09:10:00'),
-  (3, 'Hamburguesa vegetariana con lentejas', '2024-02-22', 'Autor: Manuel', 4, 'Deliciosa receta de hamburguesa vegetariana a base de lentejas.', '2024-05-20 17:45:12');
+  (1, 'El Señor de los Anillos: La Comunidad del Anillo', '2001-12-19', 'Escritor: J.R.R. Tolkien', 0, 'Primera entrega de la trilogía épica de fantasía heroica escrita por el filólogo y catedrático británico J. R. R. Tolkien.', '2024-05-10 15:23:42'),
+  (2, 'Curso básico de Python', '2023-01-01', 'Autor: Juan', 0, 'Curso online gratuito para aprender los fundamentos del lenguaje de programación Python.', '2024-04-12 09:10:00'),
+  (3, 'Hamburguesa vegetariana con lentejas', '2024-02-22', 'Autor: Manuel', 0, 'Deliciosa receta de hamburguesa vegetariana a base de lentejas.', '2024-05-20 17:45:12');
 
 INSERT INTO `lista_contiene_elemento` (lista_id, elemento_id, positivo, comentario, momento_contencion)
 VALUES
-  (1, 1, 1, 'Una de las mejores películas de fantasía jamás rodadas.', '2024-05-10 15:24:12'),
-  (2, 2, 1, 'Excelente curso para iniciarse en Python.', '2024-04-15 11:23:56'),
-  (3, 3, 1, 'Muy rica y fácil de preparar.', '2024-05-20 17:45:45');
+  (1, 1, NULL, 'Una de las mejores películas de fantasía jamás rodadas.', '2024-05-10 15:24:12'),
+  (2, 2, NULL, NULL, '2024-04-15 11:23:56'),
+  (3, 3, NULL, NULL, '2024-05-20 17:45:45');
 
 INSERT INTO `usuario_manipula_lista` (usuario_id, lista_id)
 VALUES
