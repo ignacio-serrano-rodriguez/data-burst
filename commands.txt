@@ -1,12 +1,18 @@
-BACKEND
+DOCKER (Database)
+	docker run --name data_burst-BD -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root mariadb
+
+SYMFONY (API)
 	symfony api new
 	composer require doctrine
 	composer require api
 	composer require symfony/maker-bundle --dev
-
 	php bin/console doctrine:database:create
 	php bin/console make:entity
 	php bin/console make:migration
 	php bin/console doctrine:migrations:migrate		
 	php bin/console doctrine:database:drop --force
 	php bin/console cache:clear
+
+ANGULAR (Frontend)
+	ng serve (servidor local)
+	ng build --prod (produccion)
