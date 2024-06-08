@@ -69,9 +69,16 @@ class Usuario
     #[ORM\OneToMany(targetEntity: Elemento::class, mappedBy: 'usuario', orphanRemoval: true)]
     private Collection $elementos;
 
+    /**
+     * @var Collection<int, UsuarioManipulaLista>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioManipulaLista::class, mappedBy: 'usuario', orphanRemoval: true)]
+    private Collection $usuarioManipulaListas;
+
     public function __construct()
     {
         $this->elementos = new ArrayCollection();
+        $this->usuarioManipulaListas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -290,6 +297,36 @@ class Usuario
             // set the owning side to null (unless already changed)
             if ($elemento->getUsuario() === $this) {
                 $elemento->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UsuarioManipulaLista>
+     */
+    public function getUsuarioManipulaListas(): Collection
+    {
+        return $this->usuarioManipulaListas;
+    }
+
+    public function addUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
+    {
+        if (!$this->usuarioManipulaListas->contains($usuarioManipulaLista)) {
+            $this->usuarioManipulaListas->add($usuarioManipulaLista);
+            $usuarioManipulaLista->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
+    {
+        if ($this->usuarioManipulaListas->removeElement($usuarioManipulaLista)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioManipulaLista->getUsuario() === $this) {
+                $usuarioManipulaLista->setUsuario(null);
             }
         }
 

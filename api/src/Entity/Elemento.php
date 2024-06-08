@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ElementoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,17 @@ class Elemento
     #[ORM\ManyToOne(inversedBy: 'elementos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
+
+    /**
+     * @var Collection<int, ListaContieneElemento>
+     */
+    #[ORM\OneToMany(targetEntity: ListaContieneElemento::class, mappedBy: 'elemento', orphanRemoval: true)]
+    private Collection $listaContieneElementos;
+
+    public function __construct()
+    {
+        $this->listaContieneElementos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -130,6 +143,36 @@ class Elemento
     public function setUsuario(?Usuario $usuario): static
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ListaContieneElemento>
+     */
+    public function getListaContieneElementos(): Collection
+    {
+        return $this->listaContieneElementos;
+    }
+
+    public function addListaContieneElemento(ListaContieneElemento $listaContieneElemento): static
+    {
+        if (!$this->listaContieneElementos->contains($listaContieneElemento)) {
+            $this->listaContieneElementos->add($listaContieneElemento);
+            $listaContieneElemento->setElemento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListaContieneElemento(ListaContieneElemento $listaContieneElemento): static
+    {
+        if ($this->listaContieneElementos->removeElement($listaContieneElemento)) {
+            // set the owning side to null (unless already changed)
+            if ($listaContieneElemento->getElemento() === $this) {
+                $listaContieneElemento->setElemento(null);
+            }
+        }
 
         return $this;
     }
