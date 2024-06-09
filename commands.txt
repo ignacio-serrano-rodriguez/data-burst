@@ -5,8 +5,9 @@ SYMFONY (API)
 	symfony api new
 	symfony server:start
 	composer require doctrine
-	composer require api
 	composer require symfony/maker-bundle --dev
+	composer require api
+	composer require symfony/security-bundle
 	php bin/console doctrine:database:create
 	php bin/console make:entity
 	php bin/console make:migration
