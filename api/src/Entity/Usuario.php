@@ -24,7 +24,7 @@ class Usuario
     #[ORM\Column(length: 255)]
     private ?string $usuario = null;
 
-    #[ORM\Column(length: 64)]
+    #[ORM\Column(length: 255)]
     private ?string $contrasenia = null;
 
     #[ORM\Column]
