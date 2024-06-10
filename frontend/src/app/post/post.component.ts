@@ -2,18 +2,18 @@ import { Component, inject } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
 @Component({
-  selector: 'app-example',
+  selector: 'app-post',
   standalone: true,
   imports: [HttpClientModule],
-  templateUrl: './example.component.html',
-  styleUrls: ['./example.component.css']
+  templateUrl: './post.component.html',
+  styleUrls: ['./post.component.css']
 })
-export class ExampleComponent {
+export class PostComponent {
   httpClient = inject(HttpClient);
 
   ngOnInit() {
     const requestData = {
-      nombre: 'Series',
+      nombre: 'Manualidades',
       publica: false
     };
 
