@@ -1,5 +1,7 @@
 DATABASE_URL="mysql://root:root@127.0.0.1:3306/data_burst?serverVersion=1:11.3.2+maria~ubu2204"
 
+echo "verificarContrasenia -> " . ($this->comprobarContrasenia('contrasdeniasegura') ? 'true' : 'false'). "\n"; en getUsuario()
+
 # Frontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.

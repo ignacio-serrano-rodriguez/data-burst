@@ -145,16 +145,26 @@ class Usuario
         return $this;
     }
 
-    public function getContrasenia(): ?string
+    private function hashContraseniaPlana(string $contraseniaPlana): string
     {
-        return $this->contrasenia;
+        return password_hash($contraseniaPlana, PASSWORD_DEFAULT);
     }
 
-    public function setContrasenia(string $contrasenia): static
+    public function comprobarContrasenia(string $contraseniaPlana): bool
     {
-        $this->contrasenia = $contrasenia;
+        return password_verify($contraseniaPlana, $this->contrasenia);
+    }
+
+    public function setContrasenia(string $contraseniaPlana): static
+    {
+        $this->contrasenia = $this->hashContraseniaPlana($contraseniaPlana);
 
         return $this;
+    }
+
+    private function getContrasenia(): ?string
+    {            
+        return $this->contrasenia;
     }
 
     public function isVerificado(): ?bool
