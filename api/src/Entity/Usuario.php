@@ -8,10 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
 #[ApiResource]
-class Usuario
+class Usuario implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -62,6 +63,8 @@ class Usuario
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idioma = null;
+
+    private $roles = [];
 
     /**
      * @var Collection<int, Elemento>
@@ -162,7 +165,7 @@ class Usuario
         return $this;
     }
 
-    private function getContrasenia(): ?string
+    public function getContrasenia(): ?string
     {            
         return $this->contrasenia;
     }
@@ -489,5 +492,33 @@ class Usuario
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->contrasenia = null;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->id;
     }
 }

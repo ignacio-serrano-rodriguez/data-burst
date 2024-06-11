@@ -12,7 +12,7 @@ export class GetComponent {
   httpClient = inject(HttpClient);
 
   ngOnInit() {
-    const listaId = '7'; // Replace 'your-lista-id' with the actual ID of the 'lista' you want to retrieve
+    const listaId = '1'; // Replace 'your-lista-id' with the actual ID of the 'lista' you want to retrieve
 
     this.httpClient.get<any>(`http://127.0.0.1:8000/api/listas/${listaId}`)
       .subscribe({

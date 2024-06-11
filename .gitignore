@@ -12,6 +12,7 @@ api/vendor/
 api/migrations
 api/templates
 api/.env
+api/config/jwt/*.pem
 ###< symfony/framework-bundle ###
 
 # -- FRONTEND --
