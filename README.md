@@ -1,31 +1,19 @@
-DATABASE_URL="mysql://root:root@127.0.0.1:3306/data_burst?serverVersion=1:11.3.2+maria~ubu2204"
-
-echo "verificarContrasenia -> " . ($this->comprobarContrasenia('contrasdeniasegura') ? 'true' : 'false'). "\n"; en getUsuario()
-
-# Frontend
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Proyecto de Página Web Data Burst
+# Descripción Este proyecto consiste en una página web desarrollada con
+Symfony (backend), Angular (frontend) y Docker para Fedora 39
+# Requisitos - Docker y Docker Compose instalados en el sistema.
+# Instrucciones de Instalación
+- Tener instalado en local: angular-cli para Angular 17, php y composer para symfony 7 y docker engine.
+- Descargar el repositorio de github. 
+- Crear un contenedor con el comando ‘docker run --name data_burst-BD -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root mariadb’
+- Acceder mediante un gestor de base de datos como Dbeaver al puerto indicado y con las credenciales del root. 
+- Ir a la ruta de /api del repositorio
+- En .env añadir escribir la línea: ‘DATABASE_URL="mysql://root:root@127.0.0.1:3306/data_burst?serverVersion=1:11.3.2+maria~ubu2204"
+- Lanzar los comandos de php en el terminal para dicha ruta:
+--‘php bin/console doctrine:database:create’
+--‘php bin/console make:migration’
+--‘php bin/console doctrine:migrations:migrate	’
+--‘symfony server:start’
+- Abrir un nuevo terminal e ir a la ruta /frontend
+- Lanzar el comando de angular: ‘ng serve’
+- Acceder a la dirección ‘http://localhost:4200/
