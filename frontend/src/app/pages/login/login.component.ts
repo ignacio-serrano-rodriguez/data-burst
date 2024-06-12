@@ -46,7 +46,7 @@ export class LoginComponent {
       next:(data)=>{
         if(data.token != ''){
           localStorage.setItem("token",data.token);
-          this.router.navigate(['perfil']);
+          this.router.navigate(['home']);
         }
       },
       error:(error) =>{
