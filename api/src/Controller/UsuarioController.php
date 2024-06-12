@@ -23,11 +23,11 @@ class UsuarioController extends AbstractController
         $usuario = $usuarioRepository->findOneBy(['usuario' => $usuario]);
 
         if (!$usuario) {
-            return new JsonResponse(['error' => 'Username not found'], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => 'Credenciales no válidas.'], Response::HTTP_BAD_REQUEST);
         }
 
         if (!password_verify($contrasenia, $usuario->getContrasenia())) {
-            return new JsonResponse(['error' => 'Invalid password'], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => 'Credenciales no válidas.'], Response::HTTP_BAD_REQUEST);
         }
         
         $token = $JWTManager->create($usuario);
