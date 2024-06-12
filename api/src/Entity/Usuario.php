@@ -19,10 +19,10 @@ class Usuario implements UserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 254)]
+    #[ORM\Column(length: 254, unique: true)]
     private ?string $mail = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $usuario = null;
 
     #[ORM\Column(length: 255)]

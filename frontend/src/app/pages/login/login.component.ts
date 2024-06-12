@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Login } from '../../interfaces/Login';
 
 import {MatCardModule} from '@angular/material/card'; 
 import {MatFormFieldModule} from '@angular/material/form-field'; 
 import {MatInputModule} from '@angular/material/input'; 
 import {MatButtonModule} from '@angular/material/button'; 
+
+import { LoginService } from '../../services/login.service';
+import { Login } from '../../interfaces/Login';
 
 @Component({
   selector: 'app-login',

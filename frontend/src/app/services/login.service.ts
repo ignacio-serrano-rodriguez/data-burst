@@ -18,5 +18,4 @@ export class LoginService {
   login(objeto:Login):Observable<RespuestaLogin>{
     return this.http.post<RespuestaLogin>(`${this.baseUrl}/login`, objeto);
   }
-
 }
