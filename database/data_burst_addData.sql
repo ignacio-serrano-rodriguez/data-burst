@@ -1,8 +1,8 @@
 INSERT INTO `usuario` (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, avatar, idioma)
 VALUES
-  ('user1@example.com', 'user1', 'password123', 1, 2, '2024-01-01 00:00:00', 'Ignacio', 'Serrano', 'Rodriguez', '1990-01-01', 'Spain', 'Software Engineer', 'Computer Science', NULL, 'en'),
-  ('user2@example.com', 'user2', 'password456', 1, 1, '2024-02-14 12:34:56', 'Jane', 'Doe', NULL, '1995-05-27', 'France', 'Teacher', 'Pedagogy', NULL, 'es'),
-  ('admin@example.com', 'admin', 'admin1234', 1, 3, '2023-12-25 10:10:10', 'Admin', NULL, NULL, '1980-10-31', 'Germany', 'Administrator', 'Database Management', NULL, 'en');
+  ('iserod@mail.com', 'iserod', '$2y$10$huWGgWMIgNEAKIij1H93kOitS2xoD4w8eLg5wz3G51xB4VFhG9JJW', 1, 1, '2024-01-01 00:00:00', 'Ignacio', 'Serrano', 'Rodriguez', '1990-01-01', 'España', 'Desarrollador', 'DAW', NULL, 'Español'),
+  ('roxen@mail.com', 'roxen', '$2y$10$XtU0vuOQXzUdqjjijhDcwuE0TaBDDp14LekuuxoPo3oqjm8poiX82', 1, 1, '2024-02-14 12:34:56', 'Rosa', 'Durán', 'Guzmán', '1995-05-27', 'España', 'Enfemera', 'Enfemería', NULL, 'Español'),
+  ('usuario_1@mail.com', 'usuario_1', '$2y$10$Fa.1fo7vZ5M8XlzHWt2S9eptrKF/O0.1DcaCzaA1Vc0xO4F0KrbPi', 1, 1, '2023-12-25 10:10:10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO `lista` (nombre, publica)
 VALUES
