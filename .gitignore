@@ -9,9 +9,7 @@ api/config/secrets/prod/prod.decrypt.private.php
 api/public/bundles/
 api/var/
 api/vendor/
-api/migrations
 api/templates
-api/.env
 api/config/jwt/*.pem
 ###< symfony/framework-bundle ###
 
