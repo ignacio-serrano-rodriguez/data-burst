@@ -10,15 +10,14 @@ Symfony (backend), Angular (frontend) y Docker para Fedora 39
 - Ir al php.ini y comprobar que están descomentados 'extension=pdo_mysql' y 'extension=sodium'
 - Ir a la ruta de /api del repositorio
 - Lanzar los comandos de php en el terminal para dicha ruta:
---‘composer update
---‘composer install’
+--‘composer update’
 --‘php bin/console doctrine:database:create’
 --‘php bin/console make:migration’
 --‘php bin/console doctrine:migrations:migrate’
 --‘symfony server:start’
+- Acceder a api platform de symfony 7 (backend api) ‘http://127.0.0.1:8000/api’
 - Abrir un nuevo terminal e ir a la ruta /frontend
 - Lanzar los comandos: 
 --‘npm install’
 --‘ng serve’
-- Acceder a api platform de symfony 7 (backend api) ‘http://127.0.0.1:8000/api’
 - Acceder a angular 17 (frontend) ‘http://localhost:4200/’
