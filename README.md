@@ -6,7 +6,7 @@ Symfony (backend), Angular (frontend) y Docker para Fedora 39
 - Tener instalado en local: angular-cli para Angular 17, php y composer para symfony 7 y docker engine.
 - Descargar el repositorio de github. 
 - Crear un contenedor con el comando ‘docker run --name data_burst-BD -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root mariadb’
-- Acceder mediante un gestor de base de datos como Dbeaver al puerto indicado y con las credenciales del root. 
+- Acceder mediante un gestor de base de datos como Dbeaver al puerto usado y con las credenciales del root. 
 - Ir al php.ini y comprobar que están descomentados 'extension=pdo_mysql' y 'extension=sodium'
 - Ir a la ruta de /api del repositorio
 - Lanzar los comandos de php en el terminal para dicha ruta:
