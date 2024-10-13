@@ -1,14 +1,3 @@
-# Función para limpiar las migraciones previas.
-function limpiarMigracionesPrevias {
-    Write-Output "${scriptName} -> Limpiando las migraciones previas."
-    if (-Not (Test-Path -Path "./migrations")) {
-        New-Item -ItemType Directory -Path "./migrations"
-    }
-    Set-Location -Path "./migrations"
-    Get-ChildItem -Path . -Filter *.php -Recurse | Remove-Item -Force
-    Set-Location -Path ".."
-}
-
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 
@@ -16,12 +5,11 @@ Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 $containerName = "data_burst-BD"
 $volumeContainerName = "data_burst-BD_volume"
 
-# Función que detiene y elimina el contenedor y su volumen.
+# Función que elimina el contenedor y el volumen de la BD.
 function limpiezaContenedor {
     Write-Output "${scriptName} -> Limpiando el contenedor de la BD existente."
-    docker stop $containerName
-    docker rm -v $containerName
-    docker volume rm $volumeContainerName
+    docker rm -f $containerName
+    # docker volume rm $volumeContainerName
 }
 
 # Comprueba si el contenedor ya existe.
@@ -39,23 +27,28 @@ docker run --name ${containerName} -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root
 # Inicia el servicio de Symfony en segundo plano.
 Set-Location -Path "./api"
 Write-Output ""
-limpiarMigracionesPrevias
+Write-Output "${scriptName} -> Generando directorio de migraciones."
+New-Item -ItemType Directory -Path "./migrations"
 Write-Output "`n${scriptName} -> Iniciando el proceso de Symfony.`n"
 Start-Sleep -Seconds 3
 composer update
 php bin/console doctrine:database:create
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate --no-interaction
+php bin/console doctrine:migrations:sync-metadata-storage
 Start-Process -FilePath "powershell" -ArgumentList "symfony server:start" -PassThru -NoNewWindow
 
 # Inicia el servicio de Angular en segundo plano.
-Write-Output "`n${scriptName} -> Iniciando el proceso de Angular.`n"
+Write-Output "${scriptName} -> Iniciando el proceso de Angular.`n"
 Set-Location -Path "../frontend"
 npm install
 Start-Process -FilePath "powershell" -ArgumentList "ng serve" -PassThru -NoNewWindow
 
 # Finalizar la aplicación web.
-Write-Output "`n${scriptName} -> Pulsa ENTER para finalizar la aplicación web.`n"
+Write-Output "${scriptName} -> Aplicación web inicializada."
+Write-Output "${scriptName} -> Backend (Symfony) http://localhost:8000/api"
+Write-Output "${scriptName} -> Frontend (Angular) http://localhost:4200"
+Write-Output "${scriptName} -> Pulsa ENTER para finalizar la aplicación web.`n"
 Set-Location -Path "../"
 $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | Out-Null
 Write-Output "`n${scriptName} -> Finalizando la aplicación web."
@@ -74,12 +67,11 @@ Write-Output "`n${scriptName} -> Finalizando la aplicación web."
         Stop-Process -Id $symfonyProcess.Id -Force
     }
 
-    # Eliminar contenedor de la BD.
+    # Llamada a la limpieza del contenedor.
     limpiezaContenedor
 
-    # Eliminar migraciones previas.
-    Set-Location -Path "./api"
-    limpiarMigracionesPrevias
+    # Eliminar directorio de migraciones.
+    Write-Output "${scriptName} -> Eliminando directorio de migraciones."
+    Remove-Item -Recurse -Force -Path "./api/migrations"
 
-    Set-Location -Path "../"
     Write-Output "`n${scriptName} -> Aplicación web finalizada."
