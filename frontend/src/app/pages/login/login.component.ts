@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 
 import { LoginService } from '../../services/login.service';
 import { Login } from '../../interfaces/Login';
+import { FooterComponent } from "../../footer/footer.component";
 
 @Component({
   selector: 'app-login',
@@ -18,8 +19,9 @@ import { Login } from '../../interfaces/Login';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    FooterComponent
+],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
