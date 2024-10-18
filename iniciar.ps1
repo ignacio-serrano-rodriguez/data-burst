@@ -1,7 +1,7 @@
-Write-Output "`n${scriptName} -> Iniciando la aplicación web."
-
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
+
+Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 
 # Definición del nombre del contenedor y su volumen.
 $containerName = "data_burst-BD"
