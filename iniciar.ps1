@@ -60,9 +60,9 @@ Write-Output "`n${scriptName} -> Finalizando la aplicación web."
     # Eliminar el proceso de Symfony.
     $symfonyProcess = Get-Process -Name "symfony" -ErrorAction SilentlyContinue
     if ($symfonyProcess) {
+        Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
         Set-Location -Path "./api"
         symfony server:stop
-        Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
         Stop-Process -Id $symfonyProcess.Id -Force
         Set-Location -Path "../"
     }
@@ -70,6 +70,7 @@ Write-Output "`n${scriptName} -> Finalizando la aplicación web."
     # Eliminar el contenedor de la BD.
     Write-Output "${scriptName} -> Eliminando el contenedor de la BD."
     docker rm -f $containerName
+    Write-Output "${scriptName} -> No se ha eliminado el volumen del contenedor."
 
     # Eliminar directorio de migraciones.
     Write-Output "${scriptName} -> Eliminando directorio de migraciones."
