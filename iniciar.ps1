@@ -60,8 +60,11 @@ Write-Output "`n${scriptName} -> Finalizando la aplicación web."
     # Eliminar el proceso de Symfony.
     $symfonyProcess = Get-Process -Name "symfony" -ErrorAction SilentlyContinue
     if ($symfonyProcess) {
+        Set-Location -Path "./api"
+        symfony server:stop
         Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
         Stop-Process -Id $symfonyProcess.Id -Force
+        Set-Location -Path "../"
     }
 
     # Eliminar el contenedor de la BD.
