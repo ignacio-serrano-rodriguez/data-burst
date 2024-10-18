@@ -13,3 +13,4 @@ Aplicación web en desarrollo con Symfony, Angular, Docker, Powershell y MariaDB
 
 ## Despliegue de la aplicación en local
 Ejecutar el script `iniciar.ps1`.
+- El volumen generado por el contenedor no se borra automaticamente. Esto es así para tener persistencia de datos entre diferentes ejecuciones de la aplicación. 
