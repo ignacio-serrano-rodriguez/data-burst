@@ -11,7 +11,7 @@ import { FooterComponent } from "../../footer/footer.component";
 })
 export class HomeComponent implements OnChanges {
 
-  usuarioLogueado: string = 'iserod';
+  usuarioLogueado: string = '(usuario logueado)';
 
   constructor() {}
 
