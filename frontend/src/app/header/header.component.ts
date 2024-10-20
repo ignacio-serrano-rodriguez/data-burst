@@ -1,10 +1,10 @@
-import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { EventEmitter } from 'stream';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AvatarComponent } from "../avatar/avatar.component";
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [AvatarComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
