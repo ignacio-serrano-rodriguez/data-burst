@@ -58,7 +58,6 @@ export class RegistroComponent {
       next:(data)=>{
         if(data.mensaje != ''){
           alert('Usuario registrado.');
-          this.router.navigate(['login']);
         }
       },
       error:(error) =>{
