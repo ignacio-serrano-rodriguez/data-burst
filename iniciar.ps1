@@ -31,6 +31,7 @@ php bin/console doctrine:database:create
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate --no-interaction
 php bin/console doctrine:migrations:sync-metadata-storage
+symfony server:stop
 Start-Process -FilePath "powershell" -ArgumentList "symfony server:start" -PassThru -NoNewWindow
 
 # Inicio del servicio de Angular en segundo plano.
