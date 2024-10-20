@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
-  usuario = localStorage.getItem('usuario');
-  constructor() {
-    console.log(this.usuario);
-  }
+export class HeaderComponent implements OnChanges {
+
+  @Input() usuarioLogueado: string = '';
+
+  constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {}
+
 }

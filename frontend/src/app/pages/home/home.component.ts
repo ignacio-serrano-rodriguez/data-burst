@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { HeaderComponent } from "../../header/header.component";
 import { FooterComponent } from "../../footer/footer.component";
 
@@ -9,6 +9,12 @@ import { FooterComponent } from "../../footer/footer.component";
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnChanges {
+
+  usuarioLogueado: string = 'iserod';
+
+  constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {}
 
 }
