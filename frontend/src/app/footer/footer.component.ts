@@ -10,46 +10,46 @@ import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit,
 export class FooterComponent implements OnInit, AfterContentInit, AfterViewInit, OnDestroy, OnChanges, DoCheck, AfterContentChecked, AfterViewChecked {
 
   constructor() {
-    console.log('FooterComponent -> constructor()');
+    // console.log('FooterComponent -> constructor()');
   }
 
   // Información nueva llega al componente
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('FooterComponent -> ngOnChanges()');
+    // console.log('FooterComponent -> ngOnChanges()');
   }
 
   // El componente se inicializa
   ngOnInit() {
-    console.log('FooterComponent -> ngOnInit()');
+    // console.log('FooterComponent -> ngOnInit()');
   }
 
   // Algo cambia en la interfaz
   ngDoCheck(): void {
-    console.log('FooterComponent -> ngDoCheck()');
+    // console.log('FooterComponent -> ngDoCheck()');
   }
 
   // Después del DoCheck (Cuando se inicializa el componente)
   ngAfterContentInit(): void {
-    console.log('FooterComponent -> ngAfterContentInit()');
+    // console.log('FooterComponent -> ngAfterContentInit()');
   }
 
   // Después del DoCheck
   ngAfterContentChecked(): void { 
-    console.log('FooterComponent -> ngAfterContentChecked()');
+    // console.log('FooterComponent -> ngAfterContentChecked()');
   }
 
   // Después AfterContentChecked (Cuando se inicializa el componente)
   ngAfterViewInit(): void {
-    console.log('FooterComponent -> ngAfterViewInit()');
+    // console.log('FooterComponent -> ngAfterViewInit()');
   }
 
   // Después AfterContentChecked
   ngAfterViewChecked(): void {
-    console.log('FooterComponent -> ngAfterViewChecked()');
+    // console.log('FooterComponent -> ngAfterViewChecked()');
   }
 
   // Componente es destruido
   ngOnDestroy(): void {
-    console.log('FooterComponent -> ngOnDestroy()');
+    // console.log('FooterComponent -> ngOnDestroy()');
   }
 }
