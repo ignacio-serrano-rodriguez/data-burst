@@ -18,6 +18,7 @@ export class FooterComponent implements OnInit, AfterContentInit, AfterViewInit,
     console.log('FooterComponent -> ngOnChanges()');
   }
 
+  // El componente se inicializa
   ngOnInit() {
     console.log('FooterComponent -> ngOnInit()');
   }
@@ -27,24 +28,27 @@ export class FooterComponent implements OnInit, AfterContentInit, AfterViewInit,
     console.log('FooterComponent -> ngDoCheck()');
   }
 
+  // Después del DoCheck (Cuando se inicializa el componente)
   ngAfterContentInit(): void {
     console.log('FooterComponent -> ngAfterContentInit()');
   }
 
-  // Se ejecuta después del DoCheck
+  // Después del DoCheck
   ngAfterContentChecked(): void { 
     console.log('FooterComponent -> ngAfterContentChecked()');
   }
 
+  // Después AfterContentChecked (Cuando se inicializa el componente)
   ngAfterViewInit(): void {
     console.log('FooterComponent -> ngAfterViewInit()');
   }
 
-  // Se ejecuta después del DoCheck
+  // Después AfterContentChecked
   ngAfterViewChecked(): void {
     console.log('FooterComponent -> ngAfterViewChecked()');
   }
 
+  // Componente es destruido
   ngOnDestroy(): void {
     console.log('FooterComponent -> ngOnDestroy()');
   }
