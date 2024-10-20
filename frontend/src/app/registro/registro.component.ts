@@ -68,8 +68,4 @@ export class RegistroComponent {
 
     })
   }
-
-  iniciarSesion(){
-    this.router.navigate(['login']);
-  }
 }

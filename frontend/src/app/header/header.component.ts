@@ -8,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-
+  usuario = localStorage.getItem('usuario');
+  constructor() {
+    console.log(this.usuario);
+  }
 }
