@@ -3,12 +3,30 @@
 <img src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
 <div id="botonesInicioRegistro">
     <div id="botones">
-        <button mat-raised-button color="secondary" (click)="mostrarLoginOcultarRegistro()">Login</button>
-        <button mat-raised-button color="secondary" (click)="mostrarRegistroOcultarLogin()">Registro</button>
+        <button 
+            mat-raised-button
+            color="secondary" 
+            [disabled]=botonLoginVisible  
+            
+            (click)="mostrarLoginOcultarRegistro()">Iniciar Sesión
+        </button>
+        <button 
+            mat-raised-button
+            color="secondary"
+            [disabled]=botonRegistroVisible   
+            
+            (click)="mostrarRegistroOcultarLogin()">Registrarse
+        </button>
     </div>
     <div id="inicioRegistro">
-        <app-login id="login"></app-login>
-        <app-registro id="registro"></app-registro>
+        <app-login 
+            id="login" 
+            [style.display]=loginStyleDisplay>
+        </app-login>
+        <app-registro 
+            id="registro" 
+            [style.display]=registroStyleDisplay>
+        </app-registro>
     </div>
 </div>
 <app-footer></app-footer>

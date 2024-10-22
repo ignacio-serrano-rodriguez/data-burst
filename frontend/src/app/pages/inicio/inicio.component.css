@@ -9,18 +9,6 @@
     justify-content: center;
 }
 
-#login
-{
-    display: none;
-    display: revert;
-}
-
-#registro
-{
-    display: none;
-    /* display: revert; */
-}
-
 img
 {
     padding: 0;
