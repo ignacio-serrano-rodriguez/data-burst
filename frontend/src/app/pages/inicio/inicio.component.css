@@ -1,3 +1,8 @@
+#componente
+{
+    background-color: lightblue;
+}
+
 #inicioRegistro, #botones
 {
     display: flex;
