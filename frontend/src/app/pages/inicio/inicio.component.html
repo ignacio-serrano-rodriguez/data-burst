@@ -1,5 +1,13 @@
 <p>inicio works!</p>
 <app-titulo></app-titulo>
-<app-login></app-login>
-<app-registro></app-registro>
+<div id="botonesInicioRegistro">
+    <div id="botones">
+        <button mat-raised-button color="secondary" (click)="mostrarLoginOcultarRegistro()">Login</button>
+        <button mat-raised-button color="secondary" (click)="mostrarRegistroOcultarLogin()">Registro</button>
+    </div>
+    <div id="inicioRegistro">
+        <app-login id="login"></app-login>
+        <app-registro id="registro"></app-registro>
+    </div>
+</div>
 <app-footer></app-footer>

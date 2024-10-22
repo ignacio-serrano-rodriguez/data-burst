@@ -1,0 +1,17 @@
+#inicioRegistro, #botones
+{
+    display: flex;
+    justify-content: center;
+}
+
+#login
+{
+    display: none;
+    display: revert;
+}
+
+#registro
+{
+    display: none;
+    display: revert;
+}
