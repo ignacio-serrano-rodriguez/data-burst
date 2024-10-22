@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,5 +6,10 @@ import { Injectable } from '@angular/core';
 })
 export class ListaService {
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
+
+  getLista() {
+    return this.http.get('http://127.0.0.1:8000/api/listas');
+  }
+
 }
