@@ -20,3 +20,12 @@
     display: none;
     /* display: revert; */
 }
+
+img
+{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 20%;
+    height: 20%;
+}

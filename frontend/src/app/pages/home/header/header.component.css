@@ -2,3 +2,12 @@
 {
     background-color: rgb(255, 255, 191);
 }
+
+img
+{
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 10%;
+    height: 10%;
+}
