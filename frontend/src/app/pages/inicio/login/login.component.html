@@ -1,19 +1,15 @@
-<div class="card-container">
-	<mat-card>
-		<mat-card-content>
-			<form class="form-custom"[formGroup]="formLogin">
-				<mat-form-field class="input-custom">
-					<mat-label>Usuario</mat-label>
-					<input matInput formControlName="usuario">
-				</mat-form-field>
-				<mat-form-field class="input-custom">
-					<mat-label>Contraseña</mat-label>
-					<input matInput formControlName="contrasenia" type="password">
-				</mat-form-field>
-				<div class="flex">
-					<button mat-flat-button color="primary"(click)="iniciarSesion()">Acceder</button>
-				</div>
-			</form>
-		</mat-card-content>
-	</mat-card>
+<div>
+	<form [formGroup]="formLogin">
+		<mat-form-field>
+			<mat-label>Usuario</mat-label>
+			<input matInput formControlName="usuario">
+		</mat-form-field>
+		<mat-form-field>
+			<mat-label>Contraseña</mat-label>
+			<input matInput formControlName="contrasenia" type="password">
+		</mat-form-field>
+		<div>
+			<button mat-flat-button color="primary"(click)="iniciarSesion()">Acceder</button>
+		</div>
+	</form>
 </div>
