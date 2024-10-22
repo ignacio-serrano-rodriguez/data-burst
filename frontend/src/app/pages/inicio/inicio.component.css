@@ -3,12 +3,6 @@
     background-color: lightblue;
 }
 
-#inicioRegistro, #botones
-{
-    display: flex;
-    justify-content: center;
-}
-
 img
 {
     padding: 0;
