@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FooterComponent } from "../../footer/footer.component";
-import { LoginComponent } from "../../login/login.component";
-import { RegistroComponent } from "../../registro/registro.component";
+import { LoginComponent } from "./login/login.component";
+import { RegistroComponent } from "./registro/registro.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';

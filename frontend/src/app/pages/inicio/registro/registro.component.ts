@@ -7,8 +7,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input'; 
 import {MatButtonModule} from '@angular/material/button'; 
 
-import { RegistroService } from '../services/registro.service';
-import { Registro } from '../interfaces/Registro';
+import { RegistroService } from '../../../services/registro.service';
+import { Registro } from '../../../interfaces/Registro';
 
 @Component({
   selector: 'app-registro',
