@@ -2,9 +2,7 @@
 {
     margin: 0;
     padding: 0;
-
-    margin: auto;
-    padding: auto;
+    border: 0;
 }
 
 #componente
@@ -14,19 +12,12 @@
 
 img
 {
-    padding: 0;
-    margin: 0;
-    border: 0;
     width: 20%;
     height: 20%;
 }
 
 #botonesLoginRegistro
 {
-
-    margin: auto;
-    padding: auto;
-
     display: flex;
     flex-wrap: wrap;
 }
@@ -35,14 +26,28 @@ img
 {
     display: flex;
     flex-wrap: wrap;
-    padding-left: 30%;
-    padding-right: 30%;
+
     justify-content: center;
+
+    width: 100%;
 }
 
 #botones button
 {
     padding-left: 1em;
     padding-right: 1em;
+
     margin: 0.3em;
+}
+
+#loginRegistro
+{
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    width: 100%;
+
+    padding-top: 2%;
 }
