@@ -1,21 +1,19 @@
-<div>
-	<form [formGroup]="formRegistro">
-		<mat-form-field>
-			<mat-label>Mail</mat-label>
-			<input matInput formControlName="mail">
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Usuario</mat-label>
-			<input matInput formControlName="usuario">
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Contraseña</mat-label>
-			<input matInput formControlName="contrasenia" type="password">
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Repetir contraseña</mat-label>
-			<input matInput formControlName="contraseniaRepetida" type="password">
-		</mat-form-field>
-		<button mat-flat-button color="primary"(click)="registrarse()">Crear usuario</button>
-	</form>
-</div>
+<form id="formularioRegistro" [formGroup]="formRegistro">
+	<mat-form-field class="elementoFormulario">
+		<mat-label>Mail</mat-label>
+		<input matInput formControlName="mail">
+	</mat-form-field>
+	<mat-form-field class="elementoFormulario">
+		<mat-label>Usuario</mat-label>
+		<input matInput formControlName="usuario">
+	</mat-form-field>
+	<mat-form-field class="elementoFormulario">
+		<mat-label>Contraseña</mat-label>
+		<input matInput formControlName="contrasenia" type="password">
+	</mat-form-field>
+	<mat-form-field class="elementoFormulario">
+		<mat-label>Repetir contraseña</mat-label>
+		<input matInput formControlName="contraseniaRepetida" type="password">
+	</mat-form-field>
+	<button class="elementoFormulario" mat-flat-button color="primary"(click)="registrarse()">Crear usuario</button>
+</form>

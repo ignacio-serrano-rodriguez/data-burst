@@ -1,11 +1,11 @@
-<form id="login" [formGroup]="formLogin">
-	<mat-form-field class="elementoLogin">
+<form id="formularioLogin" [formGroup]="formLogin">
+	<mat-form-field class="elementoFormulario">
 		<mat-label>Usuario</mat-label>
 		<input matInput formControlName="usuario">
 	</mat-form-field>
-	<mat-form-field class="elementoLogin">
+	<mat-form-field class="elementoFormulario">
 		<mat-label>Contraseña</mat-label>
 		<input matInput formControlName="contrasenia" type="password">
 	</mat-form-field>
-	<button class="elementoLogin" mat-flat-button color="primary"(click)="iniciarSesion()">Acceder</button>
+	<button class="elementoFormulario" mat-flat-button color="primary"(click)="iniciarSesion()">Acceder</button>
 </form>
