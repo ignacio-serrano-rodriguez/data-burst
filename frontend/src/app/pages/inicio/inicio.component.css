@@ -38,6 +38,7 @@ img
     padding-right: 1em;
 
     margin: 0.3em;
+    margin-bottom: 1.5em;
 }
 
 #loginRegistro
@@ -47,7 +48,13 @@ img
 
     justify-content: center;
 
-    width: 100%;
+    padding-top: 2em;
+    padding-bottom: 2em;
 
-    padding-top: 2%;
+    margin: auto;
+
+    width: 32%;
+    min-width: 26em;
+
+    background-color: #D2D9DC;
 }
