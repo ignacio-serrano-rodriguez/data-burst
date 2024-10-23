@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import {MatCardModule} from '@angular/material/card'; 
-import {MatFormFieldModule} from '@angular/material/form-field'; 
-import {MatInputModule} from '@angular/material/input'; 
-import {MatButtonModule} from '@angular/material/button'; 
+import { MatCardModule } from '@angular/material/card'; 
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatInputModule } from '@angular/material/input'; 
+import { MatButtonModule } from '@angular/material/button'; 
+import {MatIconModule} from '@angular/material/icon';
 
 import { LoginService } from '../../../services/login.service';
 import { Login } from '../../../interfaces/Login';
@@ -19,11 +20,15 @@ import { Login } from '../../../interfaces/Login';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatIconModule
 ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
+
 export class LoginComponent {
+
+  hide = true;
 
   private loginService = inject(LoginService);
   private router = inject(Router);
