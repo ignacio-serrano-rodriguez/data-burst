@@ -5,7 +5,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @font-face {
     font-family: 'Roboto';
-    src: url('assets/fonts/roboto/Roboto-Black.ttf') format('truetype');
+    src: url('assets/fonts/roboto/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ShareTech';
+    src: url('assets/fonts/shareTech/ShareTech-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

@@ -5,15 +5,54 @@
     border: 0;
 }
 
+#titulo
+{
+    display: flex;
+    flex-wrap: wrap;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    
+    margin-bottom: 3em;
+    margin-top: 5%;
+}
+
+#logoTitulo
+{
+    width: 14em;
+
+    margin-top: 0.5em;
+    margin-right: 2%;
+    margin-left: 2%;
+}
+
+#textoTitulo
+{
+    display: flex;
+    flex-wrap: wrap;
+
+    font-family: 'ShareTech';
+    font-size: 7em;
+    color: #AE00CD;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 2%;
+    margin-left: 2%;
+}
+
+#textoTitulo span
+{
+    margin: 0.1em;
+    margin-top: 0.5em;
+}
+
 #componente
 {
     background-color: lightblue;
-}
-
-img
-{
-    width: 20%;
-    height: 20%;
 }
 
 #botonesLoginRegistro
