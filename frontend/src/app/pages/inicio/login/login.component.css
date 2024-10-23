@@ -7,7 +7,12 @@
 
 .elementoFormulario
 {
-    width: 100%;
+    width: 100%;;
+}
+
+.etiquetaFormulario
+{
+    color: #717e84;
 }
 
 #formulario
