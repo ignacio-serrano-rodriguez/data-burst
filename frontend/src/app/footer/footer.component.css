@@ -25,3 +25,8 @@
     min-width: 10em;
     min-height: 2em;
 }
+
+a:hover 
+{
+    font-weight: bolder;
+}
