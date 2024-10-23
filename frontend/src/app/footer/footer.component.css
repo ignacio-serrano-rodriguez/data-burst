@@ -1,4 +1,27 @@
-#componente
+*
 {
-    background-color: lightgreen;
+    margin: auto;
+    padding: 0;
+    border: 0;
+}
+
+#footer
+{
+    display: flex;
+    flex-wrap: wrap;
+
+    margin-top: 4em;
+
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #FBE6FF;
+}
+
+.enlaces
+{
+    color: #E034FF;
+    min-width: 10em;
+    min-height: 2em;
 }
