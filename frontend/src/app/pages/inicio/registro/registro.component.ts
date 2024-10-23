@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import {MatCardModule} from '@angular/material/card'; 
-import {MatFormFieldModule} from '@angular/material/form-field'; 
-import {MatInputModule} from '@angular/material/input'; 
-import {MatButtonModule} from '@angular/material/button'; 
+import { MatCardModule } from '@angular/material/card'; 
+import { MatFormFieldModule } from '@angular/material/form-field'; 
+import { MatInputModule } from '@angular/material/input'; 
+import { MatButtonModule } from '@angular/material/button'; 
+import { MatIconModule } from '@angular/material/icon';
 
 import { RegistroService } from '../../../services/registro.service';
 import { Registro } from '../../../interfaces/Registro';
@@ -18,12 +19,17 @@ import { Registro } from '../../../interfaces/Registro';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule
   ],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
+
 export class RegistroComponent {
+
+  hideContrasenia = true;
+  hideRepetirContrasenia = true;
 
   private registroService = inject(RegistroService);
   private router = inject(Router);
