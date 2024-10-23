@@ -5,6 +5,11 @@
     border: 0;
 }
 
+.elementoFormulario
+{
+    width: 100%;
+}
+
 #formulario
 {
     width: 85%;
@@ -12,7 +17,7 @@
     padding-right: 7.5%;
 }
 
-.elementoFormulario
+#boton
 {
-    width: 100%;
+    background-color: #61B300;
 }
