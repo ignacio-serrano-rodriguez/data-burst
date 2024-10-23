@@ -5,6 +5,13 @@
     border: 0;
 }
 
+#formulario
+{
+    width: 85%;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+}
+
 .elementoFormulario
 {
     width: 100%;

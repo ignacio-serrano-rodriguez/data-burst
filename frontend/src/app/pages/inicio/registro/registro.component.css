@@ -9,3 +9,11 @@
 {
     width: 100%;
 }
+
+#formulario
+{
+    width: 85%;
+    max-width: 486px;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+}
