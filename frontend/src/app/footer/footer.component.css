@@ -10,23 +10,32 @@
     display: flex;
     flex-wrap: wrap;
 
-    margin-top: 4em;
+    margin-top: 15em;
 
     text-align: center;
     align-items: center;
     justify-content: space-between;
 
     background-color: #FBE6FF;
+    /* height: 6em; */
+}
+
+@media (max-width:700px)
+{
+    #footer 
+    {
+      height: 6em;
+    }
 }
 
 .enlaces
 {
     color: #E034FF;
     min-width: 10em;
-    min-height: 2em;
+    width: 33%;
 }
 
-a:hover 
+span:hover 
 {
     font-weight: bolder;
 }

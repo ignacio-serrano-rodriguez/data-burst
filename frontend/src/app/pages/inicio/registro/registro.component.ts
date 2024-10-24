@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card'; 
 import { MatFormFieldModule } from '@angular/material/form-field'; 
@@ -32,7 +31,6 @@ export class RegistroComponent {
   hideRepetirContrasenia = true;
 
   private registroService = inject(RegistroService);
-  private router = inject(Router);
   public formBuild = inject(FormBuilder);
 
   public formRegistro: FormGroup = this.formBuild.group({
@@ -43,6 +41,7 @@ export class RegistroComponent {
   })
 
   registrarse(){
+    
     if(this.formRegistro.invalid)return;
 
     const objeto: Registro = {
@@ -66,6 +65,7 @@ export class RegistroComponent {
           alert('Usuario registrado.');
         }
       },
+
       error:(error) =>{
         console.log(error.message);
         alert('No se pudo registrar al usuario.');
