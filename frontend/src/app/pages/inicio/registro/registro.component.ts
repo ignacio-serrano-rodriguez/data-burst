@@ -62,7 +62,29 @@ export class RegistroComponent {
     this.registroService.registrarse(objeto).subscribe({
       next:(data)=>{
         if(data.mensaje != ''){
+
           alert('Usuario registrado.');
+
+          let mailInput = document.getElementById('mailInput');
+          if (mailInput) {
+            (mailInput as HTMLInputElement).value = '';
+          }
+
+          let usuarioInput = document.getElementById('usuarioInput');
+          if (usuarioInput) {
+            (usuarioInput as HTMLInputElement).value = '';
+          }
+
+          let contraseniaInput = document.getElementById('contraseniaInput');
+          if (contraseniaInput) {
+            (contraseniaInput as HTMLInputElement).value = '';
+          }
+
+          let contraseniaRepetidaInput = document.getElementById('contraseniaRepetidaInput');
+          if (contraseniaRepetidaInput) {
+            (contraseniaRepetidaInput as HTMLInputElement).value = '';
+          }
+
         }
       },
 
