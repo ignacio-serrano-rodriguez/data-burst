@@ -5,8 +5,17 @@
 	</mat-form-field>
 	<mat-form-field class="elementoFormulario">
 		<mat-label class="etiquetaFormulario">Contraseña</mat-label>
-		<input [type]="hide ? 'password' : 'text'" matInput formControlName="contrasenia" type="password">
-		<button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+		<input 
+			[type]="hide ? 'password' : 'text'" 
+			matInput 
+			formControlName="contrasenia" 
+			type="password">
+		<button 
+			mat-icon-button 
+			matSuffix 
+			(click)="hide = !hide" 
+			[attr.aria-label]="'Hide password'" 
+			[attr.aria-pressed]="hide">
 			<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
 		</button>
 	</mat-form-field>
