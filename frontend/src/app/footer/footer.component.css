@@ -17,7 +17,6 @@
     justify-content: space-between;
 
     background-color: #FBE6FF;
-    /* height: 6em; */
 }
 
 @media (max-width:700px)
@@ -31,7 +30,7 @@
 .enlaces
 {
     color: #E034FF;
-    min-width: 10em;
+    min-width: 11em;
     width: 33%;
 }
 
