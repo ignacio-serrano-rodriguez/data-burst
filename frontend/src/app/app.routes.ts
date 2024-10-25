@@ -4,8 +4,9 @@ import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
 
-	{path:"inicio", component:InicioComponent},
-	{path:"home", component:HomeComponent},
-	{path:"", component:InicioComponent},
+	{path:"inicio", component:InicioComponent, pathMatch: "full"},
+	{path:"home", component:HomeComponent, pathMatch: "full"},
+	{path:"", component:InicioComponent, pathMatch: "full"},
 	{path:"**", component:InicioComponent}
+
 ];
