@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { RegistroService } from '../../../services/registro.service';
+import { Registro } from '../../../interfaces/Registro';
+
 import { MatCardModule } from '@angular/material/card'; 
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon';
-
-import { RegistroService } from '../../../services/registro.service';
-import { Registro } from '../../../interfaces/Registro';
 
 @Component({
   selector: 'app-registro',
@@ -60,6 +60,7 @@ export class RegistroComponent {
     }
 
     this.registroService.registrarse(objeto).subscribe({
+
       next:(data)=>{
         if(data.mensaje != ''){
           
@@ -75,5 +76,7 @@ export class RegistroComponent {
       }
 
     })
+    
   }
+
 }

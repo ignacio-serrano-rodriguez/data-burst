@@ -8,14 +8,20 @@ import { Registro } from '../interfaces/Registro';
 @Injectable({
   providedIn: 'root'
 })
+
 export class RegistroService {
 
   private http = inject(HttpClient)
-  private baseUrl:string = appsettings.apiUrl;
+  private apiUrl:string = appsettings.apiUrl;
 
   constructor() {}
 
   registrarse(objeto:Registro):Observable<RespuestaRegistro>{
-    return this.http.post<RespuestaRegistro>(`${this.baseUrl}/usuarios`, objeto, { headers: { 'Content-Type': 'application/ld+json' } });
+
+    return this.http.post<RespuestaRegistro>(`
+      ${this.apiUrl}/usuarios`, 
+      objeto, 
+      { headers: { 'Content-Type': 'application/ld+json' } });
   }
+
 }
