@@ -11,13 +11,13 @@ import { Login } from '../interfaces/Login';
 export class LoginService {
 
   private http = inject(HttpClient)
-  private apiUrl:string = appsettings.apiUrl;
+  private api:string = appsettings.api;
 
   constructor() {}
 
   login(objeto:Login):Observable<RespuestaLogin>{
 
-    return this.http.post<RespuestaLogin>(`${this.apiUrl}/auth/signin`, objeto);
+    return this.http.post<RespuestaLogin>(`${this.api}/auth/signin`, objeto);
     
   }
 }
