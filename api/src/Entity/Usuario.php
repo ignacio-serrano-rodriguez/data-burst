@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Usuario implements UserInterface
 {
@@ -64,7 +65,7 @@ class Usuario implements UserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idioma = null;
 
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var Collection<int, Elemento>
@@ -110,6 +111,12 @@ class Usuario implements UserInterface
         $this->usuarioGestionaElementos = new ArrayCollection();
         $this->usuarioAgregaUsuarios = new ArrayCollection();
         $this->usuarioGestionaUsuarios = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->momento_registro = new \DateTime();
     }
 
     public function getId(): ?int
@@ -519,6 +526,6 @@ class Usuario implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->id;
+        return (string) $this->id;
     }
 }
