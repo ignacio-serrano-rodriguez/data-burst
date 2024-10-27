@@ -117,8 +117,13 @@ class Usuario implements UserInterface
     public function prePersist(): void
     {
         $this->momento_registro = new \DateTime();
-        $this->verificado = true;
         $this->permiso = 1;
+
+        // Cambiar cuando se implemente el envío de correos de verificación
+        if ($this->verificado === null) {
+            $this->verificado = true;
+        }
+        
     }
 
     public function getId(): ?int
