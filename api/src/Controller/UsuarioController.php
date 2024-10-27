@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
 
 class UsuarioController extends AbstractController
 {
-    #[RouteAttribute("/api/login", name: "api_login", methods: ["POST"])]
+    #[RouteAttribute("/api/auth/signin", name: "api_login", methods: ["POST"])]
     public function login(Request $request, UsuarioRepository $usuarioRepository, JWTTokenManagerInterface $JWTManager)
     {
         $data = json_decode($request->getContent(), true);
