@@ -117,6 +117,8 @@ class Usuario implements UserInterface
     public function prePersist(): void
     {
         $this->momento_registro = new \DateTime();
+        $this->verificado = true;
+        $this->permiso = 1;
     }
 
     public function getId(): ?int
