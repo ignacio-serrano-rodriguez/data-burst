@@ -5,19 +5,20 @@ import { Observable } from 'rxjs';
 import { RespuestaLogin } from '../interfaces/RespuestaLogin';
 import { Login } from '../interfaces/Login';
 
+const api:string = appsettings.api;
+
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
   private http = inject(HttpClient)
-  private api:string = appsettings.api;
 
   constructor() {}
 
   login(objeto:Login):Observable<RespuestaLogin>{
 
-    return this.http.post<RespuestaLogin>(`${this.api}/auth/signin`, objeto);
+    return this.http.post<RespuestaLogin>(`${api}auth/signin`, objeto);
     
   }
 }
