@@ -48,10 +48,7 @@ export class RegistroComponent {
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
       contrasenia: this.formRegistro.value.contrasenia,
-      contraseniaRepetida: this.formRegistro.value.contraseniaRepetida,
-      verificado: true,
-      permiso: 1,
-      momento_registro: new Date()
+      contraseniaRepetida: this.formRegistro.value.contraseniaRepetida
     };
 
     if (objeto.contrasenia != objeto.contraseniaRepetida) {

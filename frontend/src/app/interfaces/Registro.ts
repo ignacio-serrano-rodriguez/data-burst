@@ -3,7 +3,4 @@ export interface Registro{
 	usuario:string
 	contrasenia:string
 	contraseniaRepetida:string
-	verificado:boolean
-	permiso:number
-	momento_registro:Date
 }
