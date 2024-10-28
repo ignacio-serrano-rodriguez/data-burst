@@ -19,7 +19,7 @@ export class RegistroService {
   registrarse(objeto:Registro):Observable<RespuestaRegistro>{
 
     return this.http.post<RespuestaRegistro>(`
-      ${this.api}usuarios`, 
+      ${this.api}auth/signup`, 
       objeto, 
       { headers: { 'Content-Type': 'application/ld+json' } });
   }
