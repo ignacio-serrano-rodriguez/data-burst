@@ -1,4 +1,5 @@
-export interface Registro{
+export interface Registro
+{
 	mail:string
 	usuario:string
 	contrasenia:string

@@ -1,4 +1,5 @@
-export interface Lista{
+export interface Lista
+{
 	id:string,
 	nombre:string,
 	publica:boolean

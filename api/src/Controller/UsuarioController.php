@@ -15,15 +15,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class UsuarioController extends AbstractController
 {
     #[Route("/api/auth/signin", name: "signin", methods: ["POST"])]
-    public function signin(
+    public function signin
+    (
         Request $request, 
         UsuarioRepository $usuarioRepository, 
-        JWTTokenManagerInterface $JWTManager) 
+        JWTTokenManagerInterface $JWTManager
+    ) 
     {
 
-        $data = json_decode($request->getContent(), true);
-        $nombreUsuario = $data['usuario'];
-        $contrasenia = $data['contrasenia'];
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $nombreUsuario = $datosRecibidos['usuario'];
+        $contrasenia = $datosRecibidos['contrasenia'];
         $respuestaJson = null;
 
         $usuario = $usuarioRepository->findOneBy(['usuario' => $nombreUsuario]);
@@ -75,19 +77,44 @@ class UsuarioController extends AbstractController
     #[Route("/api/auth/signup", name: "signup", methods: ["POST"])]
     public function signup(Request $request, EntityManagerInterface $entityManager)
     {
-        $data = json_decode($request->getContent(), true);
-        $nombreUsuario = $data['usuario'];
-        $mail = $data['mail'];
-        $contrasenia = $data['contrasenia'];
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $nombreUsuario = $datosRecibidos['usuario'];
+        $mail = $datosRecibidos['mail'];
+        $contrasenia = $datosRecibidos['contrasenia'];
+        $respuestaJson = null;
 
         $usuario = new Usuario();
         $usuario->setUsuario($nombreUsuario);
         $usuario->setMail($mail);
         $usuario->setContrasenia($contrasenia);
 
-        $entityManager->persist($usuario);
-        $entityManager->flush();
+        try 
+        {
+            $entityManager->persist($usuario);
+            $entityManager->flush();
+        
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "resultado" => "exito",
+                    "mensaje" => "Usuario creado exitosamente."
+                ],
+                Response::HTTP_CREATED
+            );
+        } 
+        
+        catch (\Throwable $th) 
+        {
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "resultado" => "error",
+                    "mensaje" => "Registro fallido."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
-        return new JsonResponse(['message' => 'Usuario creado exitosamente.'], Response::HTTP_CREATED);
+        return $respuestaJson;
     }
 }

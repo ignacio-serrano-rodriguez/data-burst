@@ -10,10 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { loginRegistroLogoutService } from '../../../servicios/loginRegistroLogout.service';
 import { Registro } from '../../../interfaces/Registro';
 
-@Component({
+@Component
+({
   selector: 'app-registro',
   standalone: true,
-  imports: [
+  imports: 
+  [
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -25,7 +27,8 @@ import { Registro } from '../../../interfaces/Registro';
   styleUrl: './registro.component.css'
 })
 
-export class RegistroComponent {
+export class RegistroComponent 
+{
 
   hideContrasenia = true;
   hideRepetirContrasenia = true;
@@ -40,40 +43,43 @@ export class RegistroComponent {
     contraseniaRepetida:['',Validators.required]
   })
 
-  registrarse(){
+  registrarse()
+  {
     
     if(this.formRegistro.invalid)return;
 
-    const objeto: Registro = {
+    const objeto: Registro
+    ={
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
       contrasenia: this.formRegistro.value.contrasenia,
       contraseniaRepetida: this.formRegistro.value.contraseniaRepetida
     };
 
-    if (objeto.contrasenia != objeto.contraseniaRepetida) {
+    if (objeto.contrasenia != objeto.contraseniaRepetida) 
+    {
       alert('Las contraseñas no coinciden.');
       return;
     }
 
-    this.loginRegistroLogoutService.registrarse(objeto).subscribe({
+    this.loginRegistroLogoutService.registrarse(objeto).subscribe
+    ({
 
-      next:(data)=>{
-        if(data.mensaje != ''){
-          
-          alert('Usuario registrado.');
+      next:(data)=>
+      {
+        if(data.resultado == "exito")
+        {
+          alert(data.mensaje);
           location.reload();
-
         }
       },
 
-      error:(error) =>{
-        console.log(error.message);
-        alert('No se pudo registrar al usuario.');
+      error:(error)=>
+      {
+        alert(error.error.mensaje);
       }
 
     })
     
   }
-
 }
