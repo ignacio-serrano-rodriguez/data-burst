@@ -11,22 +11,25 @@ import { MatIconModule } from '@angular/material/icon';
 import { loginRegistroLogoutService } from '../../../servicios/loginRegistroLogout.service';
 import { Login } from '../../../interfaces/Login';
 
-@Component({
+@Component
+({
   selector: 'app-login',
   standalone: true,
-  imports: [
+  imports: 
+  [
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
     MatIconModule
-],
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 
-export class LoginComponent {
+export class LoginComponent 
+{
 
   hide = true;
 
@@ -34,29 +37,38 @@ export class LoginComponent {
   private router = inject(Router);
   public formBuild = inject(FormBuilder);
 
-  public formLogin: FormGroup = this.formBuild.group({
+  public formLogin: FormGroup = this.formBuild.group
+  ({
     usuario:['',Validators.required],
     contrasenia:['',Validators.required]
   })
 
-  iniciarSesion(){
+  iniciarSesion()
+  {
+    
     if(this.formLogin.invalid)return;
 
-    const objeto:Login={
+    const objeto:Login
+    ={
       usuario:this.formLogin.value.usuario,
       contrasenia:this.formLogin.value.contrasenia
     }
 
-    this.loginRegistroLogoutService.iniciar_sesion(objeto).subscribe({
-      next:(data)=>{
-        if(data.token != ''){
+    this.loginRegistroLogoutService.iniciar_sesion(objeto).subscribe
+    ({
+
+      next:(data)=>
+      {
+        if(data.resultado == "exito")
+        {
           localStorage.setItem("token",data.token);
           this.router.navigate(['home']);
         }
       },
-      error:(error) =>{
-        console.log(error.message);
-        alert('Credenciales no válidas.');
+
+      error:(error)=>
+      {
+        alert(error.error.mensaje);
       }
 
     })

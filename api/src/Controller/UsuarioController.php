@@ -15,25 +15,61 @@ use Symfony\Component\Routing\Annotation\Route;
 class UsuarioController extends AbstractController
 {
     #[Route("/api/auth/signin", name: "signin", methods: ["POST"])]
-    public function signin(Request $request, UsuarioRepository $usuarioRepository, JWTTokenManagerInterface $JWTManager)
+    public function signin(
+        Request $request, 
+        UsuarioRepository $usuarioRepository, 
+        JWTTokenManagerInterface $JWTManager) 
     {
+
         $data = json_decode($request->getContent(), true);
-        $usuario = $data['usuario'];
+        $nombreUsuario = $data['usuario'];
         $contrasenia = $data['contrasenia'];
+        $respuestaJson = null;
 
-        $usuario = $usuarioRepository->findOneBy(['usuario' => $usuario]);
+        $usuario = $usuarioRepository->findOneBy(['usuario' => $nombreUsuario]);
 
-        if (!$usuario) {
-            return new JsonResponse(['error' => 'Credenciales no válidas.'], Response::HTTP_BAD_REQUEST);
+        if (!$usuario) 
+        {
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "resultado" => "error",
+                    "mensaje" => "Inicio de sesión fallido.",
+                    'token' => ''
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
-        if (!password_verify($contrasenia, $usuario->getContrasenia())) {
-            return new JsonResponse(['error' => 'Credenciales no válidas.'], Response::HTTP_BAD_REQUEST);
+        else if (!password_verify($contrasenia, $usuario->getContrasenia())) 
+        {
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "resultado" => "error",
+                    "mensaje" => "Inicio de sesión fallido.",
+                    'token' => ''
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
-        
-        $token = $JWTManager->create($usuario);
 
-        return new JsonResponse(['token' => $token]);
+        else 
+        {
+            $token = $JWTManager->create($usuario);
+            
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "resultado" => "exito",
+                    "mensaje" => "Inicio de sesión exitoso.",
+                    'token' => $token
+                ],
+                Response::HTTP_OK
+            );
+        }        
+
+        return $respuestaJson;
     }
 
     #[Route("/api/auth/signup", name: "signup", methods: ["POST"])]
