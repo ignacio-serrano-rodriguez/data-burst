@@ -2,14 +2,13 @@ import {Component} from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
 @Component({
-  selector: 'app-footer',
+  selector: 'app-pie',
   standalone: true,
   imports: [
     MatToolbarModule],
-  templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  templateUrl: './pie.component.html',
+  styleUrl: './pie.component.css'
 })
-export class FooterComponent {
+export class PieComponent {
 
- 
 }

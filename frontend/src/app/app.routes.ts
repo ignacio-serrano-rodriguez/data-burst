@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { InicioComponent } from './pages/inicio/inicio.component';
-import { HomeComponent } from './pages/home/home.component';
-import { PerfilComponent } from './pages/perfil/perfil.component';
-import { AdministracionComponent } from './pages/administracion/administracion.component';
-import { ErrorComponent } from './pages/error/error.component';
+import { InicioComponent } from './paginas/inicio/inicio.component';
+import { HomeComponent } from './paginas/home/home.component';
+import { PerfilComponent } from './paginas/perfil/perfil.component';
+import { AdministracionComponent } from './paginas/administracion/administracion.component';
+import { ErrorComponent } from './paginas/error/error.component';
 
 export const routes: Routes = [
 

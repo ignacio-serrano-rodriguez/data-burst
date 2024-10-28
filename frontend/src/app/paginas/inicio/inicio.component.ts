@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FooterComponent } from "../../footer/footer.component";
+import { PieComponent } from "../../pie/pie.component";
 import { LoginComponent } from "./login/login.component";
 import { RegistroComponent } from "./registro/registro.component";
 import { MatIconModule } from '@angular/material/icon';
@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
   // Tag que identifica al componente 
   selector: 'app-inicio',
   imports: [
-    FooterComponent, 
+    PieComponent, 
     LoginComponent, 
     RegistroComponent,
     MatIconModule,
