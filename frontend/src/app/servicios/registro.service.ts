@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { appsettings } from '../settings/appsettings';
+import { configuracion_app } from '../configuraciones/configuracion_app';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RespuestaRegistro } from '../interfaces/RespuestaRegistro';
@@ -12,7 +12,7 @@ import { Registro } from '../interfaces/Registro';
 export class RegistroService {
 
   private http = inject(HttpClient)
-  private api:string = appsettings.api;
+  private api:string = configuracion_app.api;
 
   constructor() {}
 

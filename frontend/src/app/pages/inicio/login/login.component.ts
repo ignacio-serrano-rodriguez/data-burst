@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon';
 
-import { LoginService } from '../../../services/login.service';
+import { LoginService } from '../../../servicios/login.service';
 import { Login } from '../../../interfaces/Login';
 
 @Component({

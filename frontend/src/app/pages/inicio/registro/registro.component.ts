@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { RegistroService } from '../../../services/registro.service';
+import { RegistroService } from '../../../servicios/registro.service';
 import { Registro } from '../../../interfaces/Registro';
 
 import { MatCardModule } from '@angular/material/card'; 
