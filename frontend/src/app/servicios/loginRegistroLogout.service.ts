@@ -16,8 +16,6 @@ export class loginRegistroLogoutService {
   private http = inject(HttpClient)
   private api:string = configuracion_app.api;
 
-  constructor(){}
-
   iniciar_sesion(objeto:Login):Observable<RespuestaLogin>{
 
     return this.http.post<RespuestaLogin>(`
