@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon';
 
-import { LoginService } from '../../../servicios/login.service';
+import { loginRegistroLogoutService } from '../../../servicios/loginRegistroLogout.service';
 import { Login } from '../../../interfaces/Login';
 
 @Component({
@@ -30,7 +30,7 @@ export class LoginComponent {
 
   hide = true;
 
-  private loginService = inject(LoginService);
+  private loginRegistroLogoutService = inject(loginRegistroLogoutService);
   private router = inject(Router);
   public formBuild = inject(FormBuilder);
 
@@ -47,7 +47,7 @@ export class LoginComponent {
       contrasenia:this.formLogin.value.contrasenia
     }
 
-    this.loginService.login(objeto).subscribe({
+    this.loginRegistroLogoutService.iniciar_sesion(objeto).subscribe({
       next:(data)=>{
         if(data.token != ''){
           localStorage.setItem("token",data.token);

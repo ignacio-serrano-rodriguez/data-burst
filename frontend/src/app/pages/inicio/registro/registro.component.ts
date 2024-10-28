@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { RegistroService } from '../../../servicios/registro.service';
-import { Registro } from '../../../interfaces/Registro';
-
 import { MatCardModule } from '@angular/material/card'; 
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule } from '@angular/material/icon';
+
+import { loginRegistroLogoutService } from '../../../servicios/loginRegistroLogout.service';
+import { Registro } from '../../../interfaces/Registro';
 
 @Component({
   selector: 'app-registro',
@@ -30,7 +30,7 @@ export class RegistroComponent {
   hideContrasenia = true;
   hideRepetirContrasenia = true;
 
-  private registroService = inject(RegistroService);
+  private loginRegistroLogoutService = inject(loginRegistroLogoutService);
   public formBuild = inject(FormBuilder);
 
   public formRegistro: FormGroup = this.formBuild.group({
@@ -56,7 +56,7 @@ export class RegistroComponent {
       return;
     }
 
-    this.registroService.registrarse(objeto).subscribe({
+    this.loginRegistroLogoutService.registrarse(objeto).subscribe({
 
       next:(data)=>{
         if(data.mensaje != ''){
