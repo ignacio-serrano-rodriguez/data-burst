@@ -21,7 +21,7 @@ class Lista
     private ?string $nombre = null;
 
     #[ORM\Column]
-    private ?bool $publica = null;
+    private ?bool $publica = true;
 
     /**
      * @var Collection<int, UsuarioManipulaLista>

@@ -123,7 +123,6 @@ class Usuario implements UserInterface
         if ($this->verificado === null) {
             $this->verificado = true;
         }
-        
     }
 
     public function getId(): ?int
