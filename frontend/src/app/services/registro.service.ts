@@ -12,14 +12,14 @@ import { Registro } from '../interfaces/Registro';
 export class RegistroService {
 
   private http = inject(HttpClient)
-  private apiUrl:string = appsettings.apiUrl;
+  private api:string = appsettings.api;
 
   constructor() {}
 
   registrarse(objeto:Registro):Observable<RespuestaRegistro>{
 
     return this.http.post<RespuestaRegistro>(`
-      ${this.apiUrl}/usuarios`, 
+      ${this.api}/usuarios`, 
       objeto, 
       { headers: { 'Content-Type': 'application/ld+json' } });
   }
