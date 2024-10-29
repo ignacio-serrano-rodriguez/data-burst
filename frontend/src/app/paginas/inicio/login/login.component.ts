@@ -60,6 +60,7 @@ export class LoginComponent {
       {
         if (data.exito == true) 
         {
+          document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
           localStorage.setItem("token", data.token);
           this.router.navigate(['home']);
         }
@@ -67,7 +68,7 @@ export class LoginComponent {
 
       error: (error)=> 
       {
-        alert(error.error.mensaje);
+        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
       }
 
     })

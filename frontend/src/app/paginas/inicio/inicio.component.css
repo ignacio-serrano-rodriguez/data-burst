@@ -60,11 +60,6 @@
     margin-top: 0.5em;
 }
 
-#componente
-{
-    background-color: lightblue;
-}
-
 #botonesLoginRegistro
 {
     display: flex;
@@ -88,6 +83,22 @@
 
     margin: 0.3em;
     margin-bottom: 1.5em;
+}
+
+#mensajeInformativo
+{
+    color: #F5A201;
+    font-family: 'ShareTech';
+    font-size: 1.5em;
+
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    margin-bottom: 1%;
 }
 
 #loginRegistro

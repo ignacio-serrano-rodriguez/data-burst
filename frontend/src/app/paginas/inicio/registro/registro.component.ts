@@ -11,23 +11,24 @@ import { accesoService } from '../../../servicios/acceso.service';
 import { Registro } from '../../../interfaces/Registro';
 
 @Component
-  ({
-    selector: 'app-registro',
-    standalone: true,
-    imports:
-      [
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        ReactiveFormsModule,
-        MatIconModule
-      ],
-    templateUrl: './registro.component.html',
-    styleUrl: './registro.component.css'
-  })
+({
+  selector: 'app-registro',
+  standalone: true,
+  imports:
+    [
+      MatCardModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatButtonModule,
+      ReactiveFormsModule,
+      MatIconModule
+    ],
+  templateUrl: './registro.component.html',
+  styleUrl: './registro.component.css'
+})
 
-export class RegistroComponent {
+export class RegistroComponent 
+{
 
   hideContrasenia = true;
   hideRepetirContrasenia = true;
@@ -35,45 +36,55 @@ export class RegistroComponent {
   private accesoService = inject(accesoService);
   public formBuild = inject(FormBuilder);
 
-  public formRegistro: FormGroup = this.formBuild.group({
+  public formRegistro: FormGroup = this.formBuild.group
+  ({
     mail: ['', Validators.required],
     usuario: ['', Validators.required],
     contrasenia: ['', Validators.required],
     contraseniaRepetida: ['', Validators.required]
   })
 
-  registrarse() {
+  registrarse() 
+  {
 
     if (this.formRegistro.invalid) return;
 
     const objeto: Registro
-      = {
+    ={
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
       contrasenia: this.formRegistro.value.contrasenia,
       contraseniaRepetida: this.formRegistro.value.contraseniaRepetida
     };
 
-    if (objeto.contrasenia != objeto.contraseniaRepetida) {
-      alert('Las contraseñas no coinciden.');
+    if (objeto.contrasenia != objeto.contraseniaRepetida) 
+    {
+      let mensajeInformativo = document.getElementById("mensajeInformativo");
+      mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
       return;
     }
 
     this.accesoService.registro(objeto).subscribe
-      ({
+    ({
 
-        next: (data) => {
-          if (data.exito == true) {
-            alert(data.mensaje);
-            location.reload();
-          }
-        },
-
-        error: (error) => {
-          alert(error.error.mensaje);
+      next: (data)=> 
+      {
+        if (data.exito == true) 
+        {
+          document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
+          (document.getElementById("mailInput") as HTMLInputElement).value = '';
+          (document.getElementById("usuarioInput") as HTMLInputElement).value = '';
+          (document.getElementById("contraseniaInput") as HTMLInputElement).value = '';
+          (document.getElementById("contraseniaRepetidaInput") as HTMLInputElement).value = '';
         }
+      },
 
-      })
+      error: (error)=> 
+      {
+        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
+      }
+
+    })
 
   }
 }

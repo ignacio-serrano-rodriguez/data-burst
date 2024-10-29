@@ -7,44 +7,52 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+
   // Tag que identifica al componente 
   selector: 'app-inicio',
-  imports: [
+  imports: 
+  [
     PieComponent, 
     LoginComponent, 
     RegistroComponent,
     MatIconModule,
     MatDividerModule,
-    MatButtonModule],
+    MatButtonModule
+  ],
   // Ruta del archivo HTML que renderiza el componente
   templateUrl: './inicio.component.html',
   // Ruta del archivo CSS que renderiza el componente
   styleUrl: './inicio.component.css',
   standalone: true
 })
-export class InicioComponent {  
 
+export class InicioComponent 
+{  
   botonLoginVisible:boolean = true;
   loginStyleDisplay:string = "revert";
 
   botonRegistroVisible:boolean = false;
   registroStyleDisplay:string = "none";
 
-  mostrarRegistroOcultarLogin() {
-
+  mostrarRegistroOcultarLogin() 
+  {
     this.botonLoginVisible = false;
     this.loginStyleDisplay = "none";
 
     this.botonRegistroVisible = true;
     this.registroStyleDisplay = "revert";
-  }
-  mostrarLoginOcultarRegistro() {
 
+    document.getElementById("mensajeInformativo")!.innerText = "";
+  }
+  mostrarLoginOcultarRegistro() 
+  {
     this.botonLoginVisible = true;
     this.loginStyleDisplay = "revert";
     
     this.botonRegistroVisible = false;
     this.registroStyleDisplay = "none";
+
+    document.getElementById("mensajeInformativo")!.innerText = "";
   }
 
 }
