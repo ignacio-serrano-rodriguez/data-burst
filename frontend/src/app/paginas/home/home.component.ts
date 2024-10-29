@@ -1,23 +1,22 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { CabeceraComponent } from "../../cabecera/cabecera.component";
 import { PieComponent } from "../../pie/pie.component";
 
-@Component({
+@Component
+({
   selector: 'app-home',
   standalone: true,
-  imports: [
+  imports: 
+  [
     CabeceraComponent,
     PieComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnChanges {
-
+export class HomeComponent 
+{
   usuarioLogueado: string = '(usuario logueado)';
 
-  constructor() { }
-
-  ngOnChanges(changes: SimpleChanges): void { }
 
 }
