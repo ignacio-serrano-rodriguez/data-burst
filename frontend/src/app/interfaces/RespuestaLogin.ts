@@ -1,6 +1,6 @@
 export interface RespuestaLogin
 {
-	resultado:string,
+	exito:boolean,
 	mensaje:string,
 	token:string
 }

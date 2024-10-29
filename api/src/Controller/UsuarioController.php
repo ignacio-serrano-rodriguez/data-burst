@@ -35,7 +35,7 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-                    "resultado" => "error",
+                    "exito" => false,
                     "mensaje" => "Inicio de sesión fallido.",
                     'token' => ''
                 ],
@@ -48,7 +48,7 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-                    "resultado" => "error",
+                    "exito" => false,
                     "mensaje" => "Inicio de sesión fallido.",
                     'token' => ''
                 ],
@@ -63,7 +63,7 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-                    "resultado" => "exito",
+                    "exito" => true,
                     "mensaje" => "Inicio de sesión exitoso.",
                     'token' => $token
                 ],
@@ -96,7 +96,7 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-                    "resultado" => "exito",
+                    "exito" => true,
                     "mensaje" => "Usuario creado exitosamente."
                 ],
                 Response::HTTP_CREATED
@@ -108,7 +108,7 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-                    "resultado" => "error",
+                    "exito" => false,
                     "mensaje" => "Registro fallido."
                 ],
                 Response::HTTP_BAD_REQUEST

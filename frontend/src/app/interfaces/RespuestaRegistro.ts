@@ -1,5 +1,5 @@
 export interface RespuestaRegistro
 {
-	resultado:string,
+	exito:boolean,
 	mensaje:string
 }

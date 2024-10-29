@@ -59,7 +59,7 @@ export class LoginComponent
 
       next:(data)=>
       {
-        if(data.resultado == "exito")
+        if(data.exito == true)
         {
           localStorage.setItem("token",data.token);
           this.router.navigate(['home']);

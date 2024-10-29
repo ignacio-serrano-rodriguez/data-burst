@@ -67,7 +67,7 @@ export class RegistroComponent
 
       next:(data)=>
       {
-        if(data.resultado == "exito")
+        if(data.exito == true)
         {
           alert(data.mensaje);
           location.reload();
