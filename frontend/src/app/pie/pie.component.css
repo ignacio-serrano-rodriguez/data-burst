@@ -9,6 +9,11 @@
     color: #E034FF;
 }
 
+a
+{
+    text-decoration: none;
+}
+
 #pie
 {
     display: flex;
@@ -39,5 +44,5 @@
 
 span:hover 
 {
-    font-weight: bolder;
+    text-decoration: underline;
 }
