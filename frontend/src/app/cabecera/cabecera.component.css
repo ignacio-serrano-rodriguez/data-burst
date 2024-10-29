@@ -85,3 +85,36 @@ a
 {
     text-decoration: underline;
 }
+
+/* Tablet */
+@media (max-width:860px)
+{
+    #cabecera 
+    {
+        padding-bottom: 8em;
+    }
+
+    #avatarUsuario
+    {
+        margin-left: 3%;
+    }
+}
+
+/* Movil */
+@media (max-width:430px)
+{
+    a
+    {
+        margin: 1%;
+    }
+
+    #cabecera 
+    {
+        padding-bottom: 13em;
+    }
+
+    #avatarUsuario
+    {
+        margin-left: 2%;
+    }
+}
