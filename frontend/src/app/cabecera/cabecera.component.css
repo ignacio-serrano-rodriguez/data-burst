@@ -1,6 +1,6 @@
 *
 {
-    margin: 0;
+    margin: auto;
     padding: 0;
     border: 0;
 
@@ -76,7 +76,7 @@ a
 
 #avatarUsuario
 {
-    width: 3em;;
+    width: 3em;
 }
 
 .textoEnlace:hover
