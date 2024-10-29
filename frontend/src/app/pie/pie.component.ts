@@ -1,14 +1,18 @@
-import {Component} from '@angular/core';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { Component } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
-@Component({
+@Component
+({
   selector: 'app-pie',
   standalone: true,
-  imports: [
-    MatToolbarModule],
+  imports: 
+  [
+    MatToolbarModule
+  ],
   templateUrl: './pie.component.html',
   styleUrl: './pie.component.css'
 })
-export class PieComponent {
+export class PieComponent 
+{
 
 }
