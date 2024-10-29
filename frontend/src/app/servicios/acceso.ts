@@ -15,26 +15,26 @@ import { RespuestaRegistro } from '../interfaces/RespuestaRegistro';
   providedIn: 'root'
 })
 
-export class loginRegistroLogoutService 
+export class accesoService 
 {
 
   private http = inject(HttpClient)
   private api:string = configuracion_app.api;
 
-  iniciar_sesion(objeto:Login):Observable<RespuestaLogin>
+  login(objeto:Login):Observable<RespuestaLogin>
   {
     return this.http.post<RespuestaLogin>
     (`
-      ${this.api}auth/signin`, 
+      ${this.api}login`, 
       objeto
     );
   }
 
-  registrarse(objeto:Registro):Observable<RespuestaRegistro>
+  registro(objeto:Registro):Observable<RespuestaRegistro>
   {
     return this.http.post<RespuestaRegistro>
     (`
-      ${this.api}auth/signup`, 
+      ${this.api}registro`, 
       objeto, 
       { headers: 
         { 

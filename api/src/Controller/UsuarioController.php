@@ -14,8 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UsuarioController extends AbstractController
 {
-    #[Route("/api/auth/signin", name: "signin", methods: ["POST"])]
-    public function signin
+    #[Route("/api/login", name: "login", methods: ["POST"])]
+    public function login
     (
         Request $request, 
         UsuarioRepository $usuarioRepository, 
@@ -74,8 +74,12 @@ class UsuarioController extends AbstractController
         return $respuestaJson;
     }
 
-    #[Route("/api/auth/signup", name: "signup", methods: ["POST"])]
-    public function signup(Request $request, EntityManagerInterface $entityManager)
+    #[Route("/api/registro", name: "registro", methods: ["POST"])]
+    public function registro
+    (
+        Request $request, 
+        EntityManagerInterface $entityManager
+    )
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $nombreUsuario = $datosRecibidos['usuario'];
