@@ -12,21 +12,21 @@ import { accesoService } from '../../../servicios/acceso.service';
 import { Login } from '../../../interfaces/Login';
 
 @Component
-  ({
-    selector: 'app-login',
-    standalone: true,
-    imports:
-      [
-        MatCardModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        ReactiveFormsModule,
-        MatIconModule
-      ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.css'
-  })
+({
+  selector: 'app-login',
+  standalone: true,
+  imports:
+    [
+      MatCardModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatButtonModule,
+      ReactiveFormsModule,
+      MatIconModule
+    ],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
+})
 
 export class LoginComponent {
 
@@ -37,35 +37,39 @@ export class LoginComponent {
   public formBuild = inject(FormBuilder);
 
   public formLogin: FormGroup = this.formBuild.group
-    ({
-      usuario: ['', Validators.required],
-      contrasenia: ['', Validators.required]
-    })
+  ({
+    usuario: ['', Validators.required],
+    contrasenia: ['', Validators.required]
+  })
 
-  iniciarSesion() {
+  iniciarSesion() 
+  {
 
     if (this.formLogin.invalid) return;
 
     const objeto: Login
-      = {
+    ={
       usuario: this.formLogin.value.usuario,
       contrasenia: this.formLogin.value.contrasenia
     }
 
     this.accesoService.login(objeto).subscribe
-      ({
+    ({
 
-        next: (data) => {
-          if (data.exito == true) {
-            localStorage.setItem("token", data.token);
-            this.router.navigate(['home']);
-          }
-        },
-
-        error: (error) => {
-          alert(error.error.mensaje);
+      next: (data) => 
+      {
+        if (data.exito == true) 
+        {
+          localStorage.setItem("token", data.token);
+          this.router.navigate(['home']);
         }
+      },
 
-      })
+      error: (error)=> 
+      {
+        alert(error.error.mensaje);
+      }
+
+    })
   }
 }
