@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar id="cabecera">
     <a id="titulo" class="enlaces">
         <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
         <h2 id="textoTitulo">
@@ -6,10 +6,10 @@
             <span>Burst</span>
         </h2> 
     </a>
-    <a class="enlaces"><span>Estadísticas</span></a>
-    <a class="enlaces"><span>Administración</span></a>
+    <a id="estadisticas" class="enlaces"><span>Estadísticas</span></a>
+    <a id="administracion" class="enlaces"><span>Administración</span></a>
     <a id="usuario" class="enlaces">
-        <img id="avatarUsuario" alt="Avatar del usuario"/>
         <span id="nombreUsuario">{{usuarioLogueado}}</span>
+        <img id="avatarUsuario" src="..\..\..\assets\dataBurstLogo.svg" alt="Avatar del usuario"/>
     </a>
 </mat-toolbar>

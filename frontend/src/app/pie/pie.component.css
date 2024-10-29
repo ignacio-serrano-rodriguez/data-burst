@@ -6,6 +6,7 @@
 
     font-family: 'ShareTech';
     font-size: 1.1em;
+    color: #E034FF;
 }
 
 #pie
@@ -32,7 +33,6 @@
 
 .enlaces
 {
-    color: #E034FF;
     min-width: 11em;
     width: 33%;
 }

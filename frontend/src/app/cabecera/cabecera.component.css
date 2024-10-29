@@ -1,13 +1,64 @@
-#componente
+*
 {
-    background-color: rgb(255, 255, 191);
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    font-family: 'ShareTech';
+    font-size: 1.1em;
+    color: #AE00CD;
 }
 
-img
+#cabecera
 {
-    padding: 0;
-    margin: 0;
-    border: 0;
-    width: 10%;
-    height: 10%;
+    display: flex;
+    flex-wrap: wrap;
+
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+
+    height: 5.5em;
+
+    background-color: #F4B3FF;
+}
+
+#estadisticas, #administracion
+{
+    width: 28%;
+}
+
+#titulo
+{
+    width: 17%;
+
+    display: flex;
+    flex-wrap: nowrap;
+
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+}
+
+#logoTitulo
+{
+    width: 4em;
+}
+
+#usuario
+{
+    width: 20%;
+
+    display: flex;
+    flex-wrap: nowrap;
+
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+}
+
+
+#avatarUsuario
+{
+    width: 3em;;
 }
