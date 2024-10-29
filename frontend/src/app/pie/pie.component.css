@@ -1,8 +1,11 @@
 *
 {
-    margin: auto;
+    margin: 0;
     padding: 0;
     border: 0;
+
+    font-family: 'ShareTech';
+    font-size: 1.1em;
 }
 
 #pie
