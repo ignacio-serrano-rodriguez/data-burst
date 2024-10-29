@@ -1,20 +1,19 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-@Component({
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+@Component
+({
   selector: 'app-cabecera',
   standalone: true,
-  imports: [
-    
+  imports: 
+  [
+    MatToolbarModule
   ],
   templateUrl: './cabecera.component.html',
   styleUrl: './cabecera.component.css'
 })
-export class CabeceraComponent implements OnChanges {
-
-  @Input() usuarioLogueado: string = '';
-
-  constructor() {}
-
-  ngOnChanges(changes: SimpleChanges): void {}
-
+export class CabeceraComponent 
+{
+  @Input() usuarioLogueado: string = 'iserod';
 }

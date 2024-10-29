@@ -1,7 +1,15 @@
-<div>
-    <a><h2>Data Burst</h2> <img src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/></a>
-    <h2><a>Estadísticas</a></h2>
-    <h2><a>Administración</a></h2>
-    <h3><a>{{usuarioLogueado}} <img alt="Avatar del usuario"/></a></h3>    
-</div>
-
+<mat-toolbar>
+    <a id="titulo" class="enlaces">
+        <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
+        <h2 id="textoTitulo">
+            <span>Data</span>
+            <span>Burst</span>
+        </h2> 
+    </a>
+    <a class="enlaces"><span>Estadísticas</span></a>
+    <a class="enlaces"><span>Administración</span></a>
+    <a id="usuario" class="enlaces">
+        <img id="avatarUsuario" alt="Avatar del usuario"/>
+        <span id="nombreUsuario">{{usuarioLogueado}}</span>
+    </a>
+</mat-toolbar>
