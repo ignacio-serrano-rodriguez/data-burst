@@ -12,6 +12,7 @@
 a
 {
     text-decoration: none;
+    min-width: 9em;
 }
 
 #cabecera
@@ -54,6 +55,7 @@ a
     display: flex;
     flex-wrap: wrap;
     text-align: left;
+    width: 46%;
 }
 
 #textoTitulo span
@@ -74,9 +76,14 @@ a
     text-align: center;
 }
 
+#nombreUsuario
+{
+    width: 79%;
+}
+
 #avatarUsuario
 {
-    width: 3em;
+    width: 2.5em;
 }
 
 .textoEnlace:hover
