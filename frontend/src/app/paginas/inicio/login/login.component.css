@@ -5,6 +5,11 @@
     border: 0;
 }
 
+button:hover
+{
+    text-decoration: underline;
+}
+
 .elementoFormulario
 {
     width: 100%;;
