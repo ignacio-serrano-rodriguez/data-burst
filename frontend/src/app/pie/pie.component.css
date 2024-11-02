@@ -32,7 +32,7 @@ a
 {
     #pie 
     {
-      height: 6em;
+        height: 6em;
     }
 }
 
@@ -42,7 +42,7 @@ a
     width: 33%;
 }
 
-span:hover 
+a:hover 
 {
     text-decoration: underline;
 }
