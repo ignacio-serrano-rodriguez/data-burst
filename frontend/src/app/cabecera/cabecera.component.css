@@ -40,7 +40,7 @@ a
 
 #titulo
 {
-    width: 15%;
+    width: 16%;
 
     display: flex;
     flex-wrap: nowrap;
@@ -51,7 +51,7 @@ a
 
 #logoTitulo
 {
-    width: 4em;
+    width: 3.6em;
 }
 
 #textoTitulo
@@ -59,12 +59,14 @@ a
     display: flex;
     flex-wrap: wrap;
     text-align: left;
+
     width: 46%;
 }
 
 #textoTitulo span
 {
     width: 100%;
+
     font-size: 1.7em;
 }
 
@@ -82,7 +84,9 @@ a
 
 #nombreUsuario
 {
-    font-size: 1em;
+    font-size: 0.9em;
+
+    min-width: 7.5em;
 }
 
 #avatarUsuario
@@ -100,7 +104,7 @@ a
 {
     #cabecera 
     {
-        padding-bottom: 8em;
+        padding-bottom: 9em;
     }
 
     #avatarUsuario
