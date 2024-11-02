@@ -11,7 +11,6 @@ import { authGuard } from './guardianes/auth.guard';
 
 export const routes: Routes = [
 
-	{path:"inicio", component:InicioComponent},
 	{path:"", component:InicioComponent},
 	{path:"home", component:HomeComponent, canActivate: [authGuard]},
 	{path:"perfil", component:PerfilComponent, canActivate: [authGuard]},
