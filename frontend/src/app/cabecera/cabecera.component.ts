@@ -15,5 +15,5 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 })
 export class CabeceraComponent 
 {
-  @Input() usuarioLogueado: string = 'iserod';
+  @Input() usuarioLogueado: string = 'nombreUsuario';
 }
