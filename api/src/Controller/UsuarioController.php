@@ -121,4 +121,38 @@ class UsuarioController extends AbstractController
 
         return $respuestaJson;
     }
+
+    #[Route("/api/validar-token", name: "validar_token", methods: ["POST"])]
+    public function validarToken(Request $request, JWTTokenManagerInterface $JWTManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $token = $datosRecibidos['token'];
+        $respuestaJson = null;
+
+        try 
+        {
+            $data = $JWTManager->parse($token);
+
+            $respuestaJson = new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Token válido.",
+                    // "data" => $data
+                ],
+                Response::HTTP_OK
+            );
+        } 
+        catch (\Exception $e) 
+        {
+            $respuestaJson = new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Token inválido."
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        return $respuestaJson;
+    }
 }
