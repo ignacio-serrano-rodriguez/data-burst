@@ -26,8 +26,8 @@ export class accesoService
   login(objeto:Login):Observable<RespuestaLogin>
   {
     return this.http.post<RespuestaLogin>
-    (`
-      ${this.api}login`, 
+    (
+      `${this.api}login`, 
       objeto
     );
   }
@@ -35,28 +35,19 @@ export class accesoService
   registro(objeto:Registro):Observable<RespuestaRegistro>
   {
     return this.http.post<RespuestaRegistro>
-    (`
-      ${this.api}registro`, 
-      objeto, 
-      { headers: 
-        { 
-          'Content-Type': 'application/ld+json' 
-        } 
-      }
+    (
+      `${this.api}registro`, 
+      objeto
     );
   }
 
   validarToken(objeto:ValidarToken):Observable<RespuestaValidarToken>
   {
     return this.http.post<RespuestaValidarToken>
-    (`
-      ${this.api}validar-token`, 
-      objeto, 
-      { headers: 
-        { 
-          'Content-Type': 'application/ld+json' 
-        } 
-      }
+    (
+      `${this.api}validar-token`, 
+      objeto
     );
   }
+  
 }
