@@ -9,6 +9,8 @@ import { RespuestaLogin } from '../interfaces/RespuestaLogin';
 import { Login } from '../interfaces/Login';
 import { Registro } from '../interfaces/Registro';
 import { RespuestaRegistro } from '../interfaces/RespuestaRegistro';
+import { ValidarToken } from '../interfaces/ValidarToken';
+import { RespuestaValidarToken } from '../interfaces/RespuestaValidarToken';
 
 @Injectable
 ({
@@ -35,6 +37,20 @@ export class accesoService
     return this.http.post<RespuestaRegistro>
     (`
       ${this.api}registro`, 
+      objeto, 
+      { headers: 
+        { 
+          'Content-Type': 'application/ld+json' 
+        } 
+      }
+    );
+  }
+
+  validarToken(objeto:ValidarToken):Observable<RespuestaValidarToken>
+  {
+    return this.http.post<RespuestaValidarToken>
+    (`
+      ${this.api}validar-token`, 
       objeto, 
       { headers: 
         { 
