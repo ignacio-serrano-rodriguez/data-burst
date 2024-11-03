@@ -1,19 +1,37 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-export const authGuard: CanActivateFn = (route, state) => {
+import { accesoService } from '../servicios/acceso.service';
+import { ValidarToken } from '../interfaces/ValidarToken';
 
-  const token = localStorage.getItem('token') || '';
+export const authGuard: CanActivateFn = (route, state) => 
+{
+
   const router = inject(Router);
-  
-  if(token != "")
+  const accesoServiceInstance = inject(accesoService);
+  const objeto: ValidarToken = {token: (localStorage.getItem('token') || '')}
+
+  return accesoServiceInstance.validarToken(objeto).toPromise().then(data => 
   {
-    return true;
-  }
-  else
+
+    console.log(data);
+
+    if (data && data.exito == true) 
+    {
+      return true;
+    } 
+    else 
+    {
+      const url = router.createUrlTree([""]);
+      return url;
+    }
+
+  }).
+
+  catch(error => 
   {
     const url = router.createUrlTree([""]);
     return url;
-  }
-
+  });
+  
 };
