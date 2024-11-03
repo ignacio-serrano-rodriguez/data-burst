@@ -14,8 +14,6 @@ export const authGuard: CanActivateFn = (route, state) =>
   return accesoServiceInstance.validarToken(objeto).toPromise().then(data => 
   {
 
-    console.log(data);
-
     if (data && data.exito == true) 
     {
       return true;
