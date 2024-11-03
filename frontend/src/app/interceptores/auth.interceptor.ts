@@ -4,21 +4,23 @@ export const authInterceptor: HttpInterceptorFn = (req, next) =>
 {
   // debugger;
 
-  if(req.url.indexOf("Acceso")>0)
-  {
-    return next(req);
-  }
+  // if(req.url.indexOf("Acceso")>0)
+  // {
+  //   return next(req);
+  // }
 
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
 
-  const cloneRequest = req.clone
-  ({
-    setHeaders: 
-    { 
-      Authorization: `Bearer ${token}` 
-    }
-  });
+  // const cloneRequest = req.clone
+  // ({
+  //   setHeaders: 
+  //   { 
+  //     Authorization: `Bearer ${token}` 
+  //   }
+  // });
 
-  return next(cloneRequest);
+  // return next(cloneRequest);
+
+  return next(req);
 
 };
