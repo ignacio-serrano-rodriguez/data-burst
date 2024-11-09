@@ -120,7 +120,8 @@ class Usuario implements UserInterface
         $this->permiso = 1;
 
         // Cambiar cuando se implemente el envío de correos de verificación
-        if ($this->verificado === null) {
+        if ($this->verificado === null) 
+        {
             $this->verificado = true;
         }
     }

@@ -133,18 +133,19 @@ class UsuarioController extends AbstractController
         {
             $data = $JWTManager->parse($token);
 
-            $respuestaJson = new JsonResponse(
+            $respuestaJson = new JsonResponse
+            (
                 [
                     "exito" => true,
-                    "mensaje" => "Token válido.",
-                    // "data" => $data
+                    "mensaje" => "Token válido."
                 ],
                 Response::HTTP_OK
             );
         } 
         catch (\Exception $e) 
         {
-            $respuestaJson = new JsonResponse(
+            $respuestaJson = new JsonResponse
+            (
                 [
                     "exito" => false,
                     "mensaje" => "Token inválido."

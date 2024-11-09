@@ -1,5 +1,6 @@
 export interface RespuestaValidarToken
 {
 	exito:boolean,
-	mensaje:string
+	mensaje:string,
+	permiso:string
 }

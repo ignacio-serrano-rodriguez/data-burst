@@ -28,7 +28,8 @@ import { Login } from '../../../interfaces/Login';
   styleUrl: './login.component.css'
 })
 
-export class LoginComponent {
+export class LoginComponent 
+{
 
   hide = true;
 
