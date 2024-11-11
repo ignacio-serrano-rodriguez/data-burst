@@ -35,7 +35,6 @@ export class CabeceraComponent implements OnInit
     localStorage.clear();
     sessionStorage.clear();
     window.location.href = '/';
-    this.usuario = '';
   }
 
 }
