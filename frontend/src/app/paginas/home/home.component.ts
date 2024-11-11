@@ -17,15 +17,5 @@ import { PieComponent } from "../../pie/pie.component";
 export class HomeComponent 
 {
   usuarioLogueado: string = '(usuario logueado)';
-
-  ngOnInit() 
-  {
-    
-    if (!sessionStorage.getItem('reloaded')) 
-    {
-      sessionStorage.setItem('reloaded', 'true');
-      window.location.reload();
-    }
-    
-  }
+  
 }

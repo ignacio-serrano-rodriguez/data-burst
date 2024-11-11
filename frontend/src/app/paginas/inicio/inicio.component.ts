@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PieComponent } from "../../pie/pie.component";
 import { LoginComponent } from "./login/login.component";
 import { RegistroComponent } from "./registro/registro.component";
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
 
@@ -26,13 +27,24 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true
 })
 
-export class InicioComponent 
+export class InicioComponent  implements OnInit
 {  
   botonLoginVisible:boolean = true;
   loginStyleDisplay:string = "revert";
 
   botonRegistroVisible:boolean = false;
   registroStyleDisplay:string = "none";
+
+  constructor(private router: Router) {}
+
+  ngOnInit() 
+  {
+    if (localStorage.getItem('logueado')) 
+    {
+      this.router.navigate(['home']);
+      setTimeout(() => {window.location.reload();}, 400);
+    }
+  }
 
   mostrarRegistroOcultarLogin() 
   {

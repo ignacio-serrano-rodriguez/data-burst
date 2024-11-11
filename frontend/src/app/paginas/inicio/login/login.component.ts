@@ -12,24 +12,23 @@ import { accesoService } from '../../../servicios/acceso.service';
 import { Login } from '../../../interfaces/Login';
 
 @Component
-({
-  selector: 'app-login',
-  standalone: true,
-  imports:
-    [
-      MatCardModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatButtonModule,
-      ReactiveFormsModule,
-      MatIconModule
-    ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
-})
+  ({
+    selector: 'app-login',
+    standalone: true,
+    imports:
+      [
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatIconModule
+      ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
+  })
 
-export class LoginComponent 
-{
+export class LoginComponent {
 
   hide = true;
 
@@ -38,56 +37,55 @@ export class LoginComponent
   public formBuild = inject(FormBuilder);
 
   public formLogin: FormGroup = this.formBuild.group
-  ({
-    usuario: ['', Validators.required],
-    contrasenia: ['', Validators.required]
-  })
+    ({
+      usuario: ['', Validators.required],
+      contrasenia: ['', Validators.required]
+    })
 
-  iniciarSesion() 
-  {
+  iniciarSesion() {
 
     if (this.formLogin.invalid) return;
 
     const objeto: Login
-    ={
+      = {
       usuario: this.formLogin.value.usuario,
       contrasenia: this.formLogin.value.contrasenia
     }
 
     this.accesoService.login(objeto).subscribe
-    ({
+      ({
 
-      next: (data) => 
-      {
-        if (data.exito == true) 
-        {
-          document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
+        next: (data) => {
+          if (data.exito == true) {
+            document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
 
-          localStorage.setItem("token", data.token);
+            localStorage.setItem("token", data.token);
 
-          localStorage.setItem("id", data.id.toString());
-          localStorage.setItem("mail", data.mail);
-          localStorage.setItem("usuario", data.usuario);
-          localStorage.setItem("verificado", data.verificado.toString());
-          localStorage.setItem("nombre", data.nombre);
-          localStorage.setItem("apellido_1", data.apellido_1);
-          localStorage.setItem("apellido_2", data.apellido_2);
-          localStorage.setItem("fechaNacimiento", data.fechaNacimiento);
-          localStorage.setItem("pais", data.pais);
-          localStorage.setItem("profesion", data.profesion);
-          localStorage.setItem("estudios", data.estudios);
-          localStorage.setItem("idioma", data.idioma);
-          localStorage.setItem("permiso", data.permiso.toString());
+            localStorage.setItem("id", data.id.toString());
+            localStorage.setItem("mail", data.mail);
+            localStorage.setItem("usuario", data.usuario);
+            localStorage.setItem("verificado", data.verificado.toString());
+            localStorage.setItem("nombre", data.nombre);
+            localStorage.setItem("apellido_1", data.apellido_1);
+            localStorage.setItem("apellido_2", data.apellido_2);
+            localStorage.setItem("fechaNacimiento", data.fechaNacimiento);
+            localStorage.setItem("pais", data.pais);
+            localStorage.setItem("profesion", data.profesion);
+            localStorage.setItem("estudios", data.estudios);
+            localStorage.setItem("idioma", data.idioma);
+            localStorage.setItem("permiso", data.permiso.toString());
+            localStorage.setItem("logueado", "true");
 
-          this.router.navigate(['home']);
+            this.router.navigate(['home']);
+            setTimeout(() => {window.location.reload();}, 400);
+
+          }
+        },
+
+        error: (error) => {
+          document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
         }
-      },
 
-      error: (error)=> 
-      {
-        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
-      }
-
-    })
+      })
   }
 }
