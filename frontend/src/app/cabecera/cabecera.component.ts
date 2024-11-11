@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu'; 
 
 @Component
 ({
@@ -8,11 +9,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   standalone: true,
   imports: 
   [
-    MatToolbarModule
+    MatToolbarModule,
+    MatMenuModule
   ],
   templateUrl: './cabecera.component.html',
   styleUrl: './cabecera.component.css'
 })
+
 export class CabeceraComponent implements OnInit
 {
   @Input() usuario: string = '';
@@ -25,6 +28,14 @@ export class CabeceraComponent implements OnInit
     {
       this.usuario = storedUser;
     }
+  }
+
+  cerrarSesion() 
+  {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = '/';
+    this.usuario = '';
   }
 
 }

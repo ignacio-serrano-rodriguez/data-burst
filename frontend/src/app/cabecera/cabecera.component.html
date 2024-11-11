@@ -20,7 +20,12 @@
     </span>
     <span id="usuario" class="enlaces">
         <span id="nombreUsuario" class="textoEnlace">
-            <a href="http://localhost:4200/perfil">{{usuario}}</a>
+            <!-- {{usuario}}</a> -->
+            <button mat-button [matMenuTriggerFor]="menu">{{usuario}}</button>
+            <mat-menu #menu="matMenu">
+            <button><a href="http://localhost:4200/perfil">Ver perfil</a></button>
+            <button (click)="cerrarSesion()">Cerrar sesión</button>
+            </mat-menu>
         </span>
         <a href="http://localhost:4200/perfil">
             <img id="avatarUsuario" src="..\..\..\assets\dataBurstLogo.svg" alt="Avatar del usuario"/>
