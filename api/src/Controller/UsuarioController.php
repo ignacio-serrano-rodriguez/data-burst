@@ -63,9 +63,25 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
+
                     "exito" => true,
                     "mensaje" => "Inicio de sesión exitoso.",
-                    'token' => $token
+                    'token' => $token,
+
+                    'id' => $usuario->getId(),
+                    'mail' => $usuario->getMail(),
+                    'usuario' => $usuario->getUsuario(),
+                    'verificado' => $usuario->isVerificado(),
+                    'nombre' => $usuario->getNombre(),
+                    'apellido_1' => $usuario->getApellido1(),
+                    'apellido_2' => $usuario->getApellido2(),
+                    'fechaNacimiento' => $usuario->getFechaNacimiento(),
+                    'pais' => $usuario->getPais(),
+                    'profesion' => $usuario->getProfesion(),
+                    'estudios' => $usuario->getEstudios(),
+                    'idioma' => $usuario->getIdioma(),
+                    'permiso' => $usuario->getPermiso()
+
                 ],
                 Response::HTTP_OK
             );

@@ -62,7 +62,23 @@ export class LoginComponent
         if (data.exito == true) 
         {
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
+
           localStorage.setItem("token", data.token);
+
+          localStorage.setItem("id", data.id.toString());
+          localStorage.setItem("mail", data.mail);
+          localStorage.setItem("usuario", data.usuario);
+          localStorage.setItem("verificado", data.verificado.toString());
+          localStorage.setItem("nombre", data.nombre);
+          localStorage.setItem("apellido_1", data.apellido_1);
+          localStorage.setItem("apellido_2", data.apellido_2);
+          localStorage.setItem("fechaNacimiento", data.fechaNacimiento);
+          localStorage.setItem("pais", data.pais);
+          localStorage.setItem("profesion", data.profesion);
+          localStorage.setItem("estudios", data.estudios);
+          localStorage.setItem("idioma", data.idioma);
+          localStorage.setItem("permiso", data.permiso.toString());
+
           this.router.navigate(['home']);
         }
       },
