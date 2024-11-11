@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu'; 
@@ -10,7 +11,8 @@ import {MatMenuModule} from '@angular/material/menu';
   imports: 
   [
     MatToolbarModule,
-    MatMenuModule
+    MatMenuModule,
+    CommonModule
   ],
   templateUrl: './cabecera.component.html',
   styleUrl: './cabecera.component.css'
@@ -18,15 +20,29 @@ import {MatMenuModule} from '@angular/material/menu';
 
 export class CabeceraComponent implements OnInit
 {
-  @Input() usuario: string = '';
+  @Input() nombreUsuario: string = '';
+  mostrarAdministracion: boolean = false;
+  permisoUsuario: string = "1";
 
   ngOnInit() 
   {
-    const storedUser = localStorage.getItem('usuario');
+    this.nombreUsuario = localStorage.getItem('usuario') || "usuario";
 
-    if (storedUser) 
+    if (this.nombreUsuario) 
     {
-      this.usuario = storedUser;
+      this.nombreUsuario = this.nombreUsuario;
+
+      this.permisoUsuario = localStorage.getItem('permiso') || "1";
+
+      if (this.permisoUsuario == "2")
+      {
+        console.log(localStorage.getItem('permiso'));
+        this.mostrarAdministracion = true;
+      }
+      else 
+      {
+        this.mostrarAdministracion = false;
+      }
     }
   }
 

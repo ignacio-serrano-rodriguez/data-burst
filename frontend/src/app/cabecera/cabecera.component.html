@@ -18,12 +18,16 @@
         <a class="textoEnlace" href="http://localhost:4200/estadisticas">Estadísticas</a>
     </span>
 
-    <span id="administracion" class="enlaces" >
+    <!-- <span id="administracion" class="enlaces" >
+        <a class="textoEnlace" href="http://localhost:4200/administracion">Administración</a>
+    </span> -->
+
+    <span *ngIf="mostrarAdministracion" id="administracion" class="enlaces" >
         <a class="textoEnlace" href="http://localhost:4200/administracion">Administración</a>
     </span>
 
     <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
-        <span id="nombreUsuario" class="textoEnlace">{{usuario}}</span>
+        <span id="nombreUsuario" class="textoEnlace">{{nombreUsuario}}</span>
         <img id="avatarUsuario" src="..\..\..\assets\dataBurstLogo.svg" alt="Avatar del usuario"/>
     </button>
         <mat-menu #menu="matMenu">
