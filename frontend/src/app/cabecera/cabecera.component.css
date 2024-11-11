@@ -72,21 +72,31 @@ a
 
 #usuario
 {
-    width: 14%;
+    width: 15%;
 
     display: flex;
     flex-wrap: nowrap;
 
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     text-align: center;
+
+    background-color: #F4B3FF;
+}
+
+.botonMenuUsuario
+{
+    background-color: white;
+
+    font-size: 1.15em;
+
+    padding: 0.5em;
 }
 
 #nombreUsuario
 {
-    font-size: 0.9em;
-
-    min-width: 7.5em;
+    font-size: 1em;
+    min-width: 5em;
 }
 
 #avatarUsuario
@@ -94,9 +104,19 @@ a
     width: 2.5em;
 }
 
+#verPerfil
+{
+    width: 100%;
+}
+
 .textoEnlace:hover
 {
     text-decoration: underline;
+}
+
+button:hover
+{
+    cursor: pointer;
 }
 
 /* Tablet */

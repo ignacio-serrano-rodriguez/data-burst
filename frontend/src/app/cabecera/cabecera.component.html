@@ -1,4 +1,5 @@
 <mat-toolbar id="cabecera">
+
     <span id="titulo" class="enlaces">
         <a href="http://localhost:4200/home">
             <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
@@ -12,23 +13,27 @@
             </span>
         </h2> 
     </span>
+
     <span id="estadisticas" class="enlaces" >
         <a class="textoEnlace" href="http://localhost:4200/estadisticas">Estadísticas</a>
     </span>
+
     <span id="administracion" class="enlaces" >
         <a class="textoEnlace" href="http://localhost:4200/administracion">Administración</a>
     </span>
-    <span id="usuario" class="enlaces">
-        <span id="nombreUsuario" class="textoEnlace">
-            <!-- {{usuario}}</a> -->
-            <button mat-button [matMenuTriggerFor]="menu">{{usuario}}</button>
-            <mat-menu #menu="matMenu">
-            <button><a href="http://localhost:4200/perfil">Ver perfil</a></button>
-            <button (click)="cerrarSesion()">Cerrar sesión</button>
-            </mat-menu>
-        </span>
-        <a href="http://localhost:4200/perfil">
-            <img id="avatarUsuario" src="..\..\..\assets\dataBurstLogo.svg" alt="Avatar del usuario"/>
-        </a>
-    </span>
+
+    <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
+        <span id="nombreUsuario" class="textoEnlace">{{usuario}}</span>
+        <img id="avatarUsuario" src="..\..\..\assets\dataBurstLogo.svg" alt="Avatar del usuario"/>
+    </button>
+        <mat-menu #menu="matMenu">
+            <button id="verPerfil" class="botonMenuUsuario">
+                <a class="textoEnlace" href="http://localhost:4200/perfil">Ver perfil</a>
+            </button>
+            <br/>
+            <button class="botonMenuUsuario" (click)="cerrarSesion()">
+                <span class="textoEnlace">Cerrar sesión</span>
+            </button>
+        </mat-menu>
+
 </mat-toolbar>
