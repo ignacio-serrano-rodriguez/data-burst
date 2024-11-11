@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -13,7 +13,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   templateUrl: './cabecera.component.html',
   styleUrl: './cabecera.component.css'
 })
-export class CabeceraComponent 
+export class CabeceraComponent implements OnInit
 {
-  @Input() usuarioLogueado: string = 'nombreUsuario';
+  @Input() usuario: string = '';
+
+  ngOnInit() 
+  {
+    const storedUser = localStorage.getItem('usuario');
+
+    if (storedUser) 
+    {
+      this.usuario = storedUser;
+    }
+  }
+
 }
