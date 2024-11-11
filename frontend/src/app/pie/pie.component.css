@@ -19,8 +19,6 @@ a
     display: flex;
     flex-wrap: wrap;
 
-    margin-top: 15em;
-
     text-align: center;
     align-items: center;
     justify-content: space-around;
