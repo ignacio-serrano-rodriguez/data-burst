@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ListaController extends AbstractController
 {
     #[Route("/api/crear-asignar-lista", name: "crear_asignar_lista", methods: ["POST"])]
-    public function registro
+    public function crearAsignarLista
     (
         Request $request, 
         EntityManagerInterface $entityManager
