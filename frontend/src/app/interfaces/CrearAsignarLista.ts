@@ -1,4 +1,4 @@
-export interface CrearLista
+export interface CrearAsignarLista
 {
 	nombre:string
 	usuarioID:number
