@@ -22,7 +22,7 @@ class ListaController extends AbstractController
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $nombreLista = $datosRecibidos['nombre'];
-        // $usuarioID = $datosRecibidos['usuarioID'];
+        $usuarioID = $datosRecibidos['usuarioID'];
         $respuestaJson = null;
 
         $lista = new Lista();
