@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Lista;
+use App\Entity\Usuario;
+use App\Entity\UsuarioManipulaLista;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ListaController extends AbstractController
 {
-    #[Route("/api/crear-lista", name: "crear_lista", methods: ["POST"])]
+    #[Route("/api/crear-asignar-lista", name: "crear_asignar_lista", methods: ["POST"])]
     public function registro
     (
         Request $request, 
@@ -27,6 +29,14 @@ class ListaController extends AbstractController
         $lista = new Lista();
         $lista->setNombre($nombreLista);
 
+        $usuarioManipulaLista = new UsuarioManipulaLista();
+        $usuarioManipulaLista->setLista($lista);
+        $usuarioManipulaLista->setUsuario
+        (
+            $entityManager->getRepository
+            (Usuario::class)->find($usuarioID)
+        );
+
         try 
         {
             $entityManager->persist($lista);
@@ -36,10 +46,13 @@ class ListaController extends AbstractController
             (
                 [
                     "exito" => true,
-                    "mensaje" => "Lista creada exitosamente."
+                    "mensaje" => "Lista creada y asignada exitosamente."
                 ],
                 Response::HTTP_CREATED
             );
+
+            $entityManager->persist($usuarioManipulaLista);
+            $entityManager->flush();
         } 
         
         catch (\Throwable $th) 
@@ -48,7 +61,7 @@ class ListaController extends AbstractController
             (
                 [
                     "exito" => false,
-                    "mensaje" => "Creación de la lista fallida."
+                    "mensaje" => "Creación y asignación de la lista fallida."
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -56,5 +69,4 @@ class ListaController extends AbstractController
 
         return $respuestaJson;
     }
-
 }
