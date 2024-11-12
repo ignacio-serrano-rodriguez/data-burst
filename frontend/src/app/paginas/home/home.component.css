@@ -1,6 +1,45 @@
+*
+{
+    padding: 0;
+    margin: 0;
+    border: 0
+}
+
 #body
 {
     width: 100%;
     height: 84%;
+
+    margin-bottom: 35em;
+
     background-color: #c2c2c205;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#tusListas
+{
+    background-color: yellow;
+
+    width: 37%;
+    min-width: 30em;
+
+    height: 90%;
+
+    margin: auto;
+}
+
+#tusAmigos
+{
+    background-color: orange;
+
+    width: 37%;
+    min-width: 30em;
+
+    height: 90%;
+
+    margin: auto;
 }
