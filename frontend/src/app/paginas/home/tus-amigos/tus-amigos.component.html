@@ -1,1 +1,14 @@
-<p>tus-amigos works!</p>
+<h2>Tus amigos</h2>
+<form id="formulario">
+	<mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
+		<input matInput formControlName="nombreLista">
+	</mat-form-field>
+	<button 
+		id="boton" 
+		class="elementoFormulario" 
+		mat-flat-button
+		(click)="agregarUsuario()">
+		➕
+	</button>
+</form>

@@ -1,12 +1,29 @@
 import { Component } from '@angular/core';
 
-@Component({
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+
+@Component
+({
   selector: 'app-tus-amigos',
   standalone: true,
-  imports: [],
+  imports: 
+  [
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
   templateUrl: './tus-amigos.component.html',
   styleUrl: './tus-amigos.component.css'
+
 })
-export class TusAmigosComponent {
+
+export class TusAmigosComponent 
+{
+  agregarUsuario() 
+  {
+    throw new Error('Method not implemented.');
+  }
 
 }
