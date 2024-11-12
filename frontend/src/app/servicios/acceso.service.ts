@@ -12,14 +12,10 @@ import { RespuestaRegistro } from '../interfaces/RespuestaRegistro';
 import { ValidarToken } from '../interfaces/ValidarToken';
 import { RespuestaValidarToken } from '../interfaces/RespuestaValidarToken';
 
-@Injectable
-({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 
 export class accesoService 
 {
-
   private http = inject(HttpClient)
   private api:string = configuracion_app.api;
 
@@ -49,5 +45,4 @@ export class accesoService
       objeto
     );
   }
-  
 }
