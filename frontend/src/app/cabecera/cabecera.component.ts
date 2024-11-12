@@ -49,7 +49,6 @@ export class CabeceraComponent implements OnInit
   cerrarSesion() 
   {
     localStorage.clear();
-    sessionStorage.clear();
     window.location.href = '/';
   }
 

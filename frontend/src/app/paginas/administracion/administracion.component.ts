@@ -26,7 +26,7 @@ export class AdministracionComponent implements OnInit
     if (localStorage.getItem('permiso') != "2") 
     {
       this.router.navigate(['home']);
-      setTimeout(() => {window.location.reload();}, 400);
+      localStorage.setItem("refrescar", "true");
     }
   }
 

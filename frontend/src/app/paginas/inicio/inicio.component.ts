@@ -42,7 +42,7 @@ export class InicioComponent  implements OnInit
     if (localStorage.getItem('logueado')) 
     {
       this.router.navigate(['home']);
-      setTimeout(() => {window.location.reload();}, 400);
+      localStorage.setItem("refrescar", "true");
     }
   }
 

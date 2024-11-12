@@ -77,7 +77,7 @@ export class LoginComponent {
             localStorage.setItem("logueado", "true");
 
             this.router.navigate(['home']);
-            setTimeout(() => {window.location.reload();}, 400);
+            localStorage.setItem("refrescar", "true");
 
           }
         },

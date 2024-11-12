@@ -21,7 +21,6 @@ export const authGuard: CanActivateFn = (route, state) =>
     else 
     {
       localStorage.clear();
-      sessionStorage.clear();
       const url = router.createUrlTree([""]);
       return url;
     }
@@ -31,7 +30,6 @@ export const authGuard: CanActivateFn = (route, state) =>
   catch(() =>
   {
     localStorage.clear();
-    sessionStorage.clear();
     const url = router.createUrlTree([""]);
     return url;
   });
