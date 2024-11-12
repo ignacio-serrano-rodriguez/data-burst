@@ -139,7 +139,11 @@ class UsuarioController extends AbstractController
     }
 
     #[Route("/api/validar-token", name: "validar_token", methods: ["POST"])]
-    public function validarToken(Request $request, JWTTokenManagerInterface $JWTManager)
+    public function validarToken
+    (
+        Request $request, 
+        JWTTokenManagerInterface $JWTManager
+    )
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $token = $datosRecibidos['token'];
