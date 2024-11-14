@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Repository\UsuarioRepository;
 use App\Entity\Usuario;
+use App\Entity\UsuarioAgregaUsuario;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UsuarioRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -151,7 +152,7 @@ class UsuarioController extends AbstractController
 
         try 
         {
-            $data = $JWTManager->parse($token);
+            $JWTManager->parse($token);
 
             $respuestaJson = new JsonResponse
             (
@@ -171,6 +172,60 @@ class UsuarioController extends AbstractController
                     "mensaje" => "Token inválido."
                 ],
                 Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        return $respuestaJson;
+    }
+
+    #[Route("/api/agregar-usuario", name: "agregar_usuario", methods: ["POST"])]
+    public function agregarUsuario
+    (
+        Request $request, 
+        EntityManagerInterface $entityManager
+    )
+    {
+        $respuestaJson = null;
+        
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $nombreUsuarioAgregar = $datosRecibidos['usuarioAgregar'];
+        $usuarioID = $datosRecibidos['usuarioID'];  
+
+        $usuarioAgregaUsuario = new UsuarioAgregaUsuario();
+
+        $usuarioAgregaUsuario->
+            setUsuario1(
+                $entityManager->getRepository(Usuario::class)->find($usuarioID));
+
+        $usuarioAgregaUsuario->
+        setUsuario2(
+        $entityManager->getRepository(Usuario::class)
+                ->findOneBy(['usuario' => $nombreUsuarioAgregar]));
+        
+        try 
+        {
+            $entityManager->persist($usuarioAgregaUsuario);
+            $entityManager->flush();
+            
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "exito" => true,
+                    "mensaje" => "Petición de amistad enviada."
+                ],
+                Response::HTTP_CREATED
+            );
+        } 
+        
+        catch (\Throwable $th) 
+        {
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    "exito" => false,
+                    "mensaje" => "Petición de amistad ya enviada."
+                ],
+                Response::HTTP_BAD_REQUEST
             );
         }
 
