@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
 import { ListasService } from '../../../servicios/listas.service';
+
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 
 @Component
@@ -49,7 +50,7 @@ export class TusListasComponent
 
       error: (error)=> 
       {
-        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
+        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.nombre + ")";
       }
 
     })

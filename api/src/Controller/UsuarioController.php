@@ -223,7 +223,7 @@ class UsuarioController extends AbstractController
             (
                 [
                     "exito" => false,
-                    "mensaje" => "Petición de amistad ya enviada."
+                    "mensaje" => "Petición de amistad ya enviada o usuario inexistente."
                 ],
                 Response::HTTP_BAD_REQUEST
             );

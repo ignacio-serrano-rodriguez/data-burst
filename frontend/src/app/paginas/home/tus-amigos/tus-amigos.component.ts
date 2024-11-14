@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+
+import { AmigosService } from '../../../servicios/amigos.service';
+
+import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
 
 @Component
 ({
@@ -21,9 +25,35 @@ import { MatButtonModule } from '@angular/material/button';
 
 export class TusAmigosComponent 
 {
+
+  private amigosService = inject(AmigosService);
+
   agregarUsuario() 
   {
-    console.log('Usuario agregado');
+    let objeto: AgregarUsuario
+    ={
+      usuarioID: Number(localStorage.getItem('id')) || 0,
+      usuarioAgregar: (document.getElementById('nombreUsuarioAgregar') as HTMLInputElement).value
+    };
+
+    this.amigosService.agregarUsuario(objeto).subscribe
+    ({
+
+      next: (data)=> 
+      {
+        if (data.exito == true) 
+        {
+          (document.getElementById("nombreLista") as HTMLInputElement).value = '';
+          document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.usuarioAgregar + ")";
+        }
+      },
+
+      error: (error)=> 
+      {
+        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.usuarioAgregar + ")";
+      }
+
+    })
   }
 
 }

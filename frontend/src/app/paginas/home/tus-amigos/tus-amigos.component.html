@@ -1,14 +1,13 @@
 <h2>Tus amigos</h2>
-<form id="formulario">
-	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
-		<input matInput formControlName="nombreLista">
-	</mat-form-field>
-	<button 
-		id="boton" 
-		class="elementoFormulario" 
-		mat-flat-button
-		(click)="agregarUsuario()">
-		➕
-	</button>
-</form>
+<mat-form-field class="elementoFormulario">
+	<mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
+	<input matInput id="nombreUsuarioAgregar" formControlName="nombreLista">
+</mat-form-field>
+<button 
+	id="boton" 
+	class="elementoFormulario" 
+	mat-flat-button
+	color="primary"
+	(click)="agregarUsuario()">
+	➕
+</button>
