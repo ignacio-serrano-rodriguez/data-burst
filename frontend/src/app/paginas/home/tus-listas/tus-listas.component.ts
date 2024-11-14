@@ -31,7 +31,7 @@ export class TusListasComponent
     
     let objeto: CrearAsignarLista
     ={
-      usuarioID: 17,
+      usuarioID: Number(localStorage.getItem('id')) || 0,
       nombre: 'Lista de prueba'
     };
 
@@ -52,8 +52,5 @@ export class TusListasComponent
       }
 
     })
-
-    
   }
-
 }
