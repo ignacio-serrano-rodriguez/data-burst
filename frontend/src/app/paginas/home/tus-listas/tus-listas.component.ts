@@ -43,12 +43,13 @@ export class TusListasComponent
         if (data.exito == true) 
         {
           (document.getElementById("nombreLista") as HTMLInputElement).value = '';
+          document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.nombre + ")";
         }
       },
 
       error: (error)=> 
       {
-        console.log(error.error.mensaje);
+        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
       }
 
     })
