@@ -8,6 +8,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UsuarioAgregaUsuarioRepository::class)]
+#[ORM\Table(name: 'usuario_agrega_usuario')]
+#[ORM\UniqueConstraint(name: 'usuario_unique', columns: ['usuario_1_id', 'usuario_2_id'])]
 #[ApiResource]
 class UsuarioAgregaUsuario
 {
@@ -16,7 +18,7 @@ class UsuarioAgregaUsuario
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $momento_agregacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'usuarioAgregaUsuarios')]
@@ -37,7 +39,7 @@ class UsuarioAgregaUsuario
         return $this->momento_agregacion;
     }
 
-    public function setMomentoAgregacion(\DateTimeInterface $momento_agregacion): static
+    public function setMomentoAgregacion(?\DateTimeInterface $momento_agregacion): static
     {
         $this->momento_agregacion = $momento_agregacion;
 
