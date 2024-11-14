@@ -32,7 +32,7 @@ export class TusListasComponent
     let objeto: CrearAsignarLista
     ={
       usuarioID: Number(localStorage.getItem('id')) || 0,
-      nombre: 'Lista de prueba'
+      nombre: (document.getElementById('nombreLista') as HTMLInputElement).value
     };
 
     this.listasService.crearAsignarLista(objeto).subscribe
@@ -42,7 +42,7 @@ export class TusListasComponent
       {
         if (data.exito == true) 
         {
-          console.log(data.mensaje);
+          (document.getElementById("nombreLista") as HTMLInputElement).value = '';
         }
       },
 
