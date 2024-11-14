@@ -23,7 +23,7 @@ export class TusAmigosComponent
 {
   agregarUsuario() 
   {
-    throw new Error('Method not implemented.');
+    console.log('Usuario agregado');
   }
 
 }

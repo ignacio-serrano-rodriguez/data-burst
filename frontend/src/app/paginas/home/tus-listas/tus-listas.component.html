@@ -1,14 +1,13 @@
 <h2>Tus listas</h2>
-<form id="formulario">
-	<mat-form-field>
-		<mat-label>Nombre de la lista</mat-label>
-		<input matInput>
+	<mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
+		<input matInput id="nombreLista" formControlName="nombreLista">
 	</mat-form-field>
 	<button 
 		id="boton" 
 		class="elementoFormulario" 
 		mat-flat-button
-		(click)="crearLista()">
+		color="primary"
+		(click)="crearAsignarLista()">
 		➕
 	</button>
-</form>
