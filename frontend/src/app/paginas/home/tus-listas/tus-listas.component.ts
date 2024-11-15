@@ -50,6 +50,7 @@ export class TusListasComponent
 
       error: (error)=> 
       {
+        (document.getElementById("nombreLista") as HTMLInputElement).value = '';
         document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.nombre + ")";
       }
 

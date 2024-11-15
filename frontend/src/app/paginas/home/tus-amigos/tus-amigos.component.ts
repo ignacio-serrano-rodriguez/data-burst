@@ -43,13 +43,14 @@ export class TusAmigosComponent
       {
         if (data.exito == true) 
         {
-          (document.getElementById("nombreLista") as HTMLInputElement).value = '';
+          (document.getElementById("nombreUsuarioAgregar") as HTMLInputElement).value = '';
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.usuarioAgregar + ")";
         }
       },
 
       error: (error)=> 
       {
+        (document.getElementById("nombreUsuarioAgregar") as HTMLInputElement).value = '';
         document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.usuarioAgregar + ")";
       }
 
