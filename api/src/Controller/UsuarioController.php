@@ -191,8 +191,10 @@ class UsuarioController extends AbstractController
         $nombreUsuarioAgregar = $datosRecibidos['usuarioAgregar'];
         $usuarioID = $datosRecibidos['usuarioID'];  
 
-        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($usuarioID);
-        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreUsuarioAgregar]);
+        $usuario_1 = $entityManager->
+            getRepository(Usuario::class)->find($usuarioID);
+        $usuario_2 = $entityManager->
+            getRepository(Usuario::class)->findOneBy(['usuario' => $nombreUsuarioAgregar]);
 
         if ($usuario_1 === $usuario_2) 
         {
@@ -231,7 +233,7 @@ class UsuarioController extends AbstractController
             (
                 [
                     "exito" => false,
-                    "mensaje" => "Petición de amistad ya enviada o usuario inexistente."
+                    "mensaje" => "Usuario inexistente."
                 ],
                 Response::HTTP_BAD_REQUEST
             );
