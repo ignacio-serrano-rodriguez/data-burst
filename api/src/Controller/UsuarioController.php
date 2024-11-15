@@ -191,17 +191,25 @@ class UsuarioController extends AbstractController
         $nombreUsuarioAgregar = $datosRecibidos['usuarioAgregar'];
         $usuarioID = $datosRecibidos['usuarioID'];  
 
+        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreUsuarioAgregar]);
+
+        if ($usuario_1 === $usuario_2) 
+        {
+            return new JsonResponse
+            (
+                [
+                    "exito" => false,
+                    "mensaje" => "No puedes agregarte a ti mismo."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         $usuarioAgregaUsuario = new UsuarioAgregaUsuario();
+        $usuarioAgregaUsuario->setUsuario1($usuario_1);
+        $usuarioAgregaUsuario->setUsuario2($usuario_2);
 
-        $usuarioAgregaUsuario->
-            setUsuario1(
-                $entityManager->getRepository(Usuario::class)->find($usuarioID));
-
-        $usuarioAgregaUsuario->
-        setUsuario2(
-        $entityManager->getRepository(Usuario::class)
-                ->findOneBy(['usuario' => $nombreUsuarioAgregar]));
-        
         try 
         {
             $entityManager->persist($usuarioAgregaUsuario);
