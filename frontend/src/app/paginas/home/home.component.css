@@ -26,7 +26,9 @@
 
 #mensajeInformativo
 {
-    background-color: yellow;
+    color: #F5A201;
+    font-family: 'ShareTech';
+    font-size: 1.5em;
     
     width: 100%;
 
