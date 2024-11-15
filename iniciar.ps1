@@ -26,12 +26,12 @@ Write-Output "${scriptName} -> Generando directorio de migraciones."
 New-Item -ItemType Directory -Path "./migrations"
 Write-Output "`n${scriptName} -> Iniciando el proceso de Symfony en segundo plano.`n"
 Start-Sleep -Seconds 3
+symfony server:stop
 composer update
 php bin/console doctrine:database:create
 php bin/console make:migration
 php bin/console doctrine:migrations:migrate --no-interaction
 php bin/console doctrine:migrations:sync-metadata-storage
-symfony server:stop
 Start-Process -FilePath "powershell" -ArgumentList "symfony server:start" -PassThru -NoNewWindow
 
 # Inicio del servicio de Angular en segundo plano.
