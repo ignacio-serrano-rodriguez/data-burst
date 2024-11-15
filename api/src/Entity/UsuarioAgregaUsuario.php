@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'usuario_agrega_usuario')]
 #[ORM\UniqueConstraint(name: 'usuario_unique', columns: ['usuario_1_id', 'usuario_2_id'])]
 #[ApiResource]
+#[ORM\HasLifecycleCallbacks]
 class UsuarioAgregaUsuario
 {
     #[ORM\Id]
@@ -18,7 +19,7 @@ class UsuarioAgregaUsuario
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $momento_agregacion = null;
 
     #[ORM\ManyToOne(inversedBy: 'usuarioAgregaUsuarios')]
@@ -28,6 +29,12 @@ class UsuarioAgregaUsuario
     #[ORM\ManyToOne(inversedBy: 'usuarioAgregaUsuarios')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario_2 = null;
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->momento_agregacion = new \DateTime();
+    }
 
     public function getId(): ?int
     {
