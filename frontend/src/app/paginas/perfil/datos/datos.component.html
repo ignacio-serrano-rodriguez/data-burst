@@ -35,8 +35,41 @@
 		<mat-label class="etiquetaFormulario">Fecha de nacimiento</mat-label>
 		<input matInput id="usuarioInput" formControlName="usuario">
 	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Nueva contraseña</mat-label>
+		<input 
+			[type]="hideNuevaContrasenia ? 'password' : 'text'" 
+			matInput 
+			id="nuevaContraseniaInput" 
+			formControlName="contrasenia" 
+			type="password"
+		>
+		<button 
+			mat-icon-button matSuffix 
+			(click)="hideNuevaContrasenia = !hideNuevaContrasenia" 
+			[attr.aria-label]="'Hide password'" 
+			[attr.aria-pressed]="hideNuevaContrasenia">
+			<mat-icon>{{hideNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+		</button>
+	</mat-form-field>
 	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Contraseña</mat-label>
+		<mat-label class="etiquetaFormulario">Repetir nueva contraseña</mat-label>
+		<input 
+			[type]="hideRepetirContrasenia ? 'password' : 'text'" 
+			matInput id="contraseniaRepetidaInput" 
+			formControlName="contraseniaRepetida" 
+			type="password"
+		>
+		<button 
+			mat-icon-button matSuffix 
+			(click)="hideRepetirContrasenia = !hideRepetirContrasenia" 
+			[attr.aria-label]="'Hide password'" 
+			[attr.aria-pressed]="hideRepetirContrasenia">
+			<mat-icon>{{hideRepetirContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+		</button>
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Contraseña actual</mat-label>
 		<input 
 			[type]="hideContrasenia ? 'password' : 'text'" 
 			matInput 
@@ -50,22 +83,6 @@
 			[attr.aria-label]="'Hide password'" 
 			[attr.aria-pressed]="hideContrasenia">
 			<mat-icon>{{hideContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
-		</button>
-	</mat-form-field>
-	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Repetir contraseña</mat-label>
-		<input 
-			[type]="hideRepetirContrasenia ? 'password' : 'text'" 
-			matInput id="contraseniaRepetidaInput" 
-			formControlName="contraseniaRepetida" 
-			type="password"
-		>
-		<button 
-			mat-icon-button matSuffix 
-			(click)="hideRepetirContrasenia = !hideRepetirContrasenia" 
-			[attr.aria-label]="'Hide password'" 
-			[attr.aria-pressed]="hideRepetirContrasenia">
-			<mat-icon>{{hideRepetirContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
 		</button>
 	</mat-form-field>
 	<button 

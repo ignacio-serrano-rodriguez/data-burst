@@ -35,6 +35,8 @@ import { MatCardModule } from '@angular/material/card';
 
 export class DatosComponent 
 {
+
+  hideNuevaContrasenia = true;
   hideContrasenia = true;
   hideRepetirContrasenia = true;
 
@@ -48,6 +50,7 @@ export class DatosComponent
     contrasenia: ['', Validators.required],
     contraseniaRepetida: ['', Validators.required]
   })
+localStorage: any;
 
   modificarDatos() 
   {
