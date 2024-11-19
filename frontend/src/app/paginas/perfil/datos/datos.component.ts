@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 
 import { accesoService } from '../../../servicios/acceso.service';
-import { Registro } from '../../../interfaces/Registro';
+import { ModificarDatos } from '../../../interfaces/ModificarDatos';
 import { MatCardModule } from '@angular/material/card';
 
 @Component
@@ -43,7 +43,7 @@ export class DatosComponent
   private accesoService = inject(accesoService);
   public formBuild = inject(FormBuilder);
 
-  public formRegistro: FormGroup = this.formBuild.group
+  public formModificarDatos: FormGroup = this.formBuild.group
   ({
     mail: ['', Validators.required],
     usuario: ['', Validators.required],
@@ -55,17 +55,26 @@ localStorage: any;
   modificarDatos() 
   {
 
-    if (this.formRegistro.invalid) return;
+    console.log("modificarDatos()");
 
-    const objeto: Registro
+    if (this.formModificarDatos.invalid) return;
+
+    let objeto: ModificarDatos
     ={
-      mail: this.formRegistro.value.mail,
-      usuario: this.formRegistro.value.usuario,
-      contrasenia: this.formRegistro.value.contrasenia,
-      contraseniaRepetida: this.formRegistro.value.contraseniaRepetida
+      mail: this.formModificarDatos.value.mail,
+      usuario: this.formModificarDatos.value.usuario,
+      nombre: this.formModificarDatos.value.nombre,
+      apellido_1: this.formModificarDatos.value.apellido_1,
+      apellido_2: this.formModificarDatos.value.apellido_2,
+      pais: this.formModificarDatos.value.pais,
+      idioma: this.formModificarDatos.value.idioma,
+      profesion: this.formModificarDatos.value.profesion,
+      fecha_nacimiento: this.formModificarDatos.value.fecha_nacimiento,
+      nueva_contrasenia: this.formModificarDatos.value.contraseniaRepetida,
+      contrasenia_actual: this.formModificarDatos.value.contrasenia
     };
 
-    if (objeto.contrasenia != objeto.contraseniaRepetida) 
+    if (objeto.nueva_contrasenia != objeto.nueva_contrasenia) 
     {
       let mensajeInformativo = document.getElementById("mensajeInformativo");
       mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
