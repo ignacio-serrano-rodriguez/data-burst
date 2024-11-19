@@ -1,0 +1,39 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+button:hover
+{
+    text-decoration: underline;
+}
+
+.elementoFormulario
+{
+    width: 100%;
+}
+
+.etiquetaFormulario
+{
+    color: #717e84;
+}
+
+#formulario
+{
+    width: 85%;
+    max-width: 486px;
+    padding-left: 7.5%;
+    padding-right: 7.5%;
+}
+
+#boton
+{
+    padding-top: 1.4em;
+    padding-bottom: 1.4em;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #EEF1F2;
+    background-color: #61B300;
+}

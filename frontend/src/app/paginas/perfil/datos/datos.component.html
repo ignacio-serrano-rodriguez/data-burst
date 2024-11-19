@@ -1,1 +1,79 @@
-<p>datos works!</p>
+<form id="formulario" [formGroup]="formRegistro">
+	<mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Mail</mat-label>
+		<input matInput id="mailInput" formControlName="mail">
+	</mat-form-field>
+	<mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Usuario</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Nombre</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Primer apellido</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Segundo apellido</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">País</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Idioma</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Profesión</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+    <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Fecha de nacimiento</mat-label>
+		<input matInput id="usuarioInput" formControlName="usuario">
+	</mat-form-field>
+	<mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Contraseña</mat-label>
+		<input 
+			[type]="hideContrasenia ? 'password' : 'text'" 
+			matInput 
+			id="contraseniaInput" 
+			formControlName="contrasenia" 
+			type="password"
+		>
+		<button 
+			mat-icon-button matSuffix 
+			(click)="hideContrasenia = !hideContrasenia" 
+			[attr.aria-label]="'Hide password'" 
+			[attr.aria-pressed]="hideContrasenia">
+			<mat-icon>{{hideContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+		</button>
+	</mat-form-field>
+	<mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Repetir contraseña</mat-label>
+		<input 
+			[type]="hideRepetirContrasenia ? 'password' : 'text'" 
+			matInput id="contraseniaRepetidaInput" 
+			formControlName="contraseniaRepetida" 
+			type="password"
+		>
+		<button 
+			mat-icon-button matSuffix 
+			(click)="hideRepetirContrasenia = !hideRepetirContrasenia" 
+			[attr.aria-label]="'Hide password'" 
+			[attr.aria-pressed]="hideRepetirContrasenia">
+			<mat-icon>{{hideRepetirContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+		</button>
+	</mat-form-field>
+	<button 
+		id="boton" 
+		class="elementoFormulario" 
+		mat-flat-button 
+		color="primary"
+		(click)="modificarDatos()">
+		Aplicar cambios
+	</button>
+</form>
