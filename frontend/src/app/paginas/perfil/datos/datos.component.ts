@@ -7,8 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { accesoService } from '../../../servicios/acceso.service';
-import { Registro } from '../../../interfaces/Registro';
+import { DatosService } from '../../../servicios/datos.service';
+import { ModificarDatosUsuario } from '../../../interfaces/ModificarDatosUsuario';
 
 @Component
 ({
@@ -27,44 +27,54 @@ import { Registro } from '../../../interfaces/Registro';
   styleUrl: './datos.component.css'
 })
 
-export class DatosComponent 
+export class DatosComponent
 {
   
-  hideContrasenia = true;
-  hideRepetirContrasenia = true;
+  hideNuevaContrasenia = true;
+  hideRepetirNuevaContrasenia = true;
+  hideContraseniaActual = true;
 
-  private accesoService = inject(accesoService);
+  private DatosService = inject(DatosService);
   public formBuild = inject(FormBuilder);
 
   public formRegistro: FormGroup = this.formBuild.group
   ({
-    mail: ['', Validators.required],
-    usuario: ['', Validators.required],
-    contrasenia: ['', Validators.required],
-    contraseniaRepetida: ['', Validators.required]
+    mail: [localStorage.getItem('mail') || ''],
+    usuario: [localStorage.getItem('usuario') || ''],
+    nuevaContrasenia: [''],
+    contraseniaRepetida: [''],
+    contraseniaActual: ['', Validators.required]
   })
 
-  registrarse() 
+  modificarDatosUsuario() 
   {
 
     if (this.formRegistro.invalid) return;
 
-    const objeto: Registro
+    const objeto: ModificarDatosUsuario
     ={
+      id: localStorage.getItem('id') || '',
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
-      contrasenia: this.formRegistro.value.contrasenia,
-      contraseniaRepetida: this.formRegistro.value.contraseniaRepetida
+      nueva_contrasenia: this.formRegistro.value.nuevaContrasenia,
+      contrasenia_actual: this.formRegistro.value.contraseniaActual,
+      nombre: '',
+      apellido_1: '',
+      apellido_2: '',
+      pais: '',
+      idioma: '',
+      profesion: '',
+      fecha_nacimiento: ''
     };
 
-    if (objeto.contrasenia != objeto.contraseniaRepetida) 
-    {
-      let mensajeInformativo = document.getElementById("mensajeInformativo");
-      mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
-      return;
-    }
+    // if (objeto.contrasenia != objeto.contraseniaRepetida) 
+    // {
+    //   let mensajeInformativo = document.getElementById("mensajeInformativo");
+    //   mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
+    //   return;
+    // }
 
-    this.accesoService.registro(objeto).subscribe
+    this.DatosService.modificarDatosUsuario(objeto).subscribe
     ({
 
       next: (data)=> 
@@ -72,10 +82,8 @@ export class DatosComponent
         if (data.exito == true) 
         {
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
-          (document.getElementById("mailInput") as HTMLInputElement).value = '';
-          (document.getElementById("usuarioInput") as HTMLInputElement).value = '';
-          (document.getElementById("contraseniaInput") as HTMLInputElement).value = '';
-          (document.getElementById("contraseniaRepetidaInput") as HTMLInputElement).value = '';
+          localStorage.clear();
+          window.location.reload();
         }
       },
 
