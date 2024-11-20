@@ -42,7 +42,7 @@ export class DatosComponent
     mail: [localStorage.getItem('mail') || ''],
     usuario: [localStorage.getItem('usuario') || ''],
     nuevaContrasenia: [''],
-    contraseniaRepetida: [''],
+    nuevaContraseniaRepetida: [''],
     contraseniaActual: ['', Validators.required]
   })
 
@@ -57,6 +57,7 @@ export class DatosComponent
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
       nueva_contrasenia: this.formRegistro.value.nuevaContrasenia,
+      nueva_contrasenia_repetida: this.formRegistro.value.nuevaContraseniaRepetida,
       contrasenia_actual: this.formRegistro.value.contraseniaActual,
       nombre: '',
       apellido_1: '',
@@ -67,12 +68,12 @@ export class DatosComponent
       fecha_nacimiento: ''
     };
 
-    // if (objeto.contrasenia != objeto.contraseniaRepetida) 
-    // {
-    //   let mensajeInformativo = document.getElementById("mensajeInformativo");
-    //   mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
-    //   return;
-    // }
+    if (objeto.nueva_contrasenia != objeto.nueva_contrasenia_repetida) 
+    {
+      let mensajeInformativo = document.getElementById("mensajeInformativo");
+      mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
+      return;
+    }
 
     this.DatosService.modificarDatosUsuario(objeto).subscribe
     ({

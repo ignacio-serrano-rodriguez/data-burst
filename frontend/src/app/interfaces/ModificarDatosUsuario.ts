@@ -11,5 +11,6 @@ export interface ModificarDatosUsuario
   profesion:string
   fecha_nacimiento:string
   nueva_contrasenia:string
+  nueva_contrasenia_repetida: string
 	contrasenia_actual:string
 }
