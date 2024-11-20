@@ -1,4 +1,4 @@
-export interface ModificarDatos
+export interface ModificarDatosUsuario
 {
   id:string
 	mail:string
