@@ -1,20 +1,24 @@
-table {
+table 
+{
   margin: auto;
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
+th, td 
+{
   border: none;
   padding: 8px;
   text-align: left; /* Alinear el contenido de las celdas a la izquierda */
 }
 
-th {
+th 
+{
   background-color: transparent;
 }
 
-button {
+button 
+{
   font-size: 1.5em;
   background: none; /* Eliminar el fondo */
   border: 1px solid transparent; /* Eliminar el borde */
@@ -22,10 +26,12 @@ button {
   cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
 }
 
-button:not(:last-child) {
+button:not(:last-child) 
+{
   margin-right: 10px; /* Agregar margen derecho a todos los botones excepto al último */
 }
 
-button:hover {
+button:hover 
+{
   background: rgba(128, 128, 128, 0.37);
 }
