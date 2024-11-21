@@ -1,1 +1,18 @@
-<p>solicitudes works!</p>
+<table>
+  <thead>
+    <tr>
+      <th>Solicitud</th>
+      <th>Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let solicitud of solicitudes">
+      <td>{{ solicitud.nombre }}</td>
+      <td>{{ solicitud.tipo }}</td>
+      <td>
+        <button (click)="aceptarSolicitud(solicitud)">✅</button>
+        <button (click)="denegarSolicitud(solicitud)">❌</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
