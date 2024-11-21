@@ -370,4 +370,71 @@ class UsuarioController extends AbstractController
 
         return $respuestaJson;
     }
+
+    #[Route("/api/obtener-solicitudes", name: "obtener_solicitudes", methods: ["GET"])]
+    public function obtenerSolicitudes
+    (
+        Request $request, 
+        EntityManagerInterface $entityManager
+    )
+    {
+        $respuestaJson = null;
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $usuarioId = $datosRecibidos['id'];
+    
+        try {
+            // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
+            $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
+    
+            $dataAmistad = [];
+            $dataLista = []; // Mantener la estructura para futuras implementaciones
+    
+            foreach ($solicitudesAmistad as $solicitud) {
+                // Verificar que no exista un registro con los IDs intercambiados
+                $solicitudAceptada = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                    'usuario_1' => $usuarioId,
+                    'usuario_2' => $solicitud->getUsuario1()->getId()
+                ]);
+    
+                if (!$solicitudAceptada) {
+                    $dataAmistad[] = [
+                        'nombre' => $solicitud->getUsuario1()->getUsuario(), // Asumiendo que 'usuario' es el nombre de usuario
+                        'tipo' => 'amistad',
+                    ];
+                }
+            }
+    
+            if (empty($dataAmistad) && empty($dataLista)) {
+                $respuestaJson = new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "No existen solicitudes."
+                    ],
+                    Response::HTTP_OK
+                );
+            } else {
+                $respuestaJson = new JsonResponse(
+                    [
+                        "exito" => true,
+                        "mensaje" => "Solicitudes obtenidas exitosamente.",
+                        "data" => [
+                            "amistad" => $dataAmistad,
+                            "lista" => $dataLista // Mantener la estructura para futuras implementaciones
+                        ]
+                    ],
+                    Response::HTTP_OK
+                );
+            }
+        } catch (\Throwable $th) {
+            $respuestaJson = new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "No se han podido obtener las solicitudes."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    
+        return $respuestaJson;
+    }
 }
