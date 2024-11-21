@@ -1,46 +1,50 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface Solicitud 
-{
-  nombre: string;
-  tipo: string;
-}
+import { SolicitudesService } from '../../../servicios/solicitudes.service';
+import { Solicitud, RespuestaObtenerSolicitudes } from '../../../interfaces/RespuestaObtenerSolicitudes';
+import { ObtenerSolicitudes } from '../../../interfaces/ObtenerSolicitudes';
 
 @Component({
   selector: 'app-solicitudes',
   standalone: true,
-  imports: 
-  [
+  imports: [
     CommonModule
   ],
   templateUrl: './solicitudes.component.html',
-  styleUrl: './solicitudes.component.css'
+  styleUrls: ['./solicitudes.component.css'] // Corregido aquí
 })
-export class SolicitudesComponent implements OnInit 
-{
+export class SolicitudesComponent implements OnInit {
 
-  solicitudes: Solicitud[] = [];
+  solicitudesAmistad: Solicitud[] = [];
+  solicitudesLista: Solicitud[] = [];
 
-  ngOnInit(): void 
-  {
-    this.solicitudes 
-    =[
-      { nombre: 'Solicitud 1', tipo: 'Tipo A' },
-      { nombre: 'Solicitud 2', tipo: 'Tipo B' },
-      { nombre: 'Solicitud 3', tipo: 'Tipo C' }
-    ];
+  constructor(private solicitudesService: SolicitudesService) {}
+
+  ngOnInit(): void {
+    const usuarioId = localStorage.getItem('id'); // Obtener el ID del usuario desde el localStorage
+    if (usuarioId) {
+      const solicitud: ObtenerSolicitudes = { id: parseInt(usuarioId, 10) }; // Crear el objeto de solicitud con el ID del usuario
+      this.solicitudesService.obtenerSolicitudes(solicitud).subscribe((respuesta: RespuestaObtenerSolicitudes) => {
+        if (respuesta.exito) {
+          this.solicitudesAmistad = respuesta.solicitudes.amistad;
+          this.solicitudesLista = respuesta.solicitudes.lista;
+        } else {
+          console.log(respuesta.mensaje);
+        }
+      });
+    } else {
+      console.log('No se encontró el ID del usuario en el localStorage.');
+    }
   }
-  aceptarSolicitud(solicitud: Solicitud) 
-  {
+
+  aceptarSolicitud(solicitud: Solicitud) {
     console.log('Solicitud aceptada:', solicitud);
     // Lógica para aceptar la solicitud
   }
 
-  denegarSolicitud(solicitud: Solicitud) 
-  {
+  denegarSolicitud(solicitud: Solicitud) {
     console.log('Solicitud denegada:', solicitud);
     // Lógica para denegar la solicitud
   }
-
 }

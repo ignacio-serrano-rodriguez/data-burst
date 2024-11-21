@@ -3,12 +3,21 @@
     <tr>
       <th>Solicitud</th>
       <th>Tipo</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let solicitud of solicitudes">
+    <tr *ngFor="let solicitud of solicitudesAmistad">
       <td>{{ solicitud.nombre }}</td>
-      <td>{{ solicitud.tipo }}</td>
+      <td>Amistad</td>
+      <td>
+        <button (click)="aceptarSolicitud(solicitud)">✅</button>
+        <button (click)="denegarSolicitud(solicitud)">❌</button>
+      </td>
+    </tr>
+    <tr *ngFor="let solicitud of solicitudesLista">
+      <td>{{ solicitud.nombre }}</td>
+      <td>Lista</td>
       <td>
         <button (click)="aceptarSolicitud(solicitud)">✅</button>
         <button (click)="denegarSolicitud(solicitud)">❌</button>

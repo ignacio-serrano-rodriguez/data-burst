@@ -371,7 +371,7 @@ class UsuarioController extends AbstractController
         return $respuestaJson;
     }
 
-    #[Route("/api/obtener-solicitudes", name: "obtener_solicitudes", methods: ["GET"])]
+    #[Route("/api/obtener-solicitudes", name: "obtener_solicitudes", methods: ["POST"])]
     public function obtenerSolicitudes
     (
         Request $request, 
