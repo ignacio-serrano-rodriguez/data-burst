@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SolicitudesService } from '../../../servicios/solicitudes.service';
-import { Solicitud, RespuestaObtenerSolicitudes } from '../../../interfaces/RespuestaObtenerSolicitudes';
+import { AplicarSolicitud } from '../../../interfaces/AplicarSolicitud'; 
 import { ObtenerSolicitudes } from '../../../interfaces/ObtenerSolicitudes';
+import { Solicitud, RespuestaObtenerSolicitudes } from '../../../interfaces/RespuestaObtenerSolicitudes';
+import { RespuestaAplicarSolicitud } from '../../../interfaces/RespuestaAplicarSolicitud';
 
 @Component({
   selector: 'app-solicitudes',
@@ -12,7 +14,7 @@ import { ObtenerSolicitudes } from '../../../interfaces/ObtenerSolicitudes';
     CommonModule
   ],
   templateUrl: './solicitudes.component.html',
-  styleUrls: ['./solicitudes.component.css'] // Corregido aquí
+  styleUrls: ['./solicitudes.component.css'] 
 })
 export class SolicitudesComponent implements OnInit {
 
@@ -22,9 +24,9 @@ export class SolicitudesComponent implements OnInit {
   constructor(private solicitudesService: SolicitudesService) {}
 
   ngOnInit(): void {
-    const usuarioId = localStorage.getItem('id'); // Obtener el ID del usuario desde el localStorage
-    if (usuarioId) {
-      const solicitud: ObtenerSolicitudes = { id: parseInt(usuarioId, 10) }; // Crear el objeto de solicitud con el ID del usuario
+    const IDUsuario = localStorage.getItem('id'); // Obtener el ID del usuario desde el localStorage
+    if (IDUsuario) {
+      let solicitud: ObtenerSolicitudes = { id: parseInt(IDUsuario, 10) }; // Crear el objeto de solicitud con el ID del usuario
       this.solicitudesService.obtenerSolicitudes(solicitud).subscribe((respuesta: RespuestaObtenerSolicitudes) => {
         if (respuesta.exito) {
           this.solicitudesAmistad = respuesta.solicitudes.amistad;
@@ -38,13 +40,27 @@ export class SolicitudesComponent implements OnInit {
     }
   }
 
-  aceptarSolicitud(solicitud: Solicitud) {
-    console.log('Solicitud aceptada:', solicitud);
-    // Lógica para aceptar la solicitud
+  aceptarSolicitud(nombre: string, tipo: string) {
+    let aplicarSolicitud: AplicarSolicitud = {
+      nombre, 
+      IDUsuario: parseInt(localStorage.getItem('id')!, 10),
+      tipo
+    };
+    this.solicitudesService.aceptarSolicitud(aplicarSolicitud).subscribe((respuesta: RespuestaAplicarSolicitud) => {
+      console.log('Solicitud aceptada:', respuesta.mensaje);
+      this.ngOnInit(); // Vuelve a cargar las solicitudes
+    });
   }
 
-  denegarSolicitud(solicitud: Solicitud) {
-    console.log('Solicitud denegada:', solicitud);
-    // Lógica para denegar la solicitud
+  denegarSolicitud(nombre: string, tipo: string) {
+    let aplicarSolicitud: AplicarSolicitud = {
+      nombre, 
+      IDUsuario: parseInt(localStorage.getItem('id')!, 10),
+      tipo
+    };
+    this.solicitudesService.denegarSolicitud(aplicarSolicitud).subscribe((respuesta: RespuestaAplicarSolicitud) => {
+      console.log('Solicitud denegada:', respuesta.mensaje);
+      this.ngOnInit(); // Vuelve a cargar las solicitudes
+    });
   }
 }

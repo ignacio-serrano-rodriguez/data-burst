@@ -11,16 +11,16 @@
       <td>{{ solicitud.nombre }}</td>
       <td>Amistad</td>
       <td>
-        <button (click)="aceptarSolicitud(solicitud)">✅</button>
-        <button (click)="denegarSolicitud(solicitud)">❌</button>
+        <button (click)="aceptarSolicitud(solicitud.nombre, 'amistad')">✅</button>
+        <button (click)="denegarSolicitud(solicitud.nombre, 'amistad')">❌</button>
       </td>
     </tr>
     <tr *ngFor="let solicitud of solicitudesLista">
       <td>{{ solicitud.nombre }}</td>
       <td>Lista</td>
       <td>
-        <button (click)="aceptarSolicitud(solicitud)">✅</button>
-        <button (click)="denegarSolicitud(solicitud)">❌</button>
+        <button (click)="aceptarSolicitud(solicitud.nombre, 'lista')">✅</button>
+        <button (click)="denegarSolicitud(solicitud.nombre, 'lista')">❌</button>
       </td>
     </tr>
   </tbody>

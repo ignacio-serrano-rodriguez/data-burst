@@ -426,4 +426,93 @@ class UsuarioController extends AbstractController
 
         return $respuestaJson;
     }
+
+    #[Route("/api/aceptar-solicitud", name: "aceptar_solicitud", methods: ["POST"])]
+    public function aceptarSolicitud(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $nombreSolicitud = $datosRecibidos['nombre'];
+        $idUsuario = $datosRecibidos['IDUsuario'];
+        $tipo = $datosRecibidos['tipo'];
+    
+        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($idUsuario);
+        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreSolicitud]);
+    
+        if (!$usuario_1 || !$usuario_2) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Usuario no encontrado."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    
+        try {
+            // Obtener la solicitud de amistad
+            $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                'usuario_2' => $usuario_1,
+                'usuario_1' => $usuario_2
+            ]);
+    
+            if ($solicitud) {
+                // Lógica para aceptar la solicitud
+                // Por ejemplo, crear una nueva relación de amistad
+                $nuevaRelacion = new UsuarioAgregaUsuario();
+                $nuevaRelacion->setUsuario1($usuario_1);
+                $nuevaRelacion->setUsuario2($usuario_2);
+                $entityManager->persist($nuevaRelacion);
+                $entityManager->flush();
+    
+                return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud aceptada.'], Response::HTTP_OK);
+            } else {
+                return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+            }
+        } catch (\Throwable $th) {
+            return new JsonResponse(['exito' => false, 'mensaje' => 'Error al aceptar la solicitud.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    #[Route("/api/denegar-solicitud", name: "denegar_solicitud", methods: ["POST"])]
+    public function denegarSolicitud(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $nombreSolicitud = $datosRecibidos['nombre'];
+        $idUsuario = $datosRecibidos['IDUsuario'];
+        $tipo = $datosRecibidos['tipo'];
+    
+        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($idUsuario);
+        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreSolicitud]);
+    
+        if (!$usuario_1 || !$usuario_2) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Usuario no encontrado."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    
+        try {
+            // Obtener la solicitud de amistad
+            $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                'usuario_2' => $usuario_1,
+                'usuario_1' => $usuario_2
+            ]);
+    
+            if ($solicitud) {
+                // Lógica para denegar la solicitud
+                $entityManager->remove($solicitud);
+                $entityManager->flush();
+    
+                return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud denegada.'], Response::HTTP_OK);
+            } else {
+                return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+            }
+        } catch (\Throwable $th) {
+            return new JsonResponse(['exito' => false, 'mensaje' => 'Error al denegar la solicitud.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
