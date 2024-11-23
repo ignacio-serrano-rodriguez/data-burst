@@ -1,7 +1,10 @@
 <app-cabecera id="cabecera"></app-cabecera>
 <div id="body">
     <span id="mensajeInformativo"></span>
-    <app-tus-listas id="tusListas"></app-tus-listas>
-    <app-tus-amigos id="tusAmigos"></app-tus-amigos>
+    <div *ngIf="mostrarListasYAmigos">
+        <app-tus-listas id="tusListas" (listaSeleccionada)="mostrarLista($event)"></app-tus-listas>
+        <app-tus-amigos id="tusAmigos"></app-tus-amigos>
+    </div>
+    <app-lista *ngIf="mostrarListaComponent" [listaId]="listaId"></app-lista>
 </div>
 <app-pie id="pie"></app-pie>

@@ -1,20 +1,22 @@
 <h2>Tus listas</h2>
 <mat-form-field class="elementoFormulario">
-	<mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
-	<input matInput id="nombreLista" formControlName="nombreLista">
+  <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
+  <input matInput id="nombreLista" formControlName="nombreLista">
 </mat-form-field>
 <button 
-	id="boton" 
-	class="elementoFormulario" 
-	mat-flat-button
-	color="primary"
-	(click)="crearAsignarLista()">
-	➕
+  id="boton" 
+  class="elementoFormulario" 
+  mat-flat-button
+  color="primary"
+  (click)="crearAsignarLista()">
+  ➕
 </button>
 
 <div id="mensajeInformativo"></div>
 
 <h3>Listas Asignadas</h3>
 <ul>
-  <li *ngFor="let lista of listas">{{ lista.nombre }}</li>
+  <li *ngFor="let lista of listas">
+    <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
+  </li>
 </ul>

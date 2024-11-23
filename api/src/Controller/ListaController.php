@@ -80,6 +80,7 @@ class ListaController extends AbstractController
             $dataListas = [];
             foreach ($listasAsignadas as $listaAsignada) {
                 $dataListas[] = [
+                    'id' => $listaAsignada->getLista()->getId(),
                     'nombre' => $listaAsignada->getLista()->getNombre()
                 ];
             }
@@ -97,6 +98,45 @@ class ListaController extends AbstractController
                 [
                     "exito" => false,
                     "mensaje" => "Error al obtener listas."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route("/api/obtener-lista/{id}", name: "obtener_lista", methods: ["GET"])]
+    public function obtenerLista(int $id, EntityManagerInterface $entityManager)
+    {
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($id);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $dataLista = [
+                'id' => $lista->getId(),
+                'nombre' => $lista->getNombre()
+            ];
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Lista obtenida exitosamente.",
+                    "lista" => $dataLista
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al obtener la lista."
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

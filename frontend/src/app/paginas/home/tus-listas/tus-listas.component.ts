@@ -1,7 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
-
+import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,6 +24,7 @@ export class TusListasComponent implements OnInit {
 
   private listasService = inject(ListasService);
   listas: Lista[] = [];
+  @Output() listaSeleccionada = new EventEmitter<number>();
 
   ngOnInit(): void {
     this.obtenerListas();
@@ -64,5 +63,9 @@ export class TusListasComponent implements OnInit {
         console.error('Error al obtener listas:', error);
       }
     });
+  }
+
+  seleccionarLista(id: number) {
+    this.listaSeleccionada.emit(id);
   }
 }

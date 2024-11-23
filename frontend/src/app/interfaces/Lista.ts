@@ -1,4 +1,4 @@
-export interface Lista 
-{
+export interface Lista {
+    id: number;
     nombre: string;
-}
+  }

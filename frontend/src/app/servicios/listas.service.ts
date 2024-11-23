@@ -5,6 +5,7 @@ import { configuracion_app } from '../configuraciones/configuracion_app';
 import { CrearAsignarLista } from '../interfaces/CrearAsignarLista';
 import { RespuestaCrearAsignarLista } from '../interfaces/RespuestaCrearAsignarLista';
 import { RespuestaObtenerListas } from '../interfaces/RespuestaObtenerListas';
+import { RespuestaObtenerLista } from '../interfaces/RespuestaObtenerLista';
 
 @Injectable({ providedIn: 'root' })
 export class ListasService {
@@ -22,6 +23,12 @@ export class ListasService {
     return this.http.post<RespuestaObtenerListas>(
       `${this.api}obtener-listas`, 
       { usuarioID }
+    );
+  }
+
+  obtenerLista(id: number): Observable<RespuestaObtenerLista> {
+    return this.http.get<RespuestaObtenerLista>(
+      `${this.api}obtener-lista/${id}`
     );
   }
 }
