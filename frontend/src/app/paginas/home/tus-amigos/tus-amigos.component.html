@@ -11,3 +11,10 @@
 	(click)="agregarUsuario()">
 	➕
 </button>
+
+<div id="mensajeInformativo"></div>
+
+<h3>Amigos Agregados</h3>
+<ul>
+  <li *ngFor="let amigo of amigos">{{ amigo.nombre }}</li>
+</ul>

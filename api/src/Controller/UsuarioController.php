@@ -515,4 +515,49 @@ class UsuarioController extends AbstractController
         }
     }
 
+    #[Route("/api/obtener-amigos", name: "obtener_amigos", methods: ["POST"])]
+    public function obtenerAmigos(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $usuarioID = $datosRecibidos['usuarioID'];
+
+        try {
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $amigos = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_1' => $usuario]);
+
+            $dataAmigos = [];
+            foreach ($amigos as $amigo) {
+                $dataAmigos[] = [
+                    'nombre' => $amigo->getUsuario2()->getUsuario()
+                ];
+            }
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Amigos obtenidos exitosamente.",
+                    "amigos" => $dataAmigos
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al obtener amigos."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
