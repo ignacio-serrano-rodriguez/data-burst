@@ -30,7 +30,18 @@ symfony server:stop
 composer update
 php bin/console doctrine:database:create
 php bin/console make:migration
-php bin/console doctrine:migrations:migrate --no-interaction
+
+# Crear un archivo temporal con la respuesta "yes"
+$tempFile = [System.IO.Path]::GetTempFileName()
+Set-Content -Path $tempFile -Value "yes"
+
+# Ejecutar las migraciones y redirigir la entrada desde el archivo temporal
+Write-Output "`n${scriptName} -> Ejecutando las migraciones.`n"
+Start-Process -FilePath "php" -ArgumentList "bin/console doctrine:migrations:migrate --no-interaction" -RedirectStandardInput $tempFile -Wait
+
+# Eliminar el archivo temporal
+Remove-Item -Path $tempFile
+
 php bin/console doctrine:migrations:sync-metadata-storage
 Start-Process -FilePath "powershell" -ArgumentList "symfony server:start" -PassThru -NoNewWindow
 
