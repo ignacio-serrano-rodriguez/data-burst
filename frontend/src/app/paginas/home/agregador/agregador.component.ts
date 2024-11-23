@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './agregador.component.css'
 })
 export class AgregadorComponent {
+  @Input() nombreLista: string | undefined;
   @Output() volverALista = new EventEmitter<void>();
 
   volver() {
