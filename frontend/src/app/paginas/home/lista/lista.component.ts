@@ -4,11 +4,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ListasService } from '../../../servicios/listas.service';
 import { Lista } from '../../../interfaces/Lista';
+import { AgregadorComponent } from '../agregador/agregador.component';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, AgregadorComponent],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css'
 })
@@ -18,6 +19,7 @@ export class ListaComponent implements OnInit {
   @Input() listaId: number | null = null;
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   lista: Lista | undefined;
+  mostrarAgregadorComponent = false;
 
   ngOnInit(): void {
     if (this.listaId) {
@@ -40,5 +42,13 @@ export class ListaComponent implements OnInit {
 
   volver() {
     this.volverAListasYAmigos.emit();
+  }
+
+  mostrarAgregador() {
+    this.mostrarAgregadorComponent = true;
+  }
+
+  ocultarAgregador() {
+    this.mostrarAgregadorComponent = false;
   }
 }

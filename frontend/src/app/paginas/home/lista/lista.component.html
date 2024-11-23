@@ -1,9 +1,19 @@
-<button mat-icon-button (click)="volver()">
-  <mat-icon>arrow_back</mat-icon>
-</button>
+<div *ngIf="!mostrarAgregadorComponent">
+  <button mat-icon-button (click)="volver()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
 
-<h2>Detalles de la Lista</h2>
-<div *ngIf="lista">
-  <p>Nombre: {{ lista.nombre }}</p>
-  <!-- Aquí puedes agregar más detalles de la lista -->
+  <h2>Detalles de la Lista</h2>
+  <div *ngIf="lista">
+    <p>Nombre: {{ lista.nombre }}</p>
+    <!-- Aquí puedes agregar más detalles de la lista -->
+  </div>
+
+  <button mat-flat-button color="primary" (click)="mostrarAgregador()">
+    Agregador de Elementos
+  </button>
+</div>
+
+<div *ngIf="mostrarAgregadorComponent">
+  <app-agregador (volverALista)="ocultarAgregador()"></app-agregador>
 </div>
