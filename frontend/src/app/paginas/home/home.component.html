@@ -5,6 +5,6 @@
         <app-tus-listas id="tusListas" (listaSeleccionada)="mostrarLista($event)"></app-tus-listas>
         <app-tus-amigos id="tusAmigos"></app-tus-amigos>
     </div>
-    <app-lista *ngIf="mostrarListaComponent" [listaId]="listaId"></app-lista>
+    <app-lista *ngIf="mostrarListaComponent" [listaId]="listaId" (volverAListasYAmigos)="volverAListasYAmigos()"></app-lista>
 </div>
 <app-pie id="pie"></app-pie>
