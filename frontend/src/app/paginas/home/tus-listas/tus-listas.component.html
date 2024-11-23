@@ -11,3 +11,10 @@
 	(click)="crearAsignarLista()">
 	➕
 </button>
+
+<div id="mensajeInformativo"></div>
+
+<h3>Listas Asignadas</h3>
+<ul>
+  <li *ngFor="let lista of listas">{{ lista.nombre }}</li>
+</ul>
