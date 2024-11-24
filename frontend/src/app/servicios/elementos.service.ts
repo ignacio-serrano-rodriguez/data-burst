@@ -5,6 +5,7 @@ import { configuracion_app } from '../configuraciones/configuracion_app';
 import { Elemento } from '../interfaces/Elemento';
 import { RespuestaBuscarElementos } from '../interfaces/RespuestaBuscarElementos';
 import { RespuestaCrearElemento } from '../interfaces/RespuestaCrearElemento';
+import { RespuestaAsignarElemento } from '../interfaces/RespuestaAsignarElemento';
 
 @Injectable({ providedIn: 'root' })
 export class ElementosService {
@@ -22,6 +23,13 @@ export class ElementosService {
     return this.http.post<RespuestaCrearElemento>(
       `${this.api}/crear-elemento`, 
       elemento
+    );
+  }
+
+  asignarElemento(listaId: number, elementoId: number): Observable<RespuestaAsignarElemento> {
+    return this.http.post<RespuestaAsignarElemento>(
+      `${this.api}/asignar-elemento`, 
+      { lista_id: listaId, elemento_id: elementoId }
     );
   }
 }

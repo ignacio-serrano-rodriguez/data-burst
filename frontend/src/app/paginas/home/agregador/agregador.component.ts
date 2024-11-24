@@ -24,6 +24,7 @@ import { Elemento } from '../../../interfaces/Elemento';
 })
 export class AgregadorComponent {
   @Input() nombreLista: string | undefined;
+  @Input() listaId: number | undefined;
   @Output() volverALista = new EventEmitter<void>();
 
   private elementosService = inject(ElementosService);
@@ -110,6 +111,24 @@ export class AgregadorComponent {
       },
       error: (error) => {
         console.error('Error al crear el elemento:', error);
+      }
+    });
+  }
+
+  asignarElemento(elementoId: number) {
+    if (this.listaId === undefined) {
+      console.error('Lista no especificada');
+      return;
+    }
+
+    this.elementosService.asignarElemento(this.listaId, elementoId).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          console.log('Elemento asignado a la lista exitosamente');
+        }
+      },
+      error: (error) => {
+        console.error('Error al asignar el elemento a la lista:', error);
       }
     });
   }

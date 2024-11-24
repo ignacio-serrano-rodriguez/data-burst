@@ -20,6 +20,9 @@
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
+      <button mat-button color="primary" (click)="asignarElemento(elemento.id)">
+        Asignar a la Lista
+      </button>
     </li>
   </ul>
 </div>

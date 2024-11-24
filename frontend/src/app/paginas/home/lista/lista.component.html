@@ -15,5 +15,9 @@
 </div>
 
 <div *ngIf="mostrarAgregadorComponent">
-  <app-agregador [nombreLista]="lista?.nombre" (volverALista)="ocultarAgregador()"></app-agregador>
+  <app-agregador 
+    [nombreLista]="lista?.nombre" 
+    [listaId]="lista?.id" 
+    (volverALista)="ocultarAgregador()">
+  </app-agregador>
 </div>
