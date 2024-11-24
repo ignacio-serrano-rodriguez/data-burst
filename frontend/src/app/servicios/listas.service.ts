@@ -14,21 +14,21 @@ export class ListasService {
 
   crearAsignarLista(objeto: CrearAsignarLista): Observable<RespuestaCrearAsignarLista> {
     return this.http.post<RespuestaCrearAsignarLista>(
-      `${this.api}crear-asignar-lista`, 
+      `${this.api}/crear-asignar-lista`, 
       objeto
     );
   }
 
   obtenerListas(usuarioID: number): Observable<RespuestaObtenerListas> {
     return this.http.post<RespuestaObtenerListas>(
-      `${this.api}obtener-listas`, 
+      `${this.api}/obtener-listas`, 
       { usuarioID }
     );
   }
 
   obtenerLista(id: number): Observable<RespuestaObtenerLista> {
     return this.http.get<RespuestaObtenerLista>(
-      `${this.api}obtener-lista/${id}`
+      `${this.api}/obtener-lista/${id}`
     );
   }
 }

@@ -13,14 +13,14 @@ export class AmigosService {
 
   agregarUsuario(objeto: AgregarUsuario): Observable<RespuestaAgregarUsuario> {
     return this.http.post<RespuestaAgregarUsuario>(
-      `${this.api}agregar-usuario`, 
+      `${this.api}/agregar-usuario`, 
       objeto
     );
   }
 
   obtenerAmigos(usuarioID: number): Observable<RespuestaObtenerAmigos> {
     return this.http.post<RespuestaObtenerAmigos>(
-      `${this.api}obtener-amigos`, 
+      `${this.api}/obtener-amigos`, 
       { usuarioID }
     );
   }

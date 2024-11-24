@@ -12,8 +12,9 @@ export class ElementosService {
   private api: string = configuracion_app.api;
 
   buscarElementos(query: string): Observable<RespuestaBuscarElementos> {
-    return this.http.get<RespuestaBuscarElementos>(
-      `${this.api}/buscar-elementos?query=${query}`
+    return this.http.post<RespuestaBuscarElementos>(
+      `${this.api}/buscar-elementos`, 
+      { query }
     );
   }
 

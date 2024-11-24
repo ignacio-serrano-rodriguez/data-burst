@@ -14,21 +14,21 @@ export class SolicitudesService {
 
   obtenerSolicitudes(obtenerSolicitudes: ObtenerSolicitudes): Observable<RespuestaObtenerSolicitudes> {
     return this.http.post<RespuestaObtenerSolicitudes>(
-      `${this.api}obtener-solicitudes`, 
+      `${this.api}/obtener-solicitudes`, 
       obtenerSolicitudes
     );
   }
 
   aceptarSolicitud(aplicarSolicitud: AplicarSolicitud): Observable<RespuestaAplicarSolicitud> {
     return this.http.post<RespuestaAplicarSolicitud>(
-      `${this.api}aceptar-solicitud`, 
+      `${this.api}/aceptar-solicitud`, 
       aplicarSolicitud
     );
   }
 
   denegarSolicitud(aplicarSolicitud: AplicarSolicitud): Observable<RespuestaAplicarSolicitud> {
     return this.http.post<RespuestaAplicarSolicitud>(
-      `${this.api}denegar-solicitud`, 
+      `${this.api}/denegar-solicitud`, 
       aplicarSolicitud
     );
   }

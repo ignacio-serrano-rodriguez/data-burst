@@ -12,10 +12,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ElementoController extends AbstractController
 {
-    #[Route("/api/buscar-elementos", name: "buscar_elementos", methods: ["GET"])]
+    #[Route("/api/buscar-elementos", name: "buscar_elementos", methods: ["POST"])]
     public function buscarElementos(Request $request, EntityManagerInterface $entityManager)
     {
-        $query = $request->query->get('query');
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $query = $datosRecibidos['query'] ?? '';
+
+        if (empty($query)) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "La consulta de búsqueda está vacía.",
+                    "elementos" => []
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
         $elementos = $entityManager->getRepository(Elemento::class)->createQueryBuilder('e')
             ->where('e.nombre LIKE :query')

@@ -23,7 +23,7 @@ export class accesoService
   {
     return this.http.post<RespuestaLogin>
     (
-      `${this.api}login`, 
+      `${this.api}/login`, 
       objeto
     );
   }
@@ -32,7 +32,7 @@ export class accesoService
   {
     return this.http.post<RespuestaRegistro>
     (
-      `${this.api}registro`, 
+      `${this.api}/registro`, 
       objeto
     );
   }
@@ -41,7 +41,7 @@ export class accesoService
   {
     return this.http.post<RespuestaValidarToken>
     (
-      `${this.api}validar-token`, 
+      `${this.api}/validar-token`, 
       objeto
     );
   }
