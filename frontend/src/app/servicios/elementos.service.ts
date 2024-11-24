@@ -13,13 +13,13 @@ export class ElementosService {
 
   buscarElementos(query: string): Observable<RespuestaBuscarElementos> {
     return this.http.get<RespuestaBuscarElementos>(
-      `${this.api}buscar-elementos?query=${query}`
+      `${this.api}/buscar-elementos?query=${query}`
     );
   }
 
   crearElemento(elemento: Elemento): Observable<RespuestaCrearElemento> {
     return this.http.post<RespuestaCrearElemento>(
-      `${this.api}crear-elemento`, 
+      `${this.api}/crear-elemento`, 
       elemento
     );
   }

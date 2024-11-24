@@ -5,13 +5,15 @@
 <h2>Agregador de Elementos</h2>
 <p>Lista: {{ nombreLista }}</p>
 
-<mat-form-field class="example-full-width">
-  <mat-label>Buscar Elementos</mat-label>
-  <input matInput formControlName="query">
-</mat-form-field>
-<button mat-flat-button color="primary" (click)="buscarElementos()">
-  Buscar
-</button>
+<form [formGroup]="formBuscar">
+  <mat-form-field class="example-full-width">
+    <mat-label>Buscar Elementos</mat-label>
+    <input matInput formControlName="query">
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="buscarElementos()">
+    Buscar
+  </button>
+</form>
 
 <div *ngIf="elementos.length > 0">
   <h3>Resultados de la Búsqueda</h3>

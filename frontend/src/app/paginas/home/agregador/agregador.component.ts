@@ -30,7 +30,7 @@ export class AgregadorComponent {
   private formBuilder = inject(FormBuilder);
 
   formBuscar: FormGroup = this.formBuilder.group({
-    query: ['']
+    query: ['', Validators.required]
   });
 
   formCrear: FormGroup = this.formBuilder.group({
@@ -46,7 +46,14 @@ export class AgregadorComponent {
   noSeEncontraronElementos = false;
 
   buscarElementos() {
-    const query = this.formBuscar.value.query;
+    const query = this.formBuscar.value.query.trim();
+    if (!query) {
+      this.elementos = [];
+      this.noSeEncontraronElementos = true;
+      this.mostrarBotonCrear = true;
+      return;
+    }
+
     this.elementosService.buscarElementos(query).subscribe({
       next: (data) => {
         if (data.exito) {
@@ -54,9 +61,6 @@ export class AgregadorComponent {
           this.mostrarFormularioCrear = false; // Ocultar el formulario de creación después de la búsqueda
           this.mostrarBotonCrear = true; // Mostrar el botón de creación después de la búsqueda
           this.noSeEncontraronElementos = this.elementos.length === 0; // Mostrar el mensaje si no se encontraron elementos
-          if (this.noSeEncontraronElementos) {
-            this.elementos = []; // Borrar los elementos mostrados si no se encontraron elementos
-          }
         }
       },
       error: (error) => {
