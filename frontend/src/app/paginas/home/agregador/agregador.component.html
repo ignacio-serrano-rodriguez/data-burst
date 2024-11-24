@@ -4,4 +4,49 @@
 
 <h2>Agregador de Elementos</h2>
 <p>Lista: {{ nombreLista }}</p>
-<!-- Aquí puedes agregar el contenido del componente Agregador -->
+
+<mat-form-field class="example-full-width">
+  <mat-label>Buscar Elementos</mat-label>
+  <input matInput formControlName="query">
+</mat-form-field>
+<button mat-flat-button color="primary" (click)="buscarElementos()">
+  Buscar
+</button>
+
+<div *ngIf="elementos.length > 0">
+  <h3>Resultados de la Búsqueda</h3>
+  <ul>
+    <li *ngFor="let elemento of elementos">
+      {{ elemento.nombre }}
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="mostrarFormularioCrear">
+  <h3>Crear Nuevo Elemento</h3>
+  <form [formGroup]="formCrear" (ngSubmit)="crearElemento()">
+    <mat-form-field class="example-full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Fecha de Aparición</mat-label>
+      <input matInput type="date" formControlName="fecha_aparicion">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Información Extra</mat-label>
+      <input matInput formControlName="informacion_extra">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Puntuación</mat-label>
+      <input matInput type="number" formControlName="puntuacion">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="descripcion"></textarea>
+    </mat-form-field>
+    <button mat-flat-button color="primary" type="submit">
+      Crear
+    </button>
+  </form>
+</div>
