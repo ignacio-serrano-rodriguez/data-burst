@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\Elemento;
-use App\Entity\Usuario;
+use App\Entity\Usuario; // Asegúrate de importar la clase Usuario desde el namespace correcto
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +66,7 @@ class ElementoController extends AbstractController
         $elemento->setNombre($datosRecibidos['nombre']);
         $elemento->setFechaAparicion(new \DateTime($datosRecibidos['fecha_aparicion']));
         $elemento->setInformacionExtra($datosRecibidos['informacion_extra']);
-        $elemento->setPuntuacion($datosRecibidos['puntuacion']);
+        $elemento->setPuntuacion(0); // Puntuación por defecto
         $elemento->setDescripcion($datosRecibidos['descripcion']);
         $elemento->setMomentoCreacion(new \DateTime());
         $elemento->setUsuario($usuario);

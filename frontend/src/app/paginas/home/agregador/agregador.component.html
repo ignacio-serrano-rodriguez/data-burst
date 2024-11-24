@@ -22,6 +22,16 @@
   </ul>
 </div>
 
+<div *ngIf="noSeEncontraronElementos">
+  <p>No se encontraron elementos.</p>
+</div>
+
+<div *ngIf="mostrarBotonCrear">
+  <button mat-flat-button color="accent" (click)="mostrarFormulario()">
+    Mostrar formulario de creación
+  </button>
+</div>
+
 <div *ngIf="mostrarFormularioCrear">
   <h3>Crear Nuevo Elemento</h3>
   <form [formGroup]="formCrear" (ngSubmit)="crearElemento()">
@@ -36,10 +46,6 @@
     <mat-form-field class="example-full-width">
       <mat-label>Información Extra</mat-label>
       <input matInput formControlName="informacion_extra">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Puntuación</mat-label>
-      <input matInput type="number" formControlName="puntuacion">
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Descripción</mat-label>

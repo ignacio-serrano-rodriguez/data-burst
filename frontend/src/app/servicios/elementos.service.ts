@@ -8,19 +8,19 @@ import { RespuestaCrearElemento } from '../interfaces/RespuestaCrearElemento';
 
 @Injectable({ providedIn: 'root' })
 export class ElementosService {
-    private http = inject(HttpClient);
-    private api: string = configuracion_app.api;
+  private http = inject(HttpClient);
+  private api: string = configuracion_app.api;
 
-    buscarElementos(query: string): Observable<RespuestaBuscarElementos> {
-        return this.http.get<RespuestaBuscarElementos>(
-            `${this.api}buscar-elementos?query=${query}`
-        );
-    }
+  buscarElementos(query: string): Observable<RespuestaBuscarElementos> {
+    return this.http.get<RespuestaBuscarElementos>(
+      `${this.api}buscar-elementos?query=${query}`
+    );
+  }
 
-    crearElemento(elemento: Elemento): Observable<RespuestaCrearElemento> {
-        return this.http.post<RespuestaCrearElemento>(
-            `${this.api}crear-elemento`,
-            elemento
-        );
-    }
+  crearElemento(elemento: Elemento): Observable<RespuestaCrearElemento> {
+    return this.http.post<RespuestaCrearElemento>(
+      `${this.api}crear-elemento`, 
+      elemento
+    );
+  }
 }

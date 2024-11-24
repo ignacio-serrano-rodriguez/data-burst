@@ -37,26 +37,40 @@ export class AgregadorComponent {
     nombre: ['', Validators.required],
     fecha_aparicion: ['', Validators.required],
     informacion_extra: [''],
-    puntuacion: [0, [Validators.required, Validators.min(0), Validators.max(10)]],
     descripcion: ['', Validators.required]
   });
 
   elementos: Elemento[] = [];
   mostrarFormularioCrear = false;
+  mostrarBotonCrear = false;
+  noSeEncontraronElementos = false;
 
   buscarElementos() {
     const query = this.formBuscar.value.query;
     this.elementosService.buscarElementos(query).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.elementos = data.elementos;
-          this.mostrarFormularioCrear = this.elementos.length === 0;
+          this.elementos = data.elementos.filter(elemento => elemento.nombre.toLowerCase().includes(query.toLowerCase()));
+          this.mostrarFormularioCrear = false; // Ocultar el formulario de creación después de la búsqueda
+          this.mostrarBotonCrear = true; // Mostrar el botón de creación después de la búsqueda
+          this.noSeEncontraronElementos = this.elementos.length === 0; // Mostrar el mensaje si no se encontraron elementos
+          if (this.noSeEncontraronElementos) {
+            this.elementos = []; // Borrar los elementos mostrados si no se encontraron elementos
+          }
         }
       },
       error: (error) => {
         console.error('Error al buscar elementos:', error);
+        this.mostrarFormularioCrear = false; // Ocultar el formulario de creación en caso de error
+        this.mostrarBotonCrear = true; // Mostrar el botón de creación en caso de error
+        this.noSeEncontraronElementos = true; // Mostrar el mensaje en caso de error
+        this.elementos = []; // Borrar los elementos mostrados en caso de error
       }
     });
+  }
+
+  mostrarFormulario() {
+    this.mostrarFormularioCrear = true;
   }
 
   crearElemento() {
@@ -73,7 +87,7 @@ export class AgregadorComponent {
       nombre: this.formCrear.value.nombre,
       fecha_aparicion: this.formCrear.value.fecha_aparicion,
       informacion_extra: this.formCrear.value.informacion_extra,
-      puntuacion: this.formCrear.value.puntuacion,
+      puntuacion: 0, // Puntuación por defecto
       descripcion: this.formCrear.value.descripcion,
       momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10) // Añadir el usuario_id
@@ -86,6 +100,8 @@ export class AgregadorComponent {
         if (data.exito) {
           this.elementos.push(data.elemento);
           this.mostrarFormularioCrear = false;
+          this.mostrarBotonCrear = false; // Ocultar el botón de creación después de crear el elemento
+          this.noSeEncontraronElementos = false; // Ocultar el mensaje después de crear el elemento
         }
       },
       error: (error) => {
