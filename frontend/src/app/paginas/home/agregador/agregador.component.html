@@ -5,29 +5,25 @@
 <h2>Agregador de Elementos</h2>
 <p>Lista: {{ nombreLista }}</p>
 
-<form [formGroup]="formBuscar">
-  <mat-form-field class="example-full-width">
-    <mat-label>Buscar Elementos</mat-label>
-    <input matInput formControlName="query">
-  </mat-form-field>
-  <button mat-flat-button color="primary" (click)="buscarElementos()">
-    Buscar
-  </button>
-</form>
+<mat-form-field class="example-full-width">
+  <mat-label>Buscar Elementos</mat-label>
+  <input matInput [(ngModel)]="nombreElemento" (input)="limpiarMensaje()">
+</mat-form-field>
+<button mat-flat-button color="primary" (click)="buscarElementos()" [disabled]="!esNombreElementoValido()">
+  Buscar
+</button>
 
 <div *ngIf="elementos.length > 0">
   <h3>Resultados de la Búsqueda</h3>
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
-      <ng-container *ngIf="consultasFinalizadas">
-        <button *ngIf="!elementosAsignados.has(elemento.id)" mat-button color="primary" (click)="asignarElemento(elemento.id)">
-          Asignar a la Lista
-        </button>
-        <button *ngIf="elementosAsignados.has(elemento.id)" mat-button color="warn" (click)="quitarElemento(elemento.id)">
-          Quitar de la Lista
-        </button>
-      </ng-container>
+      <button *ngIf="!elementosAsignados.has(elemento.id)" mat-button color="primary" (click)="asignarElemento(elemento.id)">
+        Asignar a la Lista
+      </button>
+      <button *ngIf="elementosAsignados.has(elemento.id)" mat-button color="warn" (click)="quitarElemento(elemento.id)">
+        Quitar de la Lista
+      </button>
     </li>
   </ul>
 </div>
@@ -44,25 +40,23 @@
 
 <div *ngIf="mostrarFormularioCrear">
   <h3>Crear Nuevo Elemento</h3>
-  <form [formGroup]="formCrear" (ngSubmit)="crearElemento()">
-    <mat-form-field class="example-full-width">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Fecha de Aparición</mat-label>
-      <input matInput type="date" formControlName="fecha_aparicion">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Información Extra</mat-label>
-      <input matInput formControlName="informacion_extra">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Descripción</mat-label>
-      <textarea matInput formControlName="descripcion"></textarea>
-    </mat-form-field>
-    <button mat-flat-button color="primary" type="submit">
-      Crear
-    </button>
-  </form>
+  <mat-form-field class="example-full-width">
+    <mat-label>Nombre</mat-label>
+    <input matInput [(ngModel)]="nombreElemento">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Fecha de Aparición</mat-label>
+    <input matInput type="date">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Información Extra</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput></textarea>
+  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="crearElemento()">
+    Crear
+  </button>
 </div>

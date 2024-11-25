@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { ElementosService } from '../../../servicios/elementos.service';
 import { ListasService } from '../../../servicios/listas.service';
 import { Elemento } from '../../../interfaces/Elemento';
@@ -18,7 +18,7 @@ import { Elemento } from '../../../interfaces/Elemento';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    FormsModule // Agregar FormsModule a los imports
   ],
   templateUrl: './agregador.component.html',
   styleUrl: './agregador.component.css'
@@ -30,19 +30,8 @@ export class AgregadorComponent {
 
   private elementosService = inject(ElementosService);
   private listasService = inject(ListasService);
-  private formBuilder = inject(FormBuilder);
 
-  formBuscar: FormGroup = this.formBuilder.group({
-    query: ['', Validators.required]
-  });
-
-  formCrear: FormGroup = this.formBuilder.group({
-    nombre: ['', Validators.required],
-    fecha_aparicion: ['', Validators.required],
-    informacion_extra: [''],
-    descripcion: ['', Validators.required]
-  });
-
+  nombreElemento: string = '';
   elementos: Elemento[] = [];
   elementosAsignados: Set<number> = new Set();
   mostrarFormularioCrear = false;
@@ -51,7 +40,7 @@ export class AgregadorComponent {
   consultasFinalizadas = false;
 
   buscarElementos() {
-    const query = this.formBuscar.value.query.trim();
+    const query = this.nombreElemento.trim();
     if (!query) {
       this.elementos = [];
       this.noSeEncontraronElementos = true;
@@ -100,13 +89,12 @@ export class AgregadorComponent {
   }
 
   mostrarFormulario() {
-    const query = this.formBuscar.value.query.trim();
-    this.formCrear.patchValue({ nombre: query });
+    const query = this.nombreElemento.trim();
     this.mostrarFormularioCrear = true;
   }
 
   crearElemento() {
-    if (this.formCrear.invalid) return;
+    if (!this.nombreElemento.trim()) return;
 
     const usuarioId = localStorage.getItem('id');
     if (!usuarioId) {
@@ -116,11 +104,11 @@ export class AgregadorComponent {
 
     const nuevoElemento: Elemento = {
       id: 0, // El ID será asignado por el backend
-      nombre: this.formCrear.value.nombre,
-      fecha_aparicion: this.formCrear.value.fecha_aparicion,
-      informacion_extra: this.formCrear.value.informacion_extra,
+      nombre: this.nombreElemento,
+      fecha_aparicion: '', // Añadir la fecha de aparición
+      informacion_extra: '', // Añadir la información extra
       puntuacion: 0, // Puntuación por defecto
-      descripcion: this.formCrear.value.descripcion,
+      descripcion: '', // Añadir la descripción
       momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10) // Añadir el usuario_id
     };
@@ -182,5 +170,13 @@ export class AgregadorComponent {
 
   volver() {
     this.volverALista.emit();
+  }
+
+  limpiarMensaje() {
+    // No es necesario hacer nada aquí, ya que el valor del input se maneja con ngModel
+  }
+
+  esNombreElementoValido(): boolean {
+    return this.nombreElemento.trim().length > 0;
   }
 }
