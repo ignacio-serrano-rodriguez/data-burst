@@ -39,6 +39,25 @@ export class AgregadorComponent {
   noSeEncontraronElementos = false;
   consultasFinalizadas = false;
 
+  ngOnInit(): void {
+    this.obtenerElementosAsignados();
+  }
+
+  obtenerElementosAsignados() {
+    if (this.listaId) {
+      this.listasService.obtenerElementosLista(this.listaId).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            this.elementosAsignados = new Set(data.elementos.map(e => e.id));
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener los elementos de la lista:', error);
+        }
+      });
+    }
+  }
+
   buscarElementos() {
     const query = this.nombreElemento.trim();
     if (!query) {
@@ -57,24 +76,7 @@ export class AgregadorComponent {
           this.mostrarFormularioCrear = false; // Ocultar el formulario de creación después de la búsqueda
           this.mostrarBotonCrear = true; // Mostrar el botón de creación después de la búsqueda
           this.noSeEncontraronElementos = this.elementos.length === 0; // Mostrar el mensaje si no se encontraron elementos
-
-          // Verificar si los elementos ya están asignados a la lista
-          if (this.listaId) {
-            this.listasService.obtenerElementosLista(this.listaId).subscribe({
-              next: (data) => {
-                if (data.exito) {
-                  this.elementosAsignados = new Set(data.elementos.map(e => e.id));
-                }
-                this.consultasFinalizadas = true; // Marcar las consultas como finalizadas
-              },
-              error: (error) => {
-                console.error('Error al obtener los elementos de la lista:', error);
-                this.consultasFinalizadas = true; // Marcar las consultas como finalizadas incluso en caso de error
-              }
-            });
-          } else {
-            this.consultasFinalizadas = true; // Marcar las consultas como finalizadas si no hay listaId
-          }
+          this.consultasFinalizadas = true; // Marcar las consultas como finalizadas
         }
       },
       error: (error) => {
@@ -122,6 +124,12 @@ export class AgregadorComponent {
           this.mostrarFormularioCrear = false;
           this.mostrarBotonCrear = false; // Ocultar el botón de creación después de crear el elemento
           this.noSeEncontraronElementos = false; // Ocultar el mensaje después de crear el elemento
+
+          // Asignar el nuevo elemento a la lista
+          if (this.listaId) {
+            this.asignarElemento(data.elemento.id);
+            this.elementosAsignados.add(data.elemento.id); // Añadir el elemento a la lista de elementos asignados
+          }
         }
       },
       error: (error) => {
