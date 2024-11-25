@@ -533,13 +533,24 @@ class UsuarioController extends AbstractController
                 );
             }
 
-            $amigos = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_1' => $usuario]);
+            // Obtener las solicitudes de amistad enviadas por el usuario
+            $solicitudesEnviadas = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_1' => $usuario]);
 
             $dataAmigos = [];
-            foreach ($amigos as $amigo) {
-                $dataAmigos[] = [
-                    'nombre' => $amigo->getUsuario2()->getUsuario()
-                ];
+            foreach ($solicitudesEnviadas as $solicitud) {
+                $usuario2 = $solicitud->getUsuario2();
+
+                // Verificar si existe una solicitud de amistad en sentido contrario
+                $solicitudRecibida = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                    'usuario_1' => $usuario2,
+                    'usuario_2' => $usuario
+                ]);
+
+                if ($solicitudRecibida) {
+                    $dataAmigos[] = [
+                        'nombre' => $usuario2->getUsuario()
+                    ];
+                }
             }
 
             return new JsonResponse(
