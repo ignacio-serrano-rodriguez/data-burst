@@ -48,6 +48,7 @@ export class AgregadorComponent {
   mostrarFormularioCrear = false;
   mostrarBotonCrear = false;
   noSeEncontraronElementos = false;
+  consultasFinalizadas = false;
 
   buscarElementos() {
     const query = this.formBuscar.value.query.trim();
@@ -57,6 +58,8 @@ export class AgregadorComponent {
       this.mostrarBotonCrear = false; // No mostrar el botón de creación si el input está vacío
       return;
     }
+
+    this.consultasFinalizadas = false; // Reiniciar el estado de las consultas
 
     this.elementosService.buscarElementos(query).subscribe({
       next: (data) => {
@@ -73,11 +76,15 @@ export class AgregadorComponent {
                 if (data.exito) {
                   this.elementosAsignados = new Set(data.elementos.map(e => e.id));
                 }
+                this.consultasFinalizadas = true; // Marcar las consultas como finalizadas
               },
               error: (error) => {
                 console.error('Error al obtener los elementos de la lista:', error);
+                this.consultasFinalizadas = true; // Marcar las consultas como finalizadas incluso en caso de error
               }
             });
+          } else {
+            this.consultasFinalizadas = true; // Marcar las consultas como finalizadas si no hay listaId
           }
         }
       },
@@ -87,6 +94,7 @@ export class AgregadorComponent {
         this.mostrarBotonCrear = true; // Mostrar el botón de creación en caso de error
         this.noSeEncontraronElementos = true; // Mostrar el mensaje en caso de error
         this.elementos = []; // Borrar los elementos mostrados en caso de error
+        this.consultasFinalizadas = true; // Marcar las consultas como finalizadas incluso en caso de error
       }
     });
   }
@@ -155,20 +163,20 @@ export class AgregadorComponent {
 
   quitarElemento(elementoId: number) {
     if (this.listaId === undefined) {
-        console.error('Lista no especificada');
-        return;
+      console.error('Lista no especificada');
+      return;
     }
 
     this.elementosService.quitarElemento(this.listaId, elementoId).subscribe({
-        next: (data) => {
-            if (data.exito) {
-                console.log('Elemento quitado de la lista exitosamente');
-                this.elementosAsignados.delete(elementoId); // Quitar el elemento de la lista de elementos asignados
-            }
-        },
-        error: (error) => {
-            console.error('Error al quitar el elemento de la lista:', error);
+      next: (data) => {
+        if (data.exito) {
+          console.log('Elemento quitado de la lista exitosamente');
+          this.elementosAsignados.delete(elementoId); // Quitar el elemento de la lista de elementos asignados
         }
+      },
+      error: (error) => {
+        console.error('Error al quitar el elemento de la lista:', error);
+      }
     });
   }
 
