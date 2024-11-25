@@ -51,7 +51,7 @@ export class AgregadorComponent {
     if (!query) {
       this.elementos = [];
       this.noSeEncontraronElementos = true;
-      this.mostrarBotonCrear = true;
+      this.mostrarBotonCrear = false; // No mostrar el botón de creación si el input está vacío
       return;
     }
 
