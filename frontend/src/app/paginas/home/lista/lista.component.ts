@@ -66,5 +66,8 @@ export class ListaComponent implements OnInit {
 
   ocultarAgregador() {
     this.mostrarAgregadorComponent = false;
+    if (this.listaId) {
+      this.obtenerElementosLista(this.listaId);
+    }
   }
 }
