@@ -9,6 +9,13 @@
     <!-- Aquí puedes agregar más detalles de la lista -->
   </div>
 
+  <h3>Elementos Asignados</h3>
+  <ul>
+    <li *ngFor="let elemento of elementos">
+      {{ elemento.nombre }}
+    </li>
+  </ul>
+
   <button mat-flat-button color="primary" (click)="mostrarAgregador()">
     Agregador de Elementos
   </button>

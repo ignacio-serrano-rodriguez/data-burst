@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ListasService } from '../../../servicios/listas.service';
 import { Lista } from '../../../interfaces/Lista';
+import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from '../agregador/agregador.component';
 
 @Component({
@@ -19,11 +20,13 @@ export class ListaComponent implements OnInit {
   @Input() listaId: number | null = null;
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   lista: Lista | undefined;
+  elementos: Elemento[] = [];
   mostrarAgregadorComponent = false;
 
   ngOnInit(): void {
     if (this.listaId) {
       this.obtenerLista(this.listaId);
+      this.obtenerElementosLista(this.listaId);
     }
   }
 
@@ -36,6 +39,19 @@ export class ListaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al obtener la lista:', error);
+      }
+    });
+  }
+
+  obtenerElementosLista(id: number) {
+    this.listasService.obtenerElementosLista(id).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.elementos = data.elementos;
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener los elementos de la lista:', error);
       }
     });
   }

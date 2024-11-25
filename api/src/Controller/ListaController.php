@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\Lista;
+use App\Entity\ListaContieneElemento;
 use App\Entity\Usuario;
 use App\Entity\UsuarioManipulaLista;
 use Doctrine\ORM\EntityManagerInterface;
@@ -141,5 +142,46 @@ class ListaController extends AbstractController
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    #[Route("/api/obtener-elementos-lista/{listaId}", name: "obtener_elementos_lista", methods: ["GET"])]
+    public function obtenerElementosLista(int $listaId, EntityManagerInterface $entityManager)
+    {
+        $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+
+        if (!$lista) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Lista no encontrada."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $elementos = $entityManager->getRepository(ListaContieneElemento::class)->findBy(['lista' => $lista]);
+
+        $dataElementos = [];
+        foreach ($elementos as $listaContieneElemento) {
+            $elemento = $listaContieneElemento->getElemento();
+            $dataElementos[] = [
+                'id' => $elemento->getId(),
+                'nombre' => $elemento->getNombre(),
+                'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
+                'informacion_extra' => $elemento->getInformacionExtra(),
+                'puntuacion' => $elemento->getPuntuacion(),
+                'descripcion' => $elemento->getDescripcion(),
+                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s')
+            ];
+        }
+
+        return new JsonResponse(
+            [
+                "exito" => true,
+                "mensaje" => "Elementos de la lista encontrados.",
+                "elementos" => $dataElementos
+            ],
+            Response::HTTP_OK
+        );
     }
 }

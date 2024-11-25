@@ -6,6 +6,7 @@ import { CrearAsignarLista } from '../interfaces/CrearAsignarLista';
 import { RespuestaCrearAsignarLista } from '../interfaces/RespuestaCrearAsignarLista';
 import { RespuestaObtenerListas } from '../interfaces/RespuestaObtenerListas';
 import { RespuestaObtenerLista } from '../interfaces/RespuestaObtenerLista';
+import { Elemento } from '../interfaces/Elemento';
 
 @Injectable({ providedIn: 'root' })
 export class ListasService {
@@ -29,6 +30,12 @@ export class ListasService {
   obtenerLista(id: number): Observable<RespuestaObtenerLista> {
     return this.http.get<RespuestaObtenerLista>(
       `${this.api}/obtener-lista/${id}`
+    );
+  }
+
+  obtenerElementosLista(listaId: number): Observable<{ exito: boolean, mensaje: string, elementos: Elemento[] }> {
+    return this.http.get<{ exito: boolean, mensaje: string, elementos: Elemento[] }>(
+      `${this.api}/obtener-elementos-lista/${listaId}`
     );
   }
 }

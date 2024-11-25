@@ -2,9 +2,9 @@
 namespace App\Controller;
 
 use App\Entity\Elemento;
+use App\Entity\Usuario;
 use App\Entity\Lista;
 use App\Entity\ListaContieneElemento;
-use App\Entity\Usuario; // Asegúrate de importar la clase Usuario desde el namespace correcto
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
