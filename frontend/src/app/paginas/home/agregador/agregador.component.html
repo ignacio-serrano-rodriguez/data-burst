@@ -20,8 +20,11 @@
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
-      <button mat-button color="primary" (click)="asignarElemento(elemento.id)">
+      <button *ngIf="!elementosAsignados.has(elemento.id)" mat-button color="primary" (click)="asignarElemento(elemento.id)">
         Asignar a la Lista
+      </button>
+      <button *ngIf="elementosAsignados.has(elemento.id)" mat-button color="warn" (click)="quitarElemento(elemento.id)">
+        Quitar de la Lista
       </button>
     </li>
   </ul>

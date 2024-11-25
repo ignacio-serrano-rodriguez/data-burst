@@ -32,4 +32,11 @@ export class ElementosService {
       { lista_id: listaId, elemento_id: elementoId }
     );
   }
+
+  quitarElemento(listaId: number, elementoId: number): Observable<{ exito: boolean, mensaje: string }> {
+    return this.http.post<{ exito: boolean, mensaje: string }>(
+      `${this.api}/quitar-elemento`, 
+      { lista_id: listaId, elemento_id: elementoId }
+    );
+  }
 }

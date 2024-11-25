@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ElementosService } from '../../../servicios/elementos.service';
+import { ListasService } from '../../../servicios/listas.service';
 import { Elemento } from '../../../interfaces/Elemento';
 
 @Component({
@@ -28,6 +29,7 @@ export class AgregadorComponent {
   @Output() volverALista = new EventEmitter<void>();
 
   private elementosService = inject(ElementosService);
+  private listasService = inject(ListasService);
   private formBuilder = inject(FormBuilder);
 
   formBuscar: FormGroup = this.formBuilder.group({
@@ -42,6 +44,7 @@ export class AgregadorComponent {
   });
 
   elementos: Elemento[] = [];
+  elementosAsignados: Set<number> = new Set();
   mostrarFormularioCrear = false;
   mostrarBotonCrear = false;
   noSeEncontraronElementos = false;
@@ -62,6 +65,20 @@ export class AgregadorComponent {
           this.mostrarFormularioCrear = false; // Ocultar el formulario de creación después de la búsqueda
           this.mostrarBotonCrear = true; // Mostrar el botón de creación después de la búsqueda
           this.noSeEncontraronElementos = this.elementos.length === 0; // Mostrar el mensaje si no se encontraron elementos
+
+          // Verificar si los elementos ya están asignados a la lista
+          if (this.listaId) {
+            this.listasService.obtenerElementosLista(this.listaId).subscribe({
+              next: (data) => {
+                if (data.exito) {
+                  this.elementosAsignados = new Set(data.elementos.map(e => e.id));
+                }
+              },
+              error: (error) => {
+                console.error('Error al obtener los elementos de la lista:', error);
+              }
+            });
+          }
         }
       },
       error: (error) => {
@@ -127,10 +144,30 @@ export class AgregadorComponent {
       next: (data) => {
         if (data.exito) {
           console.log('Elemento asignado a la lista exitosamente');
+          this.elementosAsignados.add(elementoId); // Añadir el elemento a la lista de elementos asignados
         }
       },
       error: (error) => {
         console.error('Error al asignar el elemento a la lista:', error);
+      }
+    });
+  }
+
+  quitarElemento(elementoId: number) {
+    if (this.listaId === undefined) {
+      console.error('Lista no especificada');
+      return;
+    }
+
+    this.elementosService.quitarElemento(this.listaId, elementoId).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          console.log('Elemento quitado de la lista exitosamente');
+          this.elementosAsignados.delete(elementoId); // Quitar el elemento de la lista de elementos asignados
+        }
+      },
+      error: (error) => {
+        console.error('Error al quitar el elemento de la lista:', error);
       }
     });
   }
