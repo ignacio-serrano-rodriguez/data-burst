@@ -160,4 +160,59 @@ class ElementoController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/quitar-elemento", name: "quitar_elemento", methods: ["POST"])]
+    public function quitarElemento(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+
+        $lista = $entityManager->getRepository(Lista::class)->find($datosRecibidos['lista_id']);
+        $elemento = $entityManager->getRepository(Elemento::class)->find($datosRecibidos['elemento_id']);
+
+        if (!$lista || !$elemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Lista o elemento no encontrado."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $listaContieneElemento = $entityManager->getRepository(ListaContieneElemento::class)->findOneBy([
+            'lista' => $lista,
+            'elemento' => $elemento
+        ]);
+
+        if (!$listaContieneElemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "El elemento no está asignado a la lista."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            $entityManager->remove($listaContieneElemento);
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Elemento quitado de la lista exitosamente."
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al quitar el elemento de la lista: " . $th->getMessage()
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
