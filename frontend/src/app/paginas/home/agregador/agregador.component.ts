@@ -75,6 +75,8 @@ export class AgregadorComponent {
   }
 
   mostrarFormulario() {
+    const query = this.formBuscar.value.query.trim();
+    this.formCrear.patchValue({ nombre: query });
     this.mostrarFormularioCrear = true;
   }
 
