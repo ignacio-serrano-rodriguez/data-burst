@@ -10,7 +10,8 @@
     mat-flat-button
     color="primary"
     type="submit"
-    [disabled]="formCrearLista.invalid">
+    [disabled]="formCrearLista.invalid"
+    (click)="limpiarMensaje()">
     ➕
   </button>
 </form>

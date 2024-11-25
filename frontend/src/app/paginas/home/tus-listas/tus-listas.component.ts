@@ -81,6 +81,11 @@ export class TusListasComponent implements OnInit {
   }
 
   seleccionarLista(id: number) {
+    this.limpiarMensaje();
     this.listaSeleccionada.emit(id);
+  }
+
+  limpiarMensaje() {
+    document.getElementById("mensajeInformativo")!.innerText = '';
   }
 }
