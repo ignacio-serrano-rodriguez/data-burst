@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 import { Lista } from '../../../interfaces/Lista';
+import { HomeComponent } from '../home.component'; // Importar HomeComponent
 
 @Component({
   selector: 'app-tus-listas',
@@ -25,6 +26,7 @@ import { Lista } from '../../../interfaces/Lista';
 export class TusListasComponent implements OnInit {
 
   private listasService = inject(ListasService);
+  private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   listas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
 
@@ -49,13 +51,13 @@ export class TusListasComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.nombreLista = '';
-          document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.nombre + ")";
+          this.homeComponent.mostrarMensajePositivo(data.mensaje + " (" + objeto.nombre + ")");
           this.obtenerListas(); // Actualizar la lista de listas
         }
       },
       error: (error) => {
         this.nombreLista = '';
-        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.nombre + ")";
+        this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.nombre + ")");
       }
     });
   }
@@ -75,12 +77,8 @@ export class TusListasComponent implements OnInit {
   }
 
   seleccionarLista(id: number) {
-    this.limpiarMensaje();
+    this.homeComponent.limpiarMensaje();
     this.listaSeleccionada.emit(id);
-  }
-
-  limpiarMensaje() {
-    document.getElementById("mensajeInformativo")!.innerText = '';
   }
 
   esNombreListaValido(): boolean {

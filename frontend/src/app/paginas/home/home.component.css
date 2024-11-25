@@ -26,7 +26,7 @@
 
 #mensajeInformativo
 {
-    color: #F5A201;
+    color: #F5A201; /* Color amarillo para mensajes de error */
     font-family: 'ShareTech';
     font-size: 1.5em;
     
@@ -53,4 +53,12 @@
     height: 90%;
 
     margin: auto;
+}
+
+.mensaje-positivo {
+    color: #61B300 !important; /* Color verde para mensajes positivos */
+}
+
+.mensaje-negativo {
+    color: #F5A201 !important; /* Color amarillo para mensajes negativos */
 }

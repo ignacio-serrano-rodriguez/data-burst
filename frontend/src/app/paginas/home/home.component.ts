@@ -44,4 +44,31 @@ export class HomeComponent implements OnInit {
     this.mostrarListasYAmigos = true;
     this.mostrarListaComponent = false;
   }
+
+  mostrarMensajePositivo(mensaje: string) {
+    const mensajeInformativo = document.getElementById("mensajeInformativo");
+    if (mensajeInformativo) {
+      mensajeInformativo.innerText = mensaje;
+      mensajeInformativo.classList.add('mensaje-positivo');
+      mensajeInformativo.classList.remove('mensaje-negativo');
+    }
+  }
+
+  mostrarMensajeNegativo(mensaje: string) {
+    const mensajeInformativo = document.getElementById("mensajeInformativo");
+    if (mensajeInformativo) {
+      mensajeInformativo.innerText = mensaje;
+      mensajeInformativo.classList.add('mensaje-negativo');
+      mensajeInformativo.classList.remove('mensaje-positivo');
+    }
+  }
+
+  limpiarMensaje() {
+    const mensajeInformativo = document.getElementById("mensajeInformativo");
+    if (mensajeInformativo) {
+      mensajeInformativo.innerText = '';
+      mensajeInformativo.classList.remove('mensaje-positivo');
+      mensajeInformativo.classList.remove('mensaje-negativo');
+    }
+  }
 }

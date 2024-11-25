@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
 import { Amigo } from '../../../interfaces/Amigo';
+import { HomeComponent } from '../home.component'; // Importar HomeComponent
 
 @Component({
   selector: 'app-tus-amigos',
@@ -25,6 +26,7 @@ import { Amigo } from '../../../interfaces/Amigo';
 export class TusAmigosComponent implements OnInit {
 
   private amigosService = inject(AmigosService);
+  private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   amigos: Amigo[] = [];
   nombreUsuarioAgregar: string = '';
 
@@ -47,13 +49,13 @@ export class TusAmigosComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.nombreUsuarioAgregar = '';
-          document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.usuarioAgregar + ")";
+          this.homeComponent.mostrarMensajePositivo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
           this.obtenerAmigos(); // Actualizar la lista de amigos
         }
       },
       error: (error) => {
         this.nombreUsuarioAgregar = '';
-        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.usuarioAgregar + ")";
+        this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
       }
     });
   }
@@ -73,7 +75,7 @@ export class TusAmigosComponent implements OnInit {
   }
 
   limpiarMensaje() {
-    document.getElementById("mensajeInformativo")!.innerText = '';
+    this.homeComponent.limpiarMensaje();
   }
 
   esNombreUsuarioValido(): boolean {
