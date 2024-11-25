@@ -7,6 +7,13 @@ Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 $containerName = "data_burst-BD"
 $volumeContainerName = "data_burst-BD_volume"
 
+# Verificar y eliminar el directorio de migraciones si existe.
+$migrationsPath = "./api/migrations"
+if (Test-Path -Path $migrationsPath) {
+    Write-Output "`n${scriptName} -> El directorio de migraciones existe. Eliminándolo."
+    Remove-Item -Recurse -Force -Path $migrationsPath
+}
+
 # Comprueba si el contenedor ya existe, en caso afirmativo lo elimina.
 $containerExists = docker ps -a --filter "name=$containerName" --format "{{.Names}}" | Select-String -Pattern "^$containerName$"
 if ($containerExists) {
@@ -23,7 +30,7 @@ docker run --name ${containerName} -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root
 Set-Location -Path "./api"
 Write-Output ""
 Write-Output "${scriptName} -> Generando directorio de migraciones."
-New-Item -ItemType Directory -Path "./migrations"
+New-Item -ItemType Directory -Path "./migrations" -Force
 Write-Output "`n${scriptName} -> Iniciando el proceso de Symfony en segundo plano.`n"
 Start-Sleep -Seconds 3
 symfony server:stop
@@ -62,30 +69,30 @@ Set-Location -Path "../"
 $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | Out-Null
 Write-Output "`n${scriptName} -> Finalizando la aplicación web."
 
-    # Eliminar el proceso de Angular.
-    $angularProcess = Get-Process -Name "node" -ErrorAction SilentlyContinue
-    if ($angularProcess) {
-        Write-Output "${scriptName} -> Deteniendo el proceso de Angular."
-        Stop-Process -Id $angularProcess.Id -Force
-    }
+# Eliminar el proceso de Angular.
+$angularProcess = Get-Process -Name "node" -ErrorAction SilentlyContinue
+if ($angularProcess) {
+    Write-Output "${scriptName} -> Deteniendo el proceso de Angular."
+    Stop-Process -Id $angularProcess.Id -Force
+}
 
-    # Eliminar el proceso de Symfony.
-    $symfonyProcess = Get-Process -Name "symfony" -ErrorAction SilentlyContinue
-    if ($symfonyProcess) {
-        Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
-        Set-Location -Path "./api"
-        symfony server:stop
-        Stop-Process -Id $symfonyProcess.Id -Force
-        Set-Location -Path "../"
-    }
+# Eliminar el proceso de Symfony.
+$symfonyProcess = Get-Process -Name "symfony" -ErrorAction SilentlyContinue
+if ($symfonyProcess) {
+    Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
+    Set-Location -Path "./api"
+    symfony server:stop
+    Stop-Process -Id $symfonyProcess.Id -Force
+    Set-Location -Path "../"
+}
 
-    # Eliminar el contenedor de la BD.
-    Write-Output "${scriptName} -> Eliminando el contenedor de la BD."
-    docker rm -f $containerName
-    Write-Output "${scriptName} -> No se ha eliminado el volumen del contenedor."
+# Eliminar el contenedor de la BD.
+Write-Output "${scriptName} -> Eliminando el contenedor de la BD."
+docker rm -f $containerName
+Write-Output "${scriptName} -> No se ha eliminado el volumen del contenedor."
 
-    # Eliminar directorio de migraciones.
-    Write-Output "${scriptName} -> Eliminando directorio de migraciones."
-    Remove-Item -Recurse -Force -Path "./api/migrations"
+# Eliminar directorio de migraciones.
+Write-Output "${scriptName} -> Eliminando directorio de migraciones."
+Remove-Item -Recurse -Force -Path "./api/migrations"
 
-    Write-Output "`n${scriptName} -> Aplicación web finalizada."
+Write-Output "`n${scriptName} -> Aplicación web finalizada."
