@@ -1,20 +1,17 @@
 <h2>Tus listas</h2>
-<form [formGroup]="formCrearLista" (ngSubmit)="crearAsignarLista()">
-  <mat-form-field class="elementoFormulario">
-    <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
-    <input matInput id="nombreLista" formControlName="nombreLista">
-  </mat-form-field>
-  <button 
-    id="boton" 
-    class="elementoFormulario" 
-    mat-flat-button
-    color="primary"
-    type="submit"
-    [disabled]="formCrearLista.invalid"
-    (click)="limpiarMensaje()">
-    ➕
-  </button>
-</form>
+<mat-form-field class="elementoFormulario">
+  <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
+  <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="limpiarMensaje()">
+</mat-form-field>
+<button 
+  id="boton" 
+  class="elementoFormulario" 
+  mat-flat-button
+  color="primary"
+  (click)="crearAsignarLista()"
+  [disabled]="!esNombreListaValido()">
+  ➕
+</button>
 
 <div id="mensajeInformativo"></div>
 

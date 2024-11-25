@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
@@ -15,7 +16,8 @@ import { Amigo } from '../../../interfaces/Amigo';
     CommonModule, // Asegúrate de que CommonModule esté importado
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    FormsModule // Agregar FormsModule a los imports
   ],
   templateUrl: './tus-amigos.component.html',
   styleUrl: './tus-amigos.component.css'
@@ -24,27 +26,33 @@ export class TusAmigosComponent implements OnInit {
 
   private amigosService = inject(AmigosService);
   amigos: Amigo[] = [];
+  nombreUsuarioAgregar: string = '';
 
   ngOnInit(): void {
     this.obtenerAmigos();
   }
 
   agregarUsuario() {
+    const nombreUsuarioAgregar = this.nombreUsuarioAgregar.trim();
+    if (!nombreUsuarioAgregar) {
+      return;
+    }
+
     let objeto: AgregarUsuario = {
       usuarioID: Number(localStorage.getItem('id')) || 0,
-      usuarioAgregar: (document.getElementById('nombreUsuarioAgregar') as HTMLInputElement).value
+      usuarioAgregar: nombreUsuarioAgregar
     };
 
     this.amigosService.agregarUsuario(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          (document.getElementById("nombreUsuarioAgregar") as HTMLInputElement).value = '';
+          this.nombreUsuarioAgregar = '';
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.usuarioAgregar + ")";
           this.obtenerAmigos(); // Actualizar la lista de amigos
         }
       },
       error: (error) => {
-        (document.getElementById("nombreUsuarioAgregar") as HTMLInputElement).value = '';
+        this.nombreUsuarioAgregar = '';
         document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.usuarioAgregar + ")";
       }
     });
@@ -62,5 +70,13 @@ export class TusAmigosComponent implements OnInit {
         console.error('Error al obtener amigos:', error);
       }
     });
+  }
+
+  limpiarMensaje() {
+    document.getElementById("mensajeInformativo")!.innerText = '';
+  }
+
+  esNombreUsuarioValido(): boolean {
+    return this.nombreUsuarioAgregar.trim().length > 0;
   }
 }

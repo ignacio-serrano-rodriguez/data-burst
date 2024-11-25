@@ -1,15 +1,16 @@
 <h2>Tus amigos</h2>
 <mat-form-field class="elementoFormulario">
-	<mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
-	<input matInput id="nombreUsuarioAgregar" formControlName="nombreLista">
+  <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
+  <input matInput id="nombreUsuarioAgregar" [(ngModel)]="nombreUsuarioAgregar" (input)="limpiarMensaje()">
 </mat-form-field>
 <button 
-	id="boton" 
-	class="elementoFormulario" 
-	mat-flat-button
-	color="primary"
-	(click)="agregarUsuario()">
-	➕
+  id="boton" 
+  class="elementoFormulario" 
+  mat-flat-button
+  color="primary"
+  (click)="agregarUsuario()"
+  [disabled]="!esNombreUsuarioValido()">
+  ➕
 </button>
 
 <div id="mensajeInformativo"></div>

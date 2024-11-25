@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
@@ -17,7 +17,7 @@ import { Lista } from '../../../interfaces/Lista';
     MatInputModule,
     MatButtonModule,
     CommonModule,
-    ReactiveFormsModule
+    FormsModule // Agregar FormsModule a los imports
   ],
   templateUrl: './tus-listas.component.html',
   styleUrl: './tus-listas.component.css'
@@ -28,39 +28,33 @@ export class TusListasComponent implements OnInit {
   listas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
 
-  formCrearLista: FormGroup;
-
-  constructor() {
-    const formBuilder = inject(FormBuilder);
-    this.formCrearLista = formBuilder.group({
-      nombreLista: ['', Validators.required]
-    });
-  }
+  nombreLista: string = '';
 
   ngOnInit(): void {
     this.obtenerListas();
   }
 
   crearAsignarLista() {
-    if (this.formCrearLista.invalid) {
+    const nombreLista = this.nombreLista.trim();
+    if (!nombreLista) {
       return;
     }
 
     let objeto: CrearAsignarLista = {
       usuarioID: Number(localStorage.getItem('id')) || 0,
-      nombre: this.formCrearLista.value.nombreLista
+      nombre: nombreLista
     };
 
     this.listasService.crearAsignarLista(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          this.formCrearLista.reset();
+          this.nombreLista = '';
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje + " (" + objeto.nombre + ")";
           this.obtenerListas(); // Actualizar la lista de listas
         }
       },
       error: (error) => {
-        this.formCrearLista.reset();
+        this.nombreLista = '';
         document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje + " (" + objeto.nombre + ")";
       }
     });
@@ -87,5 +81,9 @@ export class TusListasComponent implements OnInit {
 
   limpiarMensaje() {
     document.getElementById("mensajeInformativo")!.innerText = '';
+  }
+
+  esNombreListaValido(): boolean {
+    return this.nombreLista.trim().length > 0;
   }
 }
