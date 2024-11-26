@@ -46,15 +46,15 @@
   </mat-form-field>
   <mat-form-field class="example-full-width">
     <mat-label>Fecha de Aparición</mat-label>
-    <input matInput type="date">
+    <input matInput type="date" [(ngModel)]="fechaAparicion">
   </mat-form-field>
   <mat-form-field class="example-full-width">
     <mat-label>Información Extra</mat-label>
-    <input matInput>
+    <input matInput [(ngModel)]="informacionExtra">
   </mat-form-field>
   <mat-form-field class="example-full-width">
     <mat-label>Descripción</mat-label>
-    <textarea matInput></textarea>
+    <textarea matInput [(ngModel)]="descripcion"></textarea>
   </mat-form-field>
   <button mat-flat-button color="primary" (click)="crearElemento()">
     Crear

@@ -33,6 +33,9 @@ export class AgregadorComponent {
   private listasService = inject(ListasService);
 
   nombreElemento: string = '';
+  fechaAparicion: string = '';
+  informacionExtra: string = 'info';
+  descripcion: string = 'más info';
   elementos: Elemento[] = [];
   elementosAsignados: Set<number> = new Set();
   mostrarFormularioCrear = false;
@@ -104,6 +107,14 @@ export class AgregadorComponent {
 
   mostrarFormulario() {
     this.mostrarFormularioCrear = true;
+    this.rellenarCamposAutomaticamente();
+  }
+
+  rellenarCamposAutomaticamente() {
+    const fechaActual = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
+    this.fechaAparicion = fechaActual;
+    this.informacionExtra = 'info';
+    this.descripcion = 'más info';
   }
 
   crearElemento() {
@@ -118,10 +129,10 @@ export class AgregadorComponent {
     const nuevoElemento: Elemento = {
       id: 0, // El ID será asignado por el backend
       nombre: this.nombreElemento,
-      fecha_aparicion: '', // Añadir la fecha de aparición
-      informacion_extra: '', // Añadir la información extra
+      fecha_aparicion: this.fechaAparicion,
+      informacion_extra: this.informacionExtra,
       puntuacion: 0, // Puntuación por defecto
-      descripcion: '', // Añadir la descripción
+      descripcion: this.descripcion,
       momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10) // Añadir el usuario_id
     };
