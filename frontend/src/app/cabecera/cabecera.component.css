@@ -4,7 +4,6 @@
     padding: 0;
     border: 0;
 
-    font-family: 'ShareTech';
     font-size: 1.1em;
     color: #AE00CD;
 }
@@ -12,6 +11,11 @@
 a
 {
     text-decoration: none;
+}
+
+span
+{
+    font-family: 'ShareTech';
 }
 
 .enlaces
