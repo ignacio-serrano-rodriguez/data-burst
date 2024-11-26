@@ -88,6 +88,10 @@ span, a
     background-color: #F4B3FF;
 }
 
+button[mat-icon-button] {
+    background-color: #F4B3FF; /* Cambiar el fondo del icono de la campana a color cian */
+}
+
 .botonMenuUsuario
 {
     background-color: white;
