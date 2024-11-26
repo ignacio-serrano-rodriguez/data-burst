@@ -24,6 +24,9 @@ import { HomeComponent } from '../home.component'; // Importar HomeComponent
   styleUrl: './tus-listas.component.css'
 })
 export class TusListasComponent implements OnInit {
+limpiarMensaje() {
+throw new Error('Method not implemented.');
+}
 
   private listasService = inject(ListasService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
