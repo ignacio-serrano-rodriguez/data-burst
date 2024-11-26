@@ -13,7 +13,7 @@ a
     text-decoration: none;
 }
 
-span
+span, a
 {
     font-family: 'ShareTech';
 }
