@@ -582,7 +582,19 @@ class UsuarioController extends AbstractController
             // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
             $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
 
-            $nuevasSolicitudes = count($solicitudesAmistad);
+            $nuevasSolicitudes = 0;
+
+            foreach ($solicitudesAmistad as $solicitud) {
+                // Verificar que no exista un registro con los IDs intercambiados
+                $solicitudAceptada = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                    'usuario_1' => $usuarioId,
+                    'usuario_2' => $solicitud->getUsuario1()->getId()
+                ]);
+
+                if (!$solicitudAceptada) {
+                    $nuevasSolicitudes++;
+                }
+            }
 
             return new JsonResponse(
                 [
