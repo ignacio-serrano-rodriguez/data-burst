@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu'; 
@@ -17,7 +17,7 @@ import { NotificacionesService } from '../servicios/notificaciones.service'; // 
   templateUrl: './cabecera.component.html',
   styleUrl: './cabecera.component.css'
 })
-export class CabeceraComponent implements OnInit {
+export class CabeceraComponent implements OnInit, OnDestroy {
   @Input() nombreUsuario: string = '';
   mostrarAdministracion: boolean = false;
   permisoUsuario: string = "1";
@@ -45,7 +45,12 @@ export class CabeceraComponent implements OnInit {
       });
 
       this.notificacionesService.actualizarNumeroSolicitudes();
+      this.notificacionesService.iniciarRevisionPeriodica(); // Iniciar revisión periódica
     }
+  }
+
+  ngOnDestroy() {
+    this.notificacionesService.detenerRevisionPeriodica(); // Detener revisión periódica al destruir el componente
   }
 
   cerrarSesion() {

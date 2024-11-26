@@ -8,6 +8,7 @@ import { SolicitudesService } from './solicitudes.service';
 export class NotificacionesService {
   private nuevasSolicitudesSubject = new BehaviorSubject<number>(0);
   nuevasSolicitudes$ = this.nuevasSolicitudesSubject.asObservable();
+  private intervalId: any;
 
   constructor(private solicitudesService: SolicitudesService) {}
 
@@ -22,6 +23,20 @@ export class NotificacionesService {
           console.error('Error al obtener el número de nuevas solicitudes:', error);
         }
       });
+    }
+  }
+
+  iniciarRevisionPeriodica(intervalo: number = 60000) { // Intervalo en milisegundos, por defecto 1 minuto
+    this.detenerRevisionPeriodica(); // Detener cualquier revisión periódica existente
+    this.intervalId = setInterval(() => {
+      this.actualizarNumeroSolicitudes();
+    }, intervalo);
+  }
+
+  detenerRevisionPeriodica() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
     }
   }
 }
