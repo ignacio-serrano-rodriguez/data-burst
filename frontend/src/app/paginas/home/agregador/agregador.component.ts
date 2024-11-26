@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { ElementosService } from '../../../servicios/elementos.service';
 import { ListasService } from '../../../servicios/listas.service';
 import { Elemento } from '../../../interfaces/Elemento';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-agregador',
@@ -39,8 +40,23 @@ export class AgregadorComponent {
   noSeEncontraronElementos = false;
   consultasFinalizadas = false;
 
+  private searchSubject = new Subject<string>();
+
   ngOnInit(): void {
     this.obtenerElementosAsignados();
+
+    this.searchSubject.pipe(
+      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
+      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+    ).subscribe(query => {
+      if (query.length >= 3) {
+        this.buscarElementos(query);
+      } else {
+        this.elementos = [];
+        this.noSeEncontraronElementos = false;
+        this.mostrarBotonCrear = false;
+      }
+    });
   }
 
   obtenerElementosAsignados() {
@@ -58,15 +74,7 @@ export class AgregadorComponent {
     }
   }
 
-  buscarElementos() {
-    const query = this.nombreElemento.trim();
-    if (!query) {
-      this.elementos = [];
-      this.noSeEncontraronElementos = true;
-      this.mostrarBotonCrear = false; // No mostrar el botón de creación si el input está vacío
-      return;
-    }
-
+  buscarElementos(query: string) {
     this.consultasFinalizadas = false; // Reiniciar el estado de las consultas
 
     this.elementosService.buscarElementos(query).subscribe({
@@ -90,8 +98,11 @@ export class AgregadorComponent {
     });
   }
 
+  onNombreElementoChange() {
+    this.searchSubject.next(this.nombreElemento.trim());
+  }
+
   mostrarFormulario() {
-    const query = this.nombreElemento.trim();
     this.mostrarFormularioCrear = true;
   }
 
