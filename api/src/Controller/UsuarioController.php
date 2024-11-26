@@ -571,4 +571,33 @@ class UsuarioController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/obtener-numero-solicitudes", name: "obtener_numero_solicitudes", methods: ["POST"])]
+    public function obtenerNumeroSolicitudes(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $usuarioId = $datosRecibidos['id'];
+
+        try {
+            // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
+            $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
+
+            $nuevasSolicitudes = count($solicitudesAmistad);
+
+            return new JsonResponse(
+                [
+                    "nuevasSolicitudes" => $nuevasSolicitudes
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "No se han podido obtener las solicitudes."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    }
 }

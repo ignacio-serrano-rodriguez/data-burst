@@ -1,5 +1,4 @@
 <mat-toolbar id="cabecera">
-
     <span id="titulo" class="enlaces">
         <a href="http://localhost:4200/home">
             <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
@@ -22,18 +21,22 @@
         <a class="textoEnlace" href="http://localhost:4200/administracion">Administración</a>
     </span>
 
+    <button mat-icon-button (click)="verSolicitudes()">
+        <mat-icon>notifications</mat-icon>
+        <span *ngIf="nuevasSolicitudes > 0" class="badge">{{ nuevasSolicitudes }}</span>
+    </button>
+
     <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
         <span id="nombreUsuario" class="textoEnlace">{{nombreUsuario}}</span>
         <img id="avatarUsuario" src="..\..\..\assets\images\avatarPorDefecto.png" alt="Avatar del usuario"/>
     </button>
-        <mat-menu #menu="matMenu">
-            <button id="verPerfil" class="botonMenuUsuario">
-                <a class="textoEnlace" href="http://localhost:4200/perfil">Ver perfil</a>
-            </button>
-            <br/>
-            <button class="botonMenuUsuario" (click)="cerrarSesion()">
-                <span class="textoEnlace">Cerrar sesión</span>
-            </button>
-        </mat-menu>
-
+    <mat-menu #menu="matMenu">
+        <button id="verPerfil" class="botonMenuUsuario">
+            <a class="textoEnlace" href="http://localhost:4200/perfil">Ver perfil</a>
+        </button>
+        <br/>
+        <button class="botonMenuUsuario" (click)="cerrarSesion()">
+            <span class="textoEnlace">Cerrar sesión</span>
+        </button>
+    </mat-menu>
 </mat-toolbar>

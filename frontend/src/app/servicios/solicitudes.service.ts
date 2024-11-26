@@ -32,4 +32,11 @@ export class SolicitudesService {
       aplicarSolicitud
     );
   }
+
+  obtenerNumeroSolicitudes(usuarioId: number): Observable<{ nuevasSolicitudes: number }> {
+    return this.http.post<{ nuevasSolicitudes: number }>(
+      `${this.api}/obtener-numero-solicitudes`, 
+      { id: usuarioId }
+    );
+  }
 }
