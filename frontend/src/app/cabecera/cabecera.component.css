@@ -74,22 +74,25 @@ span, a
     font-size: 1.7em;
 }
 
+#usuario-section
+{
+    display: flex;
+    align-items: center;
+}
+
 #usuario
 {
-    width: 15%;
-
     display: flex;
     flex-wrap: nowrap;
 
     align-items: center;
-    /* justify-content: space-between; */
     text-align: center;
 
     background-color: #F4B3FF;
 }
 
 button[mat-icon-button] {
-    background-color: #F4B3FF; /* Cambiar el fondo del icono de la campana a color cian */
+    background-color: #F4B3FF; 
 }
 
 .botonMenuUsuario
