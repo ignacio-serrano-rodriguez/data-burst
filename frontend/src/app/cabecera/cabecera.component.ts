@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { MatIconModule } from '@angular/material/icon';
-import { SolicitudesService } from '../servicios/solicitudes.service'; // Ajustar la ruta del servicio
+import { NotificacionesService } from '../servicios/notificaciones.service'; // Ajustar la ruta del servicio
 
 @Component({
   selector: 'app-cabecera',
@@ -23,7 +23,7 @@ export class CabeceraComponent implements OnInit {
   permisoUsuario: string = "1";
   nuevasSolicitudes: number = 0;
 
-  constructor(private solicitudesService: SolicitudesService) {}
+  constructor(private notificacionesService: NotificacionesService) {}
 
   ngOnInit() {
     this.nombreUsuario = localStorage.getItem('usuario') || "usuario";
@@ -40,17 +40,11 @@ export class CabeceraComponent implements OnInit {
         this.mostrarAdministracion = false;
       }
 
-      const usuarioId = Number(localStorage.getItem('id'));
-      if (usuarioId) {
-        this.solicitudesService.obtenerNumeroSolicitudes(usuarioId).subscribe({
-          next: (data) => {
-            this.nuevasSolicitudes = data.nuevasSolicitudes;
-          },
-          error: (error) => {
-            console.error('Error al obtener el número de nuevas solicitudes:', error);
-          }
-        });
-      }
+      this.notificacionesService.nuevasSolicitudes$.subscribe(nuevasSolicitudes => {
+        this.nuevasSolicitudes = nuevasSolicitudes;
+      });
+
+      this.notificacionesService.actualizarNumeroSolicitudes();
     }
   }
 

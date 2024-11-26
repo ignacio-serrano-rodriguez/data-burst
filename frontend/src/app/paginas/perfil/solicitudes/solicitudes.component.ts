@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { SolicitudesService } from '../../../servicios/solicitudes.service';
+import { NotificacionesService } from '../../../servicios/notificaciones.service'; // Importar NotificacionesService
 import { AplicarSolicitud } from '../../../interfaces/AplicarSolicitud'; 
 import { ObtenerSolicitudes } from '../../../interfaces/ObtenerSolicitudes';
 import { Solicitud, RespuestaObtenerSolicitudes } from '../../../interfaces/RespuestaObtenerSolicitudes';
@@ -21,9 +21,13 @@ export class SolicitudesComponent implements OnInit {
   solicitudesAmistad: Solicitud[] = [];
   solicitudesLista: Solicitud[] = [];
 
-  constructor(private solicitudesService: SolicitudesService) {}
+  constructor(private solicitudesService: SolicitudesService, private notificacionesService: NotificacionesService) {} // Inyectar NotificacionesService
 
   ngOnInit(): void {
+    this.obtenerSolicitudes();
+  }
+
+  obtenerSolicitudes() {
     const IDUsuario = localStorage.getItem('id'); // Obtener el ID del usuario desde el localStorage
     if (IDUsuario) {
       let solicitud: ObtenerSolicitudes = { id: parseInt(IDUsuario, 10) }; // Crear el objeto de solicitud con el ID del usuario
@@ -48,7 +52,8 @@ export class SolicitudesComponent implements OnInit {
     };
     this.solicitudesService.aceptarSolicitud(aplicarSolicitud).subscribe((respuesta: RespuestaAplicarSolicitud) => {
       console.log('Solicitud aceptada:', respuesta.mensaje);
-      this.ngOnInit(); // Vuelve a cargar las solicitudes
+      this.obtenerSolicitudes(); // Vuelve a cargar las solicitudes
+      this.notificacionesService.actualizarNumeroSolicitudes(); // Actualizar el número de solicitudes en la cabecera
     });
   }
 
@@ -60,7 +65,8 @@ export class SolicitudesComponent implements OnInit {
     };
     this.solicitudesService.denegarSolicitud(aplicarSolicitud).subscribe((respuesta: RespuestaAplicarSolicitud) => {
       console.log('Solicitud denegada:', respuesta.mensaje);
-      this.ngOnInit(); // Vuelve a cargar las solicitudes
+      this.obtenerSolicitudes(); // Vuelve a cargar las solicitudes
+      this.notificacionesService.actualizarNumeroSolicitudes(); // Actualizar el número de solicitudes en la cabecera
     });
   }
 }
