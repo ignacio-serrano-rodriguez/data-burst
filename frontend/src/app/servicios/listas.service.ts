@@ -38,4 +38,11 @@ export class ListasService {
       `${this.api}/obtener-elementos-lista/${listaId}`
     );
   }
+
+  buscarListas(query: string, usuarioID: number): Observable<RespuestaObtenerListas> {
+    return this.http.post<RespuestaObtenerListas>(
+      `${this.api}/buscar-listas`, 
+      { query, usuarioID }
+    );
+  }
 }

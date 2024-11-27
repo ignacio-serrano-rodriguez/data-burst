@@ -9,6 +9,7 @@ import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 import { Lista } from '../../../interfaces/Lista';
 import { HomeComponent } from '../home.component'; // Importar HomeComponent
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tus-listas',
@@ -24,19 +25,52 @@ import { HomeComponent } from '../home.component'; // Importar HomeComponent
   styleUrl: './tus-listas.component.css'
 })
 export class TusListasComponent implements OnInit {
-limpiarMensaje() {
-throw new Error('Method not implemented.');
-}
-
   private listasService = inject(ListasService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   listas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
 
   nombreLista: string = '';
+  nombreListaBuscar: string = '';
+  noSeEncontraronListas = false;
+
+  private searchSubject = new Subject<string>();
 
   ngOnInit(): void {
     this.obtenerListas();
+
+    this.searchSubject.pipe(
+      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
+      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+    ).subscribe(query => {
+      if (query.length > 0) {
+        const usuarioID = Number(localStorage.getItem('id')) || 0;
+        this.buscarListas(query, usuarioID);
+      } else {
+        this.obtenerListas(); // Mostrar todas las listas si la cadena de búsqueda está vacía
+        this.noSeEncontraronListas = false; // No mostrar el mensaje si la cadena está vacía
+      }
+    });
+  }
+
+  onNombreListaBuscarChange() {
+    this.searchSubject.next(this.nombreListaBuscar.trim());
+  }
+
+  buscarListas(query: string, usuarioID: number) {
+    this.listasService.buscarListas(query, usuarioID).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.listas = data.listas.filter(lista => lista.nombre.toLowerCase().includes(query.toLowerCase()));
+          this.noSeEncontraronListas = this.listas.length === 0 && query.length > 0; // Mostrar el mensaje si no se encontraron listas y la cadena de búsqueda tiene al menos 1 carácter
+        }
+      },
+      error: (error) => {
+        console.error('Error al buscar listas:', error);
+        this.noSeEncontraronListas = true; // Mostrar el mensaje en caso de error
+        this.listas = []; // Borrar las listas mostradas en caso de error
+      }
+    });
   }
 
   crearAsignarLista() {
@@ -86,5 +120,9 @@ throw new Error('Method not implemented.');
 
   esNombreListaValido(): boolean {
     return this.nombreLista.trim().length > 0;
+  }
+
+  limpiarMensaje() {
+    this.homeComponent.limpiarMensaje();
   }
 }

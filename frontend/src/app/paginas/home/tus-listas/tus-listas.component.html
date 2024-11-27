@@ -1,4 +1,6 @@
 <h2>Tus listas</h2>
+
+<!-- Input para crear y asignar listas -->
 <mat-form-field class="elementoFormulario">
   <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
   <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="limpiarMensaje()">
@@ -13,6 +15,12 @@
   ➕
 </button>
 
+<!-- Input para buscar dentro de tus listas -->
+<mat-form-field class="elementoFormulario">
+  <mat-label class="etiquetaFormulario">Buscar Listas</mat-label>
+  <input matInput id="nombreListaBuscar" [(ngModel)]="nombreListaBuscar" (input)="onNombreListaBuscarChange()">
+</mat-form-field>
+
 <div id="mensajeInformativo"></div>
 
 <h3>Listas Asignadas</h3>
@@ -21,3 +29,7 @@
     <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
   </li>
 </ul>
+
+<div *ngIf="noSeEncontraronListas">
+  <p>No se encontraron listas.</p>
+</div>
