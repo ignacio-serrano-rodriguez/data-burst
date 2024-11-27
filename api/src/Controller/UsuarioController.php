@@ -619,7 +619,7 @@ class UsuarioController extends AbstractController
         $datosRecibidos = json_decode($request->getContent(), true);
         $query = $datosRecibidos['query'];
         $usuarioID = $datosRecibidos['usuarioID'];
-    
+
         try {
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
             if (!$usuario) {
@@ -631,23 +631,26 @@ class UsuarioController extends AbstractController
                     Response::HTTP_BAD_REQUEST
                 );
             }
-    
-            // Buscar amigos cuyo nombre coincida con la consulta
+
+            // Buscar amigos que el usuario ha agregado y cuyo nombre coincida con la consulta
             $amigos = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
-                ->where('u.usuario LIKE :query')
-                ->andWhere('u.id != :usuarioID')
+                ->innerJoin('u.usuarioAgregaUsuarios', 'ua')
+                ->where('ua.usuario_1 = :usuarioID')
+                ->andWhere('u.usuario LIKE :query')
+                ->andWhere('u.id != :usuarioID') // Asegurarse de que el usuario no aparezca en los resultados
                 ->setParameter('query', '%' . $query . '%')
                 ->setParameter('usuarioID', $usuarioID)
                 ->getQuery()
                 ->getResult();
-    
+
             $dataAmigos = [];
             foreach ($amigos as $amigo) {
                 $dataAmigos[] = [
+                    'id' => $amigo->getId(),
                     'nombre' => $amigo->getUsuario()
                 ];
             }
-    
+
             return new JsonResponse(
                 [
                     "exito" => true,
@@ -665,5 +668,5 @@ class UsuarioController extends AbstractController
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-    }
+}
 }
