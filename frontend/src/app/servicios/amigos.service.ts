@@ -24,4 +24,11 @@ export class AmigosService {
       { usuarioID }
     );
   }
+
+  buscarAmigos(query: string, usuarioID: number): Observable<RespuestaObtenerAmigos> {
+    return this.http.post<RespuestaObtenerAmigos>(
+      `${this.api}/buscar-amigos`, 
+      { query, usuarioID }
+    );
+  }
 }

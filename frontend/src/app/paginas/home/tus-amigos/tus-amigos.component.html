@@ -1,4 +1,6 @@
 <h2>Tus amigos</h2>
+
+<!-- Input para agregar usuarios -->
 <mat-form-field class="elementoFormulario">
   <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
   <input matInput id="nombreUsuarioAgregar" [(ngModel)]="nombreUsuarioAgregar" (input)="limpiarMensaje()">
@@ -13,9 +15,19 @@
   ➕
 </button>
 
+<!-- Input para buscar dentro de tus amigos -->
+<mat-form-field class="elementoFormulario">
+  <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
+  <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
+</mat-form-field>
+
 <div id="mensajeInformativo"></div>
 
 <h3>Amigos Agregados</h3>
 <ul>
   <li *ngFor="let amigo of amigos">{{ amigo.nombre }}</li>
 </ul>
+
+<div *ngIf="noSeEncontraronAmigos">
+  <p>No se encontraron amigos.</p>
+</div>

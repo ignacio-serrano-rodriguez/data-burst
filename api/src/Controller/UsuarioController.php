@@ -612,4 +612,58 @@ class UsuarioController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/buscar-amigos", name: "buscar_amigos", methods: ["POST"])]
+    public function buscarAmigos(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $query = $datosRecibidos['query'];
+        $usuarioID = $datosRecibidos['usuarioID'];
+    
+        try {
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+    
+            // Buscar amigos cuyo nombre coincida con la consulta
+            $amigos = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
+                ->where('u.usuario LIKE :query')
+                ->andWhere('u.id != :usuarioID')
+                ->setParameter('query', '%' . $query . '%')
+                ->setParameter('usuarioID', $usuarioID)
+                ->getQuery()
+                ->getResult();
+    
+            $dataAmigos = [];
+            foreach ($amigos as $amigo) {
+                $dataAmigos[] = [
+                    'nombre' => $amigo->getUsuario()
+                ];
+            }
+    
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Amigos encontrados exitosamente.",
+                    "amigos" => $dataAmigos
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al buscar amigos."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
