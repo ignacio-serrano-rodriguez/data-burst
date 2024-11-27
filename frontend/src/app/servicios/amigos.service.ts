@@ -5,6 +5,7 @@ import { configuracion_app } from '../configuraciones/configuracion_app';
 import { AgregarUsuario } from '../interfaces/AgregarUsuario';
 import { RespuestaAgregarUsuario } from '../interfaces/RespuestaAgregarUsuario';
 import { RespuestaObtenerAmigos } from '../interfaces/RespuestaObtenerAmigos';
+import { RespuestaBuscarUsuarios } from '../interfaces/RespuestaBuscarUsuarios'; // Importar la interfaz
 
 @Injectable({ providedIn: 'root' })
 export class AmigosService {
@@ -22,6 +23,13 @@ export class AmigosService {
     return this.http.post<RespuestaObtenerAmigos>(
       `${this.api}/obtener-amigos`, 
       { usuarioID }
+    );
+  }
+
+  buscarUsuariosNoAgregados(query: string, usuarioID: number): Observable<RespuestaBuscarUsuarios> {
+    return this.http.post<RespuestaBuscarUsuarios>(
+      `${this.api}/buscar-usuarios-no-agregados`, 
+      { query, usuarioID }
     );
   }
 

@@ -3,17 +3,26 @@
 <!-- Input para agregar usuarios -->
 <mat-form-field class="elementoFormulario">
   <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
-  <input matInput id="nombreUsuarioAgregar" [(ngModel)]="nombreUsuarioAgregar" (input)="limpiarMensaje()">
+  <input matInput id="nombreUsuarioAgregar" [(ngModel)]="nombreUsuarioAgregar" (input)="onNombreUsuarioAgregarChange()">
 </mat-form-field>
-<button 
-  id="boton" 
-  class="elementoFormulario" 
-  mat-flat-button
-  color="primary"
-  (click)="agregarUsuario()"
-  [disabled]="!esNombreUsuarioValido()">
-  ➕
-</button>
+
+<!-- Lista de usuarios no agregados encontrados -->
+<div *ngIf="usuariosNoAgregados.length > 0">
+  <h3>Usuarios No Agregados Encontrados</h3>
+  <ul>
+    <li *ngFor="let usuario of usuariosNoAgregados">
+      {{ usuario.nombre }}
+      <button mat-button color="primary" (click)="agregarUsuario(usuario.nombre)">
+        Agregar
+      </button>
+    </li>
+  </ul>
+</div>
+
+<!-- Mensaje cuando no se encuentran usuarios no agregados -->
+<div *ngIf="noSeEncontraronUsuarios">
+  <p>No se encontraron usuarios.</p>
+</div>
 
 <!-- Input para buscar dentro de tus amigos -->
 <mat-form-field class="elementoFormulario">

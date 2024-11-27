@@ -29,16 +29,32 @@ export class TusAmigosComponent implements OnInit {
   private amigosService = inject(AmigosService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   amigos: Amigo[] = [];
+  usuariosNoAgregados: Amigo[] = [];
   nombreUsuarioAgregar: string = '';
   nombreAmigoBuscar: string = '';
   noSeEncontraronAmigos = false;
+  noSeEncontraronUsuarios = false;
 
-  private searchSubject = new Subject<string>();
+  private searchSubjectAgregar = new Subject<string>();
+  private searchSubjectBuscar = new Subject<string>();
 
   ngOnInit(): void {
     this.obtenerAmigos();
 
-    this.searchSubject.pipe(
+    this.searchSubjectAgregar.pipe(
+      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
+      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+    ).subscribe(query => {
+      if (query.length >= 3) {
+        const usuarioID = Number(localStorage.getItem('id')) || 0;
+        this.buscarUsuariosNoAgregados(query, usuarioID);
+      } else {
+        this.usuariosNoAgregados = [];
+        this.noSeEncontraronUsuarios = false;
+      }
+    });
+
+    this.searchSubjectBuscar.pipe(
       debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
@@ -52,8 +68,28 @@ export class TusAmigosComponent implements OnInit {
     });
   }
 
+  onNombreUsuarioAgregarChange() {
+    this.searchSubjectAgregar.next(this.nombreUsuarioAgregar.trim());
+  }
+
   onNombreAmigoBuscarChange() {
-    this.searchSubject.next(this.nombreAmigoBuscar.trim());
+    this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+  }
+
+  buscarUsuariosNoAgregados(query: string, usuarioID: number) {
+    this.amigosService.buscarUsuariosNoAgregados(query, usuarioID).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.usuariosNoAgregados = data.usuarios;
+          this.noSeEncontraronUsuarios = this.usuariosNoAgregados.length === 0;
+        }
+      },
+      error: (error) => {
+        console.error('Error al buscar usuarios no agregados:', error);
+        this.usuariosNoAgregados = [];
+        this.noSeEncontraronUsuarios = true;
+      }
+    });
   }
 
   buscarAmigos(query: string, usuarioID: number) {
@@ -72,8 +108,8 @@ export class TusAmigosComponent implements OnInit {
     });
   }
 
-  agregarUsuario() {
-    const nombreUsuarioAgregar = this.nombreUsuarioAgregar.trim();
+  agregarUsuario(nombreUsuario: string) {
+    const nombreUsuarioAgregar = nombreUsuario.trim();
     if (!nombreUsuarioAgregar) {
       return;
     }
@@ -114,9 +150,5 @@ export class TusAmigosComponent implements OnInit {
 
   limpiarMensaje() {
     this.homeComponent.limpiarMensaje();
-  }
-
-  esNombreUsuarioValido(): boolean {
-    return this.nombreUsuarioAgregar.trim().length > 0;
   }
 }

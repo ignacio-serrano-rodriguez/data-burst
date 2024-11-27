@@ -633,11 +633,10 @@ class UsuarioController extends AbstractController
             }
 
             // Buscar amigos que el usuario ha agregado y cuyo nombre coincida con la consulta
-            $amigos = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
-                ->innerJoin('u.usuarioAgregaUsuarios', 'ua')
+            $amigos = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
+                ->innerJoin('ua.usuario_2', 'u')
                 ->where('ua.usuario_1 = :usuarioID')
                 ->andWhere('u.usuario LIKE :query')
-                ->andWhere('u.id != :usuarioID') // Asegurarse de que el usuario no aparezca en los resultados
                 ->setParameter('query', '%' . $query . '%')
                 ->setParameter('usuarioID', $usuarioID)
                 ->getQuery()
@@ -646,8 +645,8 @@ class UsuarioController extends AbstractController
             $dataAmigos = [];
             foreach ($amigos as $amigo) {
                 $dataAmigos[] = [
-                    'id' => $amigo->getId(),
-                    'nombre' => $amigo->getUsuario()
+                    'id' => $amigo->getUsuario2()->getId(),
+                    'nombre' => $amigo->getUsuario2()->getUsuario()
                 ];
             }
 
@@ -668,5 +667,67 @@ class UsuarioController extends AbstractController
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-}
+    }
+
+    #[Route("/api/buscar-usuarios-no-agregados", name: "buscar_usuarios_no_agregados", methods: ["POST"])]
+    public function buscarUsuariosNoAgregados(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $query = $datosRecibidos['query'];
+        $usuarioID = $datosRecibidos['usuarioID'];
+
+        try {
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // Subconsulta para obtener los IDs de los usuarios que ya están agregados
+            $subQuery = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
+                ->select('IDENTITY(ua.usuario_2)')
+                ->where('ua.usuario_1 = :usuarioID')
+                ->getDQL();
+
+            // Buscar usuarios que no están agregados por el usuario y cuyo nombre coincida con la consulta
+            $usuariosNoAgregados = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
+                ->where('u.usuario LIKE :query')
+                ->andWhere('u.id != :usuarioID')
+                ->andWhere('u.id NOT IN (' . $subQuery . ')')
+                ->setParameter('query', '%' . $query . '%')
+                ->setParameter('usuarioID', $usuarioID)
+                ->getQuery()
+                ->getResult();
+
+            $dataUsuarios = [];
+            foreach ($usuariosNoAgregados as $usuarioNoAgregado) {
+                $dataUsuarios[] = [
+                    'id' => $usuarioNoAgregado->getId(),
+                    'nombre' => $usuarioNoAgregado->getUsuario()
+                ];
+            }
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Usuarios no agregados encontrados exitosamente.",
+                    "usuarios" => $dataUsuarios
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al buscar usuarios no agregados."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
