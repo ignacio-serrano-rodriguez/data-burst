@@ -43,7 +43,6 @@ export class RegistroComponent {
   });
 
   registrarse() {
-
     if (this.formRegistro.invalid) return;
 
     const objeto: Registro = {
@@ -55,14 +54,23 @@ export class RegistroComponent {
 
     if (objeto.contrasenia != objeto.contraseniaRepetida) {
       let mensajeInformativo = document.getElementById("mensajeInformativo");
-      mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
+      if (mensajeInformativo) {
+        mensajeInformativo.classList.remove("mensaje-exito");
+        mensajeInformativo.classList.add("mensaje-error");
+        mensajeInformativo.innerText = "Las contraseñas no coinciden.";
+      }
       return;
     }
 
     this.accesoService.registro(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
+          let mensajeInformativo = document.getElementById("mensajeInformativo");
+          if (mensajeInformativo) {
+            mensajeInformativo.classList.remove("mensaje-error");
+            mensajeInformativo.classList.add("mensaje-exito");
+            mensajeInformativo.innerText = data.mensaje;
+          }
           (document.getElementById("mailInput") as HTMLInputElement).value = '';
           (document.getElementById("usuarioInput") as HTMLInputElement).value = '';
           (document.getElementById("contraseniaInput") as HTMLInputElement).value = '';
@@ -98,13 +106,23 @@ export class RegistroComponent {
               }
             },
             error: (loginError) => {
-              document.getElementById("mensajeInformativo")!.innerText = loginError.error.mensaje;
+              let mensajeInformativo = document.getElementById("mensajeInformativo");
+              if (mensajeInformativo) {
+                mensajeInformativo.classList.remove("mensaje-exito");
+                mensajeInformativo.classList.add("mensaje-error");
+                mensajeInformativo.innerText = loginError.error.mensaje;
+              }
             }
           });
         }
       },
       error: (error) => {
-        document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
+        let mensajeInformativo = document.getElementById("mensajeInformativo");
+        if (mensajeInformativo) {
+          mensajeInformativo.classList.remove("mensaje-exito");
+          mensajeInformativo.classList.add("mensaje-error");
+          mensajeInformativo.innerText = error.error.mensaje;
+        }
       }
     });
   }

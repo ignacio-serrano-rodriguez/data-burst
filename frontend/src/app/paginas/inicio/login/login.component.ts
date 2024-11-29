@@ -57,7 +57,14 @@ export class LoginComponent {
 
         next: (data) => {
           if (data.exito == true) {
-            document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
+
+            let mensajeInformativo = document.getElementById("mensajeInformativo");
+            
+            if (mensajeInformativo) {
+              mensajeInformativo.classList.remove("mensaje-error");
+              mensajeInformativo.classList.add("mensaje-exito");
+              mensajeInformativo.innerText = data.mensaje;
+            }
 
             localStorage.setItem("token", data.token);
 
@@ -83,7 +90,15 @@ export class LoginComponent {
         },
 
         error: (error) => {
-          document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
+
+          let mensajeInformativo = document.getElementById("mensajeInformativo");
+            
+          if (mensajeInformativo) {
+            mensajeInformativo.classList.remove("mensaje-exito");
+            mensajeInformativo.classList.add("mensaje-error");
+            mensajeInformativo.innerText = error.error.mensaje;
+          }
+
         }
 
       })

@@ -91,7 +91,6 @@
 
 #mensajeInformativo
 {
-    color: #F5A201;
     font-family: 'ShareTech';
     font-size: 1.5em;
 
@@ -103,6 +102,18 @@
     flex-wrap: wrap;
 
     margin-bottom: 1%;
+}
+
+.mensaje-exito
+{
+    
+    color: #61B300;
+}
+
+.mensaje-error 
+{
+    
+    color: #F5A201;
 }
 
 #loginRegistro
