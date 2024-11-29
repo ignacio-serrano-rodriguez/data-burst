@@ -276,4 +276,61 @@ class ListaController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/desasignar-lista", name: "desasignar_lista", methods: ["POST"])]
+    public function desasignarLista(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $listaId = $datosRecibidos['listaId'];
+        $usuarioId = $datosRecibidos['usuarioId'];
+
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
+
+            if (!$lista || !$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista o usuario no encontrado."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $usuarioManipulaLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findOneBy([
+                'lista' => $lista,
+                'usuario' => $usuario
+            ]);
+
+            if (!$usuarioManipulaLista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "El usuario no está asignado a esta lista."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $entityManager->remove($usuarioManipulaLista);
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Lista desasignada exitosamente."
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al desasignar la lista."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
