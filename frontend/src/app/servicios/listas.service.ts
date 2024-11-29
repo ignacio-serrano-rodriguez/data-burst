@@ -6,6 +6,7 @@ import { CrearAsignarLista } from '../interfaces/CrearAsignarLista';
 import { RespuestaCrearAsignarLista } from '../interfaces/RespuestaCrearAsignarLista';
 import { RespuestaObtenerListas } from '../interfaces/RespuestaObtenerListas';
 import { RespuestaObtenerLista } from '../interfaces/RespuestaObtenerLista';
+import { RespuestaModificarNombreLista } from '../interfaces/RespuestaModificarNombreLista'; // Importar la interfaz
 import { Elemento } from '../interfaces/Elemento';
 
 @Injectable({ providedIn: 'root' })
@@ -43,6 +44,13 @@ export class ListasService {
     return this.http.post<RespuestaObtenerListas>(
       `${this.api}/buscar-listas`, 
       { query, usuarioID }
+    );
+  }
+
+  modificarNombreLista(id: number, nuevoNombre: string): Observable<RespuestaModificarNombreLista> {
+    return this.http.post<RespuestaModificarNombreLista>(
+      `${this.api}/modificar-nombre-lista`, 
+      { id, nuevoNombre }
     );
   }
 }

@@ -6,11 +6,12 @@ import { ListasService } from '../../../servicios/listas.service';
 import { Lista } from '../../../interfaces/Lista';
 import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from '../agregador/agregador.component';
+import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 @Component({
   selector: 'app-lista',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, AgregadorComponent],
+  imports: [CommonModule, MatIconModule, MatButtonModule, AgregadorComponent, FormsModule],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css'
 })
@@ -22,6 +23,8 @@ export class ListaComponent implements OnInit {
   lista: Lista | undefined;
   elementos: Elemento[] = [];
   mostrarAgregadorComponent = false;
+  editandoNombre = false;
+  nuevoNombreLista = '';
 
   ngOnInit(): void {
     if (this.listaId) {
@@ -35,6 +38,7 @@ export class ListaComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.lista = data.lista;
+          this.nuevoNombreLista = this.lista.nombre; // Inicializar el nuevo nombre con el nombre actual
         }
       },
       error: (error) => {
@@ -69,5 +73,30 @@ export class ListaComponent implements OnInit {
     if (this.listaId) {
       this.obtenerElementosLista(this.listaId);
     }
+  }
+
+  editarNombre() {
+    this.editandoNombre = true;
+  }
+
+  guardarNombre() {
+    if (this.lista && this.nuevoNombreLista.trim()) {
+      this.listasService.modificarNombreLista(this.lista.id, this.nuevoNombreLista.trim()).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            this.lista!.nombre = this.nuevoNombreLista.trim();
+            this.editandoNombre = false;
+          }
+        },
+        error: (error) => {
+          console.error('Error al modificar el nombre de la lista:', error);
+        }
+      });
+    }
+  }
+
+  cancelarEdicion() {
+    this.editandoNombre = false;
+    this.nuevoNombreLista = this.lista ? this.lista.nombre : '';
   }
 }

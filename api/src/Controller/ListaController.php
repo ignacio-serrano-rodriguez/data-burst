@@ -236,4 +236,44 @@ class ListaController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/modificar-nombre-lista", name: "modificar_nombre_lista", methods: ["POST"])]
+    public function modificarNombreLista(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $id = $datosRecibidos['id'];
+        $nuevoNombre = $datosRecibidos['nuevoNombre'];
+
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($id);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $lista->setNombre($nuevoNombre);
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Nombre de la lista modificado exitosamente."
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al modificar el nombre de la lista."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

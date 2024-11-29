@@ -5,8 +5,12 @@
 
   <h2>Detalles de la Lista</h2>
   <div *ngIf="lista">
-    <p>Nombre: {{ lista.nombre }}</p>
-    <!-- Aquí puedes agregar más detalles de la lista -->
+    <p *ngIf="!editandoNombre">Nombre: {{ lista.nombre }} <button mat-icon-button (click)="editarNombre()"><mat-icon>edit</mat-icon></button></p>
+    <div *ngIf="editandoNombre">
+      <input [(ngModel)]="nuevoNombreLista" placeholder="Nuevo nombre de la lista">
+      <button mat-button color="primary" (click)="guardarNombre()">Guardar</button>
+      <button mat-button color="warn" (click)="cancelarEdicion()">Cancelar</button>
+    </div>
   </div>
 
   <h3>Elementos Asignados</h3>
