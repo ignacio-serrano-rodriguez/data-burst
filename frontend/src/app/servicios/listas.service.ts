@@ -71,10 +71,10 @@ export class ListasService {
     );
   }
 
-  invitarAmigo(listaId: number, amigoId: number): Observable<RespuestaInvitarAmigo> {
+  invitarAmigo(listaId: number, amigoId: number, invitadorId: number): Observable<RespuestaInvitarAmigo> {
     return this.http.post<RespuestaInvitarAmigo>(
       `${this.api}/invitar-amigo`, 
-      { listaId, amigoId }
+      { listaId, amigoId, invitadorId }
     );
   }
 }

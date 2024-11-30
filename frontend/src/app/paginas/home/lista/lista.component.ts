@@ -163,8 +163,9 @@ export class ListaComponent implements OnInit {
   }
 
   invitarAmigo(amigoId: number) {
+    const usuarioID = Number(localStorage.getItem('id')); // Obtener el ID del usuario desde el almacenamiento local
     if (this.lista) {
-      this.listasService.invitarAmigo(this.lista.id, amigoId).subscribe({
+      this.listasService.invitarAmigo(this.lista.id, amigoId, usuarioID).subscribe({
         next: (data) => {
           if (data.exito) {
             console.log('Invitación enviada exitosamente');
