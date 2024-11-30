@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Controller;
 
 use App\Entity\Lista;
-use App\Entity\ListaContieneElemento;
+use App\Entity\InvitacionLista;
 use App\Entity\Usuario;
 use App\Entity\UsuarioManipulaLista;
+use App\Entity\ListaContieneElemento;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,6 +148,7 @@ class ListaController extends AbstractController
             );
         }
     }
+
     #[Route("/api/obtener-elementos-lista/{listaId}", name: "obtener_elementos_lista", methods: ["GET"])]
     public function obtenerElementosLista(int $listaId, EntityManagerInterface $entityManager)
     {
@@ -397,8 +400,9 @@ class ListaController extends AbstractController
         $datosRecibidos = json_decode($request->getContent(), true);
         $listaId = $datosRecibidos['listaId'] ?? null;
         $amigoId = $datosRecibidos['amigoId'] ?? null;
+        $invitadorId = $datosRecibidos['invitadorId'] ?? null;
 
-        if ($listaId === null || $amigoId === null) {
+        if ($listaId === null || $amigoId === null || $invitadorId === null) {
             return new JsonResponse(
                 [
                     "exito" => false,
@@ -411,8 +415,9 @@ class ListaController extends AbstractController
         try {
             $lista = $entityManager->getRepository(Lista::class)->find($listaId);
             $amigo = $entityManager->getRepository(Usuario::class)->find($amigoId);
+            $invitador = $entityManager->getRepository(Usuario::class)->find($invitadorId);
 
-            if (!$lista || !$amigo) {
+            if (!$lista || !$amigo || !$invitador) {
                 return new JsonResponse(
                     [
                         "exito" => false,
@@ -422,11 +427,12 @@ class ListaController extends AbstractController
                 );
             }
 
-            $usuarioManipulaLista = new UsuarioManipulaLista();
-            $usuarioManipulaLista->setLista($lista);
-            $usuarioManipulaLista->setUsuario($amigo);
+            $invitacion = new InvitacionLista();
+            $invitacion->setLista($lista);
+            $invitacion->setInvitado($amigo);
+            $invitacion->setInvitador($invitador);
 
-            $entityManager->persist($usuarioManipulaLista);
+            $entityManager->persist($invitacion);
             $entityManager->flush();
 
             return new JsonResponse(
