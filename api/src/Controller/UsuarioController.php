@@ -180,11 +180,7 @@ class UsuarioController extends AbstractController
     }
 
     #[Route("/api/agregar-usuario", name: "agregar_usuario", methods: ["POST"])]
-    public function agregarUsuario
-    (
-        Request $request, 
-        EntityManagerInterface $entityManager
-    )
+    public function agregarUsuario(Request $request, EntityManagerInterface $entityManager)
     {
         $respuestaJson = null;
         
@@ -192,15 +188,11 @@ class UsuarioController extends AbstractController
         $nombreUsuarioAgregar = $datosRecibidos['usuarioAgregar'];
         $usuarioID = $datosRecibidos['usuarioID'];  
 
-        $usuario_1 = $entityManager->
-            getRepository(Usuario::class)->find($usuarioID);
-        $usuario_2 = $entityManager->
-            getRepository(Usuario::class)->findOneBy(['usuario' => $nombreUsuarioAgregar]);
+        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreUsuarioAgregar]);
 
-        if ($usuario_1 === $usuario_2) 
-        {
-            return new JsonResponse
-            (
+        if ($usuario_1 === $usuario_2) {
+            return new JsonResponse(
                 [
                     "exito" => false,
                     "mensaje" => "No puedes agregarte a ti mismo."
@@ -213,25 +205,19 @@ class UsuarioController extends AbstractController
         $usuarioAgregaUsuario->setUsuario1($usuario_1);
         $usuarioAgregaUsuario->setUsuario2($usuario_2);
 
-        try 
-        {
+        try {
             $entityManager->persist($usuarioAgregaUsuario);
             $entityManager->flush();
             
-            $respuestaJson = new JsonResponse
-            (
+            $respuestaJson = new JsonResponse(
                 [
                     "exito" => true,
                     "mensaje" => "Petición de amistad enviada."
                 ],
                 Response::HTTP_CREATED
             );
-        } 
-        
-        catch (\Throwable $th) 
-        {
-            $respuestaJson = new JsonResponse
-            (
+        } catch (\Throwable $th) {
+            $respuestaJson = new JsonResponse(
                 [
                     "exito" => false,
                     "mensaje" => "Petición de amistad ya enviada o usuario inexistente."
