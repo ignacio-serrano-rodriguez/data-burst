@@ -20,17 +20,19 @@ class ListaController extends AbstractController
         $datosRecibidos = json_decode($request->getContent(), true);
         $nombreLista = $datosRecibidos['nombre'];
         $usuarioID = $datosRecibidos['usuarioID'];
+        $publica = $datosRecibidos['publica'] ?? true; // Obtener la propiedad publica, por defecto true
         $respuestaJson = null;
-
+    
         $lista = new Lista();
         $lista->setNombre($nombreLista);
-
+        $lista->setPublica($publica);
+    
         $usuarioManipulaLista = new UsuarioManipulaLista();
         $usuarioManipulaLista->setLista($lista);
         $usuarioManipulaLista->setUsuario(
             $entityManager->getRepository(Usuario::class)->find($usuarioID)
         );
-
+    
         try {
             $entityManager->persist($lista);
             $entityManager->flush();
@@ -42,7 +44,7 @@ class ListaController extends AbstractController
                 ],
                 Response::HTTP_CREATED
             );
-
+    
             $entityManager->persist($usuarioManipulaLista);
             $entityManager->flush();
         } catch (\Throwable $th) {
@@ -54,7 +56,7 @@ class ListaController extends AbstractController
                 Response::HTTP_BAD_REQUEST
             );
         }
-
+    
         return $respuestaJson;
     }
 

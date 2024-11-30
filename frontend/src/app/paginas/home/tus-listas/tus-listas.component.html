@@ -5,6 +5,9 @@
   <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
   <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="limpiarMensaje()">
 </mat-form-field>
+
+<mat-checkbox [(ngModel)]="publica">Lista Pública</mat-checkbox>
+
 <button 
   id="boton" 
   class="elementoFormulario" 

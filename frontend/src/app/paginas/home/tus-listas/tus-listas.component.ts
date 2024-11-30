@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox'; // Importar MatCheckboxModule
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 import { ListasService } from '../../../servicios/listas.service';
@@ -18,6 +19,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatCheckboxModule, // Agregar MatCheckboxModule a los imports
     CommonModule,
     FormsModule // Agregar FormsModule a los imports
   ],
@@ -32,6 +34,7 @@ export class TusListasComponent implements OnInit {
 
   nombreLista: string = '';
   nombreListaBuscar: string = '';
+  publica: boolean = true; // Variable para el checkbox
   noSeEncontraronListas = false;
 
   private searchSubject = new Subject<string>();
@@ -81,19 +84,22 @@ export class TusListasComponent implements OnInit {
 
     let objeto: CrearAsignarLista = {
       usuarioID: Number(localStorage.getItem('id')) || 0,
-      nombre: nombreLista
+      nombre: nombreLista,
+      publica: this.publica // Añadir la propiedad publica
     };
 
     this.listasService.crearAsignarLista(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
           this.nombreLista = '';
+          this.publica = true; // Resetear el checkbox a su valor por defecto
           this.homeComponent.mostrarMensajePositivo(data.mensaje + " (" + objeto.nombre + ")");
           this.obtenerListas(); // Actualizar la lista de listas
         }
       },
       error: (error) => {
         this.nombreLista = '';
+        this.publica = true; // Resetear el checkbox a su valor por defecto
         this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.nombre + ")");
       }
     });
