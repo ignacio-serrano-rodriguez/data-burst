@@ -124,7 +124,8 @@ class ListaController extends AbstractController
 
             $dataLista = [
                 'id' => $lista->getId(),
-                'nombre' => $lista->getNombre()
+                'nombre' => $lista->getNombre(),
+                'publica' => $lista->isPublica() // Incluir la propiedad publica
             ];
 
             return new JsonResponse(
@@ -145,7 +146,6 @@ class ListaController extends AbstractController
             );
         }
     }
-
     #[Route("/api/obtener-elementos-lista/{listaId}", name: "obtener_elementos_lista", methods: ["GET"])]
     public function obtenerElementosLista(int $listaId, EntityManagerInterface $entityManager)
     {
@@ -345,6 +345,46 @@ class ListaController extends AbstractController
                 [
                     "exito" => false,
                     "mensaje" => "Error al desasignar la lista."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route("/api/cambiar-visibilidad-lista", name: "cambiar_visibilidad_lista", methods: ["POST"])]
+    public function cambiarVisibilidadLista(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $id = $datosRecibidos['id'];
+        $publica = $datosRecibidos['publica'];
+
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($id);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $lista->setPublica($publica);
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Visibilidad de la lista cambiada exitosamente."
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al cambiar la visibilidad de la lista."
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

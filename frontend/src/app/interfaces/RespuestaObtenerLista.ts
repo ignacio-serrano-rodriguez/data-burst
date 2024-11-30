@@ -1,7 +1,7 @@
 import { Lista } from './Lista';
 
 export interface RespuestaObtenerLista {
-    exito: boolean;
-    mensaje: string;
-    lista: Lista;
+  exito: boolean;
+  mensaje: string;
+  lista: Lista;
 }

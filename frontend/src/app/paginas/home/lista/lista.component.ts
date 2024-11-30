@@ -127,4 +127,20 @@ export class ListaComponent implements OnInit {
       });
     }
   }
+
+  cambiarVisibilidad() {
+    if (this.lista) {
+      const nuevaVisibilidad = !this.lista.publica;
+      this.listasService.cambiarVisibilidadLista(this.lista.id, nuevaVisibilidad).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            this.lista!.publica = nuevaVisibilidad;
+          }
+        },
+        error: (error) => {
+          console.error('Error al cambiar la visibilidad de la lista:', error);
+        }
+      });
+    }
+  }
 }

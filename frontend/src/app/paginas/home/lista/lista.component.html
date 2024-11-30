@@ -11,6 +11,7 @@
       <button mat-button color="primary" (click)="guardarNombre()">Guardar</button>
       <button mat-button color="warn" (click)="cancelarEdicion()">Cancelar</button>
     </div>
+    <p>Visibilidad: {{ lista.publica ? 'Pública' : 'Privada' }} <button mat-icon-button (click)="cambiarVisibilidad()"><mat-icon>swap_horiz</mat-icon></button></p>
   </div>
 
   <h3>Elementos Asignados</h3>
