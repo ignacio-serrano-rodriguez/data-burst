@@ -7,11 +7,8 @@
 
 <mat-form-field class="example-full-width">
   <mat-label>Buscar Elementos</mat-label>
-  <input matInput [(ngModel)]="nombreElemento" (input)="onNombreElementoChange()">
+  <input matInput [(ngModel)]="buscarElemento" (input)="onBuscarElementoChange()">
 </mat-form-field>
-<button mat-flat-button color="primary" (click)="buscarElementos(nombreElemento)" [disabled]="!esNombreElementoValido()">
-  Buscar
-</button>
 
 <div *ngIf="elementos.length > 0">
   <h3>Resultados de la Búsqueda</h3>

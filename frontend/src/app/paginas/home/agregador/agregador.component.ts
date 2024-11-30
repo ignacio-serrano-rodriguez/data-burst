@@ -32,7 +32,8 @@ export class AgregadorComponent {
   private elementosService = inject(ElementosService);
   private listasService = inject(ListasService);
 
-  nombreElemento: string = '';
+  buscarElemento: string = ''; // Variable para el input "Buscar Elementos"
+  nombreElemento: string = ''; // Variable para el input "Nombre"
   fechaAparicion: string = '';
   informacionExtra: string = 'info';
   descripcion: string = 'más info';
@@ -101,11 +102,13 @@ export class AgregadorComponent {
     });
   }
 
-  onNombreElementoChange() {
-    this.searchSubject.next(this.nombreElemento.trim());
+  onBuscarElementoChange() {
+    this.searchSubject.next(this.buscarElemento.trim());
   }
 
   mostrarFormulario() {
+    this.nombreElemento = this.buscarElemento.trim(); // Pasar el valor del input "Buscar Elementos" al input "Nombre"
+    this.buscarElemento = ''; // Borrar el valor del input "Buscar Elementos"
     this.mostrarFormularioCrear = true;
     this.rellenarCamposAutomaticamente();
   }
