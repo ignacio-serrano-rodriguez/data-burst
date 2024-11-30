@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvitacionListaRepository::class)]
 #[ApiResource]
+#[ORM\UniqueConstraint(name: "unique_invitacion", columns: ["lista_id", "invitado_id", "invitador_id"])]
 class InvitacionLista
 {
     #[ORM\Id]

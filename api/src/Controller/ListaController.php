@@ -427,6 +427,23 @@ class ListaController extends AbstractController
                 );
             }
 
+            // Verificar si ya existe una invitación
+            $invitacionExistente = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
+                'lista' => $lista,
+                'invitado' => $amigo,
+                'invitador' => $invitador
+            ]);
+
+            if ($invitacionExistente) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Ya existe una invitación para este usuario."
+                    ],
+                    Response::HTTP_CONFLICT
+                );
+            }
+
             $invitacion = new InvitacionLista();
             $invitacion->setLista($lista);
             $invitacion->setInvitado($amigo);
