@@ -28,6 +28,16 @@
   <button mat-flat-button color="warn" (click)="eliminarLista()">
     Eliminar Lista
   </button>
+
+  <h3>Invitar Amigos</h3>
+  <ul>
+    <li *ngFor="let amigo of amigos">
+      {{ amigo.nombre }}
+      <button mat-button color="primary" (click)="invitarAmigo(amigo.id)">
+        Invitar
+      </button>
+    </li>
+  </ul>
 </div>
 
 <div *ngIf="mostrarAgregadorComponent">

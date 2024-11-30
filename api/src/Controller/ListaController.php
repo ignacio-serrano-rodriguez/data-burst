@@ -390,4 +390,60 @@ class ListaController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/invitar-amigo", name: "invitar_amigo", methods: ["POST"])]
+    public function invitarAmigo(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $listaId = $datosRecibidos['listaId'] ?? null;
+        $amigoId = $datosRecibidos['amigoId'] ?? null;
+
+        if ($listaId === null || $amigoId === null) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Datos incompletos."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+            $amigo = $entityManager->getRepository(Usuario::class)->find($amigoId);
+
+            if (!$lista || !$amigo) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista o usuario no encontrado."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $usuarioManipulaLista = new UsuarioManipulaLista();
+            $usuarioManipulaLista->setLista($lista);
+            $usuarioManipulaLista->setUsuario($amigo);
+
+            $entityManager->persist($usuarioManipulaLista);
+            $entityManager->flush();
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Invitación enviada exitosamente."
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al enviar la invitación."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }

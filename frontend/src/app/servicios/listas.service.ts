@@ -9,6 +9,7 @@ import { RespuestaObtenerLista } from '../interfaces/RespuestaObtenerLista';
 import { RespuestaModificarNombreLista } from '../interfaces/RespuestaModificarNombreLista'; // Importar la interfaz
 import { RespuestaDesasignarLista } from '../interfaces/RespuestaDesasignarLista'; // Importar la interfaz
 import { RespuestaCambiarVisibilidadLista } from '../interfaces/RespuestaCambiarVisibilidadLista'; // Importar la interfaz
+import { RespuestaInvitarAmigo } from '../interfaces/RespuestaInvitarAmigo'; // Importar la interfaz
 import { Elemento } from '../interfaces/Elemento';
 
 @Injectable({ providedIn: 'root' })
@@ -67,6 +68,13 @@ export class ListasService {
     return this.http.post<RespuestaCambiarVisibilidadLista>(
       `${this.api}/cambiar-visibilidad-lista`, 
       { id, publica }
+    );
+  }
+
+  invitarAmigo(listaId: number, amigoId: number): Observable<RespuestaInvitarAmigo> {
+    return this.http.post<RespuestaInvitarAmigo>(
+      `${this.api}/invitar-amigo`, 
+      { listaId, amigoId }
     );
   }
 }

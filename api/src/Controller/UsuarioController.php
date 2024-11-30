@@ -548,6 +548,7 @@ class UsuarioController extends AbstractController
 
                 if ($solicitudRecibida) {
                     $dataAmigos[] = [
+                        'id' => $usuario2->getId(), // Incluir el id del amigo
                         'nombre' => $usuario2->getUsuario()
                     ];
                 }
