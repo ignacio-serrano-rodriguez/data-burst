@@ -316,6 +316,21 @@ class ListaController extends AbstractController
             $entityManager->remove($usuarioManipulaLista);
             $entityManager->flush();
 
+            // Verificar si hay más relaciones de usuarios con esta lista
+            $relacionesRestantes = $entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista]);
+
+            if (count($relacionesRestantes) === 0) {
+                // Eliminar todas las relaciones entre la lista y los elementos
+                $elementosRelacionados = $entityManager->getRepository(ListaContieneElemento::class)->findBy(['lista' => $lista]);
+                foreach ($elementosRelacionados as $relacion) {
+                    $entityManager->remove($relacion);
+                }
+
+                // Eliminar la lista
+                $entityManager->remove($lista);
+                $entityManager->flush();
+            }
+
             return new JsonResponse(
                 [
                     "exito" => true,
