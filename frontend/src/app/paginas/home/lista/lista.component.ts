@@ -42,6 +42,7 @@ export class ListaComponent implements OnInit {
   elementos: Elemento[] = [];
   amigos: any[] = [];
   mostrarAgregadorComponent = false;
+  mostrarColaborarComponent = false; // Nueva variable para mostrar/ocultar la sección de colaborar
   editandoNombre = false;
   nuevoNombreLista = '';
   nombreAmigoBuscar: string = '';
@@ -130,6 +131,17 @@ export class ListaComponent implements OnInit {
     if (this.listaId) {
       this.obtenerElementosLista(this.listaId);
     }
+  }
+
+  mostrarColaborar() {
+    this.mostrarColaborarComponent = true;
+  }
+
+  ocultarColaborar() {
+    this.mostrarColaborarComponent = false;
+    this.amigosEncontrados = [];
+    this.noSeEncontraronAmigos = false;
+    this.nombreAmigoBuscar = '';
   }
 
   editarNombre() {

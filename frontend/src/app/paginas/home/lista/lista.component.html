@@ -29,23 +29,33 @@
     Eliminar Lista
   </button>
 
-  <h3>Invitar Amigos</h3>
-  <mat-form-field class="elementoFormulario">
-    <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
-    <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
-  </mat-form-field>
+  <button mat-flat-button color="primary" (click)="mostrarColaborar()">
+    Colaborar
+  </button>
 
-  <ul *ngIf="amigosEncontrados.length > 0">
-    <li *ngFor="let amigo of amigosEncontrados">
-      {{ amigo.nombre }}
-      <button mat-button color="primary" (click)="invitarAmigo(amigo.id)">
-        Invitar
-      </button>
-    </li>
-  </ul>
+  <div *ngIf="mostrarColaborarComponent">
+    <h3>Invitar Amigos</h3>
+    <mat-form-field class="elementoFormulario">
+      <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
+      <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
+    </mat-form-field>
 
-  <div *ngIf="noSeEncontraronAmigos">
-    <p>No se encontraron amigos.</p>
+    <ul *ngIf="amigosEncontrados.length > 0">
+      <li *ngFor="let amigo of amigosEncontrados">
+        {{ amigo.nombre }}
+        <button mat-button color="primary" (click)="invitarAmigo(amigo.id)">
+          Invitar
+        </button>
+      </li>
+    </ul>
+
+    <div *ngIf="noSeEncontraronAmigos">
+      <p>No se encontraron amigos.</p>
+    </div>
+
+    <button mat-flat-button color="warn" (click)="ocultarColaborar()">
+      Cancelar
+    </button>
   </div>
 </div>
 
