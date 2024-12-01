@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Usuario;
 use App\Entity\UsuarioAgregaUsuario;
+use App\Entity\UsuarioManipulaLista;
+use App\Entity\InvitacionLista;
+use App\Entity\Lista;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UsuarioRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -358,11 +361,7 @@ class UsuarioController extends AbstractController
     }
 
     #[Route("/api/obtener-solicitudes", name: "obtener_solicitudes", methods: ["POST"])]
-    public function obtenerSolicitudes
-    (
-        Request $request, 
-        EntityManagerInterface $entityManager
-    )
+    public function obtenerSolicitudes(Request $request, EntityManagerInterface $entityManager)
     {
         $respuestaJson = null;
         $datosRecibidos = json_decode($request->getContent(), true);
@@ -372,8 +371,11 @@ class UsuarioController extends AbstractController
             // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
             $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
 
+            // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado
+            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId, 'aceptada' => false]);
+
             $dataAmistad = [];
-            $dataLista = []; // Mantener la estructura para futuras implementaciones
+            $dataLista = [];
 
             foreach ($solicitudesAmistad as $solicitud) {
                 // Verificar que no exista un registro con los IDs intercambiados
@@ -389,13 +391,19 @@ class UsuarioController extends AbstractController
                 }
             }
 
+            foreach ($solicitudesLista as $solicitud) {
+                $dataLista[] = [
+                    'nombre' => $solicitud->getLista()->getNombre(), // Asumiendo que 'nombre' es el nombre de la lista
+                ];
+            }
+
             $respuestaJson = new JsonResponse(
                 [
                     "exito" => true,
                     "mensaje" => empty($dataAmistad) && empty($dataLista) ? "No existen solicitudes." : "Solicitudes obtenidas exitosamente.",
                     "solicitudes" => [
                         "amistad" => $dataAmistad,
-                        "lista" => $dataLista // Mantener la estructura para futuras implementaciones
+                        "lista" => $dataLista
                     ]
                 ],
                 Response::HTTP_OK
@@ -412,7 +420,7 @@ class UsuarioController extends AbstractController
 
         return $respuestaJson;
     }
-
+    
     #[Route("/api/aceptar-solicitud", name: "aceptar_solicitud", methods: ["POST"])]
     public function aceptarSolicitud(Request $request, EntityManagerInterface $entityManager)
     {
@@ -420,11 +428,10 @@ class UsuarioController extends AbstractController
         $nombreSolicitud = $datosRecibidos['nombre'];
         $idUsuario = $datosRecibidos['IDUsuario'];
         $tipo = $datosRecibidos['tipo'];
-    
-        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($idUsuario);
-        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreSolicitud]);
-    
-        if (!$usuario_1 || !$usuario_2) {
+        
+        $usuario = $entityManager->getRepository(Usuario::class)->find($idUsuario);
+        
+        if (!$usuario) {
             return new JsonResponse(
                 [
                     "exito" => false,
@@ -433,129 +440,76 @@ class UsuarioController extends AbstractController
                 Response::HTTP_BAD_REQUEST
             );
         }
-    
+        
         try {
-            // Obtener la solicitud de amistad
-            $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                'usuario_2' => $usuario_1,
-                'usuario_1' => $usuario_2
-            ]);
-    
-            if ($solicitud) {
-                // Lógica para aceptar la solicitud
-                // Por ejemplo, crear una nueva relación de amistad
-                $nuevaRelacion = new UsuarioAgregaUsuario();
-                $nuevaRelacion->setUsuario1($usuario_1);
-                $nuevaRelacion->setUsuario2($usuario_2);
-                $entityManager->persist($nuevaRelacion);
-                $entityManager->flush();
-    
-                return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud aceptada.'], Response::HTTP_OK);
-            } else {
-                return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+            if ($tipo === 'amistad') {
+                // Obtener la solicitud de amistad
+                $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreSolicitud]);
+                if (!$usuario_2) {
+                    return new JsonResponse(
+                        [
+                            "exito" => false,
+                            "mensaje" => "Usuario no encontrado."
+                        ],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+
+                $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                    'usuario_2' => $usuario,
+                    'usuario_1' => $usuario_2
+                ]);
+        
+                if ($solicitud) {
+                    // Lógica para aceptar la solicitud
+                    // Por ejemplo, crear una nueva relación de amistad
+                    $nuevaRelacion = new UsuarioAgregaUsuario();
+                    $nuevaRelacion->setUsuario1($usuario);
+                    $nuevaRelacion->setUsuario2($usuario_2);
+                    $entityManager->persist($nuevaRelacion);
+                    $entityManager->flush();
+        
+                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud aceptada.'], Response::HTTP_OK);
+                } else {
+                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+                }
+            } elseif ($tipo === 'lista') {
+                // Obtener la solicitud de acceso a la lista
+                $lista = $entityManager->getRepository(Lista::class)->findOneBy(['nombre' => $nombreSolicitud]);
+                if (!$lista) {
+                    return new JsonResponse(
+                        [
+                            "exito" => false,
+                            "mensaje" => "Lista no encontrada."
+                        ],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+
+                $invitacion = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
+                    'invitado' => $usuario,
+                    'lista' => $lista,
+                    'aceptada' => false
+                ]);
+
+                if ($invitacion) {
+                    // Lógica para aceptar la solicitud de acceso a la lista
+                    $invitacion->setAceptada(true);
+
+                    $usuarioManipulaLista = new UsuarioManipulaLista();
+                    $usuarioManipulaLista->setLista($invitacion->getLista());
+                    $usuarioManipulaLista->setUsuario($invitacion->getInvitado());
+
+                    $entityManager->persist($usuarioManipulaLista);
+                    $entityManager->flush();
+
+                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud de acceso a la lista aceptada.'], Response::HTTP_OK);
+                } else {
+                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud de acceso a la lista no encontrada.'], Response::HTTP_NOT_FOUND);
+                }
             }
         } catch (\Throwable $th) {
             return new JsonResponse(['exito' => false, 'mensaje' => 'Error al aceptar la solicitud.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-    
-    #[Route("/api/denegar-solicitud", name: "denegar_solicitud", methods: ["POST"])]
-    public function denegarSolicitud(Request $request, EntityManagerInterface $entityManager)
-    {
-        $datosRecibidos = json_decode($request->getContent(), true);
-        $nombreSolicitud = $datosRecibidos['nombre'];
-        $idUsuario = $datosRecibidos['IDUsuario'];
-        $tipo = $datosRecibidos['tipo'];
-    
-        $usuario_1 = $entityManager->getRepository(Usuario::class)->find($idUsuario);
-        $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreSolicitud]);
-    
-        if (!$usuario_1 || !$usuario_2) {
-            return new JsonResponse(
-                [
-                    "exito" => false,
-                    "mensaje" => "Usuario no encontrado."
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-    
-        try {
-            // Obtener la solicitud de amistad
-            $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                'usuario_2' => $usuario_1,
-                'usuario_1' => $usuario_2
-            ]);
-    
-            if ($solicitud) {
-                // Lógica para denegar la solicitud
-                $entityManager->remove($solicitud);
-                $entityManager->flush();
-    
-                return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud denegada.'], Response::HTTP_OK);
-            } else {
-                return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
-            }
-        } catch (\Throwable $th) {
-            return new JsonResponse(['exito' => false, 'mensaje' => 'Error al denegar la solicitud.'], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    #[Route("/api/obtener-amigos", name: "obtener_amigos", methods: ["POST"])]
-    public function obtenerAmigos(Request $request, EntityManagerInterface $entityManager)
-    {
-        $datosRecibidos = json_decode($request->getContent(), true);
-        $usuarioID = $datosRecibidos['usuarioID'];
-
-        try {
-            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
-            if (!$usuario) {
-                return new JsonResponse(
-                    [
-                        "exito" => false,
-                        "mensaje" => "Usuario no encontrado."
-                    ],
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            // Obtener las solicitudes de amistad enviadas por el usuario
-            $solicitudesEnviadas = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_1' => $usuario]);
-
-            $dataAmigos = [];
-            foreach ($solicitudesEnviadas as $solicitud) {
-                $usuario2 = $solicitud->getUsuario2();
-
-                // Verificar si existe una solicitud de amistad en sentido contrario
-                $solicitudRecibida = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                    'usuario_1' => $usuario2,
-                    'usuario_2' => $usuario
-                ]);
-
-                if ($solicitudRecibida) {
-                    $dataAmigos[] = [
-                        'id' => $usuario2->getId(), // Incluir el id del amigo
-                        'nombre' => $usuario2->getUsuario()
-                    ];
-                }
-            }
-
-            return new JsonResponse(
-                [
-                    "exito" => true,
-                    "mensaje" => "Amigos obtenidos exitosamente.",
-                    "amigos" => $dataAmigos
-                ],
-                Response::HTTP_OK
-            );
-        } catch (\Throwable $th) {
-            return new JsonResponse(
-                [
-                    "exito" => false,
-                    "mensaje" => "Error al obtener amigos."
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
         }
     }
 
@@ -597,6 +551,88 @@ class UsuarioController extends AbstractController
                 ],
                 Response::HTTP_BAD_REQUEST
             );
+        }
+    }
+
+    #[Route("/api/denegar-solicitud", name: "denegar_solicitud", methods: ["POST"])]
+    public function denegarSolicitud(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $nombreSolicitud = $datosRecibidos['nombre'];
+        $idUsuario = $datosRecibidos['IDUsuario'];
+        $tipo = $datosRecibidos['tipo'];
+        
+        $usuario = $entityManager->getRepository(Usuario::class)->find($idUsuario);
+        
+        if (!$usuario) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Usuario no encontrado."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        
+        try {
+            if ($tipo === 'amistad') {
+                // Obtener la solicitud de amistad
+                $usuario_2 = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreSolicitud]);
+                if (!$usuario_2) {
+                    return new JsonResponse(
+                        [
+                            "exito" => false,
+                            "mensaje" => "Usuario no encontrado."
+                        ],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+
+                $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                    'usuario_2' => $usuario,
+                    'usuario_1' => $usuario_2
+                ]);
+        
+                if ($solicitud) {
+                    // Lógica para denegar la solicitud
+                    $entityManager->remove($solicitud);
+                    $entityManager->flush();
+        
+                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud denegada.'], Response::HTTP_OK);
+                } else {
+                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+                }
+            } elseif ($tipo === 'lista') {
+                // Obtener la solicitud de acceso a la lista
+                $lista = $entityManager->getRepository(Lista::class)->findOneBy(['nombre' => $nombreSolicitud]);
+                if (!$lista) {
+                    return new JsonResponse(
+                        [
+                            "exito" => false,
+                            "mensaje" => "Lista no encontrada."
+                        ],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+
+                $invitacion = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
+                    'invitado' => $usuario,
+                    'lista' => $lista,
+                    'aceptada' => false
+                ]);
+
+                if ($invitacion) {
+                    // Lógica para denegar la solicitud de acceso a la lista
+                    $entityManager->remove($invitacion);
+                    $entityManager->flush();
+
+                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud de acceso a la lista denegada.'], Response::HTTP_OK);
+                } else {
+                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud de acceso a la lista no encontrada.'], Response::HTTP_NOT_FOUND);
+                }
+            }
+        } catch (\Throwable $th) {
+            return new JsonResponse(['exito' => false, 'mensaje' => 'Error al denegar la solicitud.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -712,6 +748,64 @@ class UsuarioController extends AbstractController
                 [
                     "exito" => false,
                     "mensaje" => "Error al buscar usuarios no agregados."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route("/api/obtener-amigos", name: "obtener_amigos", methods: ["POST"])]
+    public function obtenerAmigos(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $usuarioID = $datosRecibidos['usuarioID'];
+
+        try {
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // Obtener las solicitudes de amistad enviadas por el usuario
+            $solicitudesEnviadas = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_1' => $usuario]);
+
+            $dataAmigos = [];
+            foreach ($solicitudesEnviadas as $solicitud) {
+                $usuario2 = $solicitud->getUsuario2();
+
+                // Verificar si existe una solicitud de amistad en sentido contrario
+                $solicitudRecibida = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                    'usuario_1' => $usuario2,
+                    'usuario_2' => $usuario
+                ]);
+
+                if ($solicitudRecibida) {
+                    $dataAmigos[] = [
+                        'id' => $usuario2->getId(), // Incluir el id del amigo
+                        'nombre' => $usuario2->getUsuario()
+                    ];
+                }
+            }
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Amigos obtenidos exitosamente.",
+                    "amigos" => $dataAmigos
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al obtener amigos."
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
