@@ -39,4 +39,11 @@ export class AmigosService {
       { query, usuarioID }
     );
   }
+
+  buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number): Observable<RespuestaObtenerAmigos> {
+    return this.http.post<RespuestaObtenerAmigos>(
+      `${this.api}/buscar-amigos-no-manipulan-lista`, 
+      { query, usuarioID, listaID }
+    );
+  }
 }

@@ -62,7 +62,7 @@ export class ListaComponent implements OnInit {
     ).subscribe(query => {
       if (query.length >= 3) {
         const usuarioID = Number(localStorage.getItem('id')) || 0;
-        this.buscarAmigos(query, usuarioID);
+        this.buscarAmigosNoManipulanLista(query, usuarioID, this.listaId!);
       } else {
         this.amigosEncontrados = [];
         this.noSeEncontraronAmigos = false;
@@ -74,8 +74,8 @@ export class ListaComponent implements OnInit {
     this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
   }
 
-  buscarAmigos(query: string, usuarioID: number) {
-    this.amigosService.buscarAmigos(query, usuarioID).subscribe({
+  buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number) {
+    this.amigosService.buscarAmigosNoManipulanLista(query, usuarioID, listaID).subscribe({
       next: (data) => {
         if (data.exito) {
           this.amigosEncontrados = data.amigos;

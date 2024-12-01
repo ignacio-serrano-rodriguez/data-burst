@@ -818,4 +818,69 @@ class UsuarioController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/buscar-amigos-no-manipulan-lista", name: "buscar_amigos_no_manipulan_lista", methods: ["POST"])]
+    public function buscarAmigosNoManipulanLista(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $query = $datosRecibidos['query'];
+        $usuarioID = $datosRecibidos['usuarioID'];
+        $listaID = $datosRecibidos['listaID']; // Obtener el ID de la lista
+
+        try {
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // Subconsulta para obtener los IDs de los usuarios que ya están manipulando la lista
+            $subQuery = $entityManager->getRepository(UsuarioManipulaLista::class)->createQueryBuilder('uml')
+                ->select('IDENTITY(uml.usuario)')
+                ->where('uml.lista = :listaID')
+                ->getDQL();
+
+            // Buscar amigos que el usuario ha agregado, cuyo nombre coincida con la consulta y que no estén manipulando la lista
+            $amigos = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
+                ->innerJoin('ua.usuario_2', 'u')
+                ->where('ua.usuario_1 = :usuarioID')
+                ->andWhere('u.usuario LIKE :query')
+                ->andWhere('u.id NOT IN (' . $subQuery . ')')
+                ->setParameter('query', '%' . $query . '%')
+                ->setParameter('usuarioID', $usuarioID)
+                ->setParameter('listaID', $listaID)
+                ->getQuery()
+                ->getResult();
+
+            $dataAmigos = [];
+            foreach ($amigos as $amigo) {
+                $dataAmigos[] = [
+                    'id' => $amigo->getUsuario2()->getId(),
+                    'nombre' => $amigo->getUsuario2()->getUsuario()
+                ];
+            }
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Amigos encontrados exitosamente.",
+                    "amigos" => $dataAmigos
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al buscar amigos."
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
