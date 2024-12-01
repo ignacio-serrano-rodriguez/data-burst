@@ -523,6 +523,9 @@ class UsuarioController extends AbstractController
             // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
             $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
 
+            // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado
+            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId, 'aceptada' => false]);
+
             $nuevasSolicitudes = 0;
 
             foreach ($solicitudesAmistad as $solicitud) {
@@ -536,6 +539,9 @@ class UsuarioController extends AbstractController
                     $nuevasSolicitudes++;
                 }
             }
+
+            // Contar las solicitudes de listas
+            $nuevasSolicitudes += count($solicitudesLista);
 
             return new JsonResponse(
                 [
