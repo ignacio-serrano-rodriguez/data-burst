@@ -394,6 +394,7 @@ class UsuarioController extends AbstractController
             foreach ($solicitudesLista as $solicitud) {
                 $dataLista[] = [
                     'nombre' => $solicitud->getLista()->getNombre(), // Asumiendo que 'nombre' es el nombre de la lista
+                    'invitador' => $solicitud->getInvitador()->getUsuario() // Obtener el nombre del usuario que invita
                 ];
             }
 

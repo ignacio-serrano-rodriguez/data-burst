@@ -16,7 +16,7 @@
       </td>
     </tr>
     <tr *ngFor="let solicitud of solicitudesLista">
-      <td>{{ solicitud.nombre }}</td>
+      <td>{{ solicitud.nombre }} ({{ solicitud.invitador }})</td>
       <td>Lista</td>
       <td>
         <button (click)="aceptarSolicitud(solicitud.nombre, 'lista')">✅</button>
