@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field'; // Importar MatFormFieldModule
+import { MatInputModule } from '@angular/material/input'; // Importar MatInputModule
 import { ListasService } from '../../../servicios/listas.service';
 import { AmigosService } from '../../../servicios/amigos.service';
 import { Lista } from '../../../interfaces/Lista';
@@ -10,13 +12,24 @@ import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from '../agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component'; // Importar el componente de confirmación
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, AgregadorComponent, FormsModule, MatDialogModule],
+  imports: [
+    CommonModule, 
+    MatIconModule, 
+    MatButtonModule, 
+    AgregadorComponent, 
+    FormsModule, 
+    MatDialogModule,
+    MatFormFieldModule, // Agregar MatFormFieldModule a los imports
+    MatInputModule // Agregar MatInputModule a los imports
+  ],
   templateUrl: './lista.component.html',
-  styleUrl: './lista.component.css'
+  styleUrl: './lista.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] // Agregar CUSTOM_ELEMENTS_SCHEMA
 })
 export class ListaComponent implements OnInit {
 
@@ -31,13 +44,50 @@ export class ListaComponent implements OnInit {
   mostrarAgregadorComponent = false;
   editandoNombre = false;
   nuevoNombreLista = '';
+  nombreAmigoBuscar: string = '';
+  amigosEncontrados: any[] = [];
+  noSeEncontraronAmigos = false;
+
+  private searchSubjectBuscar = new Subject<string>();
 
   ngOnInit(): void {
     if (this.listaId) {
       this.obtenerLista(this.listaId);
       this.obtenerElementosLista(this.listaId);
-      this.obtenerAmigos();
     }
+
+    this.searchSubjectBuscar.pipe(
+      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
+      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+    ).subscribe(query => {
+      if (query.length >= 3) {
+        const usuarioID = Number(localStorage.getItem('id')) || 0;
+        this.buscarAmigos(query, usuarioID);
+      } else {
+        this.amigosEncontrados = [];
+        this.noSeEncontraronAmigos = false;
+      }
+    });
+  }
+
+  onNombreAmigoBuscarChange() {
+    this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+  }
+
+  buscarAmigos(query: string, usuarioID: number) {
+    this.amigosService.buscarAmigos(query, usuarioID).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.amigosEncontrados = data.amigos;
+          this.noSeEncontraronAmigos = this.amigosEncontrados.length === 0;
+        }
+      },
+      error: (error) => {
+        console.error('Error al buscar amigos:', error);
+        this.amigosEncontrados = [];
+        this.noSeEncontraronAmigos = true;
+      }
+    });
   }
 
   obtenerLista(id: number) {
@@ -63,20 +113,6 @@ export class ListaComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al obtener los elementos de la lista:', error);
-      }
-    });
-  }
-
-  obtenerAmigos() {
-    const usuarioID = Number(localStorage.getItem('id'));
-    this.amigosService.obtenerAmigos(usuarioID).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          this.amigos = data.amigos;
-        }
-      },
-      error: (error) => {
-        console.error('Error al obtener amigos:', error);
       }
     });
   }

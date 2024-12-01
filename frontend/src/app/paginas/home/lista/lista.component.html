@@ -30,14 +30,23 @@
   </button>
 
   <h3>Invitar Amigos</h3>
-  <ul>
-    <li *ngFor="let amigo of amigos">
+  <mat-form-field class="elementoFormulario">
+    <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
+    <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
+  </mat-form-field>
+
+  <ul *ngIf="amigosEncontrados.length > 0">
+    <li *ngFor="let amigo of amigosEncontrados">
       {{ amigo.nombre }}
       <button mat-button color="primary" (click)="invitarAmigo(amigo.id)">
         Invitar
       </button>
     </li>
   </ul>
+
+  <div *ngIf="noSeEncontraronAmigos">
+    <p>No se encontraron amigos.</p>
+  </div>
 </div>
 
 <div *ngIf="mostrarAgregadorComponent">
