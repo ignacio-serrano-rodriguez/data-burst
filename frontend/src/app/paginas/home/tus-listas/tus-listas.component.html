@@ -30,6 +30,10 @@
 <ul>
   <li *ngFor="let lista of listas">
     <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
+    <mat-icon *ngIf="lista.publica">public</mat-icon>
+    <mat-icon *ngIf="!lista.publica">lock</mat-icon>
+    <mat-icon *ngIf="lista.compartida">group</mat-icon>
+    <mat-icon *ngIf="!lista.compartida">person</mat-icon>
   </li>
 </ul>
 

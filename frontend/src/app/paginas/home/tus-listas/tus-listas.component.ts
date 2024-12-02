@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox'; // Importar MatCheckboxModule
+import { MatIconModule } from '@angular/material/icon'; // Importar MatIconModule
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 import { ListasService } from '../../../servicios/listas.service';
@@ -20,6 +21,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule, // Agregar MatCheckboxModule a los imports
+    MatIconModule, // Agregar MatIconModule a los imports
     CommonModule,
     FormsModule // Agregar FormsModule a los imports
   ],
@@ -110,7 +112,10 @@ export class TusListasComponent implements OnInit {
     this.listasService.obtenerListas(usuarioID).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          this.listas = data.listas;
+          this.listas = data.listas.map(lista => ({
+            ...lista,
+            compartida: lista.compartida || false // Inicializar el campo compartida si no está presente
+          }));
         }
       },
       error: (error) => {

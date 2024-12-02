@@ -85,9 +85,13 @@ class ListaController extends AbstractController
 
             $dataListas = [];
             foreach ($listasAsignadas as $listaAsignada) {
+                $lista = $listaAsignada->getLista();
+                $compartida = count($entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista])) > 1;
                 $dataListas[] = [
-                    'id' => $listaAsignada->getLista()->getId(),
-                    'nombre' => $listaAsignada->getLista()->getNombre()
+                    'id' => $lista->getId(),
+                    'nombre' => $lista->getNombre(),
+                    'publica' => $lista->isPublica(),
+                    'compartida' => $compartida
                 ];
             }
 
