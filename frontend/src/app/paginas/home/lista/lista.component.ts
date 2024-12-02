@@ -243,4 +243,29 @@ export class ListaComponent implements OnInit {
       });
     }
   }
+
+  likeElemento(elementoId: number) {
+    console.log(`Like elemento ${elementoId}`);
+    // Lógica para manejar el like
+  }
+
+  dislikeElemento(elementoId: number) {
+    console.log(`Dislike elemento ${elementoId}`);
+    // Lógica para manejar el dislike
+  }
+
+  comentarElemento(elementoId: number) {
+    console.log(`Comentar elemento ${elementoId}`);
+    // Lógica para manejar los comentarios
+  }
+
+  informacionElemento(elementoId: number) {
+    console.log(`Información elemento ${elementoId}`);
+    // Lógica para mostrar la información del elemento
+  }
+
+  eliminarElemento(elementoId: number) {
+    console.log(`Eliminar elemento ${elementoId}`);
+    // Lógica para eliminar el elemento
+  }
 }
