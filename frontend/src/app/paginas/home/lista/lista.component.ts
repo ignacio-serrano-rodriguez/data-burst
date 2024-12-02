@@ -42,7 +42,7 @@ export class ListaComponent implements OnInit {
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   lista: Lista | undefined;
   elementos: Elemento[] = [];
-  elementosLikeDislike: { [key: number]: boolean } = {}; // Objeto auxiliar para mantener el estado de like/dislike
+  elementosLikeDislike: { [key: number]: boolean | null } = {}; // Objeto auxiliar para mantener el estado de like/dislike
   amigos: any[] = [];
   colaboradores: any[] = []; // Nueva variable para almacenar los colaboradores
   mostrarAgregadorComponent = false;
@@ -115,7 +115,7 @@ export class ListaComponent implements OnInit {
         if (data.exito) {
           this.elementos = data.elementos;
           this.elementos.forEach(elemento => {
-            this.elementosLikeDislike[elemento.id] = false; // Inicializar el estado de like/dislike
+            this.elementosLikeDislike[elemento.id] = elemento.positivo; // Inicializar el estado de like/dislike
           });
         }
       },
@@ -298,9 +298,7 @@ export class ListaComponent implements OnInit {
           if (data.exito) {
             console.log('Elemento desasignado exitosamente');
             this.mostrarMensajePositivo('Elemento desasignado exitosamente.');
-            if (this.lista) {
-              this.obtenerElementosLista(this.lista.id); // Actualizar la lista de elementos
-            }
+            this.obtenerElementosLista(this.lista?.id!); // Actualizar la lista de elementos
           } else {
             console.log('Error al desasignar el elemento');
             this.mostrarMensajeNegativo('Error al desasignar el elemento.');
@@ -316,13 +314,14 @@ export class ListaComponent implements OnInit {
 
   toggleLikeDislike(elemento: Elemento) {
     const liked = this.elementosLikeDislike[elemento.id];
-    this.elementosLikeDislike[elemento.id] = !liked;
-    const positivo = this.elementosLikeDislike[elemento.id];
-
+    this.elementosLikeDislike[elemento.id] = liked === null ? true : !liked;
+    const positivo = this.elementosLikeDislike[elemento.id] as boolean;
+  
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, positivo).subscribe({
         next: (data) => {
           if (data.exito) {
+            elemento.positivo = positivo; // Actualizar el valor de positivo en el elemento
             if (positivo) {
               console.log(`Liked elemento ${elemento.id}`);
               this.mostrarMensajePositivo('Elemento marcado como me gusta.');
@@ -345,5 +344,5 @@ export class ListaComponent implements OnInit {
 
   comentarElemento(arg0: number) {
     throw new Error('Method not implemented.');
-    }
+  }
 }

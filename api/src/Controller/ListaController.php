@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Entity\Lista;
 use App\Entity\InvitacionLista;
 use App\Entity\Usuario;
-use App\Entity\Elemento;
 use App\Entity\UsuarioManipulaLista;
 use App\Entity\ListaContieneElemento;
+use App\Entity\Elemento;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -177,7 +177,8 @@ class ListaController extends AbstractController
                 'informacion_extra' => $elemento->getInformacionExtra(),
                 'puntuacion' => $elemento->getPuntuacion(),
                 'descripcion' => $elemento->getDescripcion(),
-                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s')
+                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
+                'positivo' => $listaContieneElemento->isPositivo() // Incluir el campo positivo
             ];
         }
 

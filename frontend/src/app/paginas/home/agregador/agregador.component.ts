@@ -122,13 +122,13 @@ export class AgregadorComponent {
 
   crearElemento() {
     if (!this.nombreElemento.trim()) return;
-
+  
     const usuarioId = localStorage.getItem('id');
     if (!usuarioId) {
       console.error('Usuario no autenticado');
       return;
     }
-
+  
     const nuevoElemento: Elemento = {
       id: 0, // El ID será asignado por el backend
       nombre: this.nombreElemento,
@@ -137,11 +137,12 @@ export class AgregadorComponent {
       puntuacion: 0, // Puntuación por defecto
       descripcion: this.descripcion,
       momento_creacion: new Date().toISOString(),
-      usuario_id: parseInt(usuarioId, 10) // Añadir el usuario_id
+      usuario_id: parseInt(usuarioId, 10), // Añadir el usuario_id
+      positivo: null // Inicializar el campo positivo con null
     };
-
+  
     console.log('Datos enviados:', nuevoElemento);
-
+  
     this.elementosService.crearElemento(nuevoElemento).subscribe({
       next: (data) => {
         if (data.exito) {
@@ -149,7 +150,7 @@ export class AgregadorComponent {
           this.mostrarFormularioCrear = false;
           this.mostrarBotonCrear = false; // Ocultar el botón de creación después de crear el elemento
           this.noSeEncontraronElementos = false; // Ocultar el mensaje después de crear el elemento
-
+  
           // Asignar el nuevo elemento a la lista
           if (this.listaId) {
             this.asignarElemento(data.elemento.id);

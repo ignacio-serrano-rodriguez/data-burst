@@ -7,4 +7,5 @@ export interface Elemento {
     descripcion: string;
     momento_creacion: string;
     usuario_id: number; // Añadir el usuario_id
+    positivo: boolean | null; // Añadir el campo positivo
 }
