@@ -115,7 +115,10 @@ export class ListaComponent implements OnInit {
     this.listasService.obtenerElementosLista(id).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.elementos = data.elementos;
+          this.elementos = data.elementos.map(elemento => ({
+            ...elemento,
+            comentario: elemento.comentario || '' // Inicializar el campo comentario si no está presente
+          }));
           this.elementos.forEach(elemento => {
             this.elementosLikeDislike[elemento.id] = elemento.positivo; // Inicializar el estado de like/dislike
           });
@@ -344,16 +347,33 @@ export class ListaComponent implements OnInit {
     }
   }
 
-  comentarElemento(elementoId: number) {
+  comentarElemento(elemento: Elemento) {
     const dialogRef = this.dialog.open(ComentarioDialogComponent, {
       width: '250px',
-      data: { elementoId }
+      data: { elementoId: elemento.id, comentario: elemento.comentario || '' }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        console.log(`Comentario para el elemento ${elementoId}: ${result}`);
-        // Aquí puedes manejar el comentario, por ejemplo, enviarlo al backend
+        console.log(`Comentario para el elemento ${elemento.id}: ${result}`);
+        if (this.lista) {
+          this.elementosService.actualizarComentario(this.lista.id, elemento.id, result).subscribe({
+            next: (data) => {
+              if (data.exito) {
+                console.log('Comentario actualizado exitosamente');
+                this.mostrarMensajePositivo('Comentario actualizado exitosamente.');
+                elemento.comentario = result; // Actualizar el comentario en el elemento
+              } else {
+                console.log('Error al actualizar el comentario');
+                this.mostrarMensajeNegativo('Error al actualizar el comentario.');
+              }
+            },
+            error: (error) => {
+              console.error('Error al actualizar el comentario:', error);
+              this.mostrarMensajeNegativo('Error al actualizar el comentario.');
+            }
+          });
+        }
       }
     });
   }

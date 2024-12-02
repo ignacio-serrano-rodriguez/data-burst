@@ -25,12 +25,14 @@ import { FormsModule } from '@angular/forms';
   `,
 })
 export class ComentarioDialogComponent {
-  comentario: string = '';
+  comentario: string;
 
   constructor(
     public dialogRef: MatDialogRef<ComentarioDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { elementoId: number }
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: { elementoId: number, comentario: string }
+  ) {
+    this.comentario = data.comentario;
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

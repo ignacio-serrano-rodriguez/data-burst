@@ -8,4 +8,5 @@ export interface Elemento {
     momento_creacion: string;
     usuario_id: number; // Añadir el usuario_id
     positivo: boolean | null; // Añadir el campo positivo
+    comentario: string | null; // Añadir el campo comentario
 }

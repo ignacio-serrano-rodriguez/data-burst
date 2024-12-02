@@ -138,7 +138,8 @@ export class AgregadorComponent {
       descripcion: this.descripcion,
       momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10), // Añadir el usuario_id
-      positivo: null // Inicializar el campo positivo con null
+      positivo: null, // Inicializar el campo positivo con null
+      comentario: null // Inicializar el campo comentario con null
     };
   
     console.log('Datos enviados:', nuevoElemento);

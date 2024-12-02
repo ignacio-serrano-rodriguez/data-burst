@@ -46,4 +46,11 @@ export class ElementosService {
       { lista_id: listaId, elemento_id: elementoId, positivo }
     );
   }
+
+  actualizarComentario(listaId: number, elementoId: number, comentario: string): Observable<{ exito: boolean, mensaje: string }> {
+    return this.http.post<{ exito: boolean, mensaje: string }>(
+      `${this.api}/actualizar-comentario`, 
+      { lista_id: listaId, elemento_id: elementoId, comentario }
+    );
+  }
 }

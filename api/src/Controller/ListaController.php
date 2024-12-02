@@ -178,7 +178,8 @@ class ListaController extends AbstractController
                 'puntuacion' => $elemento->getPuntuacion(),
                 'descripcion' => $elemento->getDescripcion(),
                 'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
-                'positivo' => $listaContieneElemento->isPositivo() // Incluir el campo positivo
+                'positivo' => $listaContieneElemento->isPositivo(),
+                'comentario' => $listaContieneElemento->getComentario() // Incluir el campo comentario
             ];
         }
 
@@ -515,6 +516,54 @@ class ListaController extends AbstractController
             [
                 "exito" => true,
                 "mensaje" => "Estado de like/dislike actualizado exitosamente."
+            ],
+            Response::HTTP_OK
+        );
+    }
+
+    #[Route("/api/actualizar-comentario", name: "actualizar_comentario", methods: ["POST"])]
+    public function actualizarComentario(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $listaId = $datosRecibidos['lista_id'];
+        $elementoId = $datosRecibidos['elemento_id'];
+        $comentario = $datosRecibidos['comentario'];
+
+        $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+        $elemento = $entityManager->getRepository(Elemento::class)->find($elementoId);
+
+        if (!$lista || !$elemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Lista o elemento no encontrado."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $listaContieneElemento = $entityManager->getRepository(ListaContieneElemento::class)->findOneBy([
+            'lista' => $lista,
+            'elemento' => $elemento
+        ]);
+
+        if (!$listaContieneElemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Relación entre lista y elemento no encontrada."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $listaContieneElemento->setComentario($comentario);
+        $entityManager->flush();
+
+        return new JsonResponse(
+            [
+                "exito" => true,
+                "mensaje" => "Comentario actualizado exitosamente."
             ],
             Response::HTTP_OK
         );
