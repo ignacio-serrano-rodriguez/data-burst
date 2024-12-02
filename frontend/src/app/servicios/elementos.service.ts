@@ -39,4 +39,11 @@ export class ElementosService {
       { lista_id: listaId, elemento_id: elementoId }
     );
   }
+
+  toggleLikeDislike(listaId: number, elementoId: number, positivo: boolean): Observable<{ exito: boolean, mensaje: string }> {
+    return this.http.post<{ exito: boolean, mensaje: string }>(
+      `${this.api}/toggle-like-dislike`, 
+      { lista_id: listaId, elemento_id: elementoId, positivo }
+    );
+  }
 }

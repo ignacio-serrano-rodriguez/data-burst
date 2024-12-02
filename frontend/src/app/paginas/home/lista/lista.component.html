@@ -18,11 +18,8 @@
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
-      <button mat-icon-button (click)="likeElemento(elemento.id)">
-        <mat-icon>thumb_up</mat-icon>
-      </button>
-      <button mat-icon-button (click)="dislikeElemento(elemento.id)">
-        <mat-icon>thumb_down</mat-icon>
+      <button mat-icon-button (click)="toggleLikeDislike(elemento)">
+        <mat-icon>{{ elementosLikeDislike[elemento.id] ? 'thumb_up' : 'thumb_down' }}</mat-icon>
       </button>
       <button mat-icon-button (click)="comentarElemento(elemento.id)">
         <mat-icon>comment</mat-icon>

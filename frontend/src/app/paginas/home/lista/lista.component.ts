@@ -42,6 +42,7 @@ export class ListaComponent implements OnInit {
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   lista: Lista | undefined;
   elementos: Elemento[] = [];
+  elementosLikeDislike: { [key: number]: boolean } = {}; // Objeto auxiliar para mantener el estado de like/dislike
   amigos: any[] = [];
   colaboradores: any[] = []; // Nueva variable para almacenar los colaboradores
   mostrarAgregadorComponent = false;
@@ -113,6 +114,9 @@ export class ListaComponent implements OnInit {
       next: (data) => {
         if (data.exito) {
           this.elementos = data.elementos;
+          this.elementos.forEach(elemento => {
+            this.elementosLikeDislike[elemento.id] = false; // Inicializar el estado de like/dislike
+          });
         }
       },
       error: (error) => {
@@ -287,29 +291,16 @@ export class ListaComponent implements OnInit {
     }
   }
 
-  likeElemento(elementoId: number) {
-    console.log(`Like elemento ${elementoId}`);
-    // Lógica para manejar el like
-  }
-
-  dislikeElemento(elementoId: number) {
-    console.log(`Dislike elemento ${elementoId}`);
-    // Lógica para manejar el dislike
-  }
-
-  comentarElemento(elementoId: number) {
-    console.log(`Comentar elemento ${elementoId}`);
-    // Lógica para manejar los comentarios
-  }
-
   eliminarElemento(elementoId: number) {
-    if (this.lista && this.lista.id) {
+    if (this.lista) {
       this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
         next: (data) => {
           if (data.exito) {
             console.log('Elemento desasignado exitosamente');
             this.mostrarMensajePositivo('Elemento desasignado exitosamente.');
-            this.obtenerElementosLista(this.lista!.id); // Actualizar la lista de elementos
+            if (this.lista) {
+              this.obtenerElementosLista(this.lista.id); // Actualizar la lista de elementos
+            }
           } else {
             console.log('Error al desasignar el elemento');
             this.mostrarMensajeNegativo('Error al desasignar el elemento.');
@@ -322,4 +313,37 @@ export class ListaComponent implements OnInit {
       });
     }
   }
+
+  toggleLikeDislike(elemento: Elemento) {
+    const liked = this.elementosLikeDislike[elemento.id];
+    this.elementosLikeDislike[elemento.id] = !liked;
+    const positivo = this.elementosLikeDislike[elemento.id];
+
+    if (this.lista) {
+      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, positivo).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            if (positivo) {
+              console.log(`Liked elemento ${elemento.id}`);
+              this.mostrarMensajePositivo('Elemento marcado como me gusta.');
+            } else {
+              console.log(`Disliked elemento ${elemento.id}`);
+              this.mostrarMensajeNegativo('Elemento desmarcado como me gusta.');
+            }
+          } else {
+            console.log('Error al cambiar el estado de like/dislike');
+            this.mostrarMensajeNegativo('Error al cambiar el estado de like/dislike.');
+          }
+        },
+        error: (error) => {
+          console.error('Error al cambiar el estado de like/dislike:', error);
+          this.mostrarMensajeNegativo('Error al cambiar el estado de like/dislike.');
+        }
+      });
+    }
+  }
+
+  comentarElemento(arg0: number) {
+    throw new Error('Method not implemented.');
+    }
 }

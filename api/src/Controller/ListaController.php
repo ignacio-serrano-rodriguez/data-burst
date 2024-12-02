@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lista;
 use App\Entity\InvitacionLista;
 use App\Entity\Usuario;
+use App\Entity\Elemento;
 use App\Entity\UsuarioManipulaLista;
 use App\Entity\ListaContieneElemento;
 use Doctrine\ORM\EntityManagerInterface;
@@ -468,5 +469,53 @@ class ListaController extends AbstractController
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    #[Route("/api/toggle-like-dislike", name: "toggle_like_dislike", methods: ["POST"])]
+    public function toggleLikeDislike(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $listaId = $datosRecibidos['lista_id'];
+        $elementoId = $datosRecibidos['elemento_id'];
+        $positivo = $datosRecibidos['positivo'];
+
+        $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+        $elemento = $entityManager->getRepository(Elemento::class)->find($elementoId);
+
+        if (!$lista || !$elemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Lista o elemento no encontrado."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $listaContieneElemento = $entityManager->getRepository(ListaContieneElemento::class)->findOneBy([
+            'lista' => $lista,
+            'elemento' => $elemento
+        ]);
+
+        if (!$listaContieneElemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Relación entre lista y elemento no encontrada."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $listaContieneElemento->setPositivo($positivo);
+        $entityManager->flush();
+
+        return new JsonResponse(
+            [
+                "exito" => true,
+                "mensaje" => "Estado de like/dislike actualizado exitosamente."
+            ],
+            Response::HTTP_OK
+        );
     }
 }
