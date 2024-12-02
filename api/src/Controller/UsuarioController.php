@@ -502,6 +502,7 @@ class UsuarioController extends AbstractController
                     $usuarioManipulaLista->setUsuario($invitacion->getInvitado());
 
                     $entityManager->persist($usuarioManipulaLista);
+                    $entityManager->remove($invitacion); // Eliminar la invitación de la entidad InvitacionLista
                     $entityManager->flush();
 
                     return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud de acceso a la lista aceptada.'], Response::HTTP_OK);
