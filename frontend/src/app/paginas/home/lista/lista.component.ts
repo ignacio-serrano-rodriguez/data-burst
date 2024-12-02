@@ -12,6 +12,7 @@ import { Lista } from '../../../interfaces/Lista';
 import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from '../agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component'; // Importar el componente de confirmación
+import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component'; // Importar el componente de diálogo de comentarios
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
@@ -26,7 +27,8 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule, 
     MatDialogModule,
     MatFormFieldModule, // Agregar MatFormFieldModule a los imports
-    MatInputModule // Agregar MatInputModule a los imports
+    MatInputModule, // Agregar MatInputModule a los imports
+    ComentarioDialogComponent // Agregar ComentarioDialogComponent a los imports
   ],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css',
@@ -342,7 +344,17 @@ export class ListaComponent implements OnInit {
     }
   }
 
-  comentarElemento(arg0: number) {
-    throw new Error('Method not implemented.');
+  comentarElemento(elementoId: number) {
+    const dialogRef = this.dialog.open(ComentarioDialogComponent, {
+      width: '250px',
+      data: { elementoId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        console.log(`Comentario para el elemento ${elementoId}: ${result}`);
+        // Aquí puedes manejar el comentario, por ejemplo, enviarlo al backend
+      }
+    });
   }
 }
