@@ -120,10 +120,11 @@ export class ListaComponent implements OnInit {
   }
 
   obtenerColaboradores(listaId: number) {
+    const usuarioID = Number(localStorage.getItem('id')); // Obtener el ID del usuario desde el almacenamiento local
     this.listasService.obtenerColaboradores(listaId).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.colaboradores = data.colaboradores;
+          this.colaboradores = data.colaboradores.filter(colaborador => colaborador.id !== usuarioID); // Filtrar para excluir al usuario actual
         }
       },
       error: (error) => {
