@@ -18,7 +18,7 @@
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
-      <button mat-icon-button (click)="toggleLikeDislike(elemento)">
+      <button mat-icon-button [ngClass]="{'like-button': elementosLikeDislike[elemento.id], 'dislike-button': !elementosLikeDislike[elemento.id]}" (click)="toggleLikeDislike(elemento)">
         <mat-icon>
           {{ elementosLikeDislike[elemento.id] === null ? 'help_outline' : (elementosLikeDislike[elemento.id] ? 'thumb_up' : 'thumb_down') }}
         </mat-icon>
