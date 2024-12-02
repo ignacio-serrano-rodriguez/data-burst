@@ -6,6 +6,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field'; // Importar MatFormFieldModule
 import { MatInputModule } from '@angular/material/input'; // Importar MatInputModule
 import { ListasService } from '../../../servicios/listas.service';
+import { ElementosService } from '../../../servicios/elementos.service'; // Importar ElementosService
 import { AmigosService } from '../../../servicios/amigos.service';
 import { Lista } from '../../../interfaces/Lista';
 import { Elemento } from '../../../interfaces/Elemento';
@@ -34,6 +35,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 export class ListaComponent implements OnInit {
 
   private listasService = inject(ListasService);
+  private elementosService = inject(ElementosService); // Inyectar ElementosService
   private amigosService = inject(AmigosService);
   private dialog = inject(MatDialog);
   @Input() listaId: number | null = null;
@@ -306,7 +308,23 @@ export class ListaComponent implements OnInit {
   }
 
   eliminarElemento(elementoId: number) {
-    console.log(`Eliminar elemento ${elementoId}`);
-    // Lógica para eliminar el elemento
+    if (this.lista && this.lista.id) {
+      this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            console.log('Elemento desasignado exitosamente');
+            this.mostrarMensajePositivo('Elemento desasignado exitosamente.');
+            this.obtenerElementosLista(this.lista!.id); // Actualizar la lista de elementos
+          } else {
+            console.log('Error al desasignar el elemento');
+            this.mostrarMensajeNegativo('Error al desasignar el elemento.');
+          }
+        },
+        error: (error) => {
+          console.error('Error al desasignar el elemento:', error);
+          this.mostrarMensajeNegativo('Error al desasignar el elemento.');
+        }
+      });
+    }
   }
 }
