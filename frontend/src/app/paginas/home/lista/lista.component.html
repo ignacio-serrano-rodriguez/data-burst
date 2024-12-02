@@ -53,6 +53,17 @@
       <p>No se encontraron amigos.</p>
     </div>
 
+    <h3>Colaboradores</h3>
+    <ul *ngIf="colaboradores.length > 0">
+      <li *ngFor="let colaborador of colaboradores">
+        {{ colaborador.nombre }}
+      </li>
+    </ul>
+
+    <div *ngIf="colaboradores.length === 0">
+      <p>No hay colaboradores en esta lista.</p>
+    </div>
+
     <button mat-flat-button color="warn" (click)="ocultarColaborar()">
       Cancelar
     </button>

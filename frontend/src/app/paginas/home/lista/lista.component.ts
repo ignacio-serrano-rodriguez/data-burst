@@ -41,6 +41,7 @@ export class ListaComponent implements OnInit {
   lista: Lista | undefined;
   elementos: Elemento[] = [];
   amigos: any[] = [];
+  colaboradores: any[] = []; // Nueva variable para almacenar los colaboradores
   mostrarAgregadorComponent = false;
   mostrarColaborarComponent = false; // Nueva variable para mostrar/ocultar la sección de colaborar
   editandoNombre = false;
@@ -118,6 +119,19 @@ export class ListaComponent implements OnInit {
     });
   }
 
+  obtenerColaboradores(listaId: number) {
+    this.listasService.obtenerColaboradores(listaId).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.colaboradores = data.colaboradores;
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener los colaboradores de la lista:', error);
+      }
+    });
+  }
+
   volver() {
     this.volverAListasYAmigos.emit();
   }
@@ -135,6 +149,9 @@ export class ListaComponent implements OnInit {
 
   mostrarColaborar() {
     this.mostrarColaborarComponent = true;
+    if (this.listaId) {
+      this.obtenerColaboradores(this.listaId); // Obtener los colaboradores cuando se muestra la sección de colaborar
+    }
   }
 
   ocultarColaborar() {

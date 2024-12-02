@@ -77,4 +77,10 @@ export class ListasService {
       { listaId, amigoId, invitadorId }
     );
   }
+
+  obtenerColaboradores(listaId: number): Observable<{ exito: boolean, mensaje: string, colaboradores: any[] }> {
+    return this.http.get<{ exito: boolean, mensaje: string, colaboradores: any[] }>(
+      `${this.api}/obtener-colaboradores/${listaId}`
+    );
+  }
 }

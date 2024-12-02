@@ -883,4 +883,49 @@ class UsuarioController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/obtener-colaboradores/{listaId}", name: "obtener_colaboradores", methods: ["GET"])]
+    public function obtenerColaboradores(int $listaId, EntityManagerInterface $entityManager)
+    {
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $colaboradores = $entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista]);
+
+            $dataColaboradores = [];
+            foreach ($colaboradores as $colaborador) {
+                $dataColaboradores[] = [
+                    'id' => $colaborador->getUsuario()->getId(),
+                    'nombre' => $colaborador->getUsuario()->getUsuario()
+                ];
+            }
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Colaboradores obtenidos exitosamente.",
+                    "colaboradores" => $dataColaboradores
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al obtener los colaboradores.",
+                    "error" => $th->getMessage()
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 }
