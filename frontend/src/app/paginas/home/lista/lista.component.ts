@@ -302,11 +302,6 @@ export class ListaComponent implements OnInit {
     // Lógica para manejar los comentarios
   }
 
-  informacionElemento(elementoId: number) {
-    console.log(`Información elemento ${elementoId}`);
-    // Lógica para mostrar la información del elemento
-  }
-
   eliminarElemento(elementoId: number) {
     if (this.lista && this.lista.id) {
       this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
