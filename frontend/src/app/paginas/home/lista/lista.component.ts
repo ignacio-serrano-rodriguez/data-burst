@@ -173,10 +173,14 @@ export class ListaComponent implements OnInit {
           if (data.exito) {
             this.lista!.nombre = this.nuevoNombreLista.trim();
             this.editandoNombre = false;
+            this.mostrarMensajePositivo('Nombre de la lista modificado exitosamente.');
+          } else {
+            this.mostrarMensajeNegativo('Error al modificar el nombre de la lista.');
           }
         },
         error: (error) => {
           console.error('Error al modificar el nombre de la lista:', error);
+          this.mostrarMensajeNegativo('Error al modificar el nombre de la lista.');
         }
       });
     }
@@ -201,10 +205,14 @@ export class ListaComponent implements OnInit {
             next: (data) => {
               if (data.exito) {
                 this.volverAListasYAmigos.emit(); // Volver a la vista de listas y amigos
+                this.mostrarMensajePositivo('Lista eliminada exitosamente.');
+              } else {
+                this.mostrarMensajeNegativo('Error al eliminar la lista.');
               }
             },
             error: (error) => {
               console.error('Error al desasignar la lista:', error);
+              this.mostrarMensajeNegativo('Error al eliminar la lista.');
             }
           });
         }
@@ -219,28 +227,61 @@ export class ListaComponent implements OnInit {
         next: (data) => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
+            this.mostrarMensajePositivo('Visibilidad de la lista cambiada exitosamente.');
+          } else {
+            this.mostrarMensajeNegativo('Error al cambiar la visibilidad de la lista.');
           }
         },
         error: (error) => {
           console.error('Error al cambiar la visibilidad de la lista:', error);
+          this.mostrarMensajeNegativo('Error al cambiar la visibilidad de la lista.');
         }
       });
     }
   }
 
-  invitarAmigo(amigoId: number) {
+  invitarAmigo(amigoId: number, amigoNombre: string) {
     const usuarioID = Number(localStorage.getItem('id')); // Obtener el ID del usuario desde el almacenamiento local
     if (this.lista) {
       this.listasService.invitarAmigo(this.lista.id, amigoId, usuarioID).subscribe({
         next: (data) => {
           if (data.exito) {
             console.log('Invitación enviada exitosamente');
+            this.mostrarMensajePositivo(`Invitación enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
+          } else {
+            console.log('Petición ya enviada');
+            this.mostrarMensajeNegativo(`Petición ya enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
           }
         },
         error: (error) => {
           console.error('Error al enviar la invitación:', error);
+          this.mostrarMensajeNegativo(`Petición ya enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
         }
       });
+    }
+  }
+
+  mostrarMensajePositivo(mensaje: string) {
+    const mensajeInformativo = document.getElementById('mensajeInformativo');
+    if (mensajeInformativo) {
+      mensajeInformativo.innerText = mensaje;
+      mensajeInformativo.classList.add('mensaje-positivo');
+      mensajeInformativo.classList.remove('mensaje-negativo');
+      setTimeout(() => {
+        mensajeInformativo.textContent = '';
+      }, 3000); // Limpiar el mensaje después de 3 segundos
+    }
+  }
+
+  mostrarMensajeNegativo(mensaje: string) {
+    const mensajeInformativo = document.getElementById('mensajeInformativo');
+    if (mensajeInformativo) {
+      mensajeInformativo.innerText = mensaje;
+      mensajeInformativo.classList.add('mensaje-negativo');
+      mensajeInformativo.classList.remove('mensaje-positivo');
+      setTimeout(() => {
+        mensajeInformativo.textContent = '';
+      }, 3000); // Limpiar el mensaje después de 3 segundos
     }
   }
 
