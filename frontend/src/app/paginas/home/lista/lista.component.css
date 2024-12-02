@@ -1,7 +1,11 @@
 .like-button {
-    color: green;
-  }
-  
-  .dislike-button {
-    color: red;
-  }
+  color: green;
+}
+
+.dislike-button {
+  color: red;
+}
+
+.help-button {
+  color: black;
+}
