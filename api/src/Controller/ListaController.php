@@ -509,7 +509,12 @@ class ListaController extends AbstractController
             );
         }
 
-        $listaContieneElemento->setPositivo($positivo);
+        if ($positivo === null) {
+            $listaContieneElemento->setPositivo(null);
+        } else {
+            $listaContieneElemento->setPositivo($positivo);
+        }
+
         $entityManager->flush();
 
         return new JsonResponse(

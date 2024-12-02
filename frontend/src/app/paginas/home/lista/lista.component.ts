@@ -318,30 +318,27 @@ export class ListaComponent implements OnInit {
   }
 
   toggleLikeDislike(elemento: Elemento) {
-    const liked = this.elementosLikeDislike[elemento.id];
-    this.elementosLikeDislike[elemento.id] = liked === null ? true : !liked;
-    const positivo = this.elementosLikeDislike[elemento.id] as boolean;
+    let nuevoEstado: boolean | null;
+    if (elemento.positivo === null) {
+      nuevoEstado = true; // Si es null, cambiar a like
+    } else if (elemento.positivo === true) {
+      nuevoEstado = false; // Si es like, cambiar a dislike
+    } else {
+      nuevoEstado = null; // Si es dislike, cambiar a null
+    }
   
     if (this.lista) {
-      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, positivo).subscribe({
+      const estadoParaEnviar = nuevoEstado === null ? null : nuevoEstado; // Convertir null a null para enviar al backend
+      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, estadoParaEnviar as boolean).subscribe({
         next: (data) => {
           if (data.exito) {
-            elemento.positivo = positivo; // Actualizar el valor de positivo en el elemento
-            if (positivo) {
-              console.log(`Liked elemento ${elemento.id}`);
-              this.mostrarMensajePositivo('Elemento marcado como me gusta.');
-            } else {
-              console.log(`Disliked elemento ${elemento.id}`);
-              this.mostrarMensajeNegativo('Elemento desmarcado como me gusta.');
-            }
+            elemento.positivo = nuevoEstado; // Actualizar el valor de positivo en el elemento
           } else {
             console.log('Error al cambiar el estado de like/dislike');
-            this.mostrarMensajeNegativo('Error al cambiar el estado de like/dislike.');
           }
         },
         error: (error) => {
           console.error('Error al cambiar el estado de like/dislike:', error);
-          this.mostrarMensajeNegativo('Error al cambiar el estado de like/dislike.');
         }
       });
     }
