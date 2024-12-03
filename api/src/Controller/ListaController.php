@@ -7,6 +7,8 @@ use App\Entity\InvitacionLista;
 use App\Entity\Usuario;
 use App\Entity\UsuarioManipulaLista;
 use App\Entity\ListaContieneElemento;
+use App\Entity\UsuarioElementoPositivo;
+use App\Entity\UsuarioElementoComentario;
 use App\Entity\Elemento;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -174,6 +176,16 @@ class ListaController extends AbstractController
         $dataElementos = [];
         foreach ($elementos as $listaContieneElemento) {
             $elemento = $listaContieneElemento->getElemento();
+            $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
+                'usuario' => $this->getUser(),
+                'listaContieneElemento' => $listaContieneElemento
+            ]);
+
+            $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
+                'usuario' => $this->getUser(),
+                'listaContieneElemento' => $listaContieneElemento
+            ]);
+
             $dataElementos[] = [
                 'id' => $elemento->getId(),
                 'nombre' => $elemento->getNombre(),
@@ -182,8 +194,8 @@ class ListaController extends AbstractController
                 'puntuacion' => $elemento->getPuntuacion(),
                 'descripcion' => $elemento->getDescripcion(),
                 'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
-                'positivo' => $listaContieneElemento->isPositivo(),
-                'comentario' => $listaContieneElemento->getComentario() // Incluir el campo comentario
+                'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
+                'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
             ];
         }
 
@@ -484,15 +496,17 @@ class ListaController extends AbstractController
         $listaId = $datosRecibidos['lista_id'];
         $elementoId = $datosRecibidos['elemento_id'];
         $positivo = $datosRecibidos['positivo'];
+        $usuarioId = $datosRecibidos['usuario_id'];
 
         $lista = $entityManager->getRepository(Lista::class)->find($listaId);
         $elemento = $entityManager->getRepository(Elemento::class)->find($elementoId);
+        $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
 
-        if (!$lista || !$elemento) {
+        if (!$lista || !$elemento || !$usuario) {
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Lista o elemento no encontrado."
+                    "mensaje" => "Lista, elemento o usuario no encontrado."
                 ],
                 Response::HTTP_NOT_FOUND
             );
@@ -513,12 +527,19 @@ class ListaController extends AbstractController
             );
         }
 
-        if ($positivo === null) {
-            $listaContieneElemento->setPositivo(null);
-        } else {
-            $listaContieneElemento->setPositivo($positivo);
+        $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
+            'usuario' => $usuario,
+            'listaContieneElemento' => $listaContieneElemento
+        ]);
+
+        if (!$usuarioElementoPositivo) {
+            $usuarioElementoPositivo = new UsuarioElementoPositivo();
+            $usuarioElementoPositivo->setUsuario($usuario);
+            $usuarioElementoPositivo->setListaContieneElemento($listaContieneElemento);
         }
 
+        $usuarioElementoPositivo->setPositivo($positivo);
+        $entityManager->persist($usuarioElementoPositivo);
         $entityManager->flush();
 
         return new JsonResponse(
@@ -537,15 +558,17 @@ class ListaController extends AbstractController
         $listaId = $datosRecibidos['lista_id'];
         $elementoId = $datosRecibidos['elemento_id'];
         $comentario = $datosRecibidos['comentario'];
+        $usuarioId = $datosRecibidos['usuario_id'];
 
         $lista = $entityManager->getRepository(Lista::class)->find($listaId);
         $elemento = $entityManager->getRepository(Elemento::class)->find($elementoId);
+        $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
 
-        if (!$lista || !$elemento) {
+        if (!$lista || !$elemento || !$usuario) {
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Lista o elemento no encontrado."
+                    "mensaje" => "Lista, elemento o usuario no encontrado."
                 ],
                 Response::HTTP_NOT_FOUND
             );
@@ -566,7 +589,19 @@ class ListaController extends AbstractController
             );
         }
 
-        $listaContieneElemento->setComentario($comentario);
+        $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
+            'usuario' => $usuario,
+            'listaContieneElemento' => $listaContieneElemento
+        ]);
+
+        if (!$usuarioElementoComentario) {
+            $usuarioElementoComentario = new UsuarioElementoComentario();
+            $usuarioElementoComentario->setUsuario($usuario);
+            $usuarioElementoComentario->setListaContieneElemento($listaContieneElemento);
+        }
+
+        $usuarioElementoComentario->setComentario($comentario);
+        $entityManager->persist($usuarioElementoComentario);
         $entityManager->flush();
 
         return new JsonResponse(

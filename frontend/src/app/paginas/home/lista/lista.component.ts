@@ -28,7 +28,6 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatDialogModule,
     MatFormFieldModule, // Agregar MatFormFieldModule a los imports
     MatInputModule, // Agregar MatInputModule a los imports
-    ComentarioDialogComponent // Agregar ComentarioDialogComponent a los imports
   ],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css',
@@ -326,10 +325,9 @@ export class ListaComponent implements OnInit {
     } else {
       nuevoEstado = null; // Si es dislike, cambiar a null
     }
-  
+
     if (this.lista) {
-      const estadoParaEnviar = nuevoEstado === null ? null : nuevoEstado; // Convertir null a null para enviar al backend
-      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, estadoParaEnviar as boolean).subscribe({
+      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, nuevoEstado).subscribe({
         next: (data) => {
           if (data.exito) {
             elemento.positivo = nuevoEstado; // Actualizar el valor de positivo en el elemento
@@ -349,7 +347,7 @@ export class ListaComponent implements OnInit {
       width: '250px',
       data: { elementoId: elemento.id, comentario: elemento.comentario || '' }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         console.log(`Comentario para el elemento ${elemento.id}: ${result}`);
@@ -358,16 +356,13 @@ export class ListaComponent implements OnInit {
             next: (data) => {
               if (data.exito) {
                 console.log('Comentario actualizado exitosamente');
-                this.mostrarMensajePositivo('Comentario actualizado exitosamente.');
                 elemento.comentario = result; // Actualizar el comentario en el elemento
               } else {
                 console.log('Error al actualizar el comentario');
-                this.mostrarMensajeNegativo('Error al actualizar el comentario.');
               }
             },
             error: (error) => {
               console.error('Error al actualizar el comentario:', error);
-              this.mostrarMensajeNegativo('Error al actualizar el comentario.');
             }
           });
         }

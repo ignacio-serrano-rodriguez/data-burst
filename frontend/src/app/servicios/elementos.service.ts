@@ -41,16 +41,18 @@ export class ElementosService {
   }
 
   toggleLikeDislike(listaId: number, elementoId: number, positivo: boolean | null): Observable<{ exito: boolean, mensaje: string }> {
+    const usuarioId = Number(localStorage.getItem('id')) || 0;
     return this.http.post<{ exito: boolean, mensaje: string }>(
       `${this.api}/toggle-like-dislike`, 
-      { lista_id: listaId, elemento_id: elementoId, positivo }
+      { lista_id: listaId, elemento_id: elementoId, positivo, usuario_id: usuarioId }
     );
   }
 
   actualizarComentario(listaId: number, elementoId: number, comentario: string): Observable<{ exito: boolean, mensaje: string }> {
+    const usuarioId = Number(localStorage.getItem('id')) || 0;
     return this.http.post<{ exito: boolean, mensaje: string }>(
       `${this.api}/actualizar-comentario`, 
-      { lista_id: listaId, elemento_id: elementoId, comentario }
+      { lista_id: listaId, elemento_id: elementoId, comentario, usuario_id: usuarioId }
     );
   }
 }
