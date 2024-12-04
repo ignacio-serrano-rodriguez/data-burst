@@ -38,8 +38,9 @@ export class ListasService {
   }
 
   obtenerElementosLista(listaId: number): Observable<{ exito: boolean, mensaje: string, elementos: Elemento[] }> {
+    const usuarioId = Number(localStorage.getItem('id')) || 0;
     return this.http.get<{ exito: boolean, mensaje: string, elementos: Elemento[] }>(
-      `${this.api}/obtener-elementos-lista/${listaId}`
+      `${this.api}/obtener-elementos-lista/${listaId}?usuario_id=${usuarioId}`
     );
   }
 

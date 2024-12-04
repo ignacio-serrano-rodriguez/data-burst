@@ -20,15 +20,15 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   selector: 'app-lista',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatIconModule, 
-    MatButtonModule, 
-    AgregadorComponent, 
-    FormsModule, 
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    AgregadorComponent,
+    FormsModule,
     MatDialogModule,
     MatFormFieldModule, // Agregar MatFormFieldModule a los imports
-    MatInputModule, // Agregar MatInputModule a los imports
-  ],
+    MatInputModule
+],
   templateUrl: './lista.component.html',
   styleUrl: './lista.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA] // Agregar CUSTOM_ELEMENTS_SCHEMA

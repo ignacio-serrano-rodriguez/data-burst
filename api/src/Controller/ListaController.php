@@ -156,59 +156,6 @@ class ListaController extends AbstractController
         }
     }
 
-    #[Route("/api/obtener-elementos-lista/{listaId}", name: "obtener_elementos_lista", methods: ["GET"])]
-    public function obtenerElementosLista(int $listaId, EntityManagerInterface $entityManager)
-    {
-        $lista = $entityManager->getRepository(Lista::class)->find($listaId);
-
-        if (!$lista) {
-            return new JsonResponse(
-                [
-                    "exito" => false,
-                    "mensaje" => "Lista no encontrada."
-                ],
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
-        $elementos = $entityManager->getRepository(ListaContieneElemento::class)->findBy(['lista' => $lista]);
-
-        $dataElementos = [];
-        foreach ($elementos as $listaContieneElemento) {
-            $elemento = $listaContieneElemento->getElemento();
-            $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
-                'usuario' => $this->getUser(),
-                'elemento' => $elemento
-            ]);
-
-            $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
-                'usuario' => $this->getUser(),
-                'elemento' => $elemento
-            ]);
-
-            $dataElementos[] = [
-                'id' => $elemento->getId(),
-                'nombre' => $elemento->getNombre(),
-                'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
-                'informacion_extra' => $elemento->getInformacionExtra(),
-                'puntuacion' => $elemento->getPuntuacion(),
-                'descripcion' => $elemento->getDescripcion(),
-                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
-                'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
-                'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
-            ];
-        }
-
-        return new JsonResponse(
-            [
-                "exito" => true,
-                "mensaje" => "Elementos de la lista encontrados.",
-                "elementos" => $dataElementos
-            ],
-            Response::HTTP_OK
-        );
-    }
-
     #[Route("/api/buscar-listas", name: "buscar_listas", methods: ["POST"])]
     public function buscarListas(Request $request, EntityManagerInterface $entityManager)
     {
@@ -578,6 +525,73 @@ class ListaController extends AbstractController
             [
                 "exito" => true,
                 "mensaje" => "Comentario actualizado exitosamente."
+            ],
+            Response::HTTP_OK
+        );
+    }
+
+    #[Route("/api/obtener-elementos-lista/{listaId}", name: "obtener_elementos_lista", methods: ["GET"])]
+    public function obtenerElementosLista(int $listaId, Request $request, EntityManagerInterface $entityManager)
+    {
+        $usuarioId = $request->query->get('usuario_id');
+        $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
+
+        if (!$usuario) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Usuario no encontrado."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+
+        if (!$lista) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Lista no encontrada."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        $elementos = $entityManager->getRepository(ListaContieneElemento::class)->findBy(['lista' => $lista]);
+
+        $dataElementos = [];
+
+        foreach ($elementos as $listaContieneElemento) {
+            $elemento = $listaContieneElemento->getElemento();
+            $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
+                'usuario' => $usuario,
+                'elemento' => $elemento
+            ]);
+
+            $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
+                'usuario' => $usuario,
+                'elemento' => $elemento
+            ]);
+
+            $dataElementos[] = [
+                'id' => $elemento->getId(),
+                'nombre' => $elemento->getNombre(),
+                'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
+                'informacion_extra' => $elemento->getInformacionExtra(),
+                'puntuacion' => $elemento->getPuntuacion(),
+                'descripcion' => $elemento->getDescripcion(),
+                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
+                'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
+                'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
+            ];
+        }
+
+        return new JsonResponse(
+            [
+                "exito" => true,
+                "mensaje" => "Elementos de la lista encontrados.",
+                "elementos" => $dataElementos
             ],
             Response::HTTP_OK
         );
