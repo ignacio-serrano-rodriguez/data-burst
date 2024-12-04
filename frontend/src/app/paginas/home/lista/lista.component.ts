@@ -53,6 +53,7 @@ export class ListaComponent implements OnInit {
   nombreAmigoBuscar: string = '';
   amigosEncontrados: any[] = [];
   noSeEncontraronAmigos = false;
+  usuarioActual: number = Number(localStorage.getItem('id')) || 0; // Definir la propiedad usuarioActual
 
   private searchSubjectBuscar = new Subject<string>();
 
@@ -114,12 +115,15 @@ export class ListaComponent implements OnInit {
     this.listasService.obtenerElementosLista(id).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.elementos = data.elementos.map(elemento => ({
-            ...elemento,
-            comentario: elemento.comentario || '' // Inicializar el campo comentario si no está presente
-          }));
-          this.elementos.forEach(elemento => {
-            this.elementosLikeDislike[elemento.id] = elemento.positivo; // Inicializar el estado de like/dislike
+          const usuarioId = Number(localStorage.getItem('id')) || 0;
+          this.elementos = data.elementos.map(elemento => {
+            const usuarioComentarioPositivo = elemento.usuariosComentariosPositivos.find(u => u.usuario_id === usuarioId);
+            return {
+              ...elemento,
+              positivo: usuarioComentarioPositivo ? usuarioComentarioPositivo.positivo : null,
+              comentario: usuarioComentarioPositivo ? usuarioComentarioPositivo.comentario : '',
+              usuariosComentariosPositivos: elemento.usuariosComentariosPositivos.filter(u => u.usuario_id !== usuarioId)
+            };
           });
         }
       },

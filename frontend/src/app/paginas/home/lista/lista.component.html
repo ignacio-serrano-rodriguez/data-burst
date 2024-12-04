@@ -29,6 +29,19 @@
       <button mat-icon-button (click)="eliminarElemento(elemento.id)">
         <mat-icon>delete</mat-icon>
       </button>
+      <ul>
+        <li *ngFor="let usuarioComentarioPositivo of elemento.usuariosComentariosPositivos">
+          <ng-container *ngIf="usuarioComentarioPositivo.usuario_id !== usuarioActual">
+            <strong>{{ usuarioComentarioPositivo.usuario }}:</strong>
+            <span>{{ usuarioComentarioPositivo.comentario }}</span>
+            <span [ngClass]="{'like-button': usuarioComentarioPositivo.positivo === true, 'dislike-button': usuarioComentarioPositivo.positivo === false, 'help-button': usuarioComentarioPositivo.positivo === null}">
+              <mat-icon>
+                {{ usuarioComentarioPositivo.positivo === null ? 'help_outline' : (usuarioComentarioPositivo.positivo ? 'thumb_up' : 'thumb_down') }}
+              </mat-icon>
+            </span>
+          </ng-container>
+        </li>
+      </ul>
     </li>
   </ul>
 

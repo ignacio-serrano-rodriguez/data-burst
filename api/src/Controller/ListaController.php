@@ -564,15 +564,30 @@ class ListaController extends AbstractController
 
         foreach ($elementos as $listaContieneElemento) {
             $elemento = $listaContieneElemento->getElemento();
-            $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
-                'usuario' => $usuario,
-                'elemento' => $elemento
-            ]);
+            $usuariosManipulanLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista]);
 
-            $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
-                'usuario' => $usuario,
-                'elemento' => $elemento
-            ]);
+            $usuariosComentariosPositivos = [];
+
+            foreach ($usuariosManipulanLista as $usuarioManipulaLista) {
+                $usuario = $usuarioManipulaLista->getUsuario();
+
+                $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
+                    'usuario' => $usuario,
+                    'elemento' => $elemento
+                ]);
+
+                $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
+                    'usuario' => $usuario,
+                    'elemento' => $elemento
+                ]);
+
+                $usuariosComentariosPositivos[] = [
+                    'usuario_id' => $usuario->getId(),
+                    'usuario' => $usuario->getUsuario(), // Asegurarse de obtener el nombre del usuario
+                    'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
+                    'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
+                ];
+            }
 
             $dataElementos[] = [
                 'id' => $elemento->getId(),
@@ -582,8 +597,7 @@ class ListaController extends AbstractController
                 'puntuacion' => $elemento->getPuntuacion(),
                 'descripcion' => $elemento->getDescripcion(),
                 'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
-                'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
-                'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
+                'usuariosComentariosPositivos' => $usuariosComentariosPositivos
             ];
         }
 
