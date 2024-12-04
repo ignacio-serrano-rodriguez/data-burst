@@ -17,9 +17,9 @@ class UsuarioElementoPositivo
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 
-    #[ORM\ManyToOne(targetEntity: ListaContieneElemento::class)]
+    #[ORM\ManyToOne(targetEntity: Elemento::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ListaContieneElemento $listaContieneElemento = null;
+    private ?Elemento $elemento = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $positivo = null;
@@ -41,14 +41,14 @@ class UsuarioElementoPositivo
         return $this;
     }
 
-    public function getListaContieneElemento(): ?ListaContieneElemento
+    public function getElemento(): ?Elemento
     {
-        return $this->listaContieneElemento;
+        return $this->elemento;
     }
 
-    public function setListaContieneElemento(?ListaContieneElemento $listaContieneElemento): self
+    public function setElemento(?Elemento $elemento): self
     {
-        $this->listaContieneElemento = $listaContieneElemento;
+        $this->elemento = $elemento;
 
         return $this;
     }

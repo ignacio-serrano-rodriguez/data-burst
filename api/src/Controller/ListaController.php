@@ -178,12 +178,12 @@ class ListaController extends AbstractController
             $elemento = $listaContieneElemento->getElemento();
             $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
                 'usuario' => $this->getUser(),
-                'listaContieneElemento' => $listaContieneElemento
+                'elemento' => $elemento
             ]);
 
             $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
                 'usuario' => $this->getUser(),
-                'listaContieneElemento' => $listaContieneElemento
+                'elemento' => $elemento
             ]);
 
             $dataElementos[] = [
@@ -512,30 +512,15 @@ class ListaController extends AbstractController
             );
         }
 
-        $listaContieneElemento = $entityManager->getRepository(ListaContieneElemento::class)->findOneBy([
-            'lista' => $lista,
-            'elemento' => $elemento
-        ]);
-
-        if (!$listaContieneElemento) {
-            return new JsonResponse(
-                [
-                    "exito" => false,
-                    "mensaje" => "Relación entre lista y elemento no encontrada."
-                ],
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
         $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
             'usuario' => $usuario,
-            'listaContieneElemento' => $listaContieneElemento
+            'elemento' => $elemento
         ]);
 
         if (!$usuarioElementoPositivo) {
             $usuarioElementoPositivo = new UsuarioElementoPositivo();
             $usuarioElementoPositivo->setUsuario($usuario);
-            $usuarioElementoPositivo->setListaContieneElemento($listaContieneElemento);
+            $usuarioElementoPositivo->setElemento($elemento);
         }
 
         $usuarioElementoPositivo->setPositivo($positivo);
@@ -574,30 +559,15 @@ class ListaController extends AbstractController
             );
         }
 
-        $listaContieneElemento = $entityManager->getRepository(ListaContieneElemento::class)->findOneBy([
-            'lista' => $lista,
-            'elemento' => $elemento
-        ]);
-
-        if (!$listaContieneElemento) {
-            return new JsonResponse(
-                [
-                    "exito" => false,
-                    "mensaje" => "Relación entre lista y elemento no encontrada."
-                ],
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
         $usuarioElementoComentario = $entityManager->getRepository(UsuarioElementoComentario::class)->findOneBy([
             'usuario' => $usuario,
-            'listaContieneElemento' => $listaContieneElemento
+            'elemento' => $elemento
         ]);
 
         if (!$usuarioElementoComentario) {
             $usuarioElementoComentario = new UsuarioElementoComentario();
             $usuarioElementoComentario->setUsuario($usuario);
-            $usuarioElementoComentario->setListaContieneElemento($listaContieneElemento);
+            $usuarioElementoComentario->setElemento($elemento);
         }
 
         $usuarioElementoComentario->setComentario($comentario);

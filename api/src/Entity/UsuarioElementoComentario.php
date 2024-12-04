@@ -25,7 +25,7 @@ class UsuarioElementoComentario
 
     #[ORM\ManyToOne(inversedBy: 'usuarioElementoComentarios')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ListaContieneElemento $listaContieneElemento = null;
+    private ?Elemento $elemento = null;
 
     public function getId(): ?int
     {
@@ -63,14 +63,14 @@ class UsuarioElementoComentario
         return $this;
     }
 
-    public function getListaContieneElemento(): ?ListaContieneElemento
+    public function getElemento(): ?Elemento
     {
-        return $this->listaContieneElemento;
+        return $this->elemento;
     }
 
-    public function setListaContieneElemento(?ListaContieneElemento $listaContieneElemento): static
+    public function setElemento(?Elemento $elemento): static
     {
-        $this->listaContieneElemento = $listaContieneElemento;
+        $this->elemento = $elemento;
 
         return $this;
     }
