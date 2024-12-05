@@ -8,6 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<UsuarioManipulaLista>
+ *
+ * @method UsuarioManipulaLista|null find($id, $lockMode = null, $lockVersion = null)
+ * @method UsuarioManipulaLista|null findOneBy(array $criteria, array $orderBy = null)
+ * @method UsuarioManipulaLista[]    findAll()
+ * @method UsuarioManipulaLista[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UsuarioManipulaListaRepository extends ServiceEntityRepository
 {
@@ -16,28 +21,23 @@ class UsuarioManipulaListaRepository extends ServiceEntityRepository
         parent::__construct($registry, UsuarioManipulaLista::class);
     }
 
-    //    /**
-    //     * @return UsuarioManipulaLista[] Returns an array of UsuarioManipulaLista objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function save(UsuarioManipulaLista $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
 
-    //    public function findOneBySomeField($value): ?UsuarioManipulaLista
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(UsuarioManipulaLista $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    // Añadir métodos personalizados si es necesario
 }

@@ -23,6 +23,9 @@ class UsuarioManipulaLista
     #[ORM\JoinColumn(nullable: false)]
     private ?Lista $lista = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $publica = true; // Agregar la propiedad publica
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,6 +58,18 @@ class UsuarioManipulaLista
     public function setLista(?Lista $lista): static
     {
         $this->lista = $lista;
+
+        return $this;
+    }
+
+    public function isPublica(): bool
+    {
+        return $this->publica;
+    }
+
+    public function setPublica(bool $publica): static
+    {
+        $this->publica = $publica;
 
         return $this;
     }

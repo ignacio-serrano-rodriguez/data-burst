@@ -20,17 +20,18 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   selector: 'app-lista',
   standalone: true,
   imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    AgregadorComponent,
-    FormsModule,
+    CommonModule, 
+    MatIconModule, 
+    MatButtonModule, 
+    AgregadorComponent, 
+    FormsModule, 
     MatDialogModule,
     MatFormFieldModule, // Agregar MatFormFieldModule a los imports
-    MatInputModule
-],
+    MatInputModule, // Agregar MatInputModule a los imports
+    ComentarioDialogComponent // Agregar ComentarioDialogComponent a los imports
+  ],
   templateUrl: './lista.component.html',
-  styleUrl: './lista.component.css',
+  styleUrls: ['./lista.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] // Agregar CUSTOM_ELEMENTS_SCHEMA
 })
 export class ListaComponent implements OnInit {
@@ -98,11 +99,14 @@ export class ListaComponent implements OnInit {
   }
 
   obtenerLista(id: number) {
-    this.listasService.obtenerLista(id).subscribe({
+    const usuarioId = Number(localStorage.getItem('id')) || 0;
+    this.listasService.obtenerLista(id, usuarioId).subscribe({
       next: (data) => {
-        if (data.exito == true) {
+        if (data.exito) {
           this.lista = data.lista;
           this.nuevoNombreLista = this.lista.nombre; // Inicializar el nuevo nombre con el nombre actual
+        } else {
+          console.error('Error al obtener la lista:', data.mensaje);
         }
       },
       error: (error) => {
@@ -237,7 +241,8 @@ export class ListaComponent implements OnInit {
   cambiarVisibilidad() {
     if (this.lista) {
       const nuevaVisibilidad = !this.lista.publica;
-      this.listasService.cambiarVisibilidadLista(this.lista.id, nuevaVisibilidad).subscribe({
+      const usuarioId = Number(localStorage.getItem('id')) || 0;
+      this.listasService.cambiarVisibilidadLista(this.lista.id, usuarioId, nuevaVisibilidad).subscribe({
         next: (data) => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
@@ -263,13 +268,13 @@ export class ListaComponent implements OnInit {
             console.log('Invitación enviada exitosamente');
             this.mostrarMensajePositivo(`Invitación enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
           } else {
-            console.log('Petición ya enviada');
-            this.mostrarMensajeNegativo(`Petición ya enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
+            console.log('Error al enviar la invitación:', data.mensaje);
+            this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
           }
         },
         error: (error) => {
           console.error('Error al enviar la invitación:', error);
-          this.mostrarMensajeNegativo(`Petición ya enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
+          this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
         }
       });
     }

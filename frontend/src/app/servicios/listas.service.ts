@@ -31,9 +31,10 @@ export class ListasService {
     );
   }
 
-  obtenerLista(id: number): Observable<RespuestaObtenerLista> {
-    return this.http.get<RespuestaObtenerLista>(
-      `${this.api}/obtener-lista/${id}`
+  obtenerLista(listaId: number, usuarioId: number): Observable<RespuestaObtenerLista> {
+    return this.http.post<RespuestaObtenerLista>(
+      `${this.api}/obtener-lista`, 
+      { lista_id: listaId, usuario_id: usuarioId }
     );
   }
 
@@ -65,10 +66,10 @@ export class ListasService {
     );
   }
 
-  cambiarVisibilidadLista(id: number, publica: boolean): Observable<RespuestaCambiarVisibilidadLista> {
+  cambiarVisibilidadLista(listaId: number, usuarioId: number, publica: boolean): Observable<RespuestaCambiarVisibilidadLista> {
     return this.http.post<RespuestaCambiarVisibilidadLista>(
-      `${this.api}/cambiar-visibilidad-lista`, 
-      { id, publica }
+      `${this.api}/cambiar-visibilidad-lista`,
+      { lista_id: listaId, usuario_id: usuarioId, publica }
     );
   }
 

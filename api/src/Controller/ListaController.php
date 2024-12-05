@@ -27,21 +27,21 @@ class ListaController extends AbstractController
         $usuarioID = $datosRecibidos['usuarioID'];
         $publica = $datosRecibidos['publica'] ?? true; // Obtener la propiedad publica, por defecto true
         $respuestaJson = null;
-    
+
         $lista = new Lista();
         $lista->setNombre($nombreLista);
-        $lista->setPublica($publica);
-    
+
         $usuarioManipulaLista = new UsuarioManipulaLista();
         $usuarioManipulaLista->setLista($lista);
         $usuarioManipulaLista->setUsuario(
             $entityManager->getRepository(Usuario::class)->find($usuarioID)
         );
-    
+        $usuarioManipulaLista->setPublica($publica); // Asignar la propiedad `publica` a `UsuarioManipulaLista`
+
         try {
             $entityManager->persist($lista);
             $entityManager->flush();
-        
+
             $respuestaJson = new JsonResponse(
                 [
                     "exito" => true,
@@ -49,7 +49,7 @@ class ListaController extends AbstractController
                 ],
                 Response::HTTP_CREATED
             );
-    
+
             $entityManager->persist($usuarioManipulaLista);
             $entityManager->flush();
         } catch (\Throwable $th) {
@@ -61,7 +61,7 @@ class ListaController extends AbstractController
                 Response::HTTP_BAD_REQUEST
             );
         }
-    
+
         return $respuestaJson;
     }
 
@@ -92,7 +92,7 @@ class ListaController extends AbstractController
                 $dataListas[] = [
                     'id' => $lista->getId(),
                     'nombre' => $lista->getNombre(),
-                    'publica' => $lista->isPublica(),
+                    'publica' => $listaAsignada->isPublica(), // Cambiar a `isPublica` de `UsuarioManipulaLista`
                     'compartida' => $compartida
                 ];
             }
@@ -116,11 +116,25 @@ class ListaController extends AbstractController
         }
     }
 
-    #[Route("/api/obtener-lista/{id}", name: "obtener_lista", methods: ["GET"])]
-    public function obtenerLista(int $id, EntityManagerInterface $entityManager)
+    #[Route("/api/obtener-lista", name: "obtener_lista", methods: ["POST"])]
+    public function obtenerLista(Request $request, EntityManagerInterface $entityManager)
     {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $listaId = $datosRecibidos['lista_id'] ?? null;
+        $usuarioId = $datosRecibidos['usuario_id'] ?? null;
+
+        if ($listaId === null || $usuarioId === null) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Datos incompletos."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         try {
-            $lista = $entityManager->getRepository(Lista::class)->find($id);
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
             if (!$lista) {
                 return new JsonResponse(
                     [
@@ -131,10 +145,38 @@ class ListaController extends AbstractController
                 );
             }
 
+            // Obtener el usuario desde el ID
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            // Obtener la relación entre el usuario y la lista
+            $usuarioManipulaLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findOneBy([
+                'lista' => $lista,
+                'usuario' => $usuario
+            ]);
+
+            if (!$usuarioManipulaLista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Relación usuario-lista no encontrada."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
             $dataLista = [
                 'id' => $lista->getId(),
                 'nombre' => $lista->getNombre(),
-                'publica' => $lista->isPublica() // Incluir la propiedad publica
+                'publica' => $usuarioManipulaLista->isPublica() // Incluir la propiedad publica de UsuarioManipulaLista
             ];
 
             return new JsonResponse(
@@ -320,15 +362,27 @@ class ListaController extends AbstractController
         }
     }
 
+    
     #[Route("/api/cambiar-visibilidad-lista", name: "cambiar_visibilidad_lista", methods: ["POST"])]
     public function cambiarVisibilidadLista(Request $request, EntityManagerInterface $entityManager)
     {
         $datosRecibidos = json_decode($request->getContent(), true);
-        $id = $datosRecibidos['id'];
-        $publica = $datosRecibidos['publica'];
+        $listaId = $datosRecibidos['lista_id'] ?? null;
+        $usuarioId = $datosRecibidos['usuario_id'] ?? null;
+        $publica = $datosRecibidos['publica'] ?? null;
+
+        if ($listaId === null || $usuarioId === null || $publica === null) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Datos incompletos."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
 
         try {
-            $lista = $entityManager->getRepository(Lista::class)->find($id);
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
             if (!$lista) {
                 return new JsonResponse(
                     [
@@ -339,7 +393,35 @@ class ListaController extends AbstractController
                 );
             }
 
-            $lista->setPublica($publica);
+            // Obtener el usuario desde el ID
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            // Obtener la relación entre el usuario y la lista
+            $usuarioManipulaLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findOneBy([
+                'lista' => $lista,
+                'usuario' => $usuario
+            ]);
+
+            if (!$usuarioManipulaLista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Relación usuario-lista no encontrada."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $usuarioManipulaLista->setPublica($publica); // Asignar la propiedad `publica` a `UsuarioManipulaLista`
             $entityManager->flush();
 
             return new JsonResponse(

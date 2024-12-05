@@ -20,8 +20,9 @@ class Lista
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
-    #[ORM\Column]
-    private ?bool $publica = true;
+    // Eliminar la propiedad `publica`
+    // #[ORM\Column]
+    // private ?bool $publica = true;
 
     /**
      * @var Collection<int, UsuarioManipulaLista>
@@ -61,18 +62,6 @@ class Lista
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
-
-        return $this;
-    }
-
-    public function isPublica(): ?bool
-    {
-        return $this->publica;
-    }
-
-    public function setPublica(bool $publica): static
-    {
-        $this->publica = $publica;
 
         return $this;
     }

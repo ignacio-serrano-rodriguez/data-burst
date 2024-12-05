@@ -26,7 +26,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule // Agregar FormsModule a los imports
   ],
   templateUrl: './tus-listas.component.html',
-  styleUrl: './tus-listas.component.css'
+  styleUrls: ['./tus-listas.component.css']
 })
 export class TusListasComponent implements OnInit {
   private listasService = inject(ListasService);
