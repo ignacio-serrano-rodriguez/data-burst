@@ -28,9 +28,6 @@ class InvitacionLista
     #[ORM\JoinColumn(nullable: false)]
     private ?Lista $lista = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $aceptada = false;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -68,18 +65,6 @@ class InvitacionLista
     public function setLista(?Lista $lista): self
     {
         $this->lista = $lista;
-
-        return $this;
-    }
-
-    public function isAceptada(): bool
-    {
-        return $this->aceptada;
-    }
-
-    public function setAceptada(bool $aceptada): self
-    {
-        $this->aceptada = $aceptada;
 
         return $this;
     }

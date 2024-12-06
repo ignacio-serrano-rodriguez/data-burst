@@ -372,7 +372,7 @@ class UsuarioController extends AbstractController
             $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
 
             // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado
-            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId, 'aceptada' => false]);
+            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId]);
 
             $dataAmistad = [];
             $dataLista = [];
@@ -489,14 +489,11 @@ class UsuarioController extends AbstractController
 
                 $invitacion = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
                     'invitado' => $usuario,
-                    'lista' => $lista,
-                    'aceptada' => false
+                    'lista' => $lista
                 ]);
 
                 if ($invitacion) {
                     // Lógica para aceptar la solicitud de acceso a la lista
-                    $invitacion->setAceptada(true);
-
                     $usuarioManipulaLista = new UsuarioManipulaLista();
                     $usuarioManipulaLista->setLista($invitacion->getLista());
                     $usuarioManipulaLista->setUsuario($invitacion->getInvitado());
@@ -526,7 +523,7 @@ class UsuarioController extends AbstractController
             $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
 
             // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado
-            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId, 'aceptada' => false]);
+            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId]);
 
             $nuevasSolicitudes = 0;
 
@@ -625,8 +622,7 @@ class UsuarioController extends AbstractController
 
                 $invitacion = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
                     'invitado' => $usuario,
-                    'lista' => $lista,
-                    'aceptada' => false
+                    'lista' => $lista
                 ]);
 
                 if ($invitacion) {

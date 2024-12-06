@@ -75,7 +75,7 @@ export class ListasService {
 
   invitarAmigo(listaId: number, amigoId: number, invitadorId: number): Observable<RespuestaInvitarAmigo> {
     return this.http.post<RespuestaInvitarAmigo>(
-      `${this.api}/invitar-amigo`, 
+      `${this.api}/invitar-amigo`,
       { listaId, amigoId, invitadorId }
     );
   }

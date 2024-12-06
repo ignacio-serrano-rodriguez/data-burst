@@ -28,7 +28,6 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatDialogModule,
     MatFormFieldModule, // Agregar MatFormFieldModule a los imports
     MatInputModule, // Agregar MatInputModule a los imports
-    ComentarioDialogComponent // Agregar ComentarioDialogComponent a los imports
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
