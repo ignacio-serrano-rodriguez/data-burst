@@ -34,7 +34,9 @@
 
 <h3>Amigos Agregados</h3>
 <ul>
-  <li *ngFor="let amigo of amigos">{{ amigo.nombre }}</li>
+  <li *ngFor="let amigo of amigos">
+    <a (click)="verDetalleAmigo(amigo.nombre)">{{ amigo.nombre }}</a>
+  </li>
 </ul>
 
 <div *ngIf="noSeEncontraronAmigos">

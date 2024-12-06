@@ -46,4 +46,18 @@ export class AmigosService {
       { query, usuarioID, listaID }
     );
   }
+
+  obtenerAmigoPorNombre(nombreAmigo: string): Observable<{ exito: boolean, amigo: { nombre: string } }> {
+    return this.http.get<{ exito: boolean, amigo: { nombre: string } }>(
+      `${this.api}/obtener-amigo-por-nombre/${nombreAmigo}`
+    );
+  }
+
+  eliminarAmistadPorNombre(nombreAmigo: string): Observable<{ exito: boolean, mensaje: string }> {
+    const usuarioID = Number(localStorage.getItem('id')) || 0;
+    return this.http.post<{ exito: boolean, mensaje: string }>(
+      `${this.api}/eliminar-amistad-por-nombre`, 
+      { usuarioID, nombreAmigo }
+    );
+  }
 }

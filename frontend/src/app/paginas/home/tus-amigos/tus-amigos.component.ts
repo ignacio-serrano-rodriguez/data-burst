@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { Router } from '@angular/router';
 
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
@@ -28,6 +29,7 @@ export class TusAmigosComponent implements OnInit {
 
   private amigosService = inject(AmigosService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
+  private router = inject(Router);
   amigos: Amigo[] = [];
   usuariosNoAgregados: Amigo[] = [];
   nombreUsuarioAgregar: string = '';
@@ -147,6 +149,10 @@ export class TusAmigosComponent implements OnInit {
         console.error('Error al obtener amigos:', error);
       }
     });
+  }
+
+  verDetalleAmigo(nombreAmigo: string) {
+    this.router.navigate([`/${nombreAmigo}`]);
   }
 
   limpiarMensaje() {

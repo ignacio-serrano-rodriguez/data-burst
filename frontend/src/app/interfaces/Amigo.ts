@@ -1,4 +1,4 @@
-export interface Amigo 
-{
+export interface Amigo {
+    id: number;
     nombre: string;
-}
+  }
