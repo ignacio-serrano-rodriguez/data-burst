@@ -24,7 +24,10 @@ class UsuarioManipulaLista
     private ?Lista $lista = null;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $publica = true; // Agregar la propiedad publica
+    private bool $publica = true;
+
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $momento_manipulacion = null;
 
     public function getId(): ?int
     {
@@ -72,5 +75,23 @@ class UsuarioManipulaLista
         $this->publica = $publica;
 
         return $this;
+    }
+
+    public function getMomentoManipulacion(): ?\DateTimeInterface
+    {
+        return $this->momento_manipulacion;
+    }
+
+    public function setMomentoManipulacion(\DateTimeInterface $momento_manipulacion): static
+    {
+        $this->momento_manipulacion = $momento_manipulacion;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        $this->momento_manipulacion = new \DateTime();
     }
 }

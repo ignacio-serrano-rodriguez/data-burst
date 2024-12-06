@@ -28,18 +28,29 @@ class ListaController extends AbstractController
         $publica = $datosRecibidos['publica'] ?? true; // Obtener la propiedad publica, por defecto true
         $respuestaJson = null;
 
-        $lista = new Lista();
-        $lista->setNombre($nombreLista);
-
-        $usuarioManipulaLista = new UsuarioManipulaLista();
-        $usuarioManipulaLista->setLista($lista);
-        $usuarioManipulaLista->setUsuario(
-            $entityManager->getRepository(Usuario::class)->find($usuarioID)
-        );
-        $usuarioManipulaLista->setPublica($publica); // Asignar la propiedad `publica` a `UsuarioManipulaLista`
-
         try {
+            $lista = new Lista();
+            $lista->setNombre($nombreLista);
+
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $usuarioManipulaLista = new UsuarioManipulaLista();
+            $usuarioManipulaLista->setLista($lista);
+            $usuarioManipulaLista->setUsuario($usuario);
+            $usuarioManipulaLista->setPublica($publica); // Asignar la propiedad `publica` a `UsuarioManipulaLista`
+            $usuarioManipulaLista->setMomentoManipulacion(new \DateTime()); // Asignar la fecha y hora actual
+
             $entityManager->persist($lista);
+            $entityManager->persist($usuarioManipulaLista);
             $entityManager->flush();
 
             $respuestaJson = new JsonResponse(
@@ -49,9 +60,6 @@ class ListaController extends AbstractController
                 ],
                 Response::HTTP_CREATED
             );
-
-            $entityManager->persist($usuarioManipulaLista);
-            $entityManager->flush();
         } catch (\Throwable $th) {
             $respuestaJson = new JsonResponse(
                 [

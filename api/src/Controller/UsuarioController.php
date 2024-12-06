@@ -497,6 +497,7 @@ class UsuarioController extends AbstractController
                     $usuarioManipulaLista = new UsuarioManipulaLista();
                     $usuarioManipulaLista->setLista($invitacion->getLista());
                     $usuarioManipulaLista->setUsuario($invitacion->getInvitado());
+                    $usuarioManipulaLista->setMomentoManipulacion(new \DateTime()); // Asignar la fecha y hora actual
 
                     $entityManager->persist($usuarioManipulaLista);
                     $entityManager->remove($invitacion); // Eliminar la invitación de la entidad InvitacionLista
@@ -508,6 +509,8 @@ class UsuarioController extends AbstractController
                 }
             }
         } catch (\Throwable $th) {
+            // Agregar registro de depuración
+            error_log('Error al aceptar la solicitud: ' . $th->getMessage());
             return new JsonResponse(['exito' => false, 'mensaje' => 'Error al aceptar la solicitud.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
