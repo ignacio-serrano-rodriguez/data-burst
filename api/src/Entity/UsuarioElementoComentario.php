@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UsuarioElementoComentarioRepository::class)]
 #[ApiResource]
+#[ORM\HasLifecycleCallbacks]
 class UsuarioElementoComentario
 {
     #[ORM\Id]
@@ -26,6 +27,9 @@ class UsuarioElementoComentario
     #[ORM\ManyToOne(inversedBy: 'usuarioElementoComentarios')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Elemento $elemento = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $momento_comentario = null;
 
     public function getId(): ?int
     {
@@ -47,6 +51,7 @@ class UsuarioElementoComentario
     public function setComentario(?string $comentario): static
     {
         $this->comentario = $comentario;
+        $this->momento_comentario = new \DateTime(); // Actualizar momento_comentario cuando cambie comentario
 
         return $this;
     }
@@ -73,5 +78,24 @@ class UsuarioElementoComentario
         $this->elemento = $elemento;
 
         return $this;
+    }
+
+    public function getMomentoComentario(): ?\DateTimeInterface
+    {
+        return $this->momento_comentario;
+    }
+
+    public function setMomentoComentario(?\DateTimeInterface $momento_comentario): static
+    {
+        $this->momento_comentario = $momento_comentario;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function actualizarMomentoComentario(): void
+    {
+        $this->momento_comentario = new \DateTime();
     }
 }
