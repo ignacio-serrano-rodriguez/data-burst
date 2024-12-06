@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { AmigosService } from '../../../servicios/amigos.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CabeceraComponent } from "../../../cabecera/cabecera.component";
-import { PieComponent } from "../../../pie/pie.component";
 
 @Component({
   selector: 'app-amigo',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, CabeceraComponent, PieComponent],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './amigo.component.html',
   styleUrls: ['./amigo.component.css']
 })

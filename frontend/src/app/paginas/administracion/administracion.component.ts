@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CabeceraComponent } from "../../cabecera/cabecera.component";
-import { PieComponent } from "../../pie/pie.component";
 
 import { Router } from '@angular/router';
 
@@ -8,11 +6,7 @@ import { Router } from '@angular/router';
 ({
   selector: 'app-administracion',
   standalone: true,
-  imports: 
-  [
-    CabeceraComponent, 
-    PieComponent
-  ],
+  imports: [],
   templateUrl: './administracion.component.html',
   styleUrl: './administracion.component.css'
 })

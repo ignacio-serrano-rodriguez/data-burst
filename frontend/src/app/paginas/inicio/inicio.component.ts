@@ -8,11 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
 @Component({
-
-  // Tag que identifica al componente 
   selector: 'app-inicio',
-  imports: 
-  [
+  imports: [
     PieComponent, 
     LoginComponent, 
     RegistroComponent,
@@ -20,34 +17,27 @@ import { Router } from '@angular/router';
     MatDividerModule,
     MatButtonModule
   ],
-  // Ruta del archivo HTML que renderiza el componente
   templateUrl: './inicio.component.html',
-  // Ruta del archivo CSS que renderiza el componente
-  styleUrl: './inicio.component.css',
+  styleUrls: ['./inicio.component.css'],
   standalone: true
 })
+export class InicioComponent implements OnInit {  
+  botonLoginVisible: boolean = true;
+  loginStyleDisplay: string = "revert";
 
-export class InicioComponent  implements OnInit
-{  
-  botonLoginVisible:boolean = true;
-  loginStyleDisplay:string = "revert";
-
-  botonRegistroVisible:boolean = false;
-  registroStyleDisplay:string = "none";
+  botonRegistroVisible: boolean = false;
+  registroStyleDisplay: string = "none";
 
   constructor(private router: Router) {}
 
-  ngOnInit() 
-  {
-    if (localStorage.getItem('logueado')) 
-    {
+  ngOnInit() {
+    if (localStorage.getItem('logueado')) {
       this.router.navigate(['home']);
       localStorage.setItem("refrescar", "true");
     }
   }
 
-  mostrarRegistroOcultarLogin() 
-  {
+  mostrarRegistroOcultarLogin() {
     this.botonLoginVisible = false;
     this.loginStyleDisplay = "none";
 
@@ -56,8 +46,8 @@ export class InicioComponent  implements OnInit
 
     document.getElementById("mensajeInformativo")!.innerText = "";
   }
-  mostrarLoginOcultarRegistro() 
-  {
+
+  mostrarLoginOcultarRegistro() {
     this.botonLoginVisible = true;
     this.loginStyleDisplay = "revert";
     
@@ -66,5 +56,4 @@ export class InicioComponent  implements OnInit
 
     document.getElementById("mensajeInformativo")!.innerText = "";
   }
-
 }

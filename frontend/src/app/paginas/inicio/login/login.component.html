@@ -1,29 +1,29 @@
-<form id="formulario" [formGroup]="formLogin">
+<form id="formulario-login" [formGroup]="formLogin">
 	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Usuario</mat-label>
-		<input matInput formControlName="usuario">
+	  <mat-label class="etiquetaFormulario">Usuario</mat-label>
+	  <input matInput formControlName="usuario">
 	</mat-form-field>
 	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Contraseña</mat-label>
-		<input 
-			[type]="hide ? 'password' : 'text'" 
-			matInput 
-			formControlName="contrasenia" 
-			type="password">
-		<button 
-			mat-icon-button 
-			matSuffix 
-			(click)="hide = !hide" 
-			[attr.aria-label]="'Hide password'" 
-			[attr.aria-pressed]="hide">
-			<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-		</button>
+	  <mat-label class="etiquetaFormulario">Contraseña</mat-label>
+	  <input 
+		[type]="hide ? 'password' : 'text'" 
+		matInput 
+		formControlName="contrasenia" 
+		type="password">
+	  <button 
+		mat-icon-button 
+		matSuffix 
+		(click)="hide = !hide" 
+		[attr.aria-label]="'Hide password'" 
+		[attr.aria-pressed]="hide">
+		<mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+	  </button>
 	</mat-form-field>
 	<button 
-		id="boton" 
-		class="elementoFormulario" 
-		mat-flat-button color="primary"
-		(click)="iniciarSesion()">
-		Acceder
+	  id="boton-login" 
+	  class="elementoFormulario" 
+	  mat-flat-button color="primary"
+	  (click)="iniciarSesion()">
+	  Acceder
 	</button>
-</form>
+  </form>

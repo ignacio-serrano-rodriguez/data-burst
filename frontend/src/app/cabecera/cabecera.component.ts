@@ -15,7 +15,7 @@ import { NotificacionesService } from '../servicios/notificaciones.service'; // 
     CommonModule
   ],
   templateUrl: './cabecera.component.html',
-  styleUrl: './cabecera.component.css'
+  styleUrls: ['./cabecera.component.css']
 })
 export class CabeceraComponent implements OnInit, OnDestroy {
   @Input() nombreUsuario: string = '';

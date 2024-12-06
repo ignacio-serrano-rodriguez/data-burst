@@ -1,1 +1,7 @@
+<ng-container *ngIf="!isInicioRoute">
+  <app-cabecera></app-cabecera>
+</ng-container>
 <router-outlet></router-outlet>
+<ng-container *ngIf="!isInicioRoute">
+  <app-pie></app-pie>
+</ng-container>

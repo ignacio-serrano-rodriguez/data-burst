@@ -1,4 +1,3 @@
-<app-cabecera id="cabecera"></app-cabecera>
 <div id="body">
     <span id="mensajeInformativo"></span>
     <div *ngIf="mostrarListasYAmigos">
@@ -7,4 +6,3 @@
     </div>
     <app-lista *ngIf="mostrarListaComponent" [listaId]="listaId" (volverAListasYAmigos)="volverAListasYAmigos()"></app-lista>
 </div>
-<app-pie id="pie"></app-pie>

@@ -20,14 +20,14 @@ button:hover
     color: #717e84;
 }
 
-#formulario
+#formulario-login
 {
     width: 85%;
     padding-left: 7.5%;
     padding-right: 7.5%;
 }
 
-#boton
+#boton-login
 {
     padding-top: 1.4em;
     padding-bottom: 1.4em;
