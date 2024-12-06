@@ -75,4 +75,10 @@ export class CabeceraComponent implements OnInit, OnDestroy {
       this.recargaService.recargarComponentes();
     });
   }
+
+  recargarEstadisticas() {
+    this.router.navigate(['/estadisticas']).then(() => {
+      this.recargaService.recargarEstadisticas();
+    });
+  }
 }

@@ -7,9 +7,11 @@ import { Subject } from 'rxjs';
 export class RecargaService {
   private recargarComponentesSubject = new Subject<void>();
   private cerrarSesionSubject = new Subject<void>();
+  private recargarEstadisticasSubject = new Subject<void>();
 
   recargarComponentes$ = this.recargarComponentesSubject.asObservable();
   cerrarSesion$ = this.cerrarSesionSubject.asObservable();
+  recargarEstadisticas$ = this.recargarEstadisticasSubject.asObservable();
 
   recargarComponentes() {
     this.recargarComponentesSubject.next();
@@ -17,5 +19,9 @@ export class RecargaService {
 
   cerrarSesion() {
     this.cerrarSesionSubject.next();
+  }
+
+  recargarEstadisticas() {
+    this.recargarEstadisticasSubject.next();
   }
 }

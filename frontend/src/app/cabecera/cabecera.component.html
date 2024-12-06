@@ -13,8 +13,8 @@
         </h2> 
     </span>
 
-    <span id="estadisticas" class="enlaces">
-        <a class="textoEnlace" href="http://localhost:4200/estadisticas">Estadísticas</a>
+    <span id="estadisticas" class="enlaces" (click)="recargarEstadisticas()">
+        <a class="textoEnlace">Estadísticas</a>
     </span>
 
     <span *ngIf="mostrarAdministracion" id="administracion" class="enlaces">
