@@ -3,13 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\InvitacionListaRepository;
+use App\Repository\InvitacionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: InvitacionListaRepository::class)]
+#[ORM\Entity(repositoryClass: InvitacionRepository::class)]
 #[ApiResource]
 #[ORM\UniqueConstraint(name: "unique_invitacion", columns: ["lista_id", "invitado_id", "invitador_id"])]
-class InvitacionLista
+class Invitacion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -25,7 +25,7 @@ class InvitacionLista
     private ?Usuario $invitado = null;
 
     #[ORM\ManyToOne(inversedBy: 'invitaciones')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Lista $lista = null;
 
     public function getId(): ?int

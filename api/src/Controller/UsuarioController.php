@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Invitacion;
 use App\Entity\Usuario;
 use App\Entity\UsuarioAgregaUsuario;
 use App\Entity\UsuarioManipulaLista;
-use App\Entity\InvitacionLista;
 use App\Entity\Lista;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UsuarioRepository;
@@ -204,18 +204,35 @@ class UsuarioController extends AbstractController
             );
         }
 
-        $usuarioAgregaUsuario = new UsuarioAgregaUsuario();
-        $usuarioAgregaUsuario->setUsuario1($usuario_1);
-        $usuarioAgregaUsuario->setUsuario2($usuario_2);
+        // Verificar si ya existe una invitación
+        $invitacionExistente = $entityManager->getRepository(Invitacion::class)->findOneBy([
+            'invitado' => $usuario_2,
+            'invitador' => $usuario_1,
+            'lista' => null
+        ]);
+
+        if ($invitacionExistente) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Ya existe una invitación para este usuario."
+                ],
+                Response::HTTP_CONFLICT
+            );
+        }
+
+        $invitacion = new Invitacion();
+        $invitacion->setInvitado($usuario_2);
+        $invitacion->setInvitador($usuario_1);
 
         try {
-            $entityManager->persist($usuarioAgregaUsuario);
+            $entityManager->persist($invitacion);
             $entityManager->flush();
             
             $respuestaJson = new JsonResponse(
                 [
                     "exito" => true,
-                    "mensaje" => "Petición de amistad enviada."
+                    "mensaje" => "Invitación de amistad enviada."
                 ],
                 Response::HTTP_CREATED
             );
@@ -223,7 +240,7 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Petición de amistad ya enviada o usuario inexistente."
+                    "mensaje" => "Error al enviar la invitación de amistad."
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -368,32 +385,32 @@ class UsuarioController extends AbstractController
         $usuarioId = $datosRecibidos['id'];
 
         try {
-            // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
-            $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
+            // Obtener las solicitudes de amistad donde invitado_id coincide con el ID proporcionado y lista_id es NULL
+            $solicitudesAmistad = $entityManager->getRepository(Invitacion::class)->findBy([
+                'invitado' => $usuarioId,
+                'lista' => null
+            ]);
 
-            // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado
-            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId]);
+            // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado y lista_id no es NULL
+            $solicitudesLista = $entityManager->getRepository(Invitacion::class)->createQueryBuilder('i')
+                ->where('i.invitado = :usuarioId')
+                ->andWhere('i.lista IS NOT NULL')
+                ->setParameter('usuarioId', $usuarioId)
+                ->getQuery()
+                ->getResult();
 
             $dataAmistad = [];
             $dataLista = [];
 
             foreach ($solicitudesAmistad as $solicitud) {
-                // Verificar que no exista un registro con los IDs intercambiados
-                $solicitudAceptada = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                    'usuario_1' => $usuarioId,
-                    'usuario_2' => $solicitud->getUsuario1()->getId()
-                ]);
-
-                if (!$solicitudAceptada) {
-                    $dataAmistad[] = [
-                        'nombre' => $solicitud->getUsuario1()->getUsuario(), // Asumiendo que 'usuario' es el nombre de usuario
-                    ];
-                }
+                $dataAmistad[] = [
+                    'nombre' => $solicitud->getInvitador()->getUsuario(), // Obtener el nombre del usuario que invita
+                ];
             }
 
             foreach ($solicitudesLista as $solicitud) {
                 $dataLista[] = [
-                    'nombre' => $solicitud->getLista()->getNombre(), // Asumiendo que 'nombre' es el nombre de la lista
+                    'nombre' => $solicitud->getLista()->getNombre(), // Obtener el nombre de la lista
                     'invitador' => $solicitud->getInvitador()->getUsuario() // Obtener el nombre del usuario que invita
                 ];
             }
@@ -456,23 +473,25 @@ class UsuarioController extends AbstractController
                     );
                 }
 
-                $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                    'usuario_2' => $usuario,
-                    'usuario_1' => $usuario_2
+                $invitacion = $entityManager->getRepository(Invitacion::class)->findOneBy([
+                    'invitado' => $usuario,
+                    'invitador' => $usuario_2,
+                    'lista' => null
                 ]);
-        
-                if ($solicitud) {
-                    // Lógica para aceptar la solicitud
-                    // Por ejemplo, crear una nueva relación de amistad
+
+                if ($invitacion) {
+                    // Lógica para aceptar la solicitud de amistad
                     $nuevaRelacion = new UsuarioAgregaUsuario();
                     $nuevaRelacion->setUsuario1($usuario);
                     $nuevaRelacion->setUsuario2($usuario_2);
+
                     $entityManager->persist($nuevaRelacion);
+                    $entityManager->remove($invitacion); // Eliminar la invitación de la entidad Invitacion
                     $entityManager->flush();
-        
-                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud aceptada.'], Response::HTTP_OK);
+
+                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud de amistad aceptada.'], Response::HTTP_OK);
                 } else {
-                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud de amistad no encontrada.'], Response::HTTP_NOT_FOUND);
                 }
             } elseif ($tipo === 'lista') {
                 // Obtener la solicitud de acceso a la lista
@@ -487,7 +506,7 @@ class UsuarioController extends AbstractController
                     );
                 }
 
-                $invitacion = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
+                $invitacion = $entityManager->getRepository(Invitacion::class)->findOneBy([
                     'invitado' => $usuario,
                     'lista' => $lista
                 ]);
@@ -500,7 +519,7 @@ class UsuarioController extends AbstractController
                     $usuarioManipulaLista->setMomentoManipulacion(new \DateTime()); // Asignar la fecha y hora actual
 
                     $entityManager->persist($usuarioManipulaLista);
-                    $entityManager->remove($invitacion); // Eliminar la invitación de la entidad InvitacionLista
+                    $entityManager->remove($invitacion); // Eliminar la invitación de la entidad Invitacion
                     $entityManager->flush();
 
                     return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud de acceso a la lista aceptada.'], Response::HTTP_OK);
@@ -522,28 +541,21 @@ class UsuarioController extends AbstractController
         $usuarioId = $datosRecibidos['id'];
 
         try {
-            // Obtener las solicitudes de amistad donde usuario_2_id coincide con el ID proporcionado
-            $solicitudesAmistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_2' => $usuarioId]);
+            // Obtener las solicitudes de amistad donde invitado_id coincide con el ID proporcionado y lista_id es NULL
+            $solicitudesAmistad = $entityManager->getRepository(Invitacion::class)->findBy([
+                'invitado' => $usuarioId,
+                'lista' => null
+            ]);
 
-            // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado
-            $solicitudesLista = $entityManager->getRepository(InvitacionLista::class)->findBy(['invitado' => $usuarioId]);
+            // Obtener las solicitudes de listas donde invitado_id coincide con el ID proporcionado y lista_id no es NULL
+            $solicitudesLista = $entityManager->getRepository(Invitacion::class)->createQueryBuilder('i')
+                ->where('i.invitado = :usuarioId')
+                ->andWhere('i.lista IS NOT NULL')
+                ->setParameter('usuarioId', $usuarioId)
+                ->getQuery()
+                ->getResult();
 
-            $nuevasSolicitudes = 0;
-
-            foreach ($solicitudesAmistad as $solicitud) {
-                // Verificar que no exista un registro con los IDs intercambiados
-                $solicitudAceptada = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                    'usuario_1' => $usuarioId,
-                    'usuario_2' => $solicitud->getUsuario1()->getId()
-                ]);
-
-                if (!$solicitudAceptada) {
-                    $nuevasSolicitudes++;
-                }
-            }
-
-            // Contar las solicitudes de listas
-            $nuevasSolicitudes += count($solicitudesLista);
+            $nuevasSolicitudes = count($solicitudesAmistad) + count($solicitudesLista);
 
             return new JsonResponse(
                 [
@@ -596,19 +608,20 @@ class UsuarioController extends AbstractController
                     );
                 }
 
-                $solicitud = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                    'usuario_2' => $usuario,
-                    'usuario_1' => $usuario_2
+                $invitacion = $entityManager->getRepository(Invitacion::class)->findOneBy([
+                    'invitado' => $usuario,
+                    'invitador' => $usuario_2,
+                    'lista' => null
                 ]);
-        
-                if ($solicitud) {
-                    // Lógica para denegar la solicitud
-                    $entityManager->remove($solicitud);
+
+                if ($invitacion) {
+                    // Lógica para denegar la solicitud de amistad
+                    $entityManager->remove($invitacion);
                     $entityManager->flush();
-        
-                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud denegada.'], Response::HTTP_OK);
+
+                    return new JsonResponse(['exito' => true, 'mensaje' => 'Solicitud de amistad denegada.'], Response::HTTP_OK);
                 } else {
-                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud no encontrada.'], Response::HTTP_NOT_FOUND);
+                    return new JsonResponse(['exito' => false, 'mensaje' => 'Solicitud de amistad no encontrada.'], Response::HTTP_NOT_FOUND);
                 }
             } elseif ($tipo === 'lista') {
                 // Obtener la solicitud de acceso a la lista
@@ -623,7 +636,7 @@ class UsuarioController extends AbstractController
                     );
                 }
 
-                $invitacion = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
+                $invitacion = $entityManager->getRepository(Invitacion::class)->findOneBy([
                     'invitado' => $usuario,
                     'lista' => $lista
                 ]);
@@ -779,25 +792,25 @@ class UsuarioController extends AbstractController
                 );
             }
 
-            // Obtener las solicitudes de amistad enviadas por el usuario
-            $solicitudesEnviadas = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findBy(['usuario_1' => $usuario]);
+            // Obtener las relaciones de amistad donde el usuario es usuario_1 o usuario_2
+            $amistades = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
+                ->where('ua.usuario_1 = :usuarioID OR ua.usuario_2 = :usuarioID')
+                ->setParameter('usuarioID', $usuarioID)
+                ->getQuery()
+                ->getResult();
 
             $dataAmigos = [];
-            foreach ($solicitudesEnviadas as $solicitud) {
-                $usuario2 = $solicitud->getUsuario2();
-
-                // Verificar si existe una solicitud de amistad en sentido contrario
-                $solicitudRecibida = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
-                    'usuario_1' => $usuario2,
-                    'usuario_2' => $usuario
-                ]);
-
-                if ($solicitudRecibida) {
-                    $dataAmigos[] = [
-                        'id' => $usuario2->getId(), // Incluir el id del amigo
-                        'nombre' => $usuario2->getUsuario()
-                    ];
+            foreach ($amistades as $amistad) {
+                if ($amistad->getUsuario1()->getId() === $usuarioID) {
+                    $amigo = $amistad->getUsuario2();
+                } else {
+                    $amigo = $amistad->getUsuario1();
                 }
+
+                $dataAmigos[] = [
+                    'id' => $amigo->getId(),
+                    'nombre' => $amigo->getUsuario()
+                ];
             }
 
             return new JsonResponse(
@@ -825,7 +838,7 @@ class UsuarioController extends AbstractController
         $datosRecibidos = json_decode($request->getContent(), true);
         $query = $datosRecibidos['query'];
         $usuarioID = $datosRecibidos['usuarioID'];
-        $listaID = $datosRecibidos['listaID']; // Obtener el ID de la lista
+        $listaID = $datosRecibidos['listaID'];
 
         try {
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
@@ -839,16 +852,27 @@ class UsuarioController extends AbstractController
                 );
             }
 
+            $lista = $entityManager->getRepository(Lista::class)->find($listaID);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
             // Subconsulta para obtener los IDs de los usuarios que ya están manipulando la lista
             $subQuery = $entityManager->getRepository(UsuarioManipulaLista::class)->createQueryBuilder('uml')
                 ->select('IDENTITY(uml.usuario)')
                 ->where('uml.lista = :listaID')
                 ->getDQL();
 
-            // Buscar amigos que el usuario ha agregado, cuyo nombre coincida con la consulta y que no estén manipulando la lista
-            $amigos = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
-                ->innerJoin('ua.usuario_2', 'u')
-                ->where('ua.usuario_1 = :usuarioID')
+            // Buscar amigos que no están manipulando la lista y cuyo nombre coincida con la consulta
+            $amigosNoManipulanLista = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
+                ->innerJoin('u.usuarioAgregaUsuarios', 'ua')
+                ->where('ua.usuario_1 = :usuarioID OR ua.usuario_2 = :usuarioID')
                 ->andWhere('u.usuario LIKE :query')
                 ->andWhere('u.id NOT IN (' . $subQuery . ')')
                 ->setParameter('query', '%' . $query . '%')
@@ -858,10 +882,10 @@ class UsuarioController extends AbstractController
                 ->getResult();
 
             $dataAmigos = [];
-            foreach ($amigos as $amigo) {
+            foreach ($amigosNoManipulanLista as $amigo) {
                 $dataAmigos[] = [
-                    'id' => $amigo->getUsuario2()->getId(),
-                    'nombre' => $amigo->getUsuario2()->getUsuario()
+                    'id' => $amigo->getId(),
+                    'nombre' => $amigo->getUsuario()
                 ];
             }
 

@@ -22,7 +22,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule // Agregar FormsModule a los imports
   ],
   templateUrl: './tus-amigos.component.html',
-  styleUrl: './tus-amigos.component.css'
+  styleUrls: ['./tus-amigos.component.css']
 })
 export class TusAmigosComponent implements OnInit {
 

@@ -3,13 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Lista;
-use App\Entity\InvitacionLista;
 use App\Entity\Usuario;
 use App\Entity\UsuarioManipulaLista;
 use App\Entity\ListaContieneElemento;
 use App\Entity\UsuarioElementoPositivo;
 use App\Entity\UsuarioElementoComentario;
 use App\Entity\Elemento;
+use App\Entity\Invitacion;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -458,7 +458,7 @@ class ListaController extends AbstractController
         $amigoId = $datosRecibidos['amigoId'] ?? null;
         $invitadorId = $datosRecibidos['invitadorId'] ?? null;
 
-        if ($listaId === null || $amigoId === null || $invitadorId === null) {
+        if ($amigoId === null || $invitadorId === null) {
             return new JsonResponse(
                 [
                     "exito" => false,
@@ -469,25 +469,23 @@ class ListaController extends AbstractController
         }
 
         try {
-            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
             $amigo = $entityManager->getRepository(Usuario::class)->find($amigoId);
             $invitador = $entityManager->getRepository(Usuario::class)->find($invitadorId);
 
-            if (!$lista || !$amigo || !$invitador) {
+            if (!$amigo || !$invitador) {
                 return new JsonResponse(
                     [
                         "exito" => false,
-                        "mensaje" => "Lista o usuario no encontrado."
+                        "mensaje" => "Usuario no encontrado."
                     ],
                     Response::HTTP_NOT_FOUND
                 );
             }
 
-            // Verificar si ya existe una invitación
-            $invitacionExistente = $entityManager->getRepository(InvitacionLista::class)->findOneBy([
-                'lista' => $lista,
+            $invitacionExistente = $entityManager->getRepository(Invitacion::class)->findOneBy([
                 'invitado' => $amigo,
-                'invitador' => $invitador
+                'invitador' => $invitador,
+                'lista' => $listaId ? $entityManager->getRepository(Lista::class)->find($listaId) : null
             ]);
 
             if ($invitacionExistente) {
@@ -500,10 +498,22 @@ class ListaController extends AbstractController
                 );
             }
 
-            $invitacion = new InvitacionLista();
-            $invitacion->setLista($lista);
+            $invitacion = new Invitacion();
             $invitacion->setInvitado($amigo);
             $invitacion->setInvitador($invitador);
+            if ($listaId) {
+                $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+                if (!$lista) {
+                    return new JsonResponse(
+                        [
+                            "exito" => false,
+                            "mensaje" => "Lista no encontrada."
+                        ],
+                        Response::HTTP_NOT_FOUND
+                    );
+                }
+                $invitacion->setLista($lista);
+            }
 
             $entityManager->persist($invitacion);
             $entityManager->flush();
