@@ -61,7 +61,9 @@ export class CabeceraComponent implements OnInit, OnDestroy {
 
   cerrarSesion() {
     localStorage.clear();
-    window.location.href = '/';
+    this.router.navigate(['/']).then(() => {
+      this.recargaService.cerrarSesion();
+    });
   }
 
   verSolicitudes() {
