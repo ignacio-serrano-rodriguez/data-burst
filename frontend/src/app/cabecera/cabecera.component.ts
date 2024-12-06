@@ -4,6 +4,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { MatIconModule } from '@angular/material/icon';
 import { NotificacionesService } from '../servicios/notificaciones.service'; // Ajustar la ruta del servicio
+import { Router } from '@angular/router';
+import { RecargaService } from '../servicios/recarga.service';
 
 @Component({
   selector: 'app-cabecera',
@@ -23,7 +25,11 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   permisoUsuario: string = "1";
   nuevasSolicitudes: number = 0;
 
-  constructor(private notificacionesService: NotificacionesService) {}
+  constructor(
+    private notificacionesService: NotificacionesService,
+    private router: Router,
+    private recargaService: RecargaService
+  ) {}
 
   ngOnInit() {
     this.nombreUsuario = localStorage.getItem('usuario') || "usuario";
@@ -60,5 +66,11 @@ export class CabeceraComponent implements OnInit, OnDestroy {
 
   verSolicitudes() {
     window.location.href = '/perfil';
+  }
+
+  recargarHome() {
+    this.router.navigate(['/home']).then(() => {
+      this.recargaService.recargarComponentes();
+    });
   }
 }

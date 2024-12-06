@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { TusListasComponent } from "./tus-listas/tus-listas.component";
 import { TusAmigosComponent } from "./tus-amigos/tus-amigos.component";
 import { ListaComponent } from "./lista/lista.component";
 import { CommonModule } from '@angular/common';
+import { RecargaService } from '../../servicios/recarga.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,16 +18,33 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  @ViewChild(TusListasComponent) tusListasComponent!: TusListasComponent;
+  @ViewChild(TusAmigosComponent) tusAmigosComponent!: TusAmigosComponent;
+
+  private recargaSubscription!: Subscription;
+
   usuarioLogueado: string = '(usuario logueado)';
   mostrarListasYAmigos = true;
   mostrarListaComponent = false;
   listaId: number | null = null;
 
+  constructor(private recargaService: RecargaService) {}
+
   ngOnInit() {
     if (localStorage.getItem('refrescar') === 'true') {
       localStorage.setItem('refrescar', 'false');
       // location.reload();
+    }
+
+    this.recargaSubscription = this.recargaService.recargarComponentes$.subscribe(() => {
+      this.recargarComponentes();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.recargaSubscription) {
+      this.recargaSubscription.unsubscribe();
     }
   }
 
@@ -66,5 +85,10 @@ export class HomeComponent implements OnInit {
       mensajeInformativo.classList.remove('mensaje-positivo');
       mensajeInformativo.classList.remove('mensaje-negativo');
     }
+  }
+
+  recargarComponentes() {
+    this.tusListasComponent.ngOnInit();
+    this.tusAmigosComponent.ngOnInit();
   }
 }
