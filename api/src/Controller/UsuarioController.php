@@ -952,4 +952,30 @@ class UsuarioController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/obtener-amigo-por-nombre/{nombreAmigo}", name: "obtener_amigo_por_nombre", methods: ["GET"])]
+    public function obtenerAmigoPorNombre(string $nombreAmigo, EntityManagerInterface $entityManager)
+    {
+        $usuario = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreAmigo]);
+
+        if (!$usuario) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Amigo no encontrado."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return new JsonResponse(
+            [
+                "exito" => true,
+                "amigo" => [
+                    "nombre" => $usuario->getUsuario()
+                ]
+            ],
+            Response::HTTP_OK
+        );
+    }
 }
