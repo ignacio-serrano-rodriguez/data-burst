@@ -72,7 +72,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
 
   recargarHome() {
     this.router.navigate(['/home']).then(() => {
-      this.recargaService.recargarComponentes();
+      this.recargaService.recargarHome();
     });
   }
 
