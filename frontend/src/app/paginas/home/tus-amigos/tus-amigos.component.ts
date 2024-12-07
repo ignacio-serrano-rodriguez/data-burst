@@ -116,7 +116,8 @@ export class TusAmigosComponent implements OnInit {
           this.nombreUsuarioAgregar = '';
           this.homeComponent.mostrarMensajePositivo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
           this.obtenerAmigos(); // Actualizar la lista de amigos
-          this.usuariosNoAgregados = this.usuariosNoAgregados.filter(usuario => usuario.nombre !== nombreUsuario); // Eliminar el usuario de la lista de usuarios no agregados
+          this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
+          this.noSeEncontraronUsuarios = false; // Ocultar el mensaje de no se encontraron usuarios
         }
       },
       error: (error) => {
