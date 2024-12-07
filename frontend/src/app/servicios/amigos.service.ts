@@ -53,10 +53,10 @@ export class AmigosService {
     );
   }
 
-  eliminarAmistadPorNombre(nombreAmigo: string, usuarioID: number): Observable<{ exito: boolean, mensaje: string }> {
+  eliminarAmistad(usuarioID: number, amigoID: number): Observable<{ exito: boolean, mensaje: string }> {
     return this.http.post<{ exito: boolean, mensaje: string }>(
-      `${this.api}/eliminar-amistad-por-nombre`, 
-      { usuarioID, nombreAmigo }
+      `${this.api}/eliminar-amistad`, 
+      { usuarioID, amigoID }
     );
   }
 }

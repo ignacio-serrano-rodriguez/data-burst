@@ -980,33 +980,60 @@ class UsuarioController extends AbstractController
         );
     }
 
-    #[Route("/api/eliminar-amistad-por-nombre", name: "eliminar_amistad_por_nombre", methods: ["POST"])]
-    public function eliminarAmistadPorNombre(Request $request, EntityManagerInterface $entityManager)
+    #[Route("/api/eliminar-amistad", name: "eliminar_amistad", methods: ["POST"])]
+    public function eliminarAmistad(Request $request, EntityManagerInterface $entityManager)
     {
         $data = json_decode($request->getContent(), true);
         $usuarioID = $data['usuarioID'];
-        $nombreAmigo = $data['nombreAmigo'];
+        $amigoID = $data['amigoID'];
 
         $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
-        $amigo = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreAmigo]);
+        $amigo = $entityManager->getRepository(Usuario::class)->find($amigoID);
 
         if (!$usuario || !$amigo) {
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Usuario o amigo no encontrado."
+                    "mensaje" => "Usuario no encontrado."
                 ],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        // Buscar la relación de amistad en la entidad UsuarioAgregaUsuario
         $amistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
             'usuario_1' => $usuario,
             'usuario_2' => $amigo
         ]);
 
         if (!$amistad) {
+            $amistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+                'usuario_1' => $amigo,
+                'usuario_2' => $usuario
+            ]);
+        }
+
+        if ($amistad) {
+            try {
+                $entityManager->remove($amistad);
+                $entityManager->flush();
+
+                return new JsonResponse(
+                    [
+                        "exito" => true,
+                        "mensaje" => "Amistad eliminada exitosamente."
+                    ],
+                    Response::HTTP_OK
+                );
+            } catch (\Throwable $th) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Error al eliminar la amistad."
+                    ],
+                    Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            }
+        } else {
             return new JsonResponse(
                 [
                     "exito" => false,
@@ -1015,17 +1042,5 @@ class UsuarioController extends AbstractController
                 Response::HTTP_NOT_FOUND
             );
         }
-
-        // Eliminar la relación de amistad
-        $entityManager->remove($amistad);
-        $entityManager->flush();
-
-        return new JsonResponse(
-            [
-                "exito" => true,
-                "mensaje" => "Amistad eliminada correctamente."
-            ],
-            Response::HTTP_OK
-        );
     }
 }

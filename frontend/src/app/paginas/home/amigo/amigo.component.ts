@@ -50,7 +50,7 @@ export class AmigoComponent implements OnInit {
 
   eliminarAmistad() {
     const usuarioID = Number(localStorage.getItem('id')) || 0;
-    this.amigosService.eliminarAmistadPorNombre(this.amigoNombre, usuarioID).subscribe({
+    this.amigosService.eliminarAmistad(usuarioID, this.amigoID).subscribe({
       next: (data) => {
         if (data.exito) {
           this.router.navigate(['/home']);
