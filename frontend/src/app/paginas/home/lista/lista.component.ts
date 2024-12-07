@@ -190,7 +190,6 @@ export class ListaComponent implements OnInit {
           if (data.exito) {
             this.lista!.nombre = this.nuevoNombreLista.trim();
             this.editandoNombre = false;
-            this.mostrarMensajePositivo('Nombre de la lista modificado exitosamente.');
           } else {
             this.mostrarMensajeNegativo('Error al modificar el nombre de la lista.');
           }
@@ -245,7 +244,6 @@ export class ListaComponent implements OnInit {
         next: (data) => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
-            this.mostrarMensajePositivo('Visibilidad de la lista cambiada exitosamente.');
           } else {
             this.mostrarMensajeNegativo('Error al cambiar la visibilidad de la lista.');
           }
@@ -309,7 +307,6 @@ export class ListaComponent implements OnInit {
         next: (data) => {
           if (data.exito) {
             console.log('Elemento desasignado exitosamente');
-            this.mostrarMensajePositivo('Elemento desasignado exitosamente.');
             this.obtenerElementosLista(this.lista?.id!); // Actualizar la lista de elementos
           } else {
             console.log('Error al desasignar el elemento');
