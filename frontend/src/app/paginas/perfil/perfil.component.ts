@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DatosComponent } from './datos/datos.component';
 import { SolicitudesComponent } from './solicitudes/solicitudes.component';
 import { RecargaService } from '../../servicios/recarga.service';
+import { NotificacionesService } from '../../servicios/notificaciones.service';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
@@ -22,11 +23,14 @@ export class PerfilComponent implements OnInit, OnDestroy {
 
   private recargaSubscription!: Subscription;
 
-  constructor(private recargaService: RecargaService) {}
+  constructor(
+    private recargaService: RecargaService,
+    private notificacionesService: NotificacionesService
+  ) {}
 
   ngOnInit() {
     this.recargaSubscription = this.recargaService.recargarPerfil$.subscribe(() => {
-      this.recargarHome();
+      this.recargarComponentes();
     });
   }
 
@@ -36,8 +40,9 @@ export class PerfilComponent implements OnInit, OnDestroy {
     }
   }
 
-  recargarHome() {
+  recargarComponentes() {
     this.datosComponent.recargar();
     this.solicitudesComponent.recargar();
+    this.notificacionesService.actualizarNumeroSolicitudes();
   }
 }
