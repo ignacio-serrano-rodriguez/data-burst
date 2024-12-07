@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { Router } from '@angular/router';
 
@@ -11,6 +12,7 @@ import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
 import { Amigo } from '../../../interfaces/Amigo';
 import { HomeComponent } from '../home.component'; // Importar HomeComponent
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { MensajeDialogoComponent } from './mensaje-dialogo/mensaje-dialogo.component'; // Importar el componente de diálogo
 
 @Component({
   selector: 'app-tus-amigos',
@@ -20,7 +22,8 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    FormsModule // Agregar FormsModule a los imports
+    FormsModule,
+    MatDialogModule // Agregar MatDialogModule a los imports
   ],
   templateUrl: './tus-amigos.component.html',
   styleUrls: ['./tus-amigos.component.css']
@@ -30,6 +33,7 @@ export class TusAmigosComponent implements OnInit {
   private amigosService = inject(AmigosService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   private router = inject(Router);
+  private dialog = inject(MatDialog); // Inyectar MatDialog
   amigos: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
   nombreUsuarioAgregar: string = '';
@@ -114,7 +118,7 @@ export class TusAmigosComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.nombreUsuarioAgregar = '';
-          this.homeComponent.mostrarMensajePositivo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
+          this.mostrarMensajeDialogo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
           this.obtenerAmigos(); // Actualizar la lista de amigos
           this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
           this.noSeEncontraronUsuarios = false; // Ocultar el mensaje de no se encontraron usuarios
@@ -122,7 +126,7 @@ export class TusAmigosComponent implements OnInit {
       },
       error: (error) => {
         this.nombreUsuarioAgregar = '';
-        this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
+        this.mostrarMensajeDialogo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
       }
     });
   }
@@ -147,5 +151,11 @@ export class TusAmigosComponent implements OnInit {
 
   limpiarMensaje() {
     this.homeComponent.limpiarMensaje();
+  }
+
+  mostrarMensajeDialogo(mensaje: string) {
+    this.dialog.open(MensajeDialogoComponent, {
+      data: { mensaje }
+    });
   }
 }
