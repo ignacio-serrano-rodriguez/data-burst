@@ -732,16 +732,23 @@ class UsuarioController extends AbstractController
             }
 
             // Subconsulta para obtener los IDs de los usuarios que ya están agregados
-            $subQuery = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
+            $subQueryAgregados = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
                 ->select('IDENTITY(ua.usuario_2)')
                 ->where('ua.usuario_1 = :usuarioID')
                 ->getDQL();
 
-            // Buscar usuarios que no están agregados por el usuario y cuyo nombre coincida con la consulta
+            // Subconsulta para obtener los IDs de los usuarios que ya tienen una invitación pendiente
+            $subQueryInvitaciones = $entityManager->getRepository(Invitacion::class)->createQueryBuilder('i')
+                ->select('IDENTITY(i.invitado)')
+                ->where('i.invitador = :usuarioID')
+                ->getDQL();
+
+            // Buscar usuarios que no están agregados por el usuario, no tienen una invitación pendiente y cuyo nombre coincida con la consulta
             $usuariosNoAgregados = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
                 ->where('u.usuario LIKE :query')
                 ->andWhere('u.id != :usuarioID')
-                ->andWhere('u.id NOT IN (' . $subQuery . ')')
+                ->andWhere('u.id NOT IN (' . $subQueryAgregados . ')')
+                ->andWhere('u.id NOT IN (' . $subQueryInvitaciones . ')')
                 ->setParameter('query', '%' . $query . '%')
                 ->setParameter('usuarioID', $usuarioID)
                 ->getQuery()
