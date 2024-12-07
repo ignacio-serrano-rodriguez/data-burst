@@ -32,13 +32,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private recargaService: RecargaService) {}
 
   ngOnInit() {
-    if (localStorage.getItem('refrescar') === 'true') {
-      localStorage.setItem('refrescar', 'false');
-      // location.reload();
-    }
-
-    this.recargaSubscription = this.recargaService.recargarComponentes$.subscribe(() => {
-      this.recargarComponentes();
+    this.recargaSubscription = this.recargaService.recargarHome$.subscribe(() => {
+      this.recargarHome();
     });
   }
 
@@ -87,7 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  recargarComponentes() {
+  recargarHome() {
     this.tusListasComponent.ngOnInit();
     this.tusAmigosComponent.ngOnInit();
   }

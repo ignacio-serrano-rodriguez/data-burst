@@ -5,20 +5,21 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class RecargaService {
-  private recargarComponentesSubject = new Subject<void>();
+
   private cerrarSesionSubject = new Subject<void>();
+  private recargarHomeSubject = new Subject<void>();
   private recargarEstadisticasSubject = new Subject<void>();
 
-  recargarComponentes$ = this.recargarComponentesSubject.asObservable();
   cerrarSesion$ = this.cerrarSesionSubject.asObservable();
+  recargarHome$ = this.recargarHomeSubject.asObservable();
   recargarEstadisticas$ = this.recargarEstadisticasSubject.asObservable();
-
-  recargarComponentes() {
-    this.recargarComponentesSubject.next();
-  }
 
   cerrarSesion() {
     this.cerrarSesionSubject.next();
+  }
+
+  recargarHome() {
+    this.recargarHomeSubject.next();
   }
 
   recargarEstadisticas() {
