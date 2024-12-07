@@ -30,8 +30,8 @@ export class TusAmigosComponent implements OnInit {
   private amigosService = inject(AmigosService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   private router = inject(Router);
-  amigos: Amigo[] = [];
-  usuariosNoAgregados: Amigo[] = [];
+  amigos: { id: number, nombre: string }[] = [];
+  usuariosNoAgregados: { id: number, nombre: string }[] = [];
   nombreUsuarioAgregar: string = '';
   nombreAmigoBuscar: string = '';
   noSeEncontraronAmigos = false;
@@ -140,8 +140,8 @@ export class TusAmigosComponent implements OnInit {
     });
   }
 
-  verDetalleAmigo(nombreAmigo: string) {
-    this.router.navigate([`/${nombreAmigo}`]);
+  verDetalleAmigo(nombre: string) {
+    this.router.navigate([`/${nombre}`], { state: { amigo: { nombre } } });
   }
 
   limpiarMensaje() {

@@ -16,6 +16,6 @@ export const routes: Routes = [
   { path: "perfil", component: PerfilComponent, canActivate: [authGuard] },
   { path: "estadisticas", component: EstadisticasComponent, canActivate: [authGuard] },
   { path: "administracion", component: AdministracionComponent, canActivate: [authGuard] },
-  { path: ":nombreAmigo", component: AmigoComponent, canActivate: [authGuard] },
+  { path: ":nombreUsuario", component: AmigoComponent, canActivate: [authGuard] },
   { path: "**", component: ErrorComponent, canActivate: [authGuard] }
 ];

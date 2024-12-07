@@ -972,8 +972,58 @@ class UsuarioController extends AbstractController
             [
                 "exito" => true,
                 "amigo" => [
+                    "id" => $usuario->getId(),
                     "nombre" => $usuario->getUsuario()
                 ]
+            ],
+            Response::HTTP_OK
+        );
+    }
+
+    #[Route("/api/eliminar-amistad-por-nombre", name: "eliminar_amistad_por_nombre", methods: ["POST"])]
+    public function eliminarAmistadPorNombre(Request $request, EntityManagerInterface $entityManager)
+    {
+        $data = json_decode($request->getContent(), true);
+        $usuarioID = $data['usuarioID'];
+        $nombreAmigo = $data['nombreAmigo'];
+
+        $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
+        $amigo = $entityManager->getRepository(Usuario::class)->findOneBy(['usuario' => $nombreAmigo]);
+
+        if (!$usuario || !$amigo) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Usuario o amigo no encontrado."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // Buscar la relación de amistad en la entidad UsuarioAgregaUsuario
+        $amistad = $entityManager->getRepository(UsuarioAgregaUsuario::class)->findOneBy([
+            'usuario_1' => $usuario,
+            'usuario_2' => $amigo
+        ]);
+
+        if (!$amistad) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Amistad no encontrada."
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        // Eliminar la relación de amistad
+        $entityManager->remove($amistad);
+        $entityManager->flush();
+
+        return new JsonResponse(
+            [
+                "exito" => true,
+                "mensaje" => "Amistad eliminada correctamente."
             ],
             Response::HTTP_OK
         );
