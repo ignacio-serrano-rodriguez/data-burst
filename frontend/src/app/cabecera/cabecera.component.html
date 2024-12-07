@@ -3,7 +3,7 @@
         <a>
             <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
         </a>
-        <h2 id="textoTitulo" class="textoEnlace">
+        <h2 id="textoTitulo" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/home'}">
             <span class="palabraTitulo">
                 <a>Data</a>
             </span>
@@ -14,11 +14,11 @@
     </span>
 
     <span id="estadisticas" class="enlaces" (click)="recargarEstadisticas()">
-        <a class="textoEnlace">Estadísticas</a>
+        <a class="textoEnlace" [ngClass]="{'bold': rutaActual === '/estadisticas'}">Estadísticas</a>
     </span>
 
     <span *ngIf="mostrarAdministracion" id="administracion" class="enlaces">
-        <a class="textoEnlace" href="http://localhost:4200/administracion">Administración</a>
+        <a class="textoEnlace" href="http://localhost:4200/administracion" [ngClass]="{'bold': rutaActual === '/administracion'}">Administración</a>
     </span>
 
     <div id="usuario-section">
@@ -28,7 +28,7 @@
         </button>
 
         <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
-            <span id="nombreUsuario" class="textoEnlace">{{nombreUsuario}}</span>
+            <span id="nombreUsuario" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/perfil'}">{{nombreUsuario}}</span>
             <img id="avatarUsuario" src="..\..\..\assets\images\avatarPorDefecto.png" alt="Avatar del usuario"/>
         </button>
         <mat-menu #menu="matMenu">

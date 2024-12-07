@@ -16,6 +16,7 @@ import { PieComponent } from './pie/pie.component';
 export class AppComponent implements OnInit {
   title = 'Data Burst';
   isInicioRoute = false;
+  rutaActual: string = '';
 
   constructor(private router: Router, private cdr: ChangeDetectorRef) {}
 
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(
       filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
-      this.isInicioRoute = event.url === '/';
+      this.isInicioRoute = event.urlAfterRedirects === '/';
+      this.rutaActual = event.urlAfterRedirects;
       this.cdr.detectChanges(); // Forzar la detección de cambios
     });
   }

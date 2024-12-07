@@ -126,6 +126,10 @@ button:hover
     cursor: pointer;
 }
 
+.bold {
+    font-weight: 600; /* Semi-bold */
+}
+
 /* Tablet */
 @media (max-width:824px)
 {

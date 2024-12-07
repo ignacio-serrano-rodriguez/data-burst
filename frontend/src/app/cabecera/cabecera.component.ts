@@ -4,8 +4,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { MatIconModule } from '@angular/material/icon';
 import { NotificacionesService } from '../servicios/notificaciones.service'; // Ajustar la ruta del servicio
-import { Router } from '@angular/router';
+import { Router, NavigationEnd, Event } from '@angular/router';
 import { RecargaService } from '../servicios/recarga.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cabecera',
@@ -21,6 +22,7 @@ import { RecargaService } from '../servicios/recarga.service';
 })
 export class CabeceraComponent implements OnInit, OnDestroy {
   @Input() nombreUsuario: string = '';
+  @Input() rutaActual: string = '';
   mostrarAdministracion: boolean = false;
   permisoUsuario: string = "1";
   nuevasSolicitudes: number = 0;
@@ -53,6 +55,12 @@ export class CabeceraComponent implements OnInit, OnDestroy {
       this.notificacionesService.actualizarNumeroSolicitudes();
       this.notificacionesService.iniciarRevisionPeriodica(); // Iniciar revisión periódica
     }
+
+    this.router.events.pipe(
+      filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.rutaActual = event.urlAfterRedirects;
+    });
   }
 
   ngOnDestroy() {
