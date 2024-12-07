@@ -66,7 +66,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
     });
   }
 
-  verSolicitudes() {
+  recargarPerfil() {
     window.location.href = '/perfil';
   }
 

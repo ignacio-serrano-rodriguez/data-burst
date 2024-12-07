@@ -22,7 +22,7 @@
     </span>
 
     <div id="usuario-section">
-        <button mat-icon-button (click)="verSolicitudes()">
+        <button mat-icon-button (click)="recargarPerfil()">
             <mat-icon>notifications</mat-icon>
             <span *ngIf="nuevasSolicitudes > 0" class="badge">{{ nuevasSolicitudes }}</span>
         </button>
@@ -32,8 +32,8 @@
             <img id="avatarUsuario" src="..\..\..\assets\images\avatarPorDefecto.png" alt="Avatar del usuario"/>
         </button>
         <mat-menu #menu="matMenu">
-            <button id="verPerfil" class="botonMenuUsuario">
-                <a class="textoEnlace" href="http://localhost:4200/perfil">Ver perfil</a>
+            <button id="verPerfil" class="botonMenuUsuario" (click)="recargarPerfil()">
+                <a class="textoEnlace">Ver perfil</a>
             </button>
             <br/>
             <button class="botonMenuUsuario" (click)="cerrarSesion()">
