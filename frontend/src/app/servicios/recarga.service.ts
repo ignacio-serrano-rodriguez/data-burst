@@ -9,10 +9,12 @@ export class RecargaService {
   private cerrarSesionSubject = new Subject<void>();
   private recargarHomeSubject = new Subject<void>();
   private recargarEstadisticasSubject = new Subject<void>();
+  private recargarPerfilSubject = new Subject<void>();
 
   cerrarSesion$ = this.cerrarSesionSubject.asObservable();
   recargarHome$ = this.recargarHomeSubject.asObservable();
   recargarEstadisticas$ = this.recargarEstadisticasSubject.asObservable();
+  recargarPerfil$ = this.recargarPerfilSubject.asObservable();
 
   cerrarSesion() {
     this.cerrarSesionSubject.next();
@@ -24,5 +26,9 @@ export class RecargaService {
 
   recargarEstadisticas() {
     this.recargarEstadisticasSubject.next();
+  }
+
+  recargarPerfil() {
+    this.recargarPerfilSubject.next();
   }
 }

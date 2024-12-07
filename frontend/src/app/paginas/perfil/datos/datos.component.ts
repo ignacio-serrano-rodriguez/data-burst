@@ -10,12 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { DatosService } from '../../../servicios/datos.service';
 import { ModificarDatosUsuario } from '../../../interfaces/ModificarDatosUsuario';
 
-@Component
-({
+@Component({
   selector: 'app-datos',
   standalone: true,
-  imports: 
-  [
+  imports: [
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -24,12 +22,9 @@ import { ModificarDatosUsuario } from '../../../interfaces/ModificarDatosUsuario
     MatIconModule
   ],
   templateUrl: './datos.component.html',
-  styleUrl: './datos.component.css'
+  styleUrls: ['./datos.component.css']
 })
-
-export class DatosComponent
-{
-  
+export class DatosComponent {
   hideNuevaContrasenia = true;
   hideRepetirNuevaContrasenia = true;
   hideContraseniaActual = true;
@@ -37,22 +32,18 @@ export class DatosComponent
   private DatosService = inject(DatosService);
   public formBuild = inject(FormBuilder);
 
-  public formRegistro: FormGroup = this.formBuild.group
-  ({
+  public formRegistro: FormGroup = this.formBuild.group({
     mail: [localStorage.getItem('mail') || ''],
     usuario: [localStorage.getItem('usuario') || ''],
     nuevaContrasenia: [''],
     nuevaContraseniaRepetida: [''],
     contraseniaActual: ['', Validators.required]
-  })
+  });
 
-  modificarDatosUsuario() 
-  {
-
+  modificarDatosUsuario() {
     if (this.formRegistro.invalid) return;
 
-    const objeto: ModificarDatosUsuario
-    ={
+    const objeto: ModificarDatosUsuario = {
       id: localStorage.getItem('id') || '',
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
@@ -68,32 +59,27 @@ export class DatosComponent
       fecha_nacimiento: ''
     };
 
-    if (objeto.nueva_contrasenia != objeto.nueva_contrasenia_repetida) 
-    {
+    if (objeto.nueva_contrasenia != objeto.nueva_contrasenia_repetida) {
       let mensajeInformativo = document.getElementById("mensajeInformativo");
       mensajeInformativo ? mensajeInformativo.innerText = "Las contraseñas no coinciden." : null;
       return;
     }
 
-    this.DatosService.modificarDatosUsuario(objeto).subscribe
-    ({
-
-      next: (data)=> 
-      {
-        if (data.exito == true) 
-        {
+    this.DatosService.modificarDatosUsuario(objeto).subscribe({
+      next: (data) => {
+        if (data.exito == true) {
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
           localStorage.clear();
           window.location.reload();
         }
       },
-
-      error: (error)=> 
-      {
+      error: (error) => {
         document.getElementById("mensajeInformativo")!.innerText = error.error.mensaje;
       }
+    });
+  }
 
-    })
-
+  recargar() {
+    // Lógica para recargar el componente de datos
   }
 }

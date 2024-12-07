@@ -67,7 +67,9 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   }
 
   recargarPerfil() {
-    window.location.href = '/perfil';
+    this.router.navigate(['/perfil']).then(() => {
+      this.recargaService.recargarPerfil();
+    });
   }
 
   recargarHome() {

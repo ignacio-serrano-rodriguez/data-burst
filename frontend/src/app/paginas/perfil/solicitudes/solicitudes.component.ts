@@ -69,4 +69,8 @@ export class SolicitudesComponent implements OnInit {
       this.notificacionesService.actualizarNumeroSolicitudes(); // Actualizar el número de solicitudes en la cabecera
     });
   }
+
+  recargar() {
+    this.obtenerSolicitudes();
+  }
 }
