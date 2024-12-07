@@ -130,6 +130,12 @@ button:hover
     font-weight: 600; /* Semi-bold */
 }
 
+/* Efecto de transición para el ícono de notificaciones */
+button[mat-icon-button]:hover mat-icon {
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
+}
+
 /* Tablet */
 @media (max-width:824px)
 {
