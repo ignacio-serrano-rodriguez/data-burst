@@ -3,57 +3,57 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field'; // Importar MatFormFieldModule
-import { MatInputModule } from '@angular/material/input'; // Importar MatInputModule
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { ListasService } from '../../../servicios/listas.service';
-import { ElementosService } from '../../../servicios/elementos.service'; // Importar ElementosService
+import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
 import { Lista } from '../../../interfaces/Lista';
 import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from '../agregador/agregador.component';
-import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component'; // Importar el componente de confirmación
-import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component'; // Importar el componente de diálogo de comentarios
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
+import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
+import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-lista',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatIconModule, 
-    MatButtonModule, 
-    AgregadorComponent, 
-    FormsModule, 
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    AgregadorComponent,
+    FormsModule,
     MatDialogModule,
-    MatFormFieldModule, // Agregar MatFormFieldModule a los imports
-    MatInputModule, // Agregar MatInputModule a los imports
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] // Agregar CUSTOM_ELEMENTS_SCHEMA
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ListaComponent implements OnInit {
 
   private listasService = inject(ListasService);
-  private elementosService = inject(ElementosService); // Inyectar ElementosService
+  private elementosService = inject(ElementosService);
   private amigosService = inject(AmigosService);
   private dialog = inject(MatDialog);
   @Input() listaId: number | null = null;
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   lista: Lista | undefined;
   elementos: Elemento[] = [];
-  elementosLikeDislike: { [key: number]: boolean | null } = {}; // Objeto auxiliar para mantener el estado de like/dislike
+  elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
-  colaboradores: any[] = []; // Nueva variable para almacenar los colaboradores
+  colaboradores: any[] = [];
   mostrarAgregadorComponent = false;
-  mostrarColaborarComponent = false; // Nueva variable para mostrar/ocultar la sección de colaborar
+  mostrarColaborarComponent = false;
   editandoNombre = false;
   nuevoNombreLista = '';
   nombreAmigoBuscar: string = '';
   amigosEncontrados: any[] = [];
   noSeEncontraronAmigos = false;
-  usuarioActual: number = Number(localStorage.getItem('id')) || 0; // Definir la propiedad usuarioActual
+  usuarioActual: number = Number(localStorage.getItem('id')) || 0;
 
   private searchSubjectBuscar = new Subject<string>();
 
@@ -64,8 +64,8 @@ export class ListaComponent implements OnInit {
     }
 
     this.searchSubjectBuscar.pipe(
-      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
-      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+      debounceTime(300),
+      distinctUntilChanged()
     ).subscribe(query => {
       if (query.length >= 3) {
         const usuarioID = Number(localStorage.getItem('id')) || 0;
@@ -103,7 +103,7 @@ export class ListaComponent implements OnInit {
       next: (data) => {
         if (data.exito) {
           this.lista = data.lista;
-          this.nuevoNombreLista = this.lista.nombre; // Inicializar el nuevo nombre con el nombre actual
+          this.nuevoNombreLista = this.lista.nombre;
         } else {
           console.error('Error al obtener la lista:', data.mensaje);
         }
@@ -137,11 +137,11 @@ export class ListaComponent implements OnInit {
   }
 
   obtenerColaboradores(listaId: number) {
-    const usuarioID = Number(localStorage.getItem('id')); // Obtener el ID del usuario desde el almacenamiento local
+    const usuarioID = Number(localStorage.getItem('id'));
     this.listasService.obtenerColaboradores(listaId).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.colaboradores = data.colaboradores.filter(colaborador => colaborador.id !== usuarioID); // Filtrar para excluir al usuario actual
+          this.colaboradores = data.colaboradores.filter(colaborador => colaborador.id !== usuarioID);
         }
       },
       error: (error) => {
@@ -168,7 +168,7 @@ export class ListaComponent implements OnInit {
   mostrarColaborar() {
     this.mostrarColaborarComponent = true;
     if (this.listaId) {
-      this.obtenerColaboradores(this.listaId); // Obtener los colaboradores cuando se muestra la sección de colaborar
+      this.obtenerColaboradores(this.listaId);
     }
   }
 
@@ -216,19 +216,15 @@ export class ListaComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          const usuarioID = Number(localStorage.getItem('id')); // Obtener el ID del usuario desde el almacenamiento local
+          const usuarioID = Number(localStorage.getItem('id'));
           this.listasService.desasignarLista(this.lista!.id, usuarioID).subscribe({
             next: (data) => {
               if (data.exito) {
-                this.volverAListasYAmigos.emit(); // Volver a la vista de listas y amigos
-                this.mostrarMensajePositivo('Lista eliminada exitosamente.');
-              } else {
-                this.mostrarMensajeNegativo('Error al eliminar la lista.');
+                this.volverAListasYAmigos.emit();
               }
             },
             error: (error) => {
               console.error('Error al desasignar la lista:', error);
-              this.mostrarMensajeNegativo('Error al eliminar la lista.');
             }
           });
         }
@@ -257,21 +253,21 @@ export class ListaComponent implements OnInit {
   }
 
   invitarAmigo(amigoId: number, amigoNombre: string) {
-    const usuarioID = Number(localStorage.getItem('id')); // Obtener el ID del usuario desde el almacenamiento local
+    const usuarioID = Number(localStorage.getItem('id'));
     if (this.lista) {
       this.listasService.invitarAmigo(this.lista.id, amigoId, usuarioID).subscribe({
         next: (data) => {
           if (data.exito) {
             console.log('Invitación enviada exitosamente');
-            this.mostrarMensajePositivo(`Invitación enviada. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
+            this.mostrarMensajePositivo(`Invitación enviada. (${amigoNombre})`);
           } else {
             console.log('Error al enviar la invitación:', data.mensaje);
-            this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
+            this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`);
           }
         },
         error: (error) => {
           console.error('Error al enviar la invitación:', error);
-          this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`); // Mostrar el mensaje informativo con el nombre del usuario
+          this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`);
         }
       });
     }
@@ -285,7 +281,7 @@ export class ListaComponent implements OnInit {
       mensajeInformativo.classList.remove('mensaje-negativo');
       setTimeout(() => {
         mensajeInformativo.textContent = '';
-      }, 3000); // Limpiar el mensaje después de 3 segundos
+      }, 3000);
     }
   }
 
@@ -297,7 +293,7 @@ export class ListaComponent implements OnInit {
       mensajeInformativo.classList.remove('mensaje-positivo');
       setTimeout(() => {
         mensajeInformativo.textContent = '';
-      }, 3000); // Limpiar el mensaje después de 3 segundos
+      }, 3000);
     }
   }
 
@@ -307,7 +303,7 @@ export class ListaComponent implements OnInit {
         next: (data) => {
           if (data.exito) {
             console.log('Elemento desasignado exitosamente');
-            this.obtenerElementosLista(this.lista?.id!); // Actualizar la lista de elementos
+            this.obtenerElementosLista(this.lista?.id!);
           } else {
             console.log('Error al desasignar el elemento');
             this.mostrarMensajeNegativo('Error al desasignar el elemento.');
@@ -324,18 +320,18 @@ export class ListaComponent implements OnInit {
   toggleLikeDislike(elemento: Elemento) {
     let nuevoEstado: boolean | null;
     if (elemento.positivo === null) {
-      nuevoEstado = true; // Si es null, cambiar a like
+      nuevoEstado = true;
     } else if (elemento.positivo === true) {
-      nuevoEstado = false; // Si es like, cambiar a dislike
+      nuevoEstado = false;
     } else {
-      nuevoEstado = null; // Si es dislike, cambiar a null
+      nuevoEstado = null;
     }
 
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, nuevoEstado).subscribe({
         next: (data) => {
           if (data.exito) {
-            elemento.positivo = nuevoEstado; // Actualizar el valor de positivo en el elemento
+            elemento.positivo = nuevoEstado;
           } else {
             console.log('Error al cambiar el estado de like/dislike');
           }
@@ -361,7 +357,7 @@ export class ListaComponent implements OnInit {
             next: (data) => {
               if (data.exito) {
                 console.log('Comentario actualizado exitosamente');
-                elemento.comentario = result; // Actualizar el comentario en el elemento
+                elemento.comentario = result;
               } else {
                 console.log('Error al actualizar el comentario');
               }
