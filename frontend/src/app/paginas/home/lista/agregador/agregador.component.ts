@@ -191,29 +191,6 @@ export class AgregadorComponent {
     });
   }
 
-  quitarElemento(elementoId: number) {
-    if (this.listaId === undefined) {
-      console.error('Lista no especificada');
-      return;
-    }
-
-    this.elementosService.quitarElemento(this.listaId, elementoId).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          console.log('Elemento quitado de la lista exitosamente');
-          this.elementosAsignados.delete(elementoId); // Quitar el elemento de la lista de elementos asignados
-        }
-      },
-      error: (error) => {
-        console.error('Error al quitar el elemento de la lista:', error);
-      }
-    });
-  }
-
-  limpiarMensaje() {
-    // No es necesario hacer nada aquí, ya que el valor del input se maneja con ngModel
-  }
-
   esNombreElementoValido(): boolean {
     return this.nombreElemento.trim().length > 0;
   }
