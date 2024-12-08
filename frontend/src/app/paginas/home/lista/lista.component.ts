@@ -10,7 +10,7 @@ import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
 import { Lista } from '../../../interfaces/Lista';
 import { Elemento } from '../../../interfaces/Elemento';
-import { AgregadorComponent } from '../agregador/agregador.component';
+import { AgregadorComponent } from './agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
 import { MensajeDialogoComponent } from './mensaje-dialog/mensaje-dialogo.component';
