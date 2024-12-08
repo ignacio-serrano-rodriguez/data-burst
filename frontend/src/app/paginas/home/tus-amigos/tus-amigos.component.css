@@ -1,0 +1,4 @@
+/* Cambiar el cursor a pointer para los elementos de los amigos agregados */
+ul li a {
+    cursor: pointer;
+}

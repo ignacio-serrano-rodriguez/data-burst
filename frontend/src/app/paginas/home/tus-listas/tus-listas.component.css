@@ -1,0 +1,4 @@
+/* Cambiar el cursor a pointer para los elementos de las listas asignadas */
+ul li a {
+    cursor: pointer;
+}
