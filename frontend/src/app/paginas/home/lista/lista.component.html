@@ -31,13 +31,13 @@
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
-      <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" (click)="likeElemento(elemento)">
+      <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" (click)="elemento.positivo !== true && likeElemento(elemento)">
         <mat-icon>thumb_up</mat-icon>
       </button>
-      <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" (click)="dislikeElemento(elemento)">
+      <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" (click)="elemento.positivo !== false && dislikeElemento(elemento)">
         <mat-icon>thumb_down</mat-icon>
       </button>
-      <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" (click)="resetLikeDislikeElemento(elemento)">
+      <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" (click)="elemento.positivo !== null && resetLikeDislikeElemento(elemento)">
         <mat-icon>help_outline</mat-icon>
       </button>
       <button mat-icon-button [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" (click)="comentarElemento(elemento)">
