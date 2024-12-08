@@ -17,6 +17,7 @@ span, a, div, button
 .enlaces
 {
     min-width: 9em;
+    cursor: pointer; /* Cambiar el cursor a pointer */
 }
 
 #cabecera
