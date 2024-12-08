@@ -731,26 +731,45 @@ class UsuarioController extends AbstractController
                 );
             }
 
-            // Subconsulta para obtener los IDs de los usuarios que ya están agregados
-            $subQueryAgregados = $entityManager->getRepository(UsuarioAgregaUsuario::class)->createQueryBuilder('ua')
-                ->select('IDENTITY(ua.usuario_2)')
-                ->where('ua.usuario_1 = :usuarioID')
-                ->getDQL();
+            // Obtener los IDs de los usuarios que ya están agregados
+            $usuariosAgregados = $entityManager->createQueryBuilder()
+                ->select('IDENTITY(ua.usuario_1) as usuario_1, IDENTITY(ua.usuario_2) as usuario_2')
+                ->from(UsuarioAgregaUsuario::class, 'ua')
+                ->where('ua.usuario_1 = :usuarioID OR ua.usuario_2 = :usuarioID')
+                ->setParameter('usuarioID', $usuarioID)
+                ->getQuery()
+                ->getResult();
 
-            // Subconsulta para obtener los IDs de los usuarios que ya tienen una invitación pendiente
-            $subQueryInvitaciones = $entityManager->getRepository(Invitacion::class)->createQueryBuilder('i')
-                ->select('IDENTITY(i.invitado)')
+            $idsUsuariosAgregados = [];
+            foreach ($usuariosAgregados as $usuarioAgregado) {
+                $idsUsuariosAgregados[] = $usuarioAgregado['usuario_1'];
+                $idsUsuariosAgregados[] = $usuarioAgregado['usuario_2'];
+            }
+
+            // Obtener los IDs de los usuarios que ya tienen una invitación pendiente
+            $usuariosInvitados = $entityManager->createQueryBuilder()
+                ->select('IDENTITY(i.invitado) as invitado')
+                ->from(Invitacion::class, 'i')
                 ->where('i.invitador = :usuarioID')
-                ->getDQL();
+                ->orWhere('i.invitado = :usuarioID')
+                ->setParameter('usuarioID', $usuarioID)
+                ->getQuery()
+                ->getResult();
 
-            // Buscar usuarios que no están agregados por el usuario, no tienen una invitación pendiente y cuyo nombre coincida con la consulta
-            $usuariosNoAgregados = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
+            foreach ($usuariosInvitados as $usuarioInvitado) {
+                $idsUsuariosAgregados[] = $usuarioInvitado['invitado'];
+            }
+
+            // Buscar usuarios que no están agregados por el usuario y cuyo nombre coincida con la consulta
+            $usuariosNoAgregados = $entityManager->createQueryBuilder()
+                ->select('u')
+                ->from(Usuario::class, 'u')
                 ->where('u.usuario LIKE :query')
                 ->andWhere('u.id != :usuarioID')
-                ->andWhere('u.id NOT IN (' . $subQueryAgregados . ')')
-                ->andWhere('u.id NOT IN (' . $subQueryInvitaciones . ')')
+                ->andWhere('u.id NOT IN (:idsUsuariosAgregados)')
                 ->setParameter('query', '%' . $query . '%')
                 ->setParameter('usuarioID', $usuarioID)
+                ->setParameter('idsUsuariosAgregados', $idsUsuariosAgregados)
                 ->getQuery()
                 ->getResult();
 
