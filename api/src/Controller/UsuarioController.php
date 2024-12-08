@@ -871,17 +871,24 @@ class UsuarioController extends AbstractController
             }
 
             // Subconsulta para obtener los IDs de los usuarios que ya están manipulando la lista
-            $subQuery = $entityManager->getRepository(UsuarioManipulaLista::class)->createQueryBuilder('uml')
+            $subQueryManipulanLista = $entityManager->getRepository(UsuarioManipulaLista::class)->createQueryBuilder('uml')
                 ->select('IDENTITY(uml.usuario)')
                 ->where('uml.lista = :listaID')
                 ->getDQL();
 
-            // Buscar amigos que no están manipulando la lista y cuyo nombre coincida con la consulta
+            // Subconsulta para obtener los IDs de los usuarios que ya tienen una invitación pendiente para la lista
+            $subQueryInvitaciones = $entityManager->getRepository(Invitacion::class)->createQueryBuilder('i')
+                ->select('IDENTITY(i.invitado)')
+                ->where('i.lista = :listaID')
+                ->getDQL();
+
+            // Buscar amigos que no están manipulando la lista, no tienen una invitación pendiente y cuyo nombre coincida con la consulta
             $amigosNoManipulanLista = $entityManager->getRepository(Usuario::class)->createQueryBuilder('u')
                 ->innerJoin('u.usuarioAgregaUsuarios', 'ua')
                 ->where('ua.usuario_1 = :usuarioID OR ua.usuario_2 = :usuarioID')
                 ->andWhere('u.usuario LIKE :query')
-                ->andWhere('u.id NOT IN (' . $subQuery . ')')
+                ->andWhere('u.id NOT IN (' . $subQueryManipulanLista . ')')
+                ->andWhere('u.id NOT IN (' . $subQueryInvitaciones . ')')
                 ->setParameter('query', '%' . $query . '%')
                 ->setParameter('usuarioID', $usuarioID)
                 ->setParameter('listaID', $listaID)
