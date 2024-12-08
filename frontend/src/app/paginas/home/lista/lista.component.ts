@@ -47,7 +47,6 @@ export class ListaComponent implements OnInit {
   elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
   colaboradores: any[] = [];
-  mostrarAgregadorComponent = false;
   mostrarColaborarComponent = false;
   editandoNombre = false;
   nuevoNombreLista = '';
@@ -153,17 +152,6 @@ export class ListaComponent implements OnInit {
 
   volver() {
     this.volverAListasYAmigos.emit();
-  }
-
-  mostrarAgregador() {
-    this.mostrarAgregadorComponent = true;
-  }
-
-  ocultarAgregador() {
-    this.mostrarAgregadorComponent = false;
-    if (this.listaId) {
-      this.obtenerElementosLista(this.listaId);
-    }
   }
 
   toggleColaborar() {

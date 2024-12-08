@@ -1,31 +1,72 @@
-<div *ngIf="!mostrarAgregadorComponent">
+<div>
   <button mat-icon-button (click)="volver()">
     <mat-icon>arrow_back</mat-icon>
   </button>
 
-  <h2 *ngIf="!editandoNombre" (click)="editarNombre()">{{ lista?.nombre }} <button mat-icon-button (click)="editarNombre()"><mat-icon>edit</mat-icon></button></h2>
-  <div *ngIf="editandoNombre">
-    <mat-form-field>
-      <mat-label>Nombre de la Lista</mat-label>
-      <input matInput [(ngModel)]="nuevoNombreLista">
-    </mat-form-field>
-    <button mat-button (click)="guardarNombre()">Guardar</button>
-    <button mat-button (click)="cancelarEdicion()">Cancelar</button>
+  <div class="lista-header">
+    <h2 *ngIf="!editandoNombre" (click)="editarNombre()">
+      {{ lista?.nombre }}
+    </h2>
+    <div *ngIf="editandoNombre">
+      <mat-form-field>
+        <mat-label>Nombre de la Lista</mat-label>
+        <input matInput [(ngModel)]="nuevoNombreLista">
+      </mat-form-field>
+      <button mat-button (click)="guardarNombre()">Guardar</button>
+      <button mat-button (click)="cancelarEdicion()">Cancelar</button>
+    </div>
+    <div class="lista-actions">
+      <button mat-icon-button (click)="editarNombre()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="cambiarVisibilidad()">
+        <mat-icon>{{ lista?.publica ? 'public' : 'lock' }}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleColaborar()">
+        <mat-icon>group</mat-icon>
+      </button>
+      <button mat-icon-button (click)="eliminarLista()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
 
-  <div *ngIf="lista">
-    <button mat-icon-button (click)="mostrarAgregador()">
-      <mat-icon>add</mat-icon>
-    </button>
-    <button mat-icon-button (click)="cambiarVisibilidad()">
-      <mat-icon>{{ lista.publica ? 'public' : 'lock' }}</mat-icon>
-    </button>
-    <button mat-icon-button (click)="toggleColaborar()">
-      <mat-icon>group</mat-icon>
-    </button>
-    <button mat-icon-button (click)="eliminarLista()">
-      <mat-icon>delete</mat-icon>
-    </button>
+  <div *ngIf="mostrarColaborarComponent">
+    <h3>Colaboradores</h3>
+    <ul *ngIf="colaboradores.length > 0">
+      <li *ngFor="let colaborador of colaboradores">
+        {{ colaborador.nombre }}
+      </li>
+    </ul>
+
+    <mat-form-field class="elementoFormulario">
+      <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
+      <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
+    </mat-form-field>
+
+    <ul *ngIf="amigosEncontrados.length > 0">
+      <li *ngFor="let amigo of amigosEncontrados">
+        {{ amigo.nombre }}
+        <button mat-button color="primary" (click)="invitarAmigo(amigo.id, amigo.nombre)">
+          Invitar
+        </button>
+      </li>
+    </ul>
+
+    <div *ngIf="noSeEncontraronAmigos">
+      <p>No se encontraron amigos.</p>
+    </div>
+
+    <div *ngIf="colaboradores.length === 0">
+      <p>No hay colaboradores en esta lista.</p>
+    </div>
+  </div>
+
+  <div>
+    <app-agregador 
+      [nombreLista]="lista?.nombre" 
+      [listaId]="lista?.id">
+    </app-agregador>
   </div>
 
   <ul>
@@ -61,45 +102,4 @@
       </ul>
     </li>
   </ul>
-
-  <div *ngIf="mostrarColaborarComponent">
-
-    <h3>Colaboradores</h3>
-    <ul *ngIf="colaboradores.length > 0">
-      <li *ngFor="let colaborador of colaboradores">
-        {{ colaborador.nombre }}
-      </li>
-    </ul>
-
-    <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
-      <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
-    </mat-form-field>
-
-    <ul *ngIf="amigosEncontrados.length > 0">
-      <li *ngFor="let amigo of amigosEncontrados">
-        {{ amigo.nombre }}
-        <button mat-button color="primary" (click)="invitarAmigo(amigo.id, amigo.nombre)">
-          Invitar
-        </button>
-      </li>
-    </ul>
-
-    <div *ngIf="noSeEncontraronAmigos">
-      <p>No se encontraron amigos.</p>
-    </div>
-
-    <div *ngIf="colaboradores.length === 0">
-      <p>No hay colaboradores en esta lista.</p>
-    </div>
-
-  </div>
-</div>
-
-<div *ngIf="mostrarAgregadorComponent">
-  <app-agregador 
-    [nombreLista]="lista?.nombre" 
-    [listaId]="lista?.id" 
-    (volverALista)="ocultarAgregador()">
-  </app-agregador>
 </div>

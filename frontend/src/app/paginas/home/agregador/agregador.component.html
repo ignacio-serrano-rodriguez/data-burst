@@ -1,12 +1,5 @@
-<button mat-icon-button (click)="volver()">
-  <mat-icon>arrow_back</mat-icon>
-</button>
-
-<h2>Agregador de Elementos</h2>
-<p>Lista: {{ nombreLista }}</p>
-
 <mat-form-field class="example-full-width">
-  <mat-label>Buscar Elementos</mat-label>
+  <mat-label>Agregar elemento</mat-label>
   <input matInput [(ngModel)]="buscarElemento" (input)="onBuscarElementoChange()">
 </mat-form-field>
 

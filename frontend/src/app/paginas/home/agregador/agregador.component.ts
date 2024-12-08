@@ -27,7 +27,6 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 export class AgregadorComponent {
   @Input() nombreLista: string | undefined;
   @Input() listaId: number | undefined;
-  @Output() volverALista = new EventEmitter<void>();
 
   private elementosService = inject(ElementosService);
   private listasService = inject(ListasService);
@@ -202,10 +201,6 @@ export class AgregadorComponent {
         console.error('Error al quitar el elemento de la lista:', error);
       }
     });
-  }
-
-  volver() {
-    this.volverALista.emit();
   }
 
   limpiarMensaje() {

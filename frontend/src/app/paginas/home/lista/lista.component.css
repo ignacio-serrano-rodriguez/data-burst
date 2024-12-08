@@ -19,3 +19,8 @@
 .comment-button {
   color: #9900b4;
 }
+
+/* Estilo para el nombre de la lista con efecto pointer */
+.lista-header h2 {
+  cursor: pointer;
+}
