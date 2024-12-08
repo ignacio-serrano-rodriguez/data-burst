@@ -1,13 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { AmigosService } from '../../../servicios/amigos.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-amigo',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
   templateUrl: './amigo.component.html',
   styleUrls: ['./amigo.component.css']
 })
@@ -62,5 +63,9 @@ export class AmigoComponent implements OnInit {
         console.error('Error al eliminar la amistad:', error);
       }
     });
+  }
+
+  volver() {
+    this.router.navigate(['/home']);
   }
 }

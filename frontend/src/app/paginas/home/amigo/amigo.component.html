@@ -1,4 +1,8 @@
 <div>
+  <button mat-icon-button (click)="volver()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
   <h2>Amigo: {{ amigoNombre }}</h2>
   <p>ID: {{ amigoID }}</p>
   <button mat-button (click)="eliminarAmistad()">Eliminar Amistad</button>
