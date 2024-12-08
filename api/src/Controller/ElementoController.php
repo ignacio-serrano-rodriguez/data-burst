@@ -20,6 +20,7 @@ class ElementoController extends AbstractController
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $query = $datosRecibidos['query'] ?? '';
+        $listaId = $datosRecibidos['lista_id'] ?? null;
 
         if (empty($query)) {
             return new JsonResponse(
@@ -32,11 +33,24 @@ class ElementoController extends AbstractController
             );
         }
 
-        $elementos = $entityManager->getRepository(Elemento::class)->createQueryBuilder('e')
-            ->where('e.nombre LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
-            ->getQuery()
-            ->getResult();
+        $qb = $entityManager->getRepository(Elemento::class)->createQueryBuilder('e');
+
+        if ($listaId) {
+            $qb->where('e.nombre LIKE :query')
+                ->andWhere($qb->expr()->notIn('e.id', 
+                    $entityManager->getRepository(ListaContieneElemento::class)->createQueryBuilder('lce')
+                        ->select('IDENTITY(lce.elemento)')
+                        ->where('lce.lista = :listaId')
+                        ->getDQL()
+                ))
+                ->setParameter('query', '%' . $query . '%')
+                ->setParameter('listaId', $listaId);
+        } else {
+            $qb->where('e.nombre LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
+
+        $elementos = $qb->getQuery()->getResult();
 
         $dataElementos = [];
         foreach ($elementos as $elemento) {

@@ -22,7 +22,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule // Agregar FormsModule a los imports
   ],
   templateUrl: './agregador.component.html',
-  styleUrl: './agregador.component.css'
+  styleUrls: ['./agregador.component.css']
 })
 export class AgregadorComponent {
   @Input() nombreLista: string | undefined;
@@ -80,7 +80,7 @@ export class AgregadorComponent {
   buscarElementos(query: string) {
     this.consultasFinalizadas = false; // Reiniciar el estado de las consultas
 
-    this.elementosService.buscarElementos(query).subscribe({
+    this.elementosService.buscarElementos(query, this.listaId).subscribe({
       next: (data) => {
         if (data.exito) {
           this.elementos = data.elementos.filter(elemento => elemento.nombre.toLowerCase().includes(query.toLowerCase()));

@@ -12,10 +12,10 @@ export class ElementosService {
   private http = inject(HttpClient);
   private api: string = configuracion_app.api;
 
-  buscarElementos(query: string): Observable<RespuestaBuscarElementos> {
+  buscarElementos(query: string, listaId?: number): Observable<RespuestaBuscarElementos> {
     return this.http.post<RespuestaBuscarElementos>(
       `${this.api}/buscar-elementos`, 
-      { query }
+      { query, lista_id: listaId }
     );
   }
 
