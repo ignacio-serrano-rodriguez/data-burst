@@ -24,26 +24,3 @@
     Mostrar formulario de creación
   </button>
 </div>
-
-<div *ngIf="mostrarFormularioCrear">
-  <h3>Crear Nuevo Elemento</h3>
-  <mat-form-field class="example-full-width">
-    <mat-label>Nombre</mat-label>
-    <input matInput [(ngModel)]="nombreElemento">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <mat-label>Fecha de Aparición</mat-label>
-    <input matInput type="date" [(ngModel)]="fechaAparicion">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <mat-label>Información Extra</mat-label>
-    <input matInput [(ngModel)]="informacionExtra">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <mat-label>Descripción</mat-label>
-    <textarea matInput [(ngModel)]="descripcion"></textarea>
-  </mat-form-field>
-  <button mat-flat-button color="primary" (click)="crearElemento()">
-    Crear
-  </button>
-</div>

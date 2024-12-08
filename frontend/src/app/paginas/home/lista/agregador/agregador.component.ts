@@ -4,11 +4,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { FormsModule } from '@angular/forms';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ElementosService } from '../../../../servicios/elementos.service';
 import { ListasService } from '../../../../servicios/listas.service';
 import { Elemento } from '../../../../interfaces/Elemento';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elemento-dialog.component.ts';
 
 @Component({
   selector: 'app-agregador',
@@ -19,7 +21,9 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule // Agregar FormsModule a los imports
+    FormsModule,
+    MatDialogModule,
+    CrearElementoDialogComponent
   ],
   templateUrl: './agregador.component.html',
   styleUrls: ['./agregador.component.css']
@@ -31,15 +35,11 @@ export class AgregadorComponent {
 
   private elementosService = inject(ElementosService);
   private listasService = inject(ListasService);
+  private dialog = inject(MatDialog);
 
-  buscarElemento: string = ''; // Variable para el input "Buscar Elementos"
-  nombreElemento: string = ''; // Variable para el input "Nombre"
-  fechaAparicion: string = '';
-  informacionExtra: string = 'info';
-  descripcion: string = 'más info';
+  buscarElemento: string = '';
   elementos: Elemento[] = [];
   elementosAsignados: Set<number> = new Set();
-  mostrarFormularioCrear = false;
   mostrarBotonCrear = false;
   noSeEncontraronElementos = false;
   consultasFinalizadas = false;
@@ -50,8 +50,8 @@ export class AgregadorComponent {
     this.obtenerElementosAsignados();
 
     this.searchSubject.pipe(
-      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
-      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+      debounceTime(300),
+      distinctUntilChanged()
     ).subscribe(query => {
       if (query.length >= 3) {
         this.buscarElementos(query);
@@ -79,25 +79,23 @@ export class AgregadorComponent {
   }
 
   buscarElementos(query: string) {
-    this.consultasFinalizadas = false; // Reiniciar el estado de las consultas
+    this.consultasFinalizadas = false;
 
     this.elementosService.buscarElementos(query, this.listaId).subscribe({
       next: (data) => {
         if (data.exito) {
           this.elementos = data.elementos.filter(elemento => elemento.nombre.toLowerCase().includes(query.toLowerCase()));
-          this.mostrarFormularioCrear = false; // Ocultar el formulario de creación después de la búsqueda
-          this.mostrarBotonCrear = true; // Mostrar el botón de creación después de la búsqueda
-          this.noSeEncontraronElementos = this.elementos.length === 0; // Mostrar el mensaje si no se encontraron elementos
-          this.consultasFinalizadas = true; // Marcar las consultas como finalizadas
+          this.mostrarBotonCrear = true;
+          this.noSeEncontraronElementos = this.elementos.length === 0;
+          this.consultasFinalizadas = true;
         }
       },
       error: (error) => {
         console.error('Error al buscar elementos:', error);
-        this.mostrarFormularioCrear = false; // Ocultar el formulario de creación en caso de error
-        this.mostrarBotonCrear = true; // Mostrar el botón de creación en caso de error
-        this.noSeEncontraronElementos = true; // Mostrar el mensaje en caso de error
-        this.elementos = []; // Borrar los elementos mostrados en caso de error
-        this.consultasFinalizadas = true; // Marcar las consultas como finalizadas incluso en caso de error
+        this.mostrarBotonCrear = true;
+        this.noSeEncontraronElementos = true;
+        this.elementos = [];
+        this.consultasFinalizadas = true;
       }
     });
   }
@@ -107,22 +105,21 @@ export class AgregadorComponent {
   }
 
   mostrarFormulario() {
-    this.nombreElemento = this.buscarElemento.trim(); // Pasar el valor del input "Buscar Elementos" al input "Nombre"
-    this.buscarElemento = ''; // Borrar el valor del input "Buscar Elementos"
-    this.mostrarFormularioCrear = true;
-    this.rellenarCamposAutomaticamente();
+    const dialogRef = this.dialog.open(CrearElementoDialogComponent, {
+      width: '400px',
+      data: {
+        nombre: this.buscarElemento.trim()
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.crearElemento(result);
+      }
+    });
   }
 
-  rellenarCamposAutomaticamente() {
-    const fechaActual = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
-    this.fechaAparicion = fechaActual;
-    this.informacionExtra = 'info';
-    this.descripcion = 'más info';
-  }
-
-  crearElemento() {
-    if (!this.nombreElemento.trim()) return;
-
+  crearElemento(datos: any) {
     const usuarioId = localStorage.getItem('id');
     if (!usuarioId) {
       console.error('Usuario no autenticado');
@@ -130,34 +127,34 @@ export class AgregadorComponent {
     }
 
     const nuevoElemento: Elemento = {
-      id: 0, // El ID será asignado por el backend
-      nombre: this.nombreElemento,
-      fecha_aparicion: this.fechaAparicion,
-      informacion_extra: this.informacionExtra,
-      puntuacion: 0, // Puntuación por defecto
-      descripcion: this.descripcion,
+      id: 0,
+      nombre: datos.nombre,
+      fecha_aparicion: datos.fechaAparicion,
+      informacion_extra: datos.informacionExtra,
+      puntuacion: 0,
+      descripcion: datos.descripcion,
       momento_creacion: new Date().toISOString(),
-      usuario_id: parseInt(usuarioId, 10), // Añadir el usuario_id
-      positivo: null, // Inicializar el campo positivo con null
-      comentario: null, // Inicializar el campo comentario con null
-      usuariosComentariosPositivos: [] // Inicializar el campo usuariosComentariosPositivos
+      usuario_id: parseInt(usuarioId, 10),
+      positivo: null,
+      comentario: null,
+      usuariosComentariosPositivos: []
     };
-
-    console.log('Datos enviados:', nuevoElemento);
 
     this.elementosService.crearElemento(nuevoElemento).subscribe({
       next: (data) => {
         if (data.exito) {
           this.elementos.push(data.elemento);
-          this.mostrarFormularioCrear = false;
-          this.mostrarBotonCrear = false; // Ocultar el botón de creación después de crear el elemento
-          this.noSeEncontraronElementos = false; // Ocultar el mensaje después de crear el elemento
+          this.noSeEncontraronElementos = false;
 
-          // Asignar el nuevo elemento a la lista
           if (this.listaId) {
             this.asignarElemento(data.elemento.id);
-            this.elementosAsignados.add(data.elemento.id); // Añadir el elemento a la lista de elementos asignados
+            this.elementosAsignados.add(data.elemento.id);
           }
+
+          // Vaciar el input de "Agregar elemento", los resultados de búsqueda y el botón de "Mostrar formulario de creación"
+          this.buscarElemento = '';
+          this.elementos = [];
+          this.mostrarBotonCrear = false;
         }
       },
       error: (error) => {
@@ -176,10 +173,8 @@ export class AgregadorComponent {
       next: (data) => {
         if (data.exito) {
           console.log('Elemento asignado a la lista exitosamente');
-          this.elementosAsignados.add(elementoId); // Añadir el elemento a la lista de elementos asignados
-          this.elementosActualizados.emit(); // Emitir el evento para actualizar los elementos de la lista
-
-          // Vaciar el input de "Agregar elemento", los resultados de búsqueda y el botón de "Mostrar formulario de creación"
+          this.elementosAsignados.add(elementoId);
+          this.elementosActualizados.emit();
           this.buscarElemento = '';
           this.elementos = [];
           this.mostrarBotonCrear = false;
@@ -192,6 +187,6 @@ export class AgregadorComponent {
   }
 
   esNombreElementoValido(): boolean {
-    return this.nombreElemento.trim().length > 0;
+    return this.buscarElemento.trim().length > 0;
   }
 }
