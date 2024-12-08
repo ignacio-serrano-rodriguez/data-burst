@@ -27,6 +27,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 export class AgregadorComponent {
   @Input() nombreLista: string | undefined;
   @Input() listaId: number | undefined;
+  @Output() elementosActualizados = new EventEmitter<void>();
 
   private elementosService = inject(ElementosService);
   private listasService = inject(ListasService);
@@ -176,6 +177,12 @@ export class AgregadorComponent {
         if (data.exito) {
           console.log('Elemento asignado a la lista exitosamente');
           this.elementosAsignados.add(elementoId); // Añadir el elemento a la lista de elementos asignados
+          this.elementosActualizados.emit(); // Emitir el evento para actualizar los elementos de la lista
+
+          // Vaciar el input de "Agregar elemento", los resultados de búsqueda y el botón de "Mostrar formulario de creación"
+          this.buscarElemento = '';
+          this.elementos = [];
+          this.mostrarBotonCrear = false;
         }
       },
       error: (error) => {

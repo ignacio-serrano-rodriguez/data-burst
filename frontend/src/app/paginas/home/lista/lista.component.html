@@ -65,7 +65,8 @@
   <div>
     <app-agregador 
       [nombreLista]="lista?.nombre" 
-      [listaId]="lista?.id">
+      [listaId]="lista?.id"
+      (elementosActualizados)="obtenerElementosLista(lista!.id)">
     </app-agregador>
   </div>
 
