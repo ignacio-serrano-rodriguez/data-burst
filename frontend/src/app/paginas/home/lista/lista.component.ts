@@ -261,14 +261,26 @@ export class ListaComponent implements OnInit {
           if (data.exito) {
             console.log('Invitación enviada exitosamente');
             this.mostrarMensajeDialogo(`Invitación enviada. (${amigoNombre})`);
+            this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
+            this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
+            this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
+            this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
           } else {
             console.log('Error al enviar la invitación:', data.mensaje);
             this.mostrarMensajeDialogo(`Error al enviar la invitación. (${amigoNombre})`);
+            this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
+            this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
+            this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
+            this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
           }
         },
         error: (error) => {
           console.error('Error al enviar la invitación:', error);
           this.mostrarMensajeDialogo(`Error al enviar la invitación. (${amigoNombre})`);
+          this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
+          this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
+          this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
+          this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
         }
       });
     }
