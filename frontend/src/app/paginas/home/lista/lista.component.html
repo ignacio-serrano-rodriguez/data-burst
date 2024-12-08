@@ -3,15 +3,20 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 
-  <h2>Detalles de la Lista</h2>
+  <h2 *ngIf="!editandoNombre" (click)="editarNombre()">{{ lista?.nombre }} <button mat-icon-button (click)="editarNombre()"><mat-icon>edit</mat-icon></button></h2>
+  <div *ngIf="editandoNombre">
+    <mat-form-field>
+      <mat-label>Nombre de la Lista</mat-label>
+      <input matInput [(ngModel)]="nuevoNombreLista">
+    </mat-form-field>
+    <button mat-button (click)="guardarNombre()">Guardar</button>
+    <button mat-button (click)="cancelarEdicion()">Cancelar</button>
+  </div>
+
   <div *ngIf="lista">
-    <p *ngIf="!editandoNombre">Nombre: {{ lista.nombre }} <button mat-icon-button (click)="editarNombre()"><mat-icon>edit</mat-icon></button></p>
-    <div *ngIf="editandoNombre">
-      <input [(ngModel)]="nuevoNombreLista" placeholder="Nuevo nombre de la lista">
-      <button mat-button color="primary" (click)="guardarNombre()">Guardar</button>
-      <button mat-button color="warn" (click)="cancelarEdicion()">Cancelar</button>
-    </div>
-    <p>Visibilidad: {{ lista.publica ? 'Pública' : 'Privada' }} <button mat-icon-button (click)="cambiarVisibilidad()"><mat-icon>swap_horiz</mat-icon></button></p>
+    <button mat-icon-button (click)="cambiarVisibilidad()">
+      <mat-icon>{{ lista.publica ? 'public' : 'lock' }}</mat-icon>
+    </button>
   </div>
 
   <h3>Elementos Asignados</h3>
