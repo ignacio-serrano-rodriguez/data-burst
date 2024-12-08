@@ -95,7 +95,6 @@ export class TusListasComponent implements OnInit {
         if (data.exito == true) {
           this.nombreLista = '';
           this.publica = true; // Resetear el checkbox a su valor por defecto
-          this.homeComponent.mostrarMensajePositivo(data.mensaje + " (" + objeto.nombre + ")");
           this.obtenerListas(); // Actualizar la lista de listas
         }
       },
