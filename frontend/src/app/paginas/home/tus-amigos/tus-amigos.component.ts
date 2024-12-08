@@ -122,11 +122,13 @@ export class TusAmigosComponent implements OnInit {
           this.obtenerAmigos(); // Actualizar la lista de amigos
           this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
           this.noSeEncontraronUsuarios = false; // Ocultar el mensaje de no se encontraron usuarios
+          this.onNombreUsuarioAgregarChange(); // Reiniciar la búsqueda
         }
       },
       error: (error) => {
         this.nombreUsuarioAgregar = '';
         this.mostrarMensajeDialogo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
+        this.onNombreUsuarioAgregarChange(); // Reiniciar la búsqueda
       }
     });
   }
