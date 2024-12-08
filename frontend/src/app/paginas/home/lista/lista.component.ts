@@ -13,6 +13,7 @@ import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from '../agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
+import { MensajeDialogoComponent } from './mensaje-dialog/mensaje-dialogo.component';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
@@ -259,18 +260,24 @@ export class ListaComponent implements OnInit {
         next: (data) => {
           if (data.exito) {
             console.log('Invitación enviada exitosamente');
-            this.mostrarMensajePositivo(`Invitación enviada. (${amigoNombre})`);
+            this.mostrarMensajeDialogo(`Invitación enviada. (${amigoNombre})`);
           } else {
             console.log('Error al enviar la invitación:', data.mensaje);
-            this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`);
+            this.mostrarMensajeDialogo(`Error al enviar la invitación. (${amigoNombre})`);
           }
         },
         error: (error) => {
           console.error('Error al enviar la invitación:', error);
-          this.mostrarMensajeNegativo(`Error al enviar la invitación. (${amigoNombre})`);
+          this.mostrarMensajeDialogo(`Error al enviar la invitación. (${amigoNombre})`);
         }
       });
     }
+  }
+
+  mostrarMensajeDialogo(mensaje: string) {
+    this.dialog.open(MensajeDialogoComponent, {
+      data: { mensaje }
+    });
   }
 
   mostrarMensajePositivo(mensaje: string) {
