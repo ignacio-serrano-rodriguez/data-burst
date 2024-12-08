@@ -14,25 +14,37 @@
   </div>
 
   <div *ngIf="lista">
+    <button mat-icon-button (click)="mostrarAgregador()">
+      <mat-icon>add</mat-icon>
+    </button>
     <button mat-icon-button (click)="cambiarVisibilidad()">
       <mat-icon>{{ lista.publica ? 'public' : 'lock' }}</mat-icon>
     </button>
+    <button mat-icon-button (click)="toggleColaborar()">
+      <mat-icon>group</mat-icon>
+    </button>
+    <button mat-icon-button (click)="eliminarLista()">
+      <mat-icon>delete</mat-icon>
+    </button>
   </div>
 
-  <h3>Elementos Asignados</h3>
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
-      <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true, 'dislike-button': elemento.positivo === false, 'help-button': elemento.positivo === null}" (click)="toggleLikeDislike(elemento)">
-        <mat-icon>
-          {{ elemento.positivo === null ? 'help_outline' : (elemento.positivo ? 'thumb_up' : 'thumb_down') }}
-        </mat-icon>
+      <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" (click)="likeElemento(elemento)">
+        <mat-icon>thumb_up</mat-icon>
       </button>
-      <button mat-icon-button (click)="comentarElemento(elemento)">
+      <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" (click)="dislikeElemento(elemento)">
+        <mat-icon>thumb_down</mat-icon>
+      </button>
+      <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" (click)="resetLikeDislikeElemento(elemento)">
+        <mat-icon>help_outline</mat-icon>
+      </button>
+      <button mat-icon-button [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" (click)="comentarElemento(elemento)">
         <mat-icon>comment</mat-icon>
       </button>
       <button mat-icon-button (click)="eliminarElemento(elemento.id)">
-        <mat-icon>delete</mat-icon>
+        <mat-icon>close</mat-icon>
       </button>
       <ul>
         <li *ngFor="let usuarioComentarioPositivo of elemento.usuariosComentariosPositivos">
@@ -50,20 +62,15 @@
     </li>
   </ul>
 
-  <button mat-flat-button color="primary" (click)="mostrarAgregador()">
-    Agregador de Elementos
-  </button>
-
-  <button mat-flat-button color="warn" (click)="eliminarLista()">
-    Eliminar Lista
-  </button>
-
-  <button mat-flat-button color="primary" (click)="mostrarColaborar()">
-    Colaborar
-  </button>
-
   <div *ngIf="mostrarColaborarComponent">
-    <h3>Invitar Amigos</h3>
+
+    <h3>Colaboradores</h3>
+    <ul *ngIf="colaboradores.length > 0">
+      <li *ngFor="let colaborador of colaboradores">
+        {{ colaborador.nombre }}
+      </li>
+    </ul>
+
     <mat-form-field class="elementoFormulario">
       <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
       <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
@@ -82,20 +89,10 @@
       <p>No se encontraron amigos.</p>
     </div>
 
-    <h3>Colaboradores</h3>
-    <ul *ngIf="colaboradores.length > 0">
-      <li *ngFor="let colaborador of colaboradores">
-        {{ colaborador.nombre }}
-      </li>
-    </ul>
-
     <div *ngIf="colaboradores.length === 0">
       <p>No hay colaboradores en esta lista.</p>
     </div>
 
-    <button mat-flat-button color="warn" (click)="ocultarColaborar()">
-      Cancelar
-    </button>
   </div>
 </div>
 

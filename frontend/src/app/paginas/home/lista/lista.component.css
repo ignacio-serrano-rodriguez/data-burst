@@ -1,11 +1,21 @@
+/* Estilos existentes */
+
+/* Estilo para el botón de like */
 .like-button {
   color: green;
 }
 
+/* Estilo para el botón de dislike */
 .dislike-button {
   color: red;
 }
 
+/* Estilo para el botón de interrogación */
 .help-button {
-  color: black;
+  color: #ffaa00;
+}
+
+/* Estilo para el botón de comentario con texto */
+.comment-button {
+  color: #9900b4;
 }

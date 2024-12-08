@@ -166,18 +166,11 @@ export class ListaComponent implements OnInit {
     }
   }
 
-  mostrarColaborar() {
-    this.mostrarColaborarComponent = true;
-    if (this.listaId) {
+  toggleColaborar() {
+    this.mostrarColaborarComponent = !this.mostrarColaborarComponent;
+    if (this.mostrarColaborarComponent && this.listaId) {
       this.obtenerColaboradores(this.listaId);
     }
-  }
-
-  ocultarColaborar() {
-    this.mostrarColaborarComponent = false;
-    this.amigosEncontrados = [];
-    this.noSeEncontraronAmigos = false;
-    this.nombreAmigoBuscar = '';
   }
 
   editarNombre() {
@@ -336,27 +329,52 @@ export class ListaComponent implements OnInit {
     }
   }
 
-  toggleLikeDislike(elemento: Elemento) {
-    let nuevoEstado: boolean | null;
-    if (elemento.positivo === null) {
-      nuevoEstado = true;
-    } else if (elemento.positivo === true) {
-      nuevoEstado = false;
-    } else {
-      nuevoEstado = null;
-    }
-
+  likeElemento(elemento: Elemento) {
     if (this.lista) {
-      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, nuevoEstado).subscribe({
+      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, true).subscribe({
         next: (data) => {
           if (data.exito) {
-            elemento.positivo = nuevoEstado;
+            elemento.positivo = true;
           } else {
-            console.log('Error al cambiar el estado de like/dislike');
+            console.log('Error al cambiar el estado de like');
           }
         },
         error: (error) => {
-          console.error('Error al cambiar el estado de like/dislike:', error);
+          console.error('Error al cambiar el estado de like:', error);
+        }
+      });
+    }
+  }
+
+  dislikeElemento(elemento: Elemento) {
+    if (this.lista) {
+      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, false).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            elemento.positivo = false;
+          } else {
+            console.log('Error al cambiar el estado de dislike');
+          }
+        },
+        error: (error) => {
+          console.error('Error al cambiar el estado de dislike:', error);
+        }
+      });
+    }
+  }
+
+  resetLikeDislikeElemento(elemento: Elemento) {
+    if (this.lista) {
+      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, null).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            elemento.positivo = null;
+          } else {
+            console.log('Error al resetear el estado de like/dislike');
+          }
+        },
+        error: (error) => {
+          console.error('Error al resetear el estado de like/dislike:', error);
         }
       });
     }
