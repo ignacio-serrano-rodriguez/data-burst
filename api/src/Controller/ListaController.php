@@ -206,58 +206,6 @@ class ListaController extends AbstractController
         }
     }
 
-    #[Route("/api/buscar-listas", name: "buscar_listas", methods: ["POST"])]
-    public function buscarListas(Request $request, EntityManagerInterface $entityManager)
-    {
-        $datosRecibidos = json_decode($request->getContent(), true);
-        $query = $datosRecibidos['query'];
-        $usuarioID = $datosRecibidos['usuarioID'];
-
-        try {
-            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
-            if (!$usuario) {
-                return new JsonResponse(
-                    [
-                        "exito" => false,
-                        "mensaje" => "Usuario no encontrado."
-                    ],
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            // Buscar listas cuyo nombre coincida con la consulta
-            $listasAsignadas = $entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['usuario' => $usuario]);
-
-            $dataListas = [];
-            foreach ($listasAsignadas as $listaAsignada) {
-                $lista = $listaAsignada->getLista();
-                if (stripos($lista->getNombre(), $query) !== false) {
-                    $dataListas[] = [
-                        'id' => $lista->getId(),
-                        'nombre' => $lista->getNombre()
-                    ];
-                }
-            }
-
-            return new JsonResponse(
-                [
-                    "exito" => true,
-                    "mensaje" => "Listas encontradas exitosamente.",
-                    "listas" => $dataListas
-                ],
-                Response::HTTP_OK
-            );
-        } catch (\Throwable $th) {
-            return new JsonResponse(
-                [
-                    "exito" => false,
-                    "mensaje" => "Error al buscar listas."
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-    }
-
     #[Route("/api/modificar-nombre-lista", name: "modificar_nombre_lista", methods: ["POST"])]
     public function modificarNombreLista(Request $request, EntityManagerInterface $entityManager)
     {

@@ -45,13 +45,6 @@ export class ListasService {
     );
   }
 
-  buscarListas(query: string, usuarioID: number): Observable<RespuestaObtenerListas> {
-    return this.http.post<RespuestaObtenerListas>(
-      `${this.api}/buscar-listas`, 
-      { query, usuarioID }
-    );
-  }
-
   modificarNombreLista(id: number, nuevoNombre: string): Observable<RespuestaModificarNombreLista> {
     return this.http.post<RespuestaModificarNombreLista>(
       `${this.api}/modificar-nombre-lista`, 

@@ -30,10 +30,10 @@ export class TusListasComponent implements OnInit {
   private listasService = inject(ListasService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   listas: Lista[] = [];
+  listasFiltradas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
 
   nombreLista: string = '';
-  nombreListaBuscar: string = '';
   publica: boolean = true; // Variable para el toggle
   noSeEncontraronListas = false;
 
@@ -46,34 +46,22 @@ export class TusListasComponent implements OnInit {
       debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
-      if (query.length > 0) {
-        const usuarioID = Number(localStorage.getItem('id')) || 0;
-        this.buscarListas(query, usuarioID);
-      } else {
-        this.obtenerListas(); // Mostrar todas las listas si la cadena de búsqueda está vacía
-        this.noSeEncontraronListas = false; // No mostrar el mensaje si la cadena está vacía
-      }
+      this.buscarListasLocal(query);
     });
   }
 
-  onNombreListaBuscarChange() {
-    this.searchSubject.next(this.nombreListaBuscar.trim());
+  onNombreListaChange() {
+    this.searchSubject.next(this.nombreLista.trim());
   }
 
-  buscarListas(query: string, usuarioID: number) {
-    this.listasService.buscarListas(query, usuarioID).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          this.listas = data.listas.filter(lista => lista.nombre.toLowerCase().includes(query.toLowerCase()));
-          this.noSeEncontraronListas = this.listas.length === 0 && query.length > 0; // Mostrar el mensaje si no se encontraron listas y la cadena de búsqueda tiene al menos 1 carácter
-        }
-      },
-      error: (error) => {
-        console.error('Error al buscar listas:', error);
-        this.noSeEncontraronListas = true; // Mostrar el mensaje en caso de error
-        this.listas = []; // Borrar las listas mostradas en caso de error
-      }
-    });
+  buscarListasLocal(query: string) {
+    if (query.length > 0) {
+      this.listasFiltradas = this.listas.filter(lista => lista.nombre.toLowerCase().includes(query.toLowerCase()));
+      this.noSeEncontraronListas = this.listasFiltradas.length === 0;
+    } else {
+      this.listasFiltradas = this.listas;
+      this.noSeEncontraronListas = false;
+    }
   }
 
   crearAsignarLista() {
@@ -94,6 +82,7 @@ export class TusListasComponent implements OnInit {
           this.nombreLista = '';
           this.publica = true; // Resetear el toggle a su valor por defecto
           this.obtenerListas(); // Actualizar la lista de listas
+          this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca después de crear una lista
         }
       },
       error: (error) => {
@@ -113,6 +102,7 @@ export class TusListasComponent implements OnInit {
             ...lista,
             compartida: lista.compartida || false // Inicializar el campo compartida si no está presente
           }));
+          this.listasFiltradas = this.listas; // Inicializar listasFiltradas con todas las listas
         }
       },
       error: (error) => {

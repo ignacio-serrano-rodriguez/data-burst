@@ -3,7 +3,7 @@
 <!-- Input para crear y asignar listas con icono de toggle -->
 <mat-form-field class="elementoFormulario">
   <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
-  <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="limpiarMensaje()">
+  <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="onNombreListaChange()">
   <button mat-icon-button matSuffix (click)="togglePublica()">
     <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
   </button>
@@ -20,16 +20,10 @@
   <mat-icon>add</mat-icon>
 </button>
 
-<!-- Input para buscar dentro de tus listas -->
-<mat-form-field class="elementoFormulario">
-  <mat-label class="etiquetaFormulario">Buscar en tus listas</mat-label>
-  <input matInput id="nombreListaBuscar" [(ngModel)]="nombreListaBuscar" (input)="onNombreListaBuscarChange()">
-</mat-form-field>
-
 <div id="mensajeInformativo"></div>
 
 <ul>
-  <li *ngFor="let lista of listas">
+  <li *ngFor="let lista of listasFiltradas">
     <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
     <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
     <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
@@ -38,6 +32,6 @@
   </li>
 </ul>
 
-<div *ngIf="noSeEncontraronListas">
+<div *ngIf="noSeEncontraronListas && listasFiltradas.length === 0" style="color: #F5A201;">
   <p>No se encontraron listas.</p>
 </div>
