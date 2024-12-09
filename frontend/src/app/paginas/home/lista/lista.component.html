@@ -12,8 +12,12 @@
         <mat-label>Nombre de la Lista</mat-label>
         <input matInput [(ngModel)]="nuevoNombreLista">
       </mat-form-field>
-      <button mat-button (click)="guardarNombre()">Guardar</button>
-      <button mat-button (click)="cancelarEdicion()">Cancelar</button>
+      <button mat-icon-button color="black" (click)="cancelarEdicion()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+      <button mat-icon-button color="black" (click)="guardarNombre()">
+        <mat-icon>save</mat-icon>
+      </button>
     </div>
     <div class="lista-actions">
       <button mat-icon-button (click)="editarNombre()">
