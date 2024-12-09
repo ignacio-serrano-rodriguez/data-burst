@@ -1,24 +1,23 @@
 <h2>Tus listas</h2>
 
-<!-- Input para crear y asignar listas -->
+<!-- Input para crear y asignar listas con icono de toggle -->
 <mat-form-field class="elementoFormulario">
   <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
   <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="limpiarMensaje()">
+  <button mat-icon-button matSuffix (click)="togglePublica()">
+    <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
+  </button>
 </mat-form-field>
 
-<!-- Toggle para lista pública/privada -->
-<button mat-icon-button (click)="togglePublica()">
-  <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
-</button>
-
+<!-- Botón para crear la lista con icono de añadir -->
 <button 
   id="boton" 
   class="elementoFormulario" 
-  mat-flat-button
+  mat-icon-button
   color="primary"
   (click)="crearAsignarLista()"
   [disabled]="!esNombreListaValido()">
-  ➕
+  <mat-icon>add</mat-icon>
 </button>
 
 <!-- Input para buscar dentro de tus listas -->
