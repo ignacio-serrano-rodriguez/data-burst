@@ -4,7 +4,6 @@
 </mat-form-field>
 
 <div *ngIf="elementos.length > 0">
-  <h3>Resultados de la Búsqueda</h3>
   <ul>
     <li *ngFor="let elemento of elementos">
       {{ elemento.nombre }}
@@ -21,6 +20,6 @@
 
 <div *ngIf="mostrarBotonCrear">
   <button mat-flat-button color="accent" (click)="mostrarFormulario()">
-    Mostrar formulario de creación
+    ¿Elemento inexistente? Crear
   </button>
 </div>

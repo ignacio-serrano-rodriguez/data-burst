@@ -22,8 +22,7 @@ import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elem
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatDialogModule,
-    CrearElementoDialogComponent
+    MatDialogModule
   ],
   templateUrl: './agregador.component.html',
   styleUrls: ['./agregador.component.css']
