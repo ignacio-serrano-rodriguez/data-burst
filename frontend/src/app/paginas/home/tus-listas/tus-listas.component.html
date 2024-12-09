@@ -6,7 +6,10 @@
   <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="limpiarMensaje()">
 </mat-form-field>
 
-<mat-checkbox [(ngModel)]="publica">Lista Pública</mat-checkbox>
+<!-- Toggle para lista pública/privada -->
+<button mat-icon-button (click)="togglePublica()">
+  <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
+</button>
 
 <button 
   id="boton" 

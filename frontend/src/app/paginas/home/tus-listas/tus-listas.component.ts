@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox'; // Importar MatCheckboxModule
 import { MatIconModule } from '@angular/material/icon'; // Importar MatIconModule
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
@@ -20,7 +19,6 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCheckboxModule, // Agregar MatCheckboxModule a los imports
     MatIconModule, // Agregar MatIconModule a los imports
     CommonModule,
     FormsModule // Agregar FormsModule a los imports
@@ -36,7 +34,7 @@ export class TusListasComponent implements OnInit {
 
   nombreLista: string = '';
   nombreListaBuscar: string = '';
-  publica: boolean = true; // Variable para el checkbox
+  publica: boolean = true; // Variable para el toggle
   noSeEncontraronListas = false;
 
   private searchSubject = new Subject<string>();
@@ -94,13 +92,13 @@ export class TusListasComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.nombreLista = '';
-          this.publica = true; // Resetear el checkbox a su valor por defecto
+          this.publica = true; // Resetear el toggle a su valor por defecto
           this.obtenerListas(); // Actualizar la lista de listas
         }
       },
       error: (error) => {
         this.nombreLista = '';
-        this.publica = true; // Resetear el checkbox a su valor por defecto
+        this.publica = true; // Resetear el toggle a su valor por defecto
         this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.nombre + ")");
       }
     });
@@ -134,5 +132,9 @@ export class TusListasComponent implements OnInit {
 
   limpiarMensaje() {
     this.homeComponent.limpiarMensaje();
+  }
+
+  togglePublica() {
+    this.publica = !this.publica;
   }
 }
