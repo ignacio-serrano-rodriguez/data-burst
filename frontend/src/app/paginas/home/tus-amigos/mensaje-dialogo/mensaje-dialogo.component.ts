@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon'; // Importar MatIconModule
 
 @Component({
   selector: 'app-mensaje-dialogo',
@@ -10,17 +11,10 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule // Agregar MatIconModule a los imports
   ],
-  template: `
-    <h1 mat-dialog-title>Mensaje</h1>
-    <div mat-dialog-content>
-      <p>{{ data.mensaje }}</p>
-    </div>
-    <div mat-dialog-actions>
-      <button mat-button (click)="onClose()">Cerrar</button>
-    </div>
-  `
+  templateUrl: './mensaje-dialogo.component.html'
 })
 export class MensajeDialogoComponent {
   constructor(
