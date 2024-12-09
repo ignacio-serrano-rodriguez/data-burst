@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'; // Importar MatIconModule
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete'; // Importar MatAutocompleteModule y MatAutocompleteTrigger
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
 import { ListasService } from '../../../servicios/listas.service';
@@ -20,6 +21,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule, // Agregar MatIconModule a los imports
+    MatAutocompleteModule, // Agregar MatAutocompleteModule a los imports
     CommonModule,
     FormsModule // Agregar FormsModule a los imports
   ],
@@ -32,10 +34,12 @@ export class TusListasComponent implements OnInit {
   listas: Lista[] = [];
   listasFiltradas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
 
   nombreLista: string = '';
   publica: boolean = true; // Variable para el toggle
   noSeEncontraronListas = false;
+  listaSeleccionadaId: number | null = null; // Variable para la lista seleccionada
 
   private searchSubject = new Subject<string>();
 
@@ -52,6 +56,10 @@ export class TusListasComponent implements OnInit {
 
   onNombreListaChange() {
     this.searchSubject.next(this.nombreLista.trim());
+  }
+
+  abrirDesplegable() {
+    this.autocompleteTrigger.openPanel();
   }
 
   buscarListasLocal(query: string) {

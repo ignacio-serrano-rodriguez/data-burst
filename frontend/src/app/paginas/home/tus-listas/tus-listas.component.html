@@ -1,36 +1,38 @@
 <h2>Tus listas</h2>
 
-<!-- Input para crear y asignar listas con icono de toggle -->
-<mat-form-field class="elementoFormulario">
-  <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
-  <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="onNombreListaChange()">
-  <button mat-icon-button matSuffix (click)="togglePublica()">
-    <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
-  </button>
-</mat-form-field>
+<!-- Contenedor para alinear el input y el botón en la misma línea -->
+<div class="input-button-container">
+  <!-- Input para crear y asignar listas con icono de toggle -->
+  <mat-form-field class="elementoFormulario">
+    <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
+    <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="onNombreListaChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()">
+    <button mat-icon-button matSuffix (click)="togglePublica()">
+      <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
+    </button>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista.id)">
+        {{ lista.nombre }}
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-<!-- Botón para crear la lista con icono de añadir en color negro -->
-<button 
-  id="boton" 
-  class="elementoFormulario" 
-  mat-icon-button
-  color="black"
-  (click)="crearAsignarLista()"
-  [disabled]="!esNombreListaValido()">
-  <mat-icon>add</mat-icon>
-</button>
+  <!-- Botón para crear la lista con icono de añadir en color negro -->
+  <button 
+    id="boton" 
+    class="elementoFormulario" 
+    mat-icon-button
+    color="black"
+    (click)="crearAsignarLista()"
+    [disabled]="!esNombreListaValido()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
 
 <div id="mensajeInformativo"></div>
-
-<ul>
-  <li *ngFor="let lista of listasFiltradas">
-    <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
-  </li>
-</ul>
 
 <div *ngIf="noSeEncontraronListas && listasFiltradas.length === 0" style="color: #F5A201;">
   <p>No se encontraron listas.</p>
