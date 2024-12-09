@@ -12,7 +12,7 @@
     <li *ngFor="let usuario of usuariosNoAgregados">
       {{ usuario.nombre }}
       <button mat-button color="primary" (click)="agregarUsuario(usuario.nombre)">
-        Agregar
+        <mat-icon>person_add</mat-icon>
       </button>
     </li>
   </ul>

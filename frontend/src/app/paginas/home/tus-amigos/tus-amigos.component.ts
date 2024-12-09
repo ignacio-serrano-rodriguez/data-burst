@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
@@ -18,12 +19,13 @@ import { MensajeDialogoComponent } from './mensaje-dialogo/mensaje-dialogo.compo
   selector: 'app-tus-amigos',
   standalone: true,
   imports: [
-    CommonModule, // Asegúrate de que CommonModule esté importado
+    CommonModule, 
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     FormsModule,
-    MatDialogModule // Agregar MatDialogModule a los imports
+    MatDialogModule,
+    MatIconModule 
   ],
   templateUrl: './tus-amigos.component.html',
   styleUrls: ['./tus-amigos.component.css']
