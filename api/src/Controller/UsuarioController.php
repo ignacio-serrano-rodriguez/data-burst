@@ -746,6 +746,19 @@ class UsuarioController extends AbstractController
                 $idsUsuariosAgregados[] = $usuarioAgregado['usuario2'];
             }
 
+            // Obtener los IDs de los usuarios que ya tienen una invitación pendiente
+            $usuariosInvitados = $entityManager->createQueryBuilder()
+                ->select('IDENTITY(i.invitado) as invitado')
+                ->from(Invitacion::class, 'i')
+                ->where('i.invitador = :usuarioID OR i.invitado = :usuarioID')
+                ->setParameter('usuarioID', $usuarioID)
+                ->getQuery()
+                ->getResult();
+
+            foreach ($usuariosInvitados as $usuarioInvitado) {
+                $idsUsuariosAgregados[] = $usuarioInvitado['invitado'];
+            }
+
             // Buscar usuarios que no están agregados por el usuario y cuyo nombre coincida con la consulta
             $usuariosNoAgregados = $entityManager->createQueryBuilder()
                 ->select('u')
