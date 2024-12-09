@@ -33,13 +33,6 @@ export class AmigosService {
     );
   }
 
-  buscarAmigos(query: string, usuarioID: number): Observable<RespuestaObtenerAmigos> {
-    return this.http.post<RespuestaObtenerAmigos>(
-      `${this.api}/buscar-amigos`, 
-      { query, usuarioID }
-    );
-  }
-
   buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number): Observable<RespuestaObtenerAmigos> {
     return this.http.post<RespuestaObtenerAmigos>(
       `${this.api}/buscar-amigos-no-manipulan-lista`, 
