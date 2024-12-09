@@ -5,7 +5,7 @@
   <!-- Input para crear y asignar listas con icono de toggle -->
   <mat-form-field class="elementoFormulario">
     <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
-    <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="onNombreListaChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()">
+    <input matInput id="nombreLista" [(ngModel)]="nombreLista" (input)="onNombreListaChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.enter)="crearAsignarLista()">
     <button mat-icon-button matSuffix (click)="togglePublica()">
       <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
     </button>
