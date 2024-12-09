@@ -91,6 +91,7 @@ export class TusListasComponent implements OnInit {
           this.publica = true; // Resetear el toggle a su valor por defecto
           this.obtenerListas(); // Actualizar la lista de listas
           this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca después de crear una lista
+          this.seleccionarLista(data.lista.id); // Cargar directamente la lista creada
         }
       },
       error: (error) => {

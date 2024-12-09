@@ -56,7 +56,12 @@ class ListaController extends AbstractController
             $respuestaJson = new JsonResponse(
                 [
                     "exito" => true,
-                    "mensaje" => "Lista creada y asignada exitosamente."
+                    "mensaje" => "Lista creada y asignada exitosamente.",
+                    "lista" => [
+                        "id" => $lista->getId(),
+                        "nombre" => $lista->getNombre(),
+                        "publica" => $usuarioManipulaLista->isPublica()
+                    ]
                 ],
                 Response::HTTP_CREATED
             );
