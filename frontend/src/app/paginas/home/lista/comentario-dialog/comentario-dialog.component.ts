@@ -5,24 +5,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-comentario-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule],
-  template: `
-    <h1 mat-dialog-title>Agregar Comentario</h1>
-    <div mat-dialog-content>
-      <mat-form-field>
-        <mat-label>Comentario</mat-label>
-        <textarea matInput [(ngModel)]="comentario"></textarea>
-      </mat-form-field>
-    </div>
-    <div mat-dialog-actions>
-      <button mat-button (click)="onNoClick()">Cancelar</button>
-      <button mat-button [mat-dialog-close]="comentario" cdkFocusInitial>Guardar</button>
-    </div>
-  `,
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule],
+  templateUrl: './comentario-dialog.component.html',
+  styleUrls: ['./comentario-dialog.component.css']
 })
 export class ComentarioDialogComponent {
   comentario: string;
@@ -32,6 +22,7 @@ export class ComentarioDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { elementoId: number, comentario: string }
   ) {
     this.comentario = data.comentario;
+    this.dialogRef.updateSize('500px', '400px'); // Ajustar el tamaño del diálogo
   }
 
   onNoClick(): void {

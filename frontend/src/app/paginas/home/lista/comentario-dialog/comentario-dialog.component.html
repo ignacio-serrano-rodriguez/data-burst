@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Añadir Comentario</h1>
+<div mat-dialog-content>
+  <mat-form-field class="full">
+    <mat-label>Comentario</mat-label>
+    <textarea matInput [(ngModel)]="comentario" rows="10"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions style="justify-content: space-between;">
+  <button mat-icon-button color="black" (click)="onNoClick()">
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <button mat-icon-button color="black" [mat-dialog-close]="comentario" cdkFocusInitial>
+    <mat-icon>save</mat-icon>
+  </button>
+</div>
