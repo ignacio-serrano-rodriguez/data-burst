@@ -733,7 +733,7 @@ class UsuarioController extends AbstractController
 
             // Obtener los IDs de los usuarios que ya están agregados
             $usuariosAgregados = $entityManager->createQueryBuilder()
-                ->select('IDENTITY(ua.usuario_1) as usuario_1, IDENTITY(ua.usuario_2) as usuario_2')
+                ->select('IDENTITY(ua.usuario_1) as usuario1, IDENTITY(ua.usuario_2) as usuario2')
                 ->from(UsuarioAgregaUsuario::class, 'ua')
                 ->where('ua.usuario_1 = :usuarioID OR ua.usuario_2 = :usuarioID')
                 ->setParameter('usuarioID', $usuarioID)
@@ -742,22 +742,8 @@ class UsuarioController extends AbstractController
 
             $idsUsuariosAgregados = [];
             foreach ($usuariosAgregados as $usuarioAgregado) {
-                $idsUsuariosAgregados[] = $usuarioAgregado['usuario_1'];
-                $idsUsuariosAgregados[] = $usuarioAgregado['usuario_2'];
-            }
-
-            // Obtener los IDs de los usuarios que ya tienen una invitación pendiente
-            $usuariosInvitados = $entityManager->createQueryBuilder()
-                ->select('IDENTITY(i.invitado) as invitado')
-                ->from(Invitacion::class, 'i')
-                ->where('i.invitador = :usuarioID')
-                ->orWhere('i.invitado = :usuarioID')
-                ->setParameter('usuarioID', $usuarioID)
-                ->getQuery()
-                ->getResult();
-
-            foreach ($usuariosInvitados as $usuarioInvitado) {
-                $idsUsuariosAgregados[] = $usuarioInvitado['invitado'];
+                $idsUsuariosAgregados[] = $usuarioAgregado['usuario1'];
+                $idsUsuariosAgregados[] = $usuarioAgregado['usuario2'];
             }
 
             // Buscar usuarios que no están agregados por el usuario y cuyo nombre coincida con la consulta
@@ -769,7 +755,7 @@ class UsuarioController extends AbstractController
                 ->andWhere('u.id NOT IN (:idsUsuariosAgregados)')
                 ->setParameter('query', '%' . $query . '%')
                 ->setParameter('usuarioID', $usuarioID)
-                ->setParameter('idsUsuariosAgregados', $idsUsuariosAgregados)
+                ->setParameter('idsUsuariosAgregados', $idsUsuariosAgregados ?: [0]) // Asegurarse de que no esté vacío
                 ->getQuery()
                 ->getResult();
 
@@ -790,10 +776,12 @@ class UsuarioController extends AbstractController
                 Response::HTTP_OK
             );
         } catch (\Throwable $th) {
+            // Si ocurre algún error, devolver una lista vacía
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Error al buscar usuarios no agregados."
+                    "mensaje" => "Error al buscar usuarios no agregados.",
+                    "usuarios" => []
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
