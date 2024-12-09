@@ -161,6 +161,14 @@ export class ListaComponent implements OnInit {
     }
   }
 
+  toggleEditarNombre() {
+    if (this.editandoNombre) {
+      this.cancelarEdicion();
+    } else {
+      this.editarNombre();
+    }
+  }
+
   editarNombre() {
     this.editandoNombre = true;
   }
