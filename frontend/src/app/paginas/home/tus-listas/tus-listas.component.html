@@ -9,12 +9,12 @@
   </button>
 </mat-form-field>
 
-<!-- Botón para crear la lista con icono de añadir -->
+<!-- Botón para crear la lista con icono de añadir en color negro -->
 <button 
   id="boton" 
   class="elementoFormulario" 
   mat-icon-button
-  color="primary"
+  color="black"
   (click)="crearAsignarLista()"
   [disabled]="!esNombreListaValido()">
   <mat-icon>add</mat-icon>
@@ -31,10 +31,10 @@
 <ul>
   <li *ngFor="let lista of listas">
     <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
-    <mat-icon *ngIf="lista.publica">public</mat-icon>
-    <mat-icon *ngIf="!lista.publica">lock</mat-icon>
-    <mat-icon *ngIf="lista.compartida">group</mat-icon>
-    <mat-icon *ngIf="!lista.compartida">person</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
   </li>
 </ul>
 

@@ -11,7 +11,7 @@
   <ul>
     <li *ngFor="let usuario of usuariosNoAgregados">
       {{ usuario.nombre }}
-      <button mat-button color="primary" (click)="agregarUsuario(usuario.nombre)">
+      <button mat-icon-button color="black" (click)="agregarUsuario(usuario.nombre)">
         <mat-icon>person_add</mat-icon>
       </button>
     </li>
