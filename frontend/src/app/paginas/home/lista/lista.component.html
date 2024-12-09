@@ -32,7 +32,6 @@
   </div>
 
   <div *ngIf="mostrarColaborarComponent">
-    <h3>Colaboradores</h3>
     <ul *ngIf="colaboradores.length > 0">
       <li *ngFor="let colaborador of colaboradores">
         {{ colaborador.nombre }}
@@ -40,7 +39,7 @@
     </ul>
 
     <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
+      <mat-label class="etiquetaFormulario">Invitar Amigos</mat-label>
       <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
     </mat-form-field>
 

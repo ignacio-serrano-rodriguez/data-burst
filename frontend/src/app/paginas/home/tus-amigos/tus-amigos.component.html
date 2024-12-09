@@ -2,13 +2,12 @@
 
 <!-- Input para agregar usuarios -->
 <mat-form-field class="elementoFormulario">
-  <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
+  <mat-label class="etiquetaFormulario">Agregar usuario</mat-label>
   <input matInput id="nombreUsuarioAgregar" [(ngModel)]="nombreUsuarioAgregar" (input)="onNombreUsuarioAgregarChange()">
 </mat-form-field>
 
 <!-- Lista de usuarios no agregados encontrados -->
 <div *ngIf="usuariosNoAgregados.length > 0">
-  <h3>Usuarios No Agregados Encontrados</h3>
   <ul>
     <li *ngFor="let usuario of usuariosNoAgregados">
       {{ usuario.nombre }}
@@ -26,13 +25,12 @@
 
 <!-- Input para buscar dentro de tus amigos -->
 <mat-form-field class="elementoFormulario">
-  <mat-label class="etiquetaFormulario">Buscar Amigos</mat-label>
+  <mat-label class="etiquetaFormulario">Buscar en tus amigos</mat-label>
   <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
 </mat-form-field>
 
 <div id="mensajeInformativo"></div>
 
-<h3>Amigos Agregados</h3>
 <ul>
   <li *ngFor="let amigo of amigos">
     <a (click)="verDetalleAmigo(amigo.nombre)">{{ amigo.nombre }}</a>

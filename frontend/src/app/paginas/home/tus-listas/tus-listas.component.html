@@ -20,13 +20,12 @@
 
 <!-- Input para buscar dentro de tus listas -->
 <mat-form-field class="elementoFormulario">
-  <mat-label class="etiquetaFormulario">Buscar Listas</mat-label>
+  <mat-label class="etiquetaFormulario">Buscar en tus listas</mat-label>
   <input matInput id="nombreListaBuscar" [(ngModel)]="nombreListaBuscar" (input)="onNombreListaBuscarChange()">
 </mat-form-field>
 
 <div id="mensajeInformativo"></div>
 
-<h3>Listas Asignadas</h3>
 <ul>
   <li *ngFor="let lista of listas">
     <a (click)="seleccionarLista(lista.id)">{{ lista.nombre }}</a>
