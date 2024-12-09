@@ -50,8 +50,8 @@
     <ul *ngIf="amigosEncontrados.length > 0">
       <li *ngFor="let amigo of amigosEncontrados">
         {{ amigo.nombre }}
-        <button mat-button color="primary" (click)="invitarAmigo(amigo.id, amigo.nombre)">
-          Invitar
+        <button mat-icon-button color="black" (click)="invitarAmigo(amigo.id, amigo.nombre)">
+          <mat-icon>person_add</mat-icon>
         </button>
       </li>
     </ul>
