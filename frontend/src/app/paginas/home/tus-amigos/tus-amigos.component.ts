@@ -37,50 +37,39 @@ export class TusAmigosComponent implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog); // Inyectar MatDialog
   amigos: { id: number, nombre: string }[] = [];
+  amigosFiltrados: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
-  nombreUsuarioAgregar: string = '';
-  nombreAmigoBuscar: string = '';
+  nombreUsuario: string = '';
   noSeEncontraronAmigos = false;
   noSeEncontraronUsuarios = false;
 
-  private searchSubjectAgregar = new Subject<string>();
-  private searchSubjectBuscar = new Subject<string>();
+  private searchSubject = new Subject<string>();
 
   ngOnInit(): void {
     this.obtenerAmigos();
 
-    this.searchSubjectAgregar.pipe(
+    this.searchSubject.pipe(
       debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
-      if (query.length >= 3) {
+      if (query.length === 0) {
+        this.amigosFiltrados = this.amigos;
+        this.noSeEncontraronAmigos = false;
+        this.usuariosNoAgregados = [];
+        this.noSeEncontraronUsuarios = false;
+      } else if (query.length >= 3) {
         const usuarioID = Number(localStorage.getItem('id')) || 0;
         this.buscarUsuariosNoAgregados(query, usuarioID);
       } else {
         this.usuariosNoAgregados = [];
         this.noSeEncontraronUsuarios = false;
-      }
-    });
-
-    this.searchSubjectBuscar.pipe(
-      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
-      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
-    ).subscribe(query => {
-      if (query.length > 0) {
         this.buscarAmigosLocal(query);
-      } else {
-        this.obtenerAmigos(); // Mostrar todos los amigos si la cadena de búsqueda está vacía
-        this.noSeEncontraronAmigos = false; // No mostrar el mensaje si la cadena está vacía
       }
     });
   }
 
-  onNombreUsuarioAgregarChange() {
-    this.searchSubjectAgregar.next(this.nombreUsuarioAgregar.trim());
-  }
-
-  onNombreAmigoBuscarChange() {
-    this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+  onNombreUsuarioChange() {
+    this.searchSubject.next(this.nombreUsuario.trim());
   }
 
   buscarUsuariosNoAgregados(query: string, usuarioID: number) {
@@ -100,37 +89,38 @@ export class TusAmigosComponent implements OnInit {
   }
 
   buscarAmigosLocal(query: string) {
-    const amigosFiltrados = this.amigos.filter(amigo => amigo.nombre.toLowerCase().includes(query.toLowerCase()));
-    this.noSeEncontraronAmigos = amigosFiltrados.length === 0;
-    this.amigos = amigosFiltrados;
+    if (query.length > 0) {
+      this.amigosFiltrados = this.amigos.filter(amigo => amigo.nombre.toLowerCase().includes(query.toLowerCase()));
+      this.noSeEncontraronAmigos = this.amigosFiltrados.length === 0;
+    } else {
+      this.amigosFiltrados = this.amigos;
+      this.noSeEncontraronAmigos = false;
+    }
   }
 
-  agregarUsuario(nombreUsuario: string) {
-    const nombreUsuarioAgregar = nombreUsuario.trim();
-    if (!nombreUsuarioAgregar) {
-      return;
-    }
+  agregarUsuario(usuarioNombre: string) {
+    const usuarioActualID = Number(localStorage.getItem('id')) || 0;
 
     let objeto: AgregarUsuario = {
-      usuarioID: Number(localStorage.getItem('id')) || 0,
-      usuarioAgregar: nombreUsuarioAgregar
+      usuarioID: usuarioActualID,
+      usuarioAgregar: usuarioNombre
     };
 
     this.amigosService.agregarUsuario(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          this.nombreUsuarioAgregar = '';
+          this.nombreUsuario = '';
           this.mostrarMensajeDialogo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
           this.obtenerAmigos(); // Actualizar la lista de amigos
           this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
           this.noSeEncontraronUsuarios = false; // Ocultar el mensaje de no se encontraron usuarios
-          this.onNombreUsuarioAgregarChange(); // Reiniciar la búsqueda
+          this.onNombreUsuarioChange(); // Reiniciar la búsqueda
         }
       },
       error: (error) => {
-        this.nombreUsuarioAgregar = '';
+        this.nombreUsuario = '';
         this.mostrarMensajeDialogo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
-        this.onNombreUsuarioAgregarChange(); // Reiniciar la búsqueda
+        this.onNombreUsuarioChange(); // Reiniciar la búsqueda
       }
     });
   }
@@ -141,6 +131,7 @@ export class TusAmigosComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.amigos = data.amigos;
+          this.amigosFiltrados = this.amigos; // Inicializar amigosFiltrados con todos los amigos
         }
       },
       error: (error) => {
