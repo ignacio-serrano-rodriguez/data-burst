@@ -12,6 +12,7 @@ import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 import { Lista } from '../../../interfaces/Lista';
 import { HomeComponent } from '../home.component'; // Importar HomeComponent
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { RecargaService } from '../../../servicios/recarga.service'; // Importar RecargaService
 
 @Component({
   selector: 'app-tus-listas',
@@ -31,6 +32,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 export class TusListasComponent implements OnInit {
   private listasService = inject(ListasService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
+  private recargaService = inject(RecargaService); // Inyectar RecargaService
   listas: Lista[] = [];
   listasFiltradas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
@@ -51,6 +53,11 @@ export class TusListasComponent implements OnInit {
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
       this.buscarListasLocal(query);
+    });
+
+    // Suscribirse al evento de recarga de Data Burst
+    this.recargaService.recargarDataBurst$.subscribe(() => {
+      // No hacer nada para evitar la recarga del componente
     });
   }
 

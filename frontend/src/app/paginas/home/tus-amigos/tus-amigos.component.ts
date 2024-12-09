@@ -14,6 +14,7 @@ import { Amigo } from '../../../interfaces/Amigo';
 import { HomeComponent } from '../home.component'; // Importar HomeComponent
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { MensajeDialogoComponent } from './mensaje-dialogo/mensaje-dialogo.component'; // Importar el componente de diálogo
+import { RecargaService } from '../../../servicios/recarga.service'; // Importar RecargaService
 
 @Component({
   selector: 'app-tus-amigos',
@@ -36,10 +37,12 @@ export class TusAmigosComponent implements OnInit {
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   private router = inject(Router);
   private dialog = inject(MatDialog); // Inyectar MatDialog
+  private recargaService = inject(RecargaService); // Inyectar RecargaService
   amigos: { id: number, nombre: string }[] = [];
   amigosFiltrados: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
   nombreUsuario: string = '';
+  buscando: boolean = false;
   noSeEncontraronAmigos = false;
   noSeEncontraronUsuarios = false;
 
@@ -52,19 +55,22 @@ export class TusAmigosComponent implements OnInit {
       debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
-      if (query.length === 0) {
-        this.amigosFiltrados = this.amigos;
-        this.noSeEncontraronAmigos = false;
-        this.usuariosNoAgregados = [];
-        this.noSeEncontraronUsuarios = false;
-      } else if (query.length >= 3) {
-        const usuarioID = Number(localStorage.getItem('id')) || 0;
-        this.buscarUsuariosNoAgregados(query, usuarioID);
-      } else {
-        this.usuariosNoAgregados = [];
-        this.noSeEncontraronUsuarios = false;
+      if (this.buscando) {
         this.buscarAmigosLocal(query);
+      } else {
+        if (query.length >= 3) {
+          const usuarioID = Number(localStorage.getItem('id')) || 0;
+          this.buscarUsuariosNoAgregados(query, usuarioID);
+        } else {
+          this.usuariosNoAgregados = [];
+          this.noSeEncontraronUsuarios = false;
+        }
       }
+    });
+
+    // Suscribirse al evento de recarga de Data Burst
+    this.recargaService.recargarDataBurst$.subscribe(() => {
+      // No hacer nada para evitar la recarga del componente
     });
   }
 
