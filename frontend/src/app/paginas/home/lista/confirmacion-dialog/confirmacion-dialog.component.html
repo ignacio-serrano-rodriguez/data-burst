@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Confirmación</h1>
+<div mat-dialog-content>
+  <p>{{ data.mensaje }}</p>
+</div>
+<div mat-dialog-actions style="justify-content: space-between;">
+  <button mat-icon-button color="black" (click)="onNoClick()">
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <button mat-icon-button color="black" [mat-dialog-close]="true" cdkFocusInitial>
+    <mat-icon>check</mat-icon>
+  </button>
+</div>
