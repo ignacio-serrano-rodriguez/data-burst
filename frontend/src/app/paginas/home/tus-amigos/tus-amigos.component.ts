@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +13,6 @@ import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
 import { Amigo } from '../../../interfaces/Amigo';
 import { HomeComponent } from '../home.component'; // Importar HomeComponent
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { MensajeDialogoComponent } from './mensaje-dialogo/mensaje-dialogo.component'; // Importar el componente de diálogo
 import { RecargaService } from '../../../servicios/recarga.service'; // Importar RecargaService
 
 @Component({
@@ -26,7 +24,6 @@ import { RecargaService } from '../../../servicios/recarga.service'; // Importar
     MatInputModule,
     MatButtonModule,
     FormsModule,
-    MatDialogModule,
     MatIconModule,
     MatAutocompleteModule // Agregar MatAutocompleteModule a los imports
   ],
@@ -38,7 +35,6 @@ export class TusAmigosComponent implements OnInit {
   private amigosService = inject(AmigosService);
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   private router = inject(Router);
-  private dialog = inject(MatDialog); // Inyectar MatDialog
   private recargaService = inject(RecargaService); // Inyectar RecargaService
   @ViewChild('nombreUsuarioInput') nombreUsuarioInput!: ElementRef; // Referencia al input
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
@@ -115,6 +111,18 @@ export class TusAmigosComponent implements OnInit {
     }
   }
 
+  seleccionarUsuario(usuarioNombre: string) {
+    this.nombreUsuario = ''; // Limpiar el contenido del input
+    this.autocompleteTrigger.closePanel(); // Cerrar el panel de autocompletado
+    this.agregarUsuario(usuarioNombre); // Ejecutar la acción asignada
+  }
+
+  seleccionarAmigo(amigoNombre: string) {
+    this.nombreUsuario = ''; // Limpiar el contenido del input
+    this.autocompleteTrigger.closePanel(); // Cerrar el panel de autocompletado
+    this.verDetalleAmigo(amigoNombre); // Ejecutar la acción asignada
+  }
+
   agregarUsuario(usuarioNombre: string) {
     const usuarioActualID = Number(localStorage.getItem('id')) || 0;
 
@@ -126,8 +134,7 @@ export class TusAmigosComponent implements OnInit {
     this.amigosService.agregarUsuario(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          this.nombreUsuario = '';
-          this.mostrarMensajeDialogo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
+          this.mostrarMensajeInformativo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
           this.obtenerAmigos(); // Actualizar la lista de amigos
           this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
           this.noSeEncontraronUsuarios = false; // Ocultar el mensaje de no se encontraron usuarios
@@ -135,8 +142,7 @@ export class TusAmigosComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.nombreUsuario = '';
-        this.mostrarMensajeDialogo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
+        this.mostrarMensajeInformativo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
         this.onNombreUsuarioChange(); // Reiniciar la búsqueda
       }
     });
@@ -165,10 +171,15 @@ export class TusAmigosComponent implements OnInit {
     this.homeComponent.limpiarMensaje();
   }
 
-  mostrarMensajeDialogo(mensaje: string) {
-    this.dialog.open(MensajeDialogoComponent, {
-      data: { mensaje }
-    });
+  mostrarMensajeInformativo(mensaje: string) {
+    const mensajeInformativo = document.getElementById('mensajeInformativo');
+    if (mensajeInformativo) {
+      mensajeInformativo.textContent = mensaje;
+      mensajeInformativo.style.color = '#61B300'; // Aplicar el color
+      setTimeout(() => {
+        mensajeInformativo.textContent = '';
+      }, 5000); // Limpiar el mensaje después de 5 segundos
+    }
   }
 
   salirDelInput() {

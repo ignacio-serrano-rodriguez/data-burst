@@ -13,11 +13,11 @@
 </div>
 
 <mat-autocomplete #auto="matAutocomplete">
-  <mat-option *ngFor="let usuario of usuariosNoAgregados" [value]="usuario.nombre" (click)="agregarUsuario(usuario.nombre)">
+  <mat-option *ngFor="let usuario of usuariosNoAgregados" [value]="usuario.nombre" (click)="seleccionarUsuario(usuario.nombre)">
     <span>{{ usuario.nombre }}</span>
     <mat-icon>person_add</mat-icon>
   </mat-option>
-  <mat-option *ngFor="let amigo of amigosFiltrados" [value]="amigo.nombre" (click)="verDetalleAmigo(amigo.nombre)">
+  <mat-option *ngFor="let amigo of amigosFiltrados" [value]="amigo.nombre" (click)="seleccionarAmigo(amigo.nombre)">
     <mat-icon class="option-icon" style="color: rgba(128, 128, 128, 0.6);">person</mat-icon>
     <span>{{ amigo.nombre }}</span>
   </mat-option>
