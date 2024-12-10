@@ -32,7 +32,7 @@ export class TusListasComponent implements OnInit {
   private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
   listas: Lista[] = [];
   listasFiltradas: Lista[] = [];
-  @Output() listaSeleccionada = new EventEmitter<number>();
+  @Output() listaSeleccionada = new EventEmitter<Lista>(); // Cambiar el tipo de EventEmitter a Lista
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
   @ViewChild('nombreListaInput') nombreListaInput!: ElementRef; // Referencia al input
 
@@ -78,7 +78,7 @@ export class TusListasComponent implements OnInit {
           this.publica = false; // Resetear el toggle a su valor por defecto (candado)
           this.obtenerListas(); // Actualizar la lista de listas
           this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca después de crear una lista
-          this.seleccionarLista(data.lista.id); // Cargar directamente la lista creada
+          this.seleccionarLista(data.lista); // Pasar directamente la lista creada
         }
       },
       error: (error) => {
@@ -107,9 +107,9 @@ export class TusListasComponent implements OnInit {
     });
   }
 
-  seleccionarLista(id: number) {
+  seleccionarLista(lista: Lista) {
     this.homeComponent.limpiarMensaje();
-    this.listaSeleccionada.emit(id);
+    this.listaSeleccionada.emit(lista); // Emitir la lista seleccionada
   }
 
   esNombreListaValido(): boolean {

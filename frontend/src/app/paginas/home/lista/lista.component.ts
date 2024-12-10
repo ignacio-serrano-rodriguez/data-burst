@@ -40,9 +40,8 @@ export class ListaComponent implements OnInit {
   private elementosService = inject(ElementosService);
   private amigosService = inject(AmigosService);
   private dialog = inject(MatDialog);
-  @Input() listaId: number | null = null;
+  @Input() lista: Lista | undefined; // Recibir la lista seleccionada
   @Output() volverAListasYAmigos = new EventEmitter<void>();
-  lista: Lista | undefined;
   elementos: Elemento[] = [];
   elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
@@ -58,9 +57,9 @@ export class ListaComponent implements OnInit {
   private searchSubjectBuscar = new Subject<string>();
 
   ngOnInit(): void {
-    if (this.listaId) {
-      this.obtenerLista(this.listaId);
-      this.obtenerElementosLista(this.listaId);
+    if (this.lista) {
+      this.nuevoNombreLista = this.lista.nombre;
+      this.obtenerElementosLista(this.lista.id);
     }
 
     this.searchSubjectBuscar.pipe(
@@ -69,7 +68,7 @@ export class ListaComponent implements OnInit {
     ).subscribe(query => {
       if (query.length >= 3) {
         const usuarioID = Number(localStorage.getItem('id')) || 0;
-        this.buscarAmigosNoManipulanLista(query, usuarioID, this.listaId!);
+        this.buscarAmigosNoManipulanLista(query, usuarioID, this.lista!.id);
       } else {
         this.amigosEncontrados = [];
         this.noSeEncontraronAmigos = false;
@@ -93,23 +92,6 @@ export class ListaComponent implements OnInit {
         console.error('Error al buscar amigos:', error);
         this.amigosEncontrados = [];
         this.noSeEncontraronAmigos = true;
-      }
-    });
-  }
-
-  obtenerLista(id: number) {
-    const usuarioId = Number(localStorage.getItem('id')) || 0;
-    this.listasService.obtenerLista(id, usuarioId).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          this.lista = data.lista;
-          this.nuevoNombreLista = this.lista.nombre;
-        } else {
-          console.error('Error al obtener la lista:', data.mensaje);
-        }
-      },
-      error: (error) => {
-        console.error('Error al obtener la lista:', error);
       }
     });
   }
@@ -156,8 +138,8 @@ export class ListaComponent implements OnInit {
 
   toggleColaborar() {
     this.mostrarColaborarComponent = !this.mostrarColaborarComponent;
-    if (this.mostrarColaborarComponent && this.listaId) {
-      this.obtenerColaboradores(this.listaId);
+    if (this.mostrarColaborarComponent && this.lista) {
+      this.obtenerColaboradores(this.lista.id);
     }
   }
 
@@ -311,7 +293,7 @@ export class ListaComponent implements OnInit {
         next: (data) => {
           if (data.exito) {
             console.log('Elemento desasignado exitosamente');
-            this.obtenerElementosLista(this.lista?.id!);
+            this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId); // Actualizar la lista de elementos localmente
           } else {
             console.log('Error al desasignar el elemento');
             this.mostrarMensajeNegativo('Error al desasignar el elemento.');

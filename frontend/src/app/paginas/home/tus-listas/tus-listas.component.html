@@ -26,7 +26,7 @@
 </div>
 
 <mat-autocomplete #auto="matAutocomplete">
-  <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista.id)">
+  <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista)">
     {{ lista.nombre }}
     <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
     <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
