@@ -4,8 +4,8 @@
 <div class="input-button-container">
   <!-- Input para agregar usuarios y buscar en tus amigos -->
   <mat-form-field class="elementoFormulario">
-    <mat-label class="etiquetaFormulario">Nombrde del usuario</mat-label>
-    <input matInput id="nombreUsuario" #nombreUsuarioInput [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.enter)="agregarUsuario(nombreUsuario)" (keydown.escape)="salirDelInput()">
+    <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
+    <input matInput id="nombreUsuario" #nombreUsuarioInput [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
     <button mat-icon-button matPrefix (click)="salirDelInput()">
       <mat-icon>close</mat-icon>
     </button>
