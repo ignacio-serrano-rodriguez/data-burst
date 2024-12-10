@@ -27,7 +27,7 @@
         <mat-icon>{{ lista?.publica ? 'public' : 'lock' }}</mat-icon>
       </button>
       <button mat-icon-button (click)="toggleColaborar()">
-        <mat-icon>group</mat-icon>
+        <mat-icon [style.color]="mostrarColaborarComponent ? '#61B300' : 'inherit'">group</mat-icon>
       </button>
       <button mat-icon-button (click)="eliminarLista()">
         <mat-icon>delete</mat-icon>
@@ -38,7 +38,7 @@
   <div *ngIf="mostrarColaborarComponent">
     <div class="input-button-container">
       <mat-form-field class="elementoFormulario">
-        <mat-label class="etiquetaFormulario">Invitar Amigos</mat-label>
+        <mat-label class="etiquetaFormulario">Invitar amigos</mat-label>
         <input matInput id="nombreAmigoBuscar" #nombreAmigoBuscarInput [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
         <button mat-icon-button matPrefix (click)="salirDelInput()">
           <mat-icon>close</mat-icon>
