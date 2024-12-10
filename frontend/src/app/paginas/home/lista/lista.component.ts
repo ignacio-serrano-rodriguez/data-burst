@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete'; // Importar MatAutocompleteModule y MatAutocompleteTrigger
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
@@ -13,7 +14,6 @@ import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from './agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
-import { MensajeDialogoComponent } from './mensaje-dialog/mensaje-dialogo.component';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
@@ -26,9 +26,9 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatButtonModule,
     AgregadorComponent,
     FormsModule,
-    MatDialogModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatAutocompleteModule // Agregar MatAutocompleteModule a los imports
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
@@ -43,6 +43,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
   @Input() lista: Lista | undefined; // Recibir la lista seleccionada
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   @ViewChild('nombreListaInput') nombreListaInput!: ElementRef; // Referencia al input
+  @ViewChild('nombreAmigoBuscarInput') nombreAmigoBuscarInput!: ElementRef; // Referencia al input de búsqueda de amigos
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
   elementos: Elemento[] = [];
   elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
@@ -61,6 +63,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.lista) {
       this.nuevoNombreLista = this.lista.nombre;
       this.obtenerElementosLista(this.lista.id);
+      this.obtenerColaboradores(this.lista.id);
     }
 
     this.searchSubjectBuscar.pipe(
@@ -85,6 +88,11 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   onNombreAmigoBuscarChange() {
     this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+    this.autocompleteTrigger.openPanel(); // Abrir el desplegable
+  }
+
+  abrirDesplegable() {
+    this.autocompleteTrigger.openPanel();
   }
 
   buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number) {
@@ -241,14 +249,14 @@ export class ListaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           if (data.exito) {
             console.log('Invitación enviada exitosamente');
-            this.mostrarMensajeDialogo(`Invitación enviada. (${amigoNombre})`);
+            this.mostrarMensajeInformativo(`Invitación enviada. (${amigoNombre})`);
             this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
             this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
             this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
             this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
           } else {
             console.log('Error al enviar la invitación:', data.mensaje);
-            this.mostrarMensajeDialogo(`Error al enviar la invitación. (${amigoNombre})`);
+            this.mostrarMensajeInformativo(`Error al enviar la invitación. (${amigoNombre})`);
             this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
             this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
             this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
@@ -257,7 +265,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         },
         error: (error) => {
           console.error('Error al enviar la invitación:', error);
-          this.mostrarMensajeDialogo(`Error al enviar la invitación. (${amigoNombre})`);
+          this.mostrarMensajeInformativo(`Error al enviar la invitación. (${amigoNombre})`);
           this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
           this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
           this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
@@ -267,10 +275,15 @@ export class ListaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  mostrarMensajeDialogo(mensaje: string) {
-    this.dialog.open(MensajeDialogoComponent, {
-      data: { mensaje }
-    });
+  mostrarMensajeInformativo(mensaje: string) {
+    const mensajeInformativo = document.getElementById('mensajeInformativo');
+    if (mensajeInformativo) {
+      mensajeInformativo.textContent = mensaje;
+      mensajeInformativo.style.color = 'rgb(97, 179, 0)'; // Aplicar el color
+      setTimeout(() => {
+        mensajeInformativo.textContent = '';
+      }, 5000); // Limpiar el mensaje después de 5 segundos
+    }
   }
 
   mostrarMensajePositivo(mensaje: string) {
@@ -394,5 +407,18 @@ export class ListaComponent implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  salirDelInput() {
+    if (this.nombreAmigoBuscar.trim() === '') {
+      this.nombreAmigoBuscarInput.nativeElement.blur(); // Salir del input si está vacío
+    } else {
+      this.nombreAmigoBuscar = ''; // Limpiar el contenido del input
+      this.amigosEncontrados = []; // Limpiar la lista de amigos encontrados
+      this.noSeEncontraronAmigos = false; // Asegurarse de que el mensaje no aparezca
+      setTimeout(() => {
+        this.autocompleteTrigger.openPanel(); // Abrir el desplegable para mostrar los amigos encontrados
+      }, 0);
+    }
   }
 }

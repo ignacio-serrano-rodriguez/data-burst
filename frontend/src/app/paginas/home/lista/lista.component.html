@@ -36,30 +36,26 @@
   </div>
 
   <div *ngIf="mostrarColaborarComponent">
-    <ul *ngIf="colaboradores.length > 0">
-      <li *ngFor="let colaborador of colaboradores">
-        {{ colaborador.nombre }}
-      </li>
-    </ul>
-
-    <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Invitar Amigos</mat-label>
-      <input matInput id="nombreAmigoBuscar" [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()">
-    </mat-form-field>
-
-    <ul *ngIf="amigosEncontrados.length > 0">
-      <li *ngFor="let amigo of amigosEncontrados">
-        {{ amigo.nombre }}
-        <button mat-icon-button color="black" (click)="invitarAmigo(amigo.id, amigo.nombre)">
-          <mat-icon>person_add</mat-icon>
+    <div class="input-button-container">
+      <mat-form-field class="elementoFormulario">
+        <mat-label class="etiquetaFormulario">Invitar Amigos</mat-label>
+        <input matInput id="nombreAmigoBuscar" #nombreAmigoBuscarInput [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
+        <button mat-icon-button matPrefix (click)="salirDelInput()">
+          <mat-icon>close</mat-icon>
         </button>
-      </li>
-    </ul>
-
-    <div *ngIf="noSeEncontraronAmigos">
-      <p>No se encontraron amigos.</p>
+      </mat-form-field>
     </div>
 
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let colaborador of colaboradores" [value]="colaborador.nombre" [disabled]="true">
+        <span>{{ colaborador.nombre }}</span>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);">person</mat-icon>
+      </mat-option>
+      <mat-option *ngFor="let amigo of amigosEncontrados" [value]="amigo.nombre" (click)="invitarAmigo(amigo.id, amigo.nombre)">
+        <span>{{ amigo.nombre }}</span>
+        <mat-icon>person_add</mat-icon>
+      </mat-option>
+    </mat-autocomplete>
   </div>
 
   <div>
