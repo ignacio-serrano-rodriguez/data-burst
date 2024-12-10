@@ -4,41 +4,23 @@
 <div class="input-button-container">
   <!-- Input para agregar usuarios y buscar en tus amigos -->
   <mat-form-field class="elementoFormulario">
-    <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
-    <input matInput id="nombreUsuario" #nombreUsuarioInput [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()" (keydown.enter)="agregarUsuario(nombreUsuario)" (keydown.escape)="salirDelInput()">
+    <mat-label class="etiquetaFormulario">Nombrde del usuario</mat-label>
+    <input matInput id="nombreUsuario" #nombreUsuarioInput [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.enter)="agregarUsuario(nombreUsuario)" (keydown.escape)="salirDelInput()">
     <button mat-icon-button matPrefix (click)="salirDelInput()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
 </div>
 
-<!-- Lista de usuarios no agregados encontrados -->
-<div *ngIf="usuariosNoAgregados.length > 0 && !buscando">
-  <ul>
-    <li *ngFor="let usuario of usuariosNoAgregados">
-      {{ usuario.nombre }}
-      <button mat-icon-button color="black" (click)="agregarUsuario(usuario.nombre)">
-        <mat-icon>person_add</mat-icon>
-      </button>
-    </li>
-  </ul>
-</div>
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let usuario of usuariosNoAgregados" [value]="usuario.nombre" (click)="agregarUsuario(usuario.nombre)">
+    <span>{{ usuario.nombre }}</span>
+    <mat-icon>person_add</mat-icon>
+  </mat-option>
+  <mat-option *ngFor="let amigo of amigosFiltrados" [value]="amigo.nombre" (click)="verDetalleAmigo(amigo.nombre)">
+    <mat-icon class="option-icon" style="color: rgba(128, 128, 128, 0.6);">person</mat-icon>
+    <span>{{ amigo.nombre }}</span>
+  </mat-option>
+</mat-autocomplete>
 
-<!-- Mensaje cuando no se encuentran usuarios no agregados -->
-<div *ngIf="noSeEncontraronUsuarios && !buscando">
-  <p>No se encontraron usuarios.</p>
-</div>
-
-<!-- Lista de amigos encontrados -->
-<div *ngIf="amigosFiltrados.length > 0">
-  <ul>
-    <li *ngFor="let amigo of amigosFiltrados">
-      <a (click)="verDetalleAmigo(amigo.nombre)">{{ amigo.nombre }}</a>
-    </li>
-  </ul>
-</div>
-
-<!-- Mensaje cuando no se encuentran amigos -->
-<div *ngIf="noSeEncontraronAmigos">
-  <p>No se encontraron amigos.</p>
-</div>
+<div id="mensajeInformativo"></div>

@@ -7,6 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete'; // Importar MatAutocompleteModule y MatAutocompleteTrigger
 
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
@@ -26,7 +27,8 @@ import { RecargaService } from '../../../servicios/recarga.service'; // Importar
     MatButtonModule,
     FormsModule,
     MatDialogModule,
-    MatIconModule 
+    MatIconModule,
+    MatAutocompleteModule // Agregar MatAutocompleteModule a los imports
   ],
   templateUrl: './tus-amigos.component.html',
   styleUrls: ['./tus-amigos.component.css']
@@ -39,6 +41,7 @@ export class TusAmigosComponent implements OnInit {
   private dialog = inject(MatDialog); // Inyectar MatDialog
   private recargaService = inject(RecargaService); // Inyectar RecargaService
   @ViewChild('nombreUsuarioInput') nombreUsuarioInput!: ElementRef; // Referencia al input
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
   amigos: { id: number, nombre: string }[] = [];
   amigosFiltrados: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
@@ -79,6 +82,11 @@ export class TusAmigosComponent implements OnInit {
 
   onNombreUsuarioChange() {
     this.searchSubject.next(this.nombreUsuario.trim());
+    this.autocompleteTrigger.openPanel(); // Abrir el desplegable
+  }
+
+  abrirDesplegable() {
+    this.autocompleteTrigger.openPanel();
   }
 
   buscarUsuariosNoAgregados(query: string, usuarioID: number) {
@@ -164,11 +172,17 @@ export class TusAmigosComponent implements OnInit {
   }
 
   salirDelInput() {
-    this.nombreUsuario = ''; // Limpiar el contenido del input
-    this.nombreUsuarioInput.nativeElement.blur(); // Salir del input
-    this.obtenerAmigos(); // Mostrar de nuevo todos los amigos listados
-    this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
-    this.noSeEncontraronAmigos = false; // Asegurarse de que el mensaje no aparezca
-    this.noSeEncontraronUsuarios = false; // Asegurarse de que el mensaje no aparezca
+    if (this.nombreUsuario.trim() === '') {
+      this.nombreUsuarioInput.nativeElement.blur(); // Salir del input si está vacío
+    } else {
+      this.nombreUsuario = ''; // Limpiar el contenido del input
+      this.amigosFiltrados = this.amigos; // Mostrar de nuevo todos los amigos listados
+      this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
+      this.noSeEncontraronAmigos = false; // Asegurarse de que el mensaje no aparezca
+      this.noSeEncontraronUsuarios = false; // Asegurarse de que el mensaje no aparezca
+      setTimeout(() => {
+        this.autocompleteTrigger.openPanel(); // Abrir el desplegable para mostrar los amigos agregados
+      }, 0);
+    }
   }
 }
