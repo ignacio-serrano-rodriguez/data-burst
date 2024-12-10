@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,7 +11,6 @@ import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 import { Lista } from '../../../interfaces/Lista';
 import { HomeComponent } from '../home.component'; // Importar HomeComponent
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tus-listas',
@@ -35,27 +34,15 @@ export class TusListasComponent implements OnInit {
   listasFiltradas: Lista[] = [];
   @Output() listaSeleccionada = new EventEmitter<number>();
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
+  @ViewChild('nombreListaInput') nombreListaInput!: ElementRef; // Referencia al input
 
   nombreLista: string = '';
-  publica: boolean = true; // Variable para el toggle
+  publica: boolean = false; // Variable para el toggle, por defecto false (candado)
   noSeEncontraronListas = false;
   listaSeleccionadaId: number | null = null; // Variable para la lista seleccionada
 
-  private searchSubject = new Subject<string>();
-
   ngOnInit(): void {
     this.obtenerListas();
-
-    this.searchSubject.pipe(
-      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
-      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
-    ).subscribe(query => {
-      this.buscarListasLocal(query);
-    });
-  }
-
-  onNombreListaChange() {
-    this.searchSubject.next(this.nombreLista.trim());
   }
 
   abrirDesplegable() {
@@ -88,7 +75,7 @@ export class TusListasComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.nombreLista = '';
-          this.publica = true; // Resetear el toggle a su valor por defecto
+          this.publica = false; // Resetear el toggle a su valor por defecto (candado)
           this.obtenerListas(); // Actualizar la lista de listas
           this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca después de crear una lista
           this.seleccionarLista(data.lista.id); // Cargar directamente la lista creada
@@ -96,7 +83,7 @@ export class TusListasComponent implements OnInit {
       },
       error: (error) => {
         this.nombreLista = '';
-        this.publica = true; // Resetear el toggle a su valor por defecto
+        this.publica = false; // Resetear el toggle a su valor por defecto (candado)
         this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.nombre + ")");
       }
     });
@@ -135,5 +122,12 @@ export class TusListasComponent implements OnInit {
 
   togglePublica() {
     this.publica = !this.publica;
+  }
+
+  salirDelInput() {
+    this.nombreLista = ''; // Limpiar el contenido del input
+    this.nombreListaInput.nativeElement.blur(); // Salir del input
+    this.listasFiltradas = this.listas; // Mostrar de nuevo todas las listas listadas
+    this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca
   }
 }
