@@ -40,11 +40,13 @@ export class ListaComponent implements OnInit, AfterViewInit {
   private elementosService = inject(ElementosService);
   private amigosService = inject(AmigosService);
   private dialog = inject(MatDialog);
-  @Input() lista: Lista | undefined; // Recibir la lista seleccionada
+  @Input() lista: Lista | undefined;
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   @ViewChild('nombreListaInput') nombreListaInput!: ElementRef;
   @ViewChild('nombreAmigoBuscarInput') nombreAmigoBuscarInput!: ElementRef;
+  @ViewChild('nombreElementoBuscarInput') nombreElementoBuscarInput!: ElementRef;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
+  @ViewChild('autoElemento', { read: MatAutocompleteTrigger }) autocompleteTriggerElemento!: MatAutocompleteTrigger;
   elementos: Elemento[] = [];
   elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
@@ -53,11 +55,15 @@ export class ListaComponent implements OnInit, AfterViewInit {
   editandoNombre = false;
   nuevoNombreLista = '';
   nombreAmigoBuscar: string = '';
+  nombreElementoBuscar: string = '';
   amigosEncontrados: any[] = [];
+  elementosEncontrados: any[] = [];
   noSeEncontraronAmigos = false;
+  noSeEncontraronElementos = false;
   usuarioActual: number = Number(localStorage.getItem('id')) || 0;
 
   private searchSubjectBuscar = new Subject<string>();
+  private searchSubjectElemento = new Subject<string>();
 
   ngOnInit(): void {
     if (this.lista) {
@@ -72,10 +78,22 @@ export class ListaComponent implements OnInit, AfterViewInit {
     ).subscribe(query => {
       if (query.length >= 3) {
         const usuarioID = Number(localStorage.getItem('id')) || 0;
-        this.buscarAmigosNoManipulanLista(query, usuarioID, this.lista!.id);
+        this.buscarAmigosNoManipulanLista(query, usuarioID, this.lista?.id!);
       } else {
         this.amigosEncontrados = [];
         this.noSeEncontraronAmigos = false;
+      }
+    });
+
+    this.searchSubjectElemento.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      if (query.length >= 3) {
+        this.buscarElementos(query);
+      } else {
+        this.elementosEncontrados = [];
+        this.noSeEncontraronElementos = false;
       }
     });
   }
@@ -91,8 +109,17 @@ export class ListaComponent implements OnInit, AfterViewInit {
     this.autocompleteTrigger.openPanel();
   }
 
+  onNombreElementoBuscarChange() {
+    this.searchSubjectElemento.next(this.nombreElementoBuscar.trim());
+    this.autocompleteTriggerElemento.openPanel();
+  }
+
   abrirDesplegable() {
     this.autocompleteTrigger.openPanel();
+  }
+
+  abrirDesplegableElemento() {
+    this.autocompleteTriggerElemento.openPanel();
   }
 
   buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number) {
@@ -106,6 +133,21 @@ export class ListaComponent implements OnInit, AfterViewInit {
       error: () => {
         this.amigosEncontrados = [];
         this.noSeEncontraronAmigos = true;
+      }
+    });
+  }
+
+  buscarElementos(query: string) {
+    this.elementosService.buscarElementos(query).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.elementosEncontrados = data.elementos;
+          this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
+        }
+      },
+      error: () => {
+        this.elementosEncontrados = [];
+        this.noSeEncontraronElementos = true;
       }
     });
   }
@@ -181,7 +223,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   cancelarEdicion() {
     this.editandoNombre = false;
-    this.nuevoNombreLista = this.lista ? this.lista.nombre : '';
+    if (this.lista) {
+      this.nuevoNombreLista = this.lista.nombre;
+    }
   }
 
   eliminarLista() {
@@ -237,6 +281,28 @@ export class ListaComponent implements OnInit, AfterViewInit {
           this.noSeEncontraronAmigos = false;
           this.nombreAmigoBuscar = '';
           this.onNombreAmigoBuscarChange();
+        }
+      });
+    }
+  }
+
+  agregarElemento(elementoId: number) {
+    if (this.lista) {
+      this.elementosService.asignarElemento(this.lista.id, elementoId).subscribe({
+        next: (data) => {
+          if (data.exito) {
+            this.obtenerElementosLista(this.lista!.id);
+            this.elementosEncontrados = [];
+            this.noSeEncontraronElementos = false;
+            this.nombreElementoBuscar = '';
+            this.onNombreElementoBuscarChange();
+          }
+        },
+        error: () => {
+          this.elementosEncontrados = [];
+          this.noSeEncontraronElementos = false;
+          this.nombreElementoBuscar = '';
+          this.onNombreElementoBuscarChange();
         }
       });
     }
@@ -320,6 +386,19 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.noSeEncontraronAmigos = false;
       setTimeout(() => {
         this.autocompleteTrigger.openPanel();
+      }, 0);
+    }
+  }
+
+  salirDelInputElemento() {
+    if (this.nombreElementoBuscar.trim() === '') {
+      this.nombreElementoBuscarInput.nativeElement.blur();
+    } else {
+      this.nombreElementoBuscar = '';
+      this.elementosEncontrados = [];
+      this.noSeEncontraronElementos = false;
+      setTimeout(() => {
+        this.autocompleteTriggerElemento.openPanel();
       }, 0);
     }
   }

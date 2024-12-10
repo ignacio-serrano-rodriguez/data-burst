@@ -1,24 +1,4 @@
-<mat-form-field class="example-full-width">
-  <mat-label>Añadir elemento</mat-label>
-  <input matInput [(ngModel)]="buscarElemento" (input)="onBuscarElementoChange()">
-</mat-form-field>
-
-<div *ngIf="elementos.length > 0">
-  <ul>
-    <li *ngFor="let elemento of elementos">
-      {{ elemento.nombre }}
-      <button mat-icon-button color="black" (click)="asignarElemento(elemento.id)">
-        <mat-icon>add</mat-icon>
-      </button>
-    </li>
-  </ul>
-</div>
-
-<div *ngIf="noSeEncontraronElementos">
-  <p>No se encontraron elementos.</p>
-</div>
-
-<div *ngIf="mostrarBotonCrear">
+<div>
   <button mat-flat-button color="accent" (click)="mostrarFormulario()">
     ¿Elemento inexistente? Crear
   </button>
