@@ -55,19 +55,14 @@ export class TusAmigosComponent implements OnInit {
       debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
-      if (query.length === 0) {
-        this.amigosFiltrados = this.amigos;
-        this.noSeEncontraronAmigos = false;
-        this.usuariosNoAgregados = [];
-        this.noSeEncontraronUsuarios = false;
-      } else if (query.length >= 3) {
-        const usuarioID = Number(localStorage.getItem('id')) || 0;
+      const usuarioID = Number(localStorage.getItem('id')) || 0;
+      if (query.length >= 3) {
         this.buscarUsuariosNoAgregados(query, usuarioID);
       } else {
         this.usuariosNoAgregados = [];
         this.noSeEncontraronUsuarios = false;
-        this.buscarAmigosLocal(query);
       }
+      this.buscarAmigosLocal(query); // Buscar amigos locales siempre
     });
 
     // Suscribirse al evento de recarga de Data Burst
