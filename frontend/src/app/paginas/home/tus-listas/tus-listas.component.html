@@ -12,17 +12,7 @@
     <button mat-icon-button matSuffix (click)="togglePublica()">
       <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
     </button>
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista.id)">
-        {{ lista.nombre }}
-        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
-        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
-        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
-        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
-      </mat-option>
-    </mat-autocomplete>
   </mat-form-field>
-
   <!-- Botón para crear la lista con icono de añadir en color negro -->
   <button 
     id="boton" 
@@ -34,5 +24,15 @@
     <mat-icon>add</mat-icon>
   </button>
 </div>
+
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista.id)">
+    {{ lista.nombre }}
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
+    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
+  </mat-option>
+</mat-autocomplete>
 
 <div id="mensajeInformativo"></div>

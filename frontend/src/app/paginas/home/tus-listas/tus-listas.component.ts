@@ -125,9 +125,15 @@ export class TusListasComponent implements OnInit {
   }
 
   salirDelInput() {
-    this.nombreLista = ''; // Limpiar el contenido del input
-    this.nombreListaInput.nativeElement.blur(); // Salir del input
-    this.listasFiltradas = this.listas; // Mostrar de nuevo todas las listas listadas
-    this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca
+    if (this.nombreLista.trim() === '') {
+      this.nombreListaInput.nativeElement.blur(); // Salir del input si está vacío
+    } else {
+      this.nombreLista = ''; // Limpiar el contenido del input
+      this.listasFiltradas = this.listas; // Mostrar de nuevo todas las listas listadas
+      this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca
+      setTimeout(() => {
+        this.autocompleteTrigger.openPanel(); // Abrir el desplegable para mostrar las listas
+      }, 0);
+    }
   }
 }
