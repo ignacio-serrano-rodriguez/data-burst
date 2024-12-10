@@ -10,7 +10,7 @@
     <div *ngIf="editandoNombre">
       <mat-form-field>
         <mat-label>Nombre de la Lista</mat-label>
-        <input matInput [(ngModel)]="nuevoNombreLista">
+        <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()">
       </mat-form-field>
       <button mat-icon-button color="black" (click)="cancelarEdicion()">
         <mat-icon>cancel</mat-icon>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,7 +34,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   styleUrls: ['./lista.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ListaComponent implements OnInit {
+export class ListaComponent implements OnInit, AfterViewInit {
 
   private listasService = inject(ListasService);
   private elementosService = inject(ElementosService);
@@ -42,6 +42,7 @@ export class ListaComponent implements OnInit {
   private dialog = inject(MatDialog);
   @Input() lista: Lista | undefined; // Recibir la lista seleccionada
   @Output() volverAListasYAmigos = new EventEmitter<void>();
+  @ViewChild('nombreListaInput') nombreListaInput!: ElementRef; // Referencia al input
   elementos: Elemento[] = [];
   elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
@@ -74,6 +75,12 @@ export class ListaComponent implements OnInit {
         this.noSeEncontraronAmigos = false;
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.editandoNombre) {
+      this.nombreListaInput.nativeElement.focus();
+    }
   }
 
   onNombreAmigoBuscarChange() {
@@ -153,6 +160,9 @@ export class ListaComponent implements OnInit {
 
   editarNombre() {
     this.editandoNombre = true;
+    setTimeout(() => {
+      this.nombreListaInput.nativeElement.focus(); // Hacer focus en el input
+    }, 0);
   }
 
   guardarNombre() {
