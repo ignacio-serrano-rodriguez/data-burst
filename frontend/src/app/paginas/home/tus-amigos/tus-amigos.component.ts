@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -38,6 +38,7 @@ export class TusAmigosComponent implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog); // Inyectar MatDialog
   private recargaService = inject(RecargaService); // Inyectar RecargaService
+  @ViewChild('nombreUsuarioInput') nombreUsuarioInput!: ElementRef; // Referencia al input
   amigos: { id: number, nombre: string }[] = [];
   amigosFiltrados: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
@@ -55,16 +56,18 @@ export class TusAmigosComponent implements OnInit {
       debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
       distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
     ).subscribe(query => {
-      if (this.buscando) {
-        this.buscarAmigosLocal(query);
+      if (query.length === 0) {
+        this.amigosFiltrados = this.amigos;
+        this.noSeEncontraronAmigos = false;
+        this.usuariosNoAgregados = [];
+        this.noSeEncontraronUsuarios = false;
+      } else if (query.length >= 3) {
+        const usuarioID = Number(localStorage.getItem('id')) || 0;
+        this.buscarUsuariosNoAgregados(query, usuarioID);
       } else {
-        if (query.length >= 3) {
-          const usuarioID = Number(localStorage.getItem('id')) || 0;
-          this.buscarUsuariosNoAgregados(query, usuarioID);
-        } else {
-          this.usuariosNoAgregados = [];
-          this.noSeEncontraronUsuarios = false;
-        }
+        this.usuariosNoAgregados = [];
+        this.noSeEncontraronUsuarios = false;
+        this.buscarAmigosLocal(query);
       }
     });
 
@@ -158,5 +161,14 @@ export class TusAmigosComponent implements OnInit {
     this.dialog.open(MensajeDialogoComponent, {
       data: { mensaje }
     });
+  }
+
+  salirDelInput() {
+    this.nombreUsuario = ''; // Limpiar el contenido del input
+    this.nombreUsuarioInput.nativeElement.blur(); // Salir del input
+    this.obtenerAmigos(); // Mostrar de nuevo todos los amigos listados
+    this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
+    this.noSeEncontraronAmigos = false; // Asegurarse de que el mensaje no aparezca
+    this.noSeEncontraronUsuarios = false; // Asegurarse de que el mensaje no aparezca
   }
 }

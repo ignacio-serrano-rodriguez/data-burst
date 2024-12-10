@@ -1,13 +1,19 @@
 <h2>Tus amigos</h2>
 
-<!-- Input para agregar usuarios y buscar en tus amigos -->
-<mat-form-field class="elementoFormulario">
-  <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
-  <input matInput id="nombreUsuario" [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()">
-</mat-form-field>
+<!-- Contenedor para alinear el input y el botón en la misma línea -->
+<div class="input-button-container">
+  <!-- Input para agregar usuarios y buscar en tus amigos -->
+  <mat-form-field class="elementoFormulario">
+    <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
+    <input matInput id="nombreUsuario" #nombreUsuarioInput [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()" (keydown.enter)="agregarUsuario(nombreUsuario)" (keydown.escape)="salirDelInput()">
+    <button mat-icon-button matPrefix (click)="salirDelInput()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
 
 <!-- Lista de usuarios no agregados encontrados -->
-<div *ngIf="usuariosNoAgregados.length > 0">
+<div *ngIf="usuariosNoAgregados.length > 0 && !buscando">
   <ul>
     <li *ngFor="let usuario of usuariosNoAgregados">
       {{ usuario.nombre }}
@@ -19,7 +25,7 @@
 </div>
 
 <!-- Mensaje cuando no se encuentran usuarios no agregados -->
-<div *ngIf="noSeEncontraronUsuarios">
+<div *ngIf="noSeEncontraronUsuarios && !buscando">
   <p>No se encontraron usuarios.</p>
 </div>
 
