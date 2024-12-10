@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, inject, CUSTOM_ELEMENTS
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete'; // Importar MatAutocompleteModule y MatAutocompleteTrigger
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
@@ -28,7 +28,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule // Agregar MatAutocompleteModule a los imports
+    MatAutocompleteModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
@@ -42,9 +42,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
   private dialog = inject(MatDialog);
   @Input() lista: Lista | undefined; // Recibir la lista seleccionada
   @Output() volverAListasYAmigos = new EventEmitter<void>();
-  @ViewChild('nombreListaInput') nombreListaInput!: ElementRef; // Referencia al input
-  @ViewChild('nombreAmigoBuscarInput') nombreAmigoBuscarInput!: ElementRef; // Referencia al input de búsqueda de amigos
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
+  @ViewChild('nombreListaInput') nombreListaInput!: ElementRef;
+  @ViewChild('nombreAmigoBuscarInput') nombreAmigoBuscarInput!: ElementRef;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   elementos: Elemento[] = [];
   elementosLikeDislike: { [key: number]: boolean | null } = {};
   amigos: any[] = [];
@@ -88,7 +88,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   onNombreAmigoBuscarChange() {
     this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
-    this.autocompleteTrigger.openPanel(); // Abrir el desplegable
+    this.autocompleteTrigger.openPanel();
   }
 
   abrirDesplegable() {
@@ -103,8 +103,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
           this.noSeEncontraronAmigos = this.amigosEncontrados.length === 0;
         }
       },
-      error: (error) => {
-        console.error('Error al buscar amigos:', error);
+      error: () => {
         this.amigosEncontrados = [];
         this.noSeEncontraronAmigos = true;
       }
@@ -126,9 +125,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
             };
           });
         }
-      },
-      error: (error) => {
-        console.error('Error al obtener los elementos de la lista:', error);
       }
     });
   }
@@ -140,9 +136,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
         if (data.exito) {
           this.colaboradores = data.colaboradores.filter(colaborador => colaborador.id !== usuarioID);
         }
-      },
-      error: (error) => {
-        console.error('Error al obtener los colaboradores de la lista:', error);
       }
     });
   }
@@ -169,7 +162,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   editarNombre() {
     this.editandoNombre = true;
     setTimeout(() => {
-      this.nombreListaInput.nativeElement.focus(); // Hacer focus en el input
+      this.nombreListaInput.nativeElement.focus();
     }, 0);
   }
 
@@ -180,13 +173,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
           if (data.exito) {
             this.lista!.nombre = this.nuevoNombreLista.trim();
             this.editandoNombre = false;
-          } else {
-            this.mostrarMensajeNegativo('Error al modificar el nombre de la lista.');
           }
-        },
-        error: (error) => {
-          console.error('Error al modificar el nombre de la lista:', error);
-          this.mostrarMensajeNegativo('Error al modificar el nombre de la lista.');
         }
       });
     }
@@ -212,9 +199,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
               if (data.exito) {
                 this.volverAListasYAmigos.emit();
               }
-            },
-            error: (error) => {
-              console.error('Error al desasignar la lista:', error);
             }
           });
         }
@@ -230,13 +214,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
-          } else {
-            this.mostrarMensajeNegativo('Error al cambiar la visibilidad de la lista.');
           }
-        },
-        error: (error) => {
-          console.error('Error al cambiar la visibilidad de la lista:', error);
-          this.mostrarMensajeNegativo('Error al cambiar la visibilidad de la lista.');
         }
       });
     }
@@ -248,65 +226,19 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.listasService.invitarAmigo(this.lista.id, amigoId, usuarioID).subscribe({
         next: (data) => {
           if (data.exito) {
-            console.log('Invitación enviada exitosamente');
-            this.mostrarMensajeInformativo(`Invitación enviada. (${amigoNombre})`);
-            this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
-            this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
-            this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
-            this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
-          } else {
-            console.log('Error al enviar la invitación:', data.mensaje);
-            this.mostrarMensajeInformativo(`Error al enviar la invitación. (${amigoNombre})`);
-            this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
-            this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
-            this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
-            this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
+            this.amigosEncontrados = [];
+            this.noSeEncontraronAmigos = false;
+            this.nombreAmigoBuscar = '';
+            this.onNombreAmigoBuscarChange();
           }
         },
-        error: (error) => {
-          console.error('Error al enviar la invitación:', error);
-          this.mostrarMensajeInformativo(`Error al enviar la invitación. (${amigoNombre})`);
-          this.amigosEncontrados = []; // Limpiar los resultados de búsqueda
-          this.noSeEncontraronAmigos = false; // Ocultar el mensaje de no se encontraron amigos
-          this.nombreAmigoBuscar = ''; // Limpiar el input de búsqueda
-          this.onNombreAmigoBuscarChange(); // Reiniciar la búsqueda
+        error: () => {
+          this.amigosEncontrados = [];
+          this.noSeEncontraronAmigos = false;
+          this.nombreAmigoBuscar = '';
+          this.onNombreAmigoBuscarChange();
         }
       });
-    }
-  }
-
-  mostrarMensajeInformativo(mensaje: string) {
-    const mensajeInformativo = document.getElementById('mensajeInformativo');
-    if (mensajeInformativo) {
-      mensajeInformativo.textContent = mensaje;
-      mensajeInformativo.style.color = 'rgb(97, 179, 0)'; // Aplicar el color
-      setTimeout(() => {
-        mensajeInformativo.textContent = '';
-      }, 5000); // Limpiar el mensaje después de 5 segundos
-    }
-  }
-
-  mostrarMensajePositivo(mensaje: string) {
-    const mensajeInformativo = document.getElementById('mensajeInformativo');
-    if (mensajeInformativo) {
-      mensajeInformativo.innerText = mensaje;
-      mensajeInformativo.classList.add('mensaje-positivo');
-      mensajeInformativo.classList.remove('mensaje-negativo');
-      setTimeout(() => {
-        mensajeInformativo.textContent = '';
-      }, 3000);
-    }
-  }
-
-  mostrarMensajeNegativo(mensaje: string) {
-    const mensajeInformativo = document.getElementById('mensajeInformativo');
-    if (mensajeInformativo) {
-      mensajeInformativo.innerText = mensaje;
-      mensajeInformativo.classList.add('mensaje-negativo');
-      mensajeInformativo.classList.remove('mensaje-positivo');
-      setTimeout(() => {
-        mensajeInformativo.textContent = '';
-      }, 3000);
     }
   }
 
@@ -315,16 +247,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
         next: (data) => {
           if (data.exito) {
-            console.log('Elemento desasignado exitosamente');
-            this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId); // Actualizar la lista de elementos localmente
-          } else {
-            console.log('Error al desasignar el elemento');
-            this.mostrarMensajeNegativo('Error al desasignar el elemento.');
+            this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId);
           }
-        },
-        error: (error) => {
-          console.error('Error al desasignar el elemento:', error);
-          this.mostrarMensajeNegativo('Error al desasignar el elemento.');
         }
       });
     }
@@ -336,12 +260,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           if (data.exito) {
             elemento.positivo = true;
-          } else {
-            console.log('Error al cambiar el estado de like');
           }
-        },
-        error: (error) => {
-          console.error('Error al cambiar el estado de like:', error);
         }
       });
     }
@@ -353,12 +272,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           if (data.exito) {
             elemento.positivo = false;
-          } else {
-            console.log('Error al cambiar el estado de dislike');
           }
-        },
-        error: (error) => {
-          console.error('Error al cambiar el estado de dislike:', error);
         }
       });
     }
@@ -370,12 +284,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         next: (data) => {
           if (data.exito) {
             elemento.positivo = null;
-          } else {
-            console.log('Error al resetear el estado de like/dislike');
           }
-        },
-        error: (error) => {
-          console.error('Error al resetear el estado de like/dislike:', error);
         }
       });
     }
@@ -389,19 +298,12 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        console.log(`Comentario para el elemento ${elemento.id}: ${result}`);
         if (this.lista) {
           this.elementosService.actualizarComentario(this.lista.id, elemento.id, result).subscribe({
             next: (data) => {
               if (data.exito) {
-                console.log('Comentario actualizado exitosamente');
                 elemento.comentario = result;
-              } else {
-                console.log('Error al actualizar el comentario');
               }
-            },
-            error: (error) => {
-              console.error('Error al actualizar el comentario:', error);
             }
           });
         }
@@ -411,13 +313,13 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   salirDelInput() {
     if (this.nombreAmigoBuscar.trim() === '') {
-      this.nombreAmigoBuscarInput.nativeElement.blur(); // Salir del input si está vacío
+      this.nombreAmigoBuscarInput.nativeElement.blur();
     } else {
-      this.nombreAmigoBuscar = ''; // Limpiar el contenido del input
-      this.amigosEncontrados = []; // Limpiar la lista de amigos encontrados
-      this.noSeEncontraronAmigos = false; // Asegurarse de que el mensaje no aparezca
+      this.nombreAmigoBuscar = '';
+      this.amigosEncontrados = [];
+      this.noSeEncontraronAmigos = false;
       setTimeout(() => {
-        this.autocompleteTrigger.openPanel(); // Abrir el desplegable para mostrar los amigos encontrados
+        this.autocompleteTrigger.openPanel();
       }, 0);
     }
   }
