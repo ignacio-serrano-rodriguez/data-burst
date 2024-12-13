@@ -37,3 +37,16 @@ button:hover
     color: #EEF1F2;
     background-color: #61B300;
 }
+
+.mensaje-informativo {
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.mensaje-error {
+    color: red;
+}
+
+.mensaje-exito {
+    color: green;
+}
