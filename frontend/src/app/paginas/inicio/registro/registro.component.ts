@@ -36,17 +36,14 @@ export class RegistroComponent {
   public formBuild = inject(FormBuilder);
 
   public formRegistro: FormGroup = this.formBuild.group({
-    mail: ['', [Validators.required, Validators.email]],
-    usuario: ['', [Validators.required, Validators.minLength(5)]],
-    contrasenia: ['', [Validators.required, Validators.minLength(6), this.passwordValidator]],
+    mail: ['', Validators.required],
+    usuario: ['', Validators.required],
+    contrasenia: ['', Validators.required],
     contraseniaRepetida: ['', Validators.required]
   });
 
   registrarse() {
-    if (this.formRegistro.invalid) {
-      this.mostrarMensajeError(this.getErrorMessage());
-      return;
-    }
+    if (this.formRegistro.invalid) return;
 
     const objeto: Registro = {
       mail: this.formRegistro.value.mail,
@@ -56,15 +53,28 @@ export class RegistroComponent {
     };
 
     if (objeto.contrasenia != objeto.contraseniaRepetida) {
-      this.mostrarMensajeError("Las contraseñas no coinciden.");
+      let mensajeInformativo = document.getElementById("mensajeInformativo");
+      if (mensajeInformativo) {
+        mensajeInformativo.classList.remove("mensaje-exito");
+        mensajeInformativo.classList.add("mensaje-error");
+        mensajeInformativo.innerText = "Las contraseñas no coinciden.";
+      }
       return;
     }
 
     this.accesoService.registro(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
-          this.mostrarMensajeExito(data.mensaje);
-          this.limpiarFormulario();
+          let mensajeInformativo = document.getElementById("mensajeInformativo");
+          if (mensajeInformativo) {
+            mensajeInformativo.classList.remove("mensaje-error");
+            mensajeInformativo.classList.add("mensaje-exito");
+            mensajeInformativo.innerText = data.mensaje;
+          }
+          (document.getElementById("mailInput") as HTMLInputElement).value = '';
+          (document.getElementById("usuarioInput") as HTMLInputElement).value = '';
+          (document.getElementById("contraseniaInput") as HTMLInputElement).value = '';
+          (document.getElementById("contraseniaRepetidaInput") as HTMLInputElement).value = '';
 
           // Lógica de inicio de sesión después del registro exitoso
           const loginObjeto: Login = {
@@ -75,97 +85,45 @@ export class RegistroComponent {
           this.accesoService.login(loginObjeto).subscribe({
             next: (loginData) => {
               if (loginData.exito == true) {
-                this.guardarDatosUsuario(loginData);
+                localStorage.setItem("token", loginData.token);
+                localStorage.setItem("id", loginData.id.toString());
+                localStorage.setItem("mail", loginData.mail);
+                localStorage.setItem("usuario", loginData.usuario);
+                localStorage.setItem("verificado", loginData.verificado.toString());
+                localStorage.setItem("nombre", loginData.nombre);
+                localStorage.setItem("apellido_1", loginData.apellido_1);
+                localStorage.setItem("apellido_2", loginData.apellido_2);
+                localStorage.setItem("fechaNacimiento", loginData.fechaNacimiento);
+                localStorage.setItem("pais", loginData.pais);
+                localStorage.setItem("profesion", loginData.profesion);
+                localStorage.setItem("estudios", loginData.estudios);
+                localStorage.setItem("idioma", loginData.idioma);
+                localStorage.setItem("permiso", loginData.permiso.toString());
+                localStorage.setItem("logueado", "true");
+
                 this.router.navigate(['home']);
                 localStorage.setItem("refrescar", "true");
               }
             },
             error: (loginError) => {
-              this.mostrarMensajeError(loginError.error.mensaje);
+              let mensajeInformativo = document.getElementById("mensajeInformativo");
+              if (mensajeInformativo) {
+                mensajeInformativo.classList.remove("mensaje-exito");
+                mensajeInformativo.classList.add("mensaje-error");
+                mensajeInformativo.innerText = loginError.error.mensaje;
+              }
             }
           });
         }
       },
       error: (error) => {
-        this.mostrarMensajeError(error.error.mensaje);
+        let mensajeInformativo = document.getElementById("mensajeInformativo");
+        if (mensajeInformativo) {
+          mensajeInformativo.classList.remove("mensaje-exito");
+          mensajeInformativo.classList.add("mensaje-error");
+          mensajeInformativo.innerText = error.error.mensaje;
+        }
       }
     });
-  }
-
-  getErrorMessage(): string {
-    if (this.formRegistro.controls['mail'].hasError('required')) {
-      return 'El correo electrónico es obligatorio.';
-    }
-    if (this.formRegistro.controls['mail'].hasError('email')) {
-      return 'El correo electrónico no es válido.';
-    }
-    if (this.formRegistro.controls['usuario'].hasError('required')) {
-      return 'El nombre de usuario es obligatorio.';
-    }
-    if (this.formRegistro.controls['usuario'].hasError('minlength')) {
-      return 'El nombre de usuario debe tener al menos 5 caracteres.';
-    }
-    if (this.formRegistro.controls['contrasenia'].hasError('required')) {
-      return 'La contraseña es obligatoria.';
-    }
-    if (this.formRegistro.controls['contrasenia'].hasError('minlength')) {
-      return 'La contraseña debe tener al menos 6 caracteres.';
-    }
-    if (this.formRegistro.controls['contrasenia'].hasError('pattern')) {
-      return 'La contraseña debe contener al menos una mayúscula, un número y un símbolo especial.';
-    }
-    if (this.formRegistro.controls['contraseniaRepetida'].hasError('required')) {
-      return 'Repetir la contraseña es obligatorio.';
-    }
-    return '';
-  }
-
-  passwordValidator(control: any): { [key: string]: boolean } | null {
-    const password = control.value;
-    const pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&+\-])[A-Za-z\d@$!%*?&+\-]{6,}$/;
-    if (!pattern.test(password)) {
-      return { 'pattern': true };
-    }
-    return null;
-  }
-
-  mostrarMensajeError(mensaje: string) {
-    let mensajeInformativo = document.getElementById("mensajeInformativo");
-    if (mensajeInformativo) {
-      mensajeInformativo.classList.remove("mensaje-exito");
-      mensajeInformativo.classList.add("mensaje-error");
-      mensajeInformativo.innerText = mensaje;
-    }
-  }
-
-  mostrarMensajeExito(mensaje: string) {
-    let mensajeInformativo = document.getElementById("mensajeInformativo");
-    if (mensajeInformativo) {
-      mensajeInformativo.classList.remove("mensaje-error");
-      mensajeInformativo.classList.add("mensaje-exito");
-      mensajeInformativo.innerText = mensaje;
-    }
-  }
-
-  limpiarFormulario() {
-    this.formRegistro.reset();
-  }
-
-  guardarDatosUsuario(loginData: any) {
-    localStorage.setItem("token", loginData.token);
-    localStorage.setItem("id", loginData.id.toString());
-    localStorage.setItem("mail", loginData.mail);
-    localStorage.setItem("usuario", loginData.usuario);
-    localStorage.setItem("verificado", loginData.verificado.toString());
-    localStorage.setItem("nombre", loginData.nombre);
-    localStorage.setItem("apellido_1", loginData.apellido_1);
-    localStorage.setItem("apellido_2", loginData.apellido_2);
-    localStorage.setItem("fechaNacimiento", loginData.fechaNacimiento);
-    localStorage.setItem("pais", loginData.pais);
-    localStorage.setItem("profesion", loginData.profesion);
-    localStorage.setItem("estudios", loginData.estudios);
-    localStorage.setItem("idioma", loginData.idioma);
-    localStorage.setItem("permiso", loginData.permiso.toString());
-    localStorage.setItem("logueado", "true");
   }
 }
