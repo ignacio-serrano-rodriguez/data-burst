@@ -26,11 +26,18 @@ a
     background-color: #FBE6FF;
 }
 
-@media (max-width:700px)
+@media (max-width: 700px)
 {
     #pie 
     {
-        height: 6em;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .enlaces
+    {
+        width: 100%;
+        margin: 0.5em 0;
     }
 }
 

@@ -3,29 +3,31 @@
     margin: 0;
     padding: 0;
     border: 0;
+    box-sizing: border-box;
 }
 
 #body
 {
     background-image: url("../../../assets/images/inicioBackground.png");
-    background-repeat:no-repeat;
-    background-size: auto;
+    background-repeat: no-repeat;
+    background-size: cover;
     background-attachment: fixed;
-    background-position: center; 
-    background-size:cover;
-
+    background-position: center;
     padding-bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 #titulo
 {
     display: flex;
     flex-wrap: wrap;
-
     text-align: center;
     align-items: center;
     justify-content: center;
-    
     margin-bottom: 3em;
     padding-top: 2%;
 }
@@ -33,7 +35,6 @@
 #logoTitulo
 {
     width: 14em;
-
     margin-top: 0.5em;
     margin-right: 2%;
     margin-left: 2%;
@@ -43,15 +44,12 @@
 {
     display: flex;
     flex-wrap: wrap;
-
     font-family: 'ShareTech';
     font-size: 7em;
     color: #AE00CD;
-
     text-align: center;
     align-items: center;
     justify-content: center;
-
     margin-right: 2%;
     margin-left: 2%;
 }
@@ -66,7 +64,7 @@
 {
     display: flex;
     flex-wrap: wrap;
-
+    justify-content: center;
     margin-bottom: 3.5%;
 }
 
@@ -74,9 +72,7 @@
 {
     display: flex;
     flex-wrap: wrap;
-
     justify-content: center;
-
     width: 100%;
 }
 
@@ -84,7 +80,6 @@
 {
     padding-left: 1em;
     padding-right: 1em;
-
     margin: 0.3em;
     margin-bottom: 1.5em;
 }
@@ -93,26 +88,21 @@
 {
     font-family: 'ShareTech';
     font-size: 1.5em;
-
     text-align: center;
     align-items: center;
     justify-content: center;
-
     display: flex;
     flex-wrap: wrap;
-
     margin-bottom: 1%;
 }
 
 .mensaje-exito
 {
-    
     color: #61B300;
 }
 
 .mensaje-error 
 {
-    
     color: #F5A201;
 }
 
@@ -120,17 +110,14 @@
 {
     display: flex;
     flex-wrap: wrap;
-
     justify-content: center;
-
     padding-top: 2em;
     padding-bottom: 2em;
-
     margin: auto;
-
     width: 28%;
     min-width: 26em;
-
     background-color: #D2D9DC;
     box-shadow: 2px 2px 1px grey;
+    align-items: center;
+    text-align: center;
 }
