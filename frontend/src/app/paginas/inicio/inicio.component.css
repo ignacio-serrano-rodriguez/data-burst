@@ -121,3 +121,14 @@
     align-items: center;
     text-align: center;
 }
+
+/* Móvil */
+@media (max-width: 480px) {
+    #logoTitulo {
+        width: 10em;
+    }
+
+    #textoTitulo {
+        font-size: 5em;
+    }
+}
