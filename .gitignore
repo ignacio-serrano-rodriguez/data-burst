@@ -1,7 +1,10 @@
+# -- GENERAL --
+.vscode/
 
 # -- API --
 
 ###> symfony/framework-bundle ###
+api/.env
 api/.env.local
 api/.env.local.php
 api/.env.*.local
@@ -16,7 +19,7 @@ api/migrations/*
 
 # -- FRONTEND --
 
-# Compiled output
+# Ficheros de compilación
 frontend/dist
 frontend/tmp
 frontend/out-tsc
@@ -27,7 +30,7 @@ frontend/node_modules
 frontend/npm-debug.log
 frontend/yarn-error.log
 
-# IDEs and editors
+# IDEs
 frontend/.idea/
 frontend/.project
 frontend/.classpath
@@ -44,7 +47,7 @@ frontend/!.vscode/launch.json
 frontend/!.vscode/extensions.json
 frontend/.history/*
 
-# Miscellaneous
+# Mezcla
 frontend/.angular/
 frontend/.sass-cache/
 frontend/connect.lock
@@ -53,7 +56,7 @@ frontend/libpeerconnection.log
 frontend/testem.log
 frontend/typings
 
-# System files
+# Ficheros del sistema
 frontend/.DS_Store
 frontend/Thumbs.db
 

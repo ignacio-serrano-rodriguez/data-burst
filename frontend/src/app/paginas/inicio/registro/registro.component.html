@@ -3,18 +3,19 @@
 	  <mat-label class="etiquetaFormulario">Mail</mat-label>
 	  <input matInput id="mailInput" formControlName="mail">
 	</mat-form-field>
+  
 	<mat-form-field class="elementoFormulario">
 	  <mat-label class="etiquetaFormulario">Usuario</mat-label>
 	  <input matInput id="usuarioInput" formControlName="usuario">
 	</mat-form-field>
+  
 	<mat-form-field class="elementoFormulario">
 	  <mat-label class="etiquetaFormulario">Contraseña</mat-label>
 	  <input 
 		[type]="hideContrasenia ? 'password' : 'text'" 
 		matInput 
 		id="contraseniaInput" 
-		formControlName="contrasenia" 
-		type="password">
+		formControlName="contrasenia">
 	  <button 
 		mat-icon-button matSuffix 
 		(click)="hideContrasenia = !hideContrasenia" 
@@ -23,13 +24,13 @@
 		<mat-icon>{{hideContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
 	  </button>
 	</mat-form-field>
+  
 	<mat-form-field class="elementoFormulario">
 	  <mat-label class="etiquetaFormulario">Repetir contraseña</mat-label>
 	  <input 
 		[type]="hideRepetirContrasenia ? 'password' : 'text'" 
 		matInput id="contraseniaRepetidaInput" 
-		formControlName="contraseniaRepetida" 
-		type="password">
+		formControlName="contraseniaRepetida">
 	  <button 
 		mat-icon-button matSuffix 
 		(click)="hideRepetirContrasenia = !hideRepetirContrasenia" 
@@ -38,6 +39,7 @@
 		<mat-icon>{{hideRepetirContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
 	  </button>
 	</mat-form-field>
+  
 	<button 
 	  id="boton-registro" 
 	  class="elementoFormulario" 
@@ -47,3 +49,5 @@
 	  Crear usuario
 	</button>
   </form>
+  
+  <div id="mensajeInformativo" class="mensaje-informativo"></div>
