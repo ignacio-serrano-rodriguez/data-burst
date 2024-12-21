@@ -138,11 +138,11 @@ button[mat-icon-button]:hover mat-icon {
 }
 
 /* Tablet */
-@media (max-width:824px)
+@media (max-width:879px)
 {
     #cabecera 
     {
-        padding-bottom: 9em;
+        padding-bottom: 8.5em;
     }
 
     #avatarUsuario
@@ -152,7 +152,7 @@ button[mat-icon-button]:hover mat-icon {
 }
 
 /* Movil */
-@media (max-width:428px)
+@media (max-width:485px)
 {
     a
     {
@@ -161,7 +161,7 @@ button[mat-icon-button]:hover mat-icon {
 
     #cabecera 
     {
-        padding-bottom: 13em;
+        padding-bottom: 12em;
     }
 
     #avatarUsuario
