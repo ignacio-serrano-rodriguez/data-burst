@@ -1,15 +1,24 @@
 # Data Burst
 
 ## Descripción
-Aplicación web que consiste en una serie de usuarios que crean listas multi-genéricas donde se almacenan contenciones valorables de elementos. Estos elementos son creados por los usuarios en el caso de que no existan, si existen; se tomarán aquellos creados por otros usuarios. De esta forma, se consigue que la base de datos se pueble dinámicamente conforme al uso de la aplicación por parte de los usuarios. También existen usuarios con privilegios denominados administradores que gestionan a otros usuarios y a los elementos creados por ellos, modificando su información. En función de las contenciones y los nombres de listas, se generan estadísticas.
+Red social de creación de listas donde se contienen elementos valorables.
+
+## Algunas características
+- Los elementos y sus características asociadas son creados por los propios usuarios.
+- Las listas públicas o privadas creadas por los usuarios pueden contener cualquier elemento.
+- Las contenciones de elementos son valorables con 3 estados distintos y están asociadas a cada usuario.
+- Los usuarios pueden modificar su información, agregar a otros usuarios, ver perfiles de usuarios agregados y reportar elementos con características erróneas y hacer listas colaborativas con amigos.
+- Los administradores pueden modificar las características de los elementos en función de los reportes de los usuarios y suspender cuentas de usuario.
+- Estadísticas son generadas en función de los elementos, las contenciones de elementos, los usuarios y los nombres de las listas.
 
 ## Tecnologías
-- **Docker** y **MariaDB** para la base de datos.
-- **Symfony** como **API de Backend**.
-- **Angular** como **Frontend**.
+- **Docker** como infraestructura.
+- **MariaDB** como base de datos.
+- **Symfony** como API de Backend.
+- **Angular** como Frontend.
 - **Powershell** para los scripts de arranque de la aplicación.
 
-## Requisitos
+## Requisitos para el arranque de la aplicación en local
 - **PowerShell 7.4.6**.
 - **angular-cli para Angular 17**.
 - **php** y **composer** **para Symfony 7**.
