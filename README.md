@@ -10,6 +10,7 @@ Red social de creación de listas donde se contienen elementos valorables.
 - Los usuarios pueden modificar su información, agregar a otros usuarios, ver perfiles de usuarios agregados y reportar elementos con características erróneas y hacer listas colaborativas con amigos.
 - Los administradores pueden modificar las características de los elementos en función de los reportes de los usuarios y suspender cuentas de usuario.
 - Estadísticas son generadas en función de los elementos, las contenciones de elementos, los usuarios y los nombres de las listas.
+- Las contraseñas están hasheadas en la base de datos.
 
 ## Tecnologías
 - **Docker** como infraestructura.
@@ -23,7 +24,9 @@ Red social de creación de listas donde se contienen elementos valorables.
 - **angular-cli para Angular 17**.
 - **php** y **composer** **para Symfony 7**.
 - Han de estar descomentadas las lineas de '**extension=pdo_mysql**' y '**extension=sodium**' en **php.ini**.
-- **OpenSSL**.
+- **Generar las claves pública y privada con OpenSSL y JWT_PASSPHRASE**.
+    - **privada** openssl genpkey -algorithm RSA -out config/jwt/private.pem -aes256 -pass pass:'JWT_PASSPHRASE'
+    - **pública** openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:'JWT_PASSPHRASE'
 - [JWT para api platform](https://api-platform.com/docs/core/jwt/)
 - **Docker engine** en ejecución.
 
