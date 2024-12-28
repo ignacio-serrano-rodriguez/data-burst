@@ -10,7 +10,7 @@ import { ElementosService } from '../../../../servicios/elementos.service';
 import { ListasService } from '../../../../servicios/listas.service';
 import { Elemento } from '../../../../interfaces/Elemento';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elemento-dialog.component.ts';
+import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elemento-dialog.component';
 
 @Component({
   selector: 'app-agregador',
