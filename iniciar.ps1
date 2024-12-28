@@ -34,7 +34,7 @@ New-Item -ItemType Directory -Path "./migrations" -Force
 Write-Output "`n${scriptName} -> Iniciando el proceso de Symfony en segundo plano.`n"
 Start-Sleep -Seconds 3
 symfony server:stop
-composer update
+composer update --lock
 php bin/console doctrine:database:create
 php bin/console make:migration
 
@@ -55,7 +55,7 @@ Start-Process -FilePath "powershell" -ArgumentList "symfony server:start" -PassT
 # Inicio del servicio de Angular en segundo plano.
 Write-Output "${scriptName} -> Iniciando el proceso de Angular en segundo plano.`n"
 Set-Location -Path "../frontend"
-npm install
+npm ci
 Start-Process -FilePath "powershell" -ArgumentList "ng serve" -PassThru -NoNewWindow
 
 # Aplicación web inicializada correctamente.
