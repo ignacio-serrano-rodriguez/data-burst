@@ -102,6 +102,10 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.editandoNombre) {
       this.nombreListaInput.nativeElement.focus();
     }
+    // Asegúrate de que autocompleteTriggerElemento esté inicializado
+    if (this.autocompleteTriggerElemento) {
+      this.autocompleteTriggerElemento.openPanel();
+    }
   }
 
   onNombreAmigoBuscarChange() {
@@ -119,7 +123,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   abrirDesplegableElemento() {
-    this.autocompleteTriggerElemento.openPanel();
+    if (this.autocompleteTriggerElemento) {
+      this.autocompleteTriggerElemento.openPanel();
+    }
   }
 
   buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number) {
