@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ListaContieneElementoRepository::class)]
 #[ApiResource]
+#[ORM\UniqueConstraint(name: "unique_lista_elemento", columns: ["lista_id", "elemento_id"])]
 class ListaContieneElemento
 {
     #[ORM\Id]
