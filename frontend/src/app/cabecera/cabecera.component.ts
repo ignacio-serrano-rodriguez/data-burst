@@ -34,33 +34,35 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.nombreUsuario = localStorage.getItem('usuario') || "usuario";
+    if (typeof localStorage !== 'undefined') {
+      this.nombreUsuario = localStorage.getItem('usuario') || "usuario";
 
-    if (this.nombreUsuario) {
-      this.nombreUsuario = this.nombreUsuario;
+      if (this.nombreUsuario) {
+        this.nombreUsuario = this.nombreUsuario;
 
-      this.permisoUsuario = localStorage.getItem('permiso') || "1";
+        this.permisoUsuario = localStorage.getItem('permiso') || "1";
 
-      if (this.permisoUsuario == "2") {
-        console.log(localStorage.getItem('permiso'));
-        this.mostrarAdministracion = true;
-      } else {
-        this.mostrarAdministracion = false;
+        if (this.permisoUsuario == "2") {
+          console.log(localStorage.getItem('permiso'));
+          this.mostrarAdministracion = true;
+        } else {
+          this.mostrarAdministracion = false;
+        }
+
+        this.notificacionesService.nuevasSolicitudes$.subscribe(nuevasSolicitudes => {
+          this.nuevasSolicitudes = nuevasSolicitudes;
+        });
+
+        this.notificacionesService.actualizarNumeroSolicitudes();
+        this.notificacionesService.iniciarRevisionPeriodica(); // Iniciar revisión periódica
       }
 
-      this.notificacionesService.nuevasSolicitudes$.subscribe(nuevasSolicitudes => {
-        this.nuevasSolicitudes = nuevasSolicitudes;
+      this.router.events.pipe(
+        filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
+      ).subscribe((event: NavigationEnd) => {
+        this.rutaActual = event.urlAfterRedirects;
       });
-
-      this.notificacionesService.actualizarNumeroSolicitudes();
-      this.notificacionesService.iniciarRevisionPeriodica(); // Iniciar revisión periódica
     }
-
-    this.router.events.pipe(
-      filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.rutaActual = event.urlAfterRedirects;
-    });
   }
 
   ngOnDestroy() {
@@ -68,7 +70,9 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   }
 
   cerrarSesion() {
-    localStorage.clear();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
     this.router.navigate(['/']).then(() => {
       this.recargaService.cerrarSesion();
     });

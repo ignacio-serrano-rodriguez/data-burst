@@ -35,12 +35,14 @@ export class InicioComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private recargaService: RecargaService) {}
 
   ngOnInit() {
-    if (localStorage.getItem('logueado')) {
-      this.router.navigate(['home']);
-      localStorage.setItem("refrescar", "true");
-    }
+    if (typeof localStorage !== 'undefined') {
+      if (localStorage.getItem('logueado')) {
+        this.router.navigate(['home']);
+        localStorage.setItem("refrescar", "true");
+      }
 
-    this.recargaSubscription = this.recargaService.cerrarSesion$.subscribe(() => {});
+      this.recargaSubscription = this.recargaService.cerrarSesion$.subscribe(() => {});
+    }
   }
 
   ngOnDestroy() {
@@ -56,7 +58,9 @@ export class InicioComponent implements OnInit, OnDestroy {
     this.botonRegistroVisible = true;
     this.registroStyleDisplay = "revert";
 
-    document.getElementById("mensajeInformativo")!.innerText = "";
+    if (typeof document !== 'undefined') {
+      document.getElementById("mensajeInformativo")!.innerText = "";
+    }
   }
 
   mostrarLoginOcultarRegistro() {
@@ -66,6 +70,8 @@ export class InicioComponent implements OnInit, OnDestroy {
     this.botonRegistroVisible = false;
     this.registroStyleDisplay = "none";
 
-    document.getElementById("mensajeInformativo")!.innerText = "";
+    if (typeof document !== 'undefined') {
+      document.getElementById("mensajeInformativo")!.innerText = "";
+    }
   }
 }
