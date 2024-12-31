@@ -24,11 +24,13 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     CommonModule,
     MatIconModule,
     MatButtonModule,
-    AgregadorComponent,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    AgregadorComponent,
+    ConfirmacionDialogComponent,
+    ComentarioDialogComponent
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
@@ -102,10 +104,11 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.editandoNombre) {
       this.nombreListaInput.nativeElement.focus();
     }
-    // Asegúrate de que autocompleteTriggerElemento esté inicializado
-    if (this.autocompleteTriggerElemento) {
-      this.autocompleteTriggerElemento.openPanel();
-    }
+    setTimeout(() => {
+      if (this.autocompleteTriggerElemento) {
+        this.autocompleteTriggerElemento.openPanel();
+      }
+    }, 0);
   }
 
   onNombreAmigoBuscarChange() {
@@ -115,7 +118,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   onNombreElementoBuscarChange() {
     this.searchSubjectElemento.next(this.nombreElementoBuscar.trim());
-    this.autocompleteTriggerElemento.openPanel();
+    if (this.autocompleteTriggerElemento) {
+      this.autocompleteTriggerElemento.openPanel();
+    }
   }
 
   abrirDesplegable() {
@@ -404,7 +409,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.elementosEncontrados = [];
       this.noSeEncontraronElementos = false;
       setTimeout(() => {
-        this.autocompleteTriggerElemento.openPanel();
+        if (this.autocompleteTriggerElemento) {
+          this.autocompleteTriggerElemento.openPanel();
+        }
       }, 0);
     }
   }
