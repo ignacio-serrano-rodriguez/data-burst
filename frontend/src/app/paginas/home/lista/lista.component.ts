@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, inject, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,9 +28,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    AgregadorComponent,
-    ConfirmacionDialogComponent,
-    ComentarioDialogComponent
+    AgregadorComponent
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
@@ -91,8 +89,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
       debounceTime(300),
       distinctUntilChanged()
     ).subscribe(query => {
-      if (query.length >= 3) {
-        this.buscarElementos(query);
+      if (query.length >= 3 && this.lista) {
+        this.buscarElementos(query, this.lista.id);
       } else {
         this.elementosEncontrados = [];
         this.noSeEncontraronElementos = false;
@@ -104,6 +102,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.editandoNombre) {
       this.nombreListaInput.nativeElement.focus();
     }
+    // Asegúrate de que autocompleteTriggerElemento esté inicializado
     setTimeout(() => {
       if (this.autocompleteTriggerElemento) {
         this.autocompleteTriggerElemento.openPanel();
@@ -135,7 +134,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   buscarAmigosNoManipulanLista(query: string, usuarioID: number, listaID: number) {
     this.amigosService.buscarAmigosNoManipulanLista(query, usuarioID, listaID).subscribe({
-      next: (data) => {
+      next: (data: { exito: boolean, amigos: any[] }) => {
         if (data.exito) {
           this.amigosEncontrados = data.amigos;
           this.noSeEncontraronAmigos = this.amigosEncontrados.length === 0;
@@ -148,9 +147,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  buscarElementos(query: string) {
-    this.elementosService.buscarElementos(query).subscribe({
-      next: (data) => {
+  buscarElementos(query: string, listaId: number) {
+    this.elementosService.buscarElementos(query, listaId).subscribe({
+      next: (data: { exito: boolean, elementos: Elemento[] }) => {
         if (data.exito) {
           this.elementosEncontrados = data.elementos;
           this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
@@ -165,7 +164,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   obtenerElementosLista(id: number) {
     this.listasService.obtenerElementosLista(id).subscribe({
-      next: (data) => {
+      next: (data: { exito: boolean, elementos: Elemento[] }) => {
         if (data.exito) {
           const usuarioId = Number(localStorage.getItem('id')) || 0;
           this.elementos = data.elementos.map(elemento => {
@@ -185,7 +184,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   obtenerColaboradores(listaId: number) {
     const usuarioID = Number(localStorage.getItem('id'));
     this.listasService.obtenerColaboradores(listaId).subscribe({
-      next: (data) => {
+      next: (data: { exito: boolean, colaboradores: any[] }) => {
         if (data.exito) {
           this.colaboradores = data.colaboradores.filter(colaborador => colaborador.id !== usuarioID);
         }
@@ -222,7 +221,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   guardarNombre() {
     if (this.lista && this.nuevoNombreLista.trim()) {
       this.listasService.modificarNombreLista(this.lista.id, this.nuevoNombreLista.trim()).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             this.lista!.nombre = this.nuevoNombreLista.trim();
             this.editandoNombre = false;
@@ -250,7 +249,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         if (result) {
           const usuarioID = Number(localStorage.getItem('id'));
           this.listasService.desasignarLista(this.lista!.id, usuarioID).subscribe({
-            next: (data) => {
+            next: (data: { exito: boolean }) => {
               if (data.exito) {
                 this.volverAListasYAmigos.emit();
               }
@@ -266,7 +265,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       const nuevaVisibilidad = !this.lista.publica;
       const usuarioId = Number(localStorage.getItem('id')) || 0;
       this.listasService.cambiarVisibilidadLista(this.lista.id, usuarioId, nuevaVisibilidad).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
           }
@@ -279,7 +278,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     const usuarioID = Number(localStorage.getItem('id'));
     if (this.lista) {
       this.listasService.invitarAmigo(this.lista.id, amigoId, usuarioID).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             this.amigosEncontrados = [];
             this.noSeEncontraronAmigos = false;
@@ -300,7 +299,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   agregarElemento(elementoId: number) {
     if (this.lista) {
       this.elementosService.asignarElemento(this.lista.id, elementoId).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             this.obtenerElementosLista(this.lista!.id);
             this.elementosEncontrados = [];
@@ -322,7 +321,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   eliminarElemento(elementoId: number) {
     if (this.lista) {
       this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId);
           }
@@ -334,7 +333,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   likeElemento(elemento: Elemento) {
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, true).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             elemento.positivo = true;
           }
@@ -346,7 +345,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   dislikeElemento(elemento: Elemento) {
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, false).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             elemento.positivo = false;
           }
@@ -358,7 +357,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   resetLikeDislikeElemento(elemento: Elemento) {
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, null).subscribe({
-        next: (data) => {
+        next: (data: { exito: boolean }) => {
           if (data.exito) {
             elemento.positivo = null;
           }
@@ -377,7 +376,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       if (result !== undefined) {
         if (this.lista) {
           this.elementosService.actualizarComentario(this.lista.id, elemento.id, result).subscribe({
-            next: (data) => {
+            next: (data: { exito: boolean }) => {
               if (data.exito) {
                 elemento.comentario = result;
               }
