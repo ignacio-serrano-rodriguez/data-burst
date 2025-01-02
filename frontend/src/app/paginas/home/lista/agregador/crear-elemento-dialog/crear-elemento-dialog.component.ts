@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -14,6 +17,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
     ReactiveFormsModule
   ],
   templateUrl: './crear-elemento-dialog.component.html',
@@ -33,6 +39,8 @@ export class CrearElementoDialogComponent {
       informacionExtra: [''],
       descripcion: ['']
     });
+
+    // this.dialogRef.updateSize('500px', '600px'); // Ajustar el tamaño del diálogo
   }
 
   guardar() {
