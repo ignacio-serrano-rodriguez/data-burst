@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-crear-elemento-dialog',
@@ -24,28 +24,24 @@ export class CrearElementoDialogComponent {
 
   constructor(
     private fb: FormBuilder,
-    public dialogRef: MatDialogRef<CrearElementoDialogComponent>,
+    private dialogRef: MatDialogRef<CrearElementoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.fb.group({
       nombre: [data.nombre || '', Validators.required],
-      fechaAparicion: [data.fechaAparicion || this.getFechaActual(), Validators.required],
-      informacionExtra: [data.informacionExtra || 'info'],
-      descripcion: [data.descripcion || 'más info']
+      fechaAparicion: ['', Validators.required],
+      informacionExtra: [''],
+      descripcion: ['']
     });
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  onSubmit(): void {
+  guardar() {
     if (this.form.valid) {
       this.dialogRef.close(this.form.value);
     }
   }
 
-  private getFechaActual(): string {
-    return new Date().toISOString().split('T')[0];
+  cerrar() {
+    this.dialogRef.close();
   }
 }

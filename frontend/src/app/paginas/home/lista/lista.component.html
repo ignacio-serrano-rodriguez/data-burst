@@ -59,13 +59,7 @@
   </div>
 
   <div>
-
-    <app-agregador 
-    [nombreLista]="lista?.nombre" 
-    [listaId]="lista?.id"
-    (elementosActualizados)="obtenerElementosLista(lista!.id)">
-    </app-agregador>
-
+  
     <mat-form-field class="elementoFormulario">
       <mat-label class="etiquetaFormulario">Buscar elemento</mat-label>
       <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
@@ -73,11 +67,15 @@
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-
+  
     <mat-autocomplete #autoElemento="matAutocomplete">
       <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre" (click)="agregarElemento(elemento.id)">
         <span>{{ elemento.nombre }}</span>
         <mat-icon>add</mat-icon>
+      </mat-option>
+      <mat-option *ngIf="mostrarBotonCrear" (click)="mostrarFormulario()">
+        <span>¿Elemento inexistente? Crear</span>
+        <mat-icon>add_circle</mat-icon>
       </mat-option>
     </mat-autocomplete>
   </div>

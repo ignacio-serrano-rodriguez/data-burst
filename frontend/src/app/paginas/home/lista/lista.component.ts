@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from './agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
+import { CrearElementoDialogComponent } from './agregador/crear-elemento-dialog/crear-elemento-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
@@ -35,11 +36,6 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ListaComponent implements OnInit, AfterViewInit {
-
-  private listasService = inject(ListasService);
-  private elementosService = inject(ElementosService);
-  private amigosService = inject(AmigosService);
-  private dialog = inject(MatDialog);
   @Input() lista: Lista | undefined;
   @Output() volverAListasYAmigos = new EventEmitter<void>();
   @ViewChild('nombreListaInput') nombreListaInput!: ElementRef;
@@ -61,9 +57,17 @@ export class ListaComponent implements OnInit, AfterViewInit {
   noSeEncontraronAmigos = false;
   noSeEncontraronElementos = false;
   usuarioActual: number = Number(localStorage.getItem('id')) || 0;
+  mostrarBotonCrear = false;
 
   private searchSubjectBuscar = new Subject<string>();
   private searchSubjectElemento = new Subject<string>();
+
+  constructor(
+    private listasService: ListasService,
+    private elementosService: ElementosService,
+    private amigosService: AmigosService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     if (this.lista) {
@@ -153,11 +157,13 @@ export class ListaComponent implements OnInit, AfterViewInit {
         if (data.exito) {
           this.elementosEncontrados = data.elementos;
           this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
+          this.mostrarBotonCrear = true;
         }
       },
       error: () => {
         this.elementosEncontrados = [];
         this.noSeEncontraronElementos = true;
+        this.mostrarBotonCrear = true;
       }
     });
   }
@@ -413,5 +419,64 @@ export class ListaComponent implements OnInit, AfterViewInit {
         }
       }, 0);
     }
+  }
+
+  mostrarFormulario() {
+    const nombreElemento = this.nombreElementoBuscar ? this.nombreElementoBuscar.trim() : '';
+    const dialogRef = this.dialog.open(CrearElementoDialogComponent, {
+      width: '400px',
+      data: {
+        nombre: nombreElemento
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.crearElemento(result);
+      }
+    });
+  }
+
+  crearElemento(datos: any) {
+    const usuarioId = localStorage.getItem('id');
+    if (!usuarioId) {
+      console.error('Usuario no autenticado');
+      return;
+    }
+
+    const nuevoElemento: Elemento = {
+      id: 0,
+      nombre: datos.nombre,
+      fecha_aparicion: datos.fechaAparicion,
+      informacion_extra: datos.informacionExtra,
+      puntuacion: 0,
+      descripcion: datos.descripcion,
+      momento_creacion: new Date().toISOString(),
+      usuario_id: parseInt(usuarioId, 10),
+      positivo: null,
+      comentario: null,
+      usuariosComentariosPositivos: []
+    };
+
+    this.elementosService.crearElemento(nuevoElemento).subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.elementos.push(data.elemento);
+          this.noSeEncontraronElementos = false;
+
+          if (this.lista) {
+            this.agregarElemento(data.elemento.id);
+          }
+
+          // Vaciar el input de "Agregar elemento", los resultados de búsqueda y el botón de "Mostrar formulario de creación"
+          this.nombreElementoBuscar = '';
+          this.elementosEncontrados = [];
+          this.mostrarBotonCrear = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error al crear el elemento:', error);
+      }
+    });
   }
 }

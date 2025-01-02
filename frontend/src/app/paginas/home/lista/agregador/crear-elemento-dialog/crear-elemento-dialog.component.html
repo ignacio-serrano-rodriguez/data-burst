@@ -7,11 +7,11 @@
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Fecha de Aparición</mat-label>
-      <input matInput type="date" formControlName="fechaAparicion">
+      <input matInput formControlName="fechaAparicion" type="date">
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Información Extra</mat-label>
-      <input matInput formControlName="informacionExtra">
+      <textarea matInput formControlName="informacionExtra"></textarea>
     </mat-form-field>
     <mat-form-field class="example-full-width">
       <mat-label>Descripción</mat-label>
@@ -20,6 +20,6 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button mat-button (click)="onSubmit()" [disabled]="!form.valid">Crear</button>
+  <button mat-button (click)="cerrar()">Cancelar</button>
+  <button mat-button (click)="guardar()" [disabled]="!form.valid">Guardar</button>
 </div>
