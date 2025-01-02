@@ -28,9 +28,8 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule,
-    AgregadorComponent
-  ],
+    MatAutocompleteModule
+],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -98,6 +97,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       } else {
         this.elementosEncontrados = [];
         this.noSeEncontraronElementos = false;
+        this.mostrarBotonCrear = true; // Mostrar el botón siempre que se realice una búsqueda
       }
     });
   }
@@ -158,11 +158,13 @@ export class ListaComponent implements OnInit, AfterViewInit {
         if (data.exito) {
           this.elementosEncontrados = data.elementos;
           this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
+          this.mostrarBotonCrear = true;
         }
       },
       error: () => {
         this.elementosEncontrados = [];
         this.noSeEncontraronElementos = true;
+        this.mostrarBotonCrear = true;
       }
     });
   }
@@ -417,6 +419,18 @@ export class ListaComponent implements OnInit, AfterViewInit {
           this.autocompleteTriggerElemento.openPanel();
         }
       }, 0);
+    }
+  }
+
+  agregarElementoSinEscribir(event: any) {
+    const elemento = event.option.value;
+    if (elemento && elemento.id) {
+      this.agregarElemento(elemento.id);
+      this.nombreElementoBuscar = ''; // Limpiar el input
+      this.elementosEncontrados = []; // Limpiar los resultados encontrados
+      this.nombreElementoBuscarInput.nativeElement.blur(); // Quitar el foco del input
+    } else {
+      this.mostrarFormulario();
     }
   }
 

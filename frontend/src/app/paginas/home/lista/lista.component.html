@@ -67,8 +67,8 @@
       </button>
     </mat-form-field>
   
-    <mat-autocomplete #autoElemento="matAutocomplete">
-      <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre" (click)="agregarElemento(elemento.id)">
+    <mat-autocomplete #autoElemento="matAutocomplete" (optionSelected)="agregarElementoSinEscribir($event)">
+      <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento">
         <span>{{ elemento.nombre }}</span>
         <mat-icon>add</mat-icon>
       </mat-option>
