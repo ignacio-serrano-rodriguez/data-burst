@@ -131,6 +131,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   abrirDesplegableElemento() {
+    this.mostrarBotonCrear = true; // Mostrar el botón siempre que se enfoque el input
     if (this.autocompleteTriggerElemento) {
       this.autocompleteTriggerElemento.openPanel();
     }
@@ -157,13 +158,11 @@ export class ListaComponent implements OnInit, AfterViewInit {
         if (data.exito) {
           this.elementosEncontrados = data.elementos;
           this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
-          this.mostrarBotonCrear = true;
         }
       },
       error: () => {
         this.elementosEncontrados = [];
         this.noSeEncontraronElementos = true;
-        this.mostrarBotonCrear = true;
       }
     });
   }
