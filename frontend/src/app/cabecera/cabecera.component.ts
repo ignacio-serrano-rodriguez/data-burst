@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatMenuModule } from '@angular/material/menu'; 
+import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { NotificacionesService } from '../servicios/notificaciones.service'; // Ajustar la ruta del servicio
 import { Router, NavigationEnd, Event } from '@angular/router';
@@ -31,7 +31,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
     private notificacionesService: NotificacionesService,
     private router: Router,
     private recargaService: RecargaService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (typeof localStorage !== 'undefined') {
@@ -43,7 +43,6 @@ export class CabeceraComponent implements OnInit, OnDestroy {
         this.permisoUsuario = localStorage.getItem('permiso') || "1";
 
         if (this.permisoUsuario == "2") {
-          console.log(localStorage.getItem('permiso'));
           this.mostrarAdministracion = true;
         } else {
           this.mostrarAdministracion = false;
