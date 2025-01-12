@@ -6,6 +6,18 @@ $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
 Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 
+# Comprobar si Docker Desktop se está ejecutando
+$dockerProcess = Get-Process -Name "Docker Desktop" -ErrorAction SilentlyContinue
+if (-not $dockerProcess) {
+    Write-Output "`n${scriptName} -> Docker Desktop no se está ejecutando. Iniciándolo."
+    Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+    # Esperar a que Docker Desktop se inicie completamente
+    Write-Output "`n${scriptName} -> Esperando a que Docker Desktop se inicie completamente."
+    Start-Sleep -Seconds 30
+} else {
+    Write-Output "`n${scriptName} -> Docker Desktop ya se está ejecutando."
+}
+
 # Definición del nombre del contenedor y su volumen.
 $containerName = "data_burst-BD"
 $volumeContainerName = "data_burst-BD_volume"
