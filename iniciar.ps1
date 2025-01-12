@@ -1,3 +1,6 @@
+# Limpiar el terminal
+Clear-Host
+
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
@@ -51,50 +54,20 @@ Remove-Item -Path $tempFile
 
 php bin/console doctrine:migrations:sync-metadata-storage
 
-# Iniciar el servidor Symfony sin TLS
-Start-Process -FilePath "powershell" -ArgumentList "symfony server:start --no-tls" -PassThru -NoNewWindow
+# Iniciar el servidor Symfony en una nueva terminal
+Write-Output "${scriptName} -> Iniciando el servidor Symfony en una nueva terminal.`n"
+Start-Process powershell -ArgumentList "cd `"$PWD`"; symfony server:start --no-tls"
 
-# Inicio del servicio de Angular en segundo plano.
-Write-Output "${scriptName} -> Iniciando el proceso de Angular en segundo plano.`n"
+# Inicio del servicio de Angular en una nueva terminal y redirigir la salida de error a este terminal
+Write-Output "${scriptName} -> Iniciando el proceso de Angular en una nueva terminal.`n"
 Set-Location -Path "../frontend"
 npm ci
-Start-Process -FilePath "powershell" -ArgumentList "ng serve" -PassThru -NoNewWindow
+Start-Process powershell -ArgumentList "cd `"$PWD`"; ng serve 2>&1"
+
+# Volver al directorio de trabajo original
+Set-Location -Path "../"
 
 # Aplicación web inicializada correctamente.
 Write-Output "${scriptName} -> Aplicación web inicializada."
 Write-Output "${scriptName} -> Backend (Symfony) en http://localhost:8000/api"
 Write-Output "${scriptName} -> Frontend (Angular) en http://localhost:4200"
-
-# Instrucciones de finalización de la aplicación web.
-Write-Output "${scriptName} -> Pulsa ENTER para finalizar la aplicación web.`n"
-Set-Location -Path "../"
-$host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | Out-Null
-Write-Output "`n${scriptName} -> Finalizando la aplicación web."
-
-# Eliminar el proceso de Angular.
-$angularProcess = Get-Process -Name "node" -ErrorAction SilentlyContinue
-if ($angularProcess) {
-    Write-Output "${scriptName} -> Deteniendo el proceso de Angular."
-    Stop-Process -Id $angularProcess.Id -Force
-}
-
-# Eliminar el proceso de Symfony.
-$symfonyProcess = Get-Process -Name "symfony" -ErrorAction SilentlyContinue
-if ($symfonyProcess) {
-    Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
-    Set-Location -Path "./api"
-    symfony server:stop
-    Stop-Process -Id $symfonyProcess.Id -Force
-    Set-Location -Path "../"
-}
-
-# Eliminar el contenedor de la BD.
-Write-Output "${scriptName} -> Eliminando el contenedor de la BD."
-docker rm -f $containerName
-Write-Output "${scriptName} -> No se ha eliminado el volumen del contenedor."
-
-# Eliminar directorio de migraciones.
-Write-Output "${scriptName} -> Eliminando directorio de migraciones."
-Remove-Item -Recurse -Force -Path "./api/migrations"
-
-Write-Output "`n${scriptName} -> Aplicación web finalizada."
