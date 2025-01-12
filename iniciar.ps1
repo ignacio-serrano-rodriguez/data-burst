@@ -50,7 +50,9 @@ Start-Process -FilePath "php" -ArgumentList "bin/console doctrine:migrations:mig
 Remove-Item -Path $tempFile
 
 php bin/console doctrine:migrations:sync-metadata-storage
-Start-Process -FilePath "powershell" -ArgumentList "symfony server:start" -PassThru -NoNewWindow
+
+# Iniciar el servidor Symfony sin TLS
+Start-Process -FilePath "powershell" -ArgumentList "symfony server:start --no-tls" -PassThru -NoNewWindow
 
 # Inicio del servicio de Angular en segundo plano.
 Write-Output "${scriptName} -> Iniciando el proceso de Angular en segundo plano.`n"
