@@ -1,6 +1,3 @@
-# Limpiar el terminal
-Clear-Host
-
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
