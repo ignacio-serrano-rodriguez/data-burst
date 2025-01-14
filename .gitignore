@@ -1,5 +1,6 @@
 # -- GENERAL --
 .vscode/
+data_burst_schema.sql
 
 # -- API --
 
@@ -59,4 +60,3 @@ frontend/typings
 # Ficheros del sistema
 frontend/.DS_Store
 frontend/Thumbs.db
-
