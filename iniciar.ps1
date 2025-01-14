@@ -76,7 +76,11 @@ Start-Process powershell -ArgumentList "cd `"$PWD`"; ng serve 2>&1"
 # Volver al directorio de trabajo original
 Set-Location -Path "../"
 
+# Llamar al script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos
+Write-Output "`n${scriptName} -> Ejecutando el script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos.`n"
+.\obtener-esquema-sql.ps1
+
 # Aplicación web inicializada correctamente.
-Write-Output "${scriptName} -> Aplicación web inicializada."
+Write-Output "`n${scriptName} -> Aplicación web inicializada."
 Write-Output "${scriptName} -> Backend (Symfony) en http://localhost:8000/api"
 Write-Output "${scriptName} -> Frontend (Angular) en http://localhost:4200"
