@@ -30,11 +30,19 @@ Red social de creación de listas donde se contienen elementos valorables.
 - [JWT para api platform](https://api-platform.com/docs/core/jwt/)
 - **Docker engine** en ejecución.
 
+## Scripts de arranque de la aplicación
 
-## Arranque de la aplicación en local
-Ejecutar el script [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/iniciar.ps1).
-- El volumen generado por el contenedor no es borrado automaticamente, de esta forma existe persistencia de datos entre los difrerentes arranques.
-- Para finalizar la ejecución, se ha de pulsar ENTER en el terminal donde está el script en ejecución.
+#### [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/iniciar.ps1)
+Inicia la aplicación web. Comprueba si Docker Desktop está en ejecución, crea e inicia el contenedor de la base de datos, realiza las migraciones necesarias y luego inicia los servicios de Symfony y Angular.
+
+#### [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/finalizar.ps1)
+Finaliza la aplicación web. Detiene los procesos de Angular y Symfony, elimina el contenedor de la base de datos y el directorio de migraciones.
+
+#### [obtener-esquema-sql.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/obtener-esquema-sql.ps1)
+Obtiene el esquema de la base de datos y lo guarda en un archivo SQL. Copia un script de shell al contenedor de Docker, lo ejecuta para generar el esquema y luego copia el archivo generado al host.
+
+#### [eliminar-volumen-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/eliminar-volumen-bd.ps1)
+Elimina el volumen de la BD Docker solo si no está siendo usado por algún contenedor. Verifica si el volumen existe y si no está en uso, lo elimina.
 
 ## Funcionalidades del desarrollo
-- Para aplicar cambios en la BD desde el ORM, es necesario eliminar el volumen tras finalizar la ejecución. Al ejecutar de nuevo el script [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/iniciar.ps1), se habrán aplicado los cambios en la BD.
+Para aplicar cambios en la BD desde el ORM, es necesario [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/finalizar.ps1), [eliminar-volumen-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/eliminar-volumen-bd.ps1) e [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/iniciar.ps1) de nuevo.
