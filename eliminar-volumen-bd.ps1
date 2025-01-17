@@ -23,3 +23,7 @@ if ($volumeExists) {
 }
 
 Write-Output "`n${scriptName} -> Operación completada."
+
+# Esperar a que el usuario pulse ENTER para cerrar el terminal
+Write-Output "`n${scriptName} -> Pulse ENTER para cerrar este terminal."
+Read-Host

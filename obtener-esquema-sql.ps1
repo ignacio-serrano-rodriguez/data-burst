@@ -28,3 +28,9 @@ Write-Output "`n${scriptName} -> Formateando el archivo SQL para eliminar cualqu
 
 # Esquema de la base de datos obtenido y guardado en el archivo de salida
 Write-Output "`n${scriptName} -> Esquema de la base de datos obtenido y guardado en '${outputFile}'."
+
+# Esperar a que el usuario pulse ENTER para cerrar el terminal solo si se ejecuta de forma independiente
+if ($MyInvocation.MyCommand.Path -ne $null -and $MyInvocation.MyCommand.Path -ne "iniciar.ps1") {
+    Write-Output "`n${scriptName} -> Pulse ENTER para cerrar este terminal."
+    Read-Host
+}

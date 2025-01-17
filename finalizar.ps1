@@ -34,3 +34,7 @@ Write-Output "${scriptName} -> Eliminando directorio de migraciones."
 Remove-Item -Recurse -Force -Path "./api/migrations"
 
 Write-Output "`n${scriptName} -> Aplicación web finalizada."
+
+# Esperar a que el usuario pulse ENTER para cerrar el terminal
+Write-Output "`n${scriptName} -> Pulse ENTER para cerrar este terminal."
+Read-Host
