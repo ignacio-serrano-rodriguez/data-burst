@@ -11,14 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 class UsuarioManipulaLista
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'usuarioManipulaListas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 
+    #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'usuarioManipulaListas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lista $lista = null;
@@ -28,18 +25,6 @@ class UsuarioManipulaLista
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $momento_manipulacion = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(string $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     public function getUsuario(): ?Usuario
     {

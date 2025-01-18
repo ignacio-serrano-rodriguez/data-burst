@@ -10,14 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class UsuarioElementoPositivo
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(targetEntity: Usuario::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 
+    #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Elemento::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Elemento $elemento = null;
@@ -27,11 +24,6 @@ class UsuarioElementoPositivo
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $momento_positivo = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getUsuario(): ?Usuario
     {

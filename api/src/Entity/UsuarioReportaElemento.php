@@ -12,9 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
 class UsuarioReportaElemento
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\ManyToOne(inversedBy: 'usuarioReportaElementos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Usuario $usuario = null;
+
+    #[ORM\Id]
+    #[ORM\ManyToOne(inversedBy: 'usuarioReportaElementos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Elemento $elemento = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $descripcion = null;
@@ -22,22 +27,26 @@ class UsuarioReportaElemento
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $momento_reporte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'usuarioReportaElementos')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Usuario $usuario = null;
-
-    #[ORM\ManyToOne(inversedBy: 'usuarioReportaElementos')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Elemento $elemento = null;
-
-    public function getId(): ?int
+    public function getUsuario(): ?Usuario
     {
-        return $this->id;
+        return $this->usuario;
     }
 
-    public function setId(string $id): static
+    public function setUsuario(?Usuario $usuario): static
     {
-        $this->id = $id;
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    public function getElemento(): ?Elemento
+    {
+        return $this->elemento;
+    }
+
+    public function setElemento(?Elemento $elemento): static
+    {
+        $this->elemento = $elemento;
 
         return $this;
     }
@@ -62,30 +71,6 @@ class UsuarioReportaElemento
     public function setMomentoReporte(\DateTimeInterface $momento_reporte): static
     {
         $this->momento_reporte = $momento_reporte;
-
-        return $this;
-    }
-
-    public function getUsuario(): ?Usuario
-    {
-        return $this->usuario;
-    }
-
-    public function setUsuario(?Usuario $usuario): static
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    public function getElemento(): ?Elemento
-    {
-        return $this->elemento;
-    }
-
-    public function setElemento(?Elemento $elemento): static
-    {
-        $this->elemento = $elemento;
 
         return $this;
     }

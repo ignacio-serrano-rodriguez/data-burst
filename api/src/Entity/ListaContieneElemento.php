@@ -12,25 +12,17 @@ use Doctrine\ORM\Mapping as ORM;
 class ListaContieneElemento
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'listaContieneElementos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lista $lista = null;
 
+    #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'listaContieneElementos')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Elemento $elemento = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $momentoContencion = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getLista(): ?Lista
     {
