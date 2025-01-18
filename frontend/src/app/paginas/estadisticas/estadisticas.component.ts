@@ -1,30 +1,31 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RecargaService } from '../../servicios/recarga.service';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { CommonModule } from '@angular/common'; // Importar CommonModule
+
+interface Estadistica {
+  masAgregado: string;
+  masGustado: string;
+  menosGustado: string;
+}
 
 @Component({
   selector: 'app-estadisticas',
+  standalone: true, // Indicar que es un componente standalone
+  imports: [FormsModule, CommonModule], // Importar FormsModule y CommonModule aquí
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.css']
 })
-export class EstadisticasComponent implements OnInit, OnDestroy {
-  private recargaSubscription!: Subscription;
+export class EstadisticasComponent {
+  categoria: string = ''; // Asegúrate de que esta propiedad exista
+  estadisticas: Estadistica[] = [
+    { masAgregado: '', masGustado: '', menosGustado: '' },
+    { masAgregado: '', masGustado: '', menosGustado: '' },
+    { masAgregado: '', masGustado: '', menosGustado: '' }
+  ];
 
-  constructor(private recargaService: RecargaService) {}
-
-  ngOnInit() {
-    this.recargaSubscription = this.recargaService.recargarEstadisticas$.subscribe(() => {
-      this.recargarComponente();
-    });
-  }
-
-  ngOnDestroy() {
-    if (this.recargaSubscription) {
-      this.recargaSubscription.unsubscribe();
-    }
-  }
-
-  recargarComponente() {
-    // Lógica para recargar el componente de estadísticas
+  generarEstadisticas() {
+    // Lógica para generar estadísticas basada en la categoría
+    console.log(`Generando estadísticas para la categoría: ${this.categoria}`);
+    // Aquí puedes agregar la lógica para obtener las estadísticas y actualizar el array `estadisticas`
   }
 }
