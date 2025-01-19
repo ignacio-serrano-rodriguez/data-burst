@@ -1,39 +1,45 @@
-<div id="body">
-    <div id="titulo">
-        <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
-        <h1 id="textoTitulo">
-            <span>Data</span>
-            <span>Burst</span>
-        </h1>
-    </div>
-    <span id="mensajeInformativo"></span>
-    <div id="botonesLoginRegistro">
-        <div id="botones">
-            <button 
-                mat-raised-button
-                color="secondary" 
-                [disabled]=botonLoginVisible  
-                
-                (click)="mostrarLoginOcultarRegistro()">Iniciar Sesión
-            </button>
-            <button 
-                mat-raised-button
-                color="secondary"
-                [disabled]=botonRegistroVisible   
-                
-                (click)="mostrarRegistroOcultarLogin()">Registrarse
-            </button>
+<div id="inicio-container">
+
+    <div id="inicio-header">
+        <div id="inicio-header-container">
+            <div id="titulo">
+                <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
+                <h1 id="textoTitulo">
+                    <span>Data</span>
+                    <span>Burst</span>
+                </h1>
+            </div>
+            <div id="botonesLoginRegistro">
+                <div id="botones">
+                    <button 
+                        mat-raised-button
+                        color="secondary" 
+                        [disabled]=botonLoginVisible  
+                        
+                        (click)="mostrarLoginOcultarRegistro()">Iniciar Sesión
+                    </button>
+                    <button 
+                        mat-raised-button
+                        color="secondary"
+                        [disabled]=botonRegistroVisible   
+                        
+                        (click)="mostrarRegistroOcultarLogin()">Registrarse
+                    </button>
+                </div>
+                <span id="mensajeInformativo"></span>
+                <div id="loginRegistro">
+                    <app-login 
+                        id="login" 
+                        [style.display]=loginStyleDisplay>
+                    </app-login>
+                    <app-registro 
+                        id="registro" 
+                        [style.display]=registroStyleDisplay>
+                    </app-registro>
+                </div>
+            </div>
         </div>
-        <div id="loginRegistro">
-            <app-login 
-                id="login" 
-                [style.display]=loginStyleDisplay>
-            </app-login>
-            <app-registro 
-                id="registro" 
-                [style.display]=registroStyleDisplay>
-            </app-registro>
-        </div>
     </div>
+
+    <app-pie></app-pie>
 </div>
-<app-pie></app-pie>

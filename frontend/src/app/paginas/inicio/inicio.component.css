@@ -1,3 +1,7 @@
+:host {
+    height: 100%;
+}
+
 *
 {
     margin: 0;
@@ -6,19 +10,29 @@
     box-sizing: border-box;
 }
 
-#body
+#inicio-container
 {
     background-image: url("../../../assets/images/inicioBackground.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
-    padding-bottom: 10%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+#inicio-header {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    min-height: 100vh;
+    align-items: center;
+    height: 100%;
+}
+
+#inicio-header-container {
+    display: flex;
 }
 
 #titulo
@@ -63,9 +77,8 @@
 #botonesLoginRegistro
 {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
-    margin-bottom: 3.5%;
 }
 
 #botones
@@ -130,5 +143,9 @@
 
     #textoTitulo {
         font-size: 5em;
+    }
+
+    #inicio-header-container {
+        flex-direction: column;
     }
 }
