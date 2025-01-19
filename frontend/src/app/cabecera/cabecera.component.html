@@ -1,5 +1,5 @@
 <mat-toolbar id="cabecera">
-    <span id="titulo" class="enlaces" (click)="recargarHome()">
+    <div id="titulo" class="enlaces" (click)="recargarHome()">
         <a>
             <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
         </a>
@@ -11,34 +11,54 @@
                 <a>Burst</a>
             </span>
         </h2> 
-    </span>
+    </div>
 
-    <span id="estadisticas" class="enlaces" (click)="recargarEstadisticas()">
-        <a class="textoEnlace" [ngClass]="{'bold': rutaActual === '/estadisticas'}">Estadísticas</a>
-    </span>
-
-    <span *ngIf="mostrarAdministracion" id="administracion" class="enlaces">
-        <a class="textoEnlace" href="http://localhost:4200/administracion" [ngClass]="{'bold': rutaActual === '/administracion'}">Administración</a>
-    </span>
-
-    <div id="usuario-section">
-        <button mat-icon-button (click)="recargarPerfil()">
-            <mat-icon>notifications</mat-icon>
-            <span *ngIf="nuevasSolicitudes > 0" class="badge">{{ nuevasSolicitudes }}</span>
-        </button>
-
-        <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
-            <span id="nombreUsuario" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/perfil'}">{{nombreUsuario}}</span>
-            <img id="avatarUsuario" src="..\..\..\assets\images\avatarPorDefecto.png" alt="Avatar del usuario"/>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button id="verPerfil" class="botonMenuUsuario" (click)="recargarPerfil()">
-                <span class="textoEnlace">Ver perfil</span>
+    <div id="cabecera-menu">
+        <span id="estadisticas" class="enlaces" (click)="recargarEstadisticas()">
+            <a class="textoEnlace" [ngClass]="{'bold': rutaActual === '/estadisticas'}">Estadísticas</a>
+        </span>
+    
+        <span *ngIf="mostrarAdministracion" id="administracion" class="enlaces">
+            <a class="textoEnlace" href="http://localhost:4200/administracion" [ngClass]="{'bold': rutaActual === '/administracion'}">Administración</a>
+        </span>
+    
+        <div id="usuario-section">
+            <button mat-icon-button (click)="recargarPerfil()">
+                <mat-icon>notifications</mat-icon>
+                <span *ngIf="nuevasSolicitudes > 0" class="badge">{{ nuevasSolicitudes }}</span>
             </button>
-            <br/>
-            <button class="botonMenuUsuario" (click)="cerrarSesion()">
-                <span class="textoEnlace">Cerrar sesión</span>
+    
+            <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
+                <span id="nombreUsuario" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/perfil'}">{{nombreUsuario}}</span>
+                <img id="avatarUsuario" src="..\..\..\assets\images\avatarPorDefecto.png" alt="Avatar del usuario"/>
             </button>
-        </mat-menu>
+            <mat-menu #menu="matMenu">
+                <button id="verPerfil" class="botonMenuUsuario" (click)="recargarPerfil()">
+                    <span class="textoEnlace">Ver perfil</span>
+                </button>
+                <br/>
+                <button class="botonMenuUsuario" (click)="cerrarSesion()">
+                    <span class="textoEnlace">Cerrar sesión</span>
+                </button>
+            </mat-menu>
+        </div>
     </div>
 </mat-toolbar>
+
+<button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>
+        <mat-icon>dialpad</mat-icon>
+        <span>Redial</span>
+    </button>
+    <button mat-menu-item disabled>
+        <mat-icon>voicemail</mat-icon>
+        <span>Check voice mail</span>
+    </button>
+    <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Disable alerts</span>
+    </button>
+</mat-menu>

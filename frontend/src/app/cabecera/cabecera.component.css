@@ -23,15 +23,19 @@ span, a, div, button
 #cabecera
 {
     display: flex;
-    flex-wrap: wrap;
-
+    flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     text-align: center;
 
-    height: 5.5em;
-
+    height: auto;
     background-color: #F4B3FF;
+}
+
+#cabecera-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #estadisticas, #administracion
@@ -41,11 +45,7 @@ span, a, div, button
 
 #titulo
 {
-    width: 16%;
-
     display: flex;
-    flex-wrap: nowrap;
-
     align-items: center;
     justify-content: space-around;
 }
@@ -137,14 +137,13 @@ button[mat-icon-button]:hover mat-icon {
     transition: transform 0.3s ease-in-out;
 }
 
+#hamburger-menu {
+    display: none;
+}
+
 /* Tablet */
 @media (max-width:879px)
 {
-    #cabecera 
-    {
-        padding-bottom: 8.5em;
-    }
-
     #avatarUsuario
     {
         margin-left: 3%;
@@ -159,13 +158,24 @@ button[mat-icon-button]:hover mat-icon {
         margin: 1%;
     }
 
-    #cabecera 
-    {
-        padding-bottom: 12em;
-    }
-
     #avatarUsuario
     {
         margin-left: 2%;
+    }
+
+    #cabecera-menu {
+        display: none;
+    }
+
+    #hamburger-menu {
+        position: fixed;
+        bottom: 2px;
+        right: 4px;
+        height: 35px;
+        width: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
     }
 }

@@ -62,3 +62,15 @@
 .mensaje-negativo {
     color: #F5A201 !important; /* Color amarillo para mensajes negativos */
 }
+
+#mostrarListasYAmigos {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Móvil */
+@media (max-width: 480px) {
+    #mostrarListasYAmigos {
+        flex-direction: column;
+    }
+}

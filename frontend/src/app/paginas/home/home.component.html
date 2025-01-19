@@ -1,6 +1,6 @@
 <div id="body">
     <span id="mensajeInformativo"></span>
-    <div *ngIf="mostrarListasYAmigos">
+    <div id="mostrarListasYAmigos" *ngIf="mostrarListasYAmigos">
         <app-tus-listas id="tusListas" (listaSeleccionada)="mostrarLista($event)"></app-tus-listas>
         <app-tus-amigos id="tusAmigos"></app-tus-amigos>
     </div>
