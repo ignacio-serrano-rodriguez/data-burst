@@ -1,6 +1,7 @@
 # -- GENERAL --
 .vscode/
 data_burst_schema.sql
+desktop.ini
 
 # -- API --
 
