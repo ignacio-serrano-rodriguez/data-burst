@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   isInicioRoute = false;
   rutaActual: string = '';
 
-  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(private router: Router, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.router.events.pipe(

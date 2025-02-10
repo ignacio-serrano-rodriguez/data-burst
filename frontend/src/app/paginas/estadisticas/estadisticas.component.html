@@ -1,24 +1,6 @@
 <div class="estadisticas-container">
-    <div class="input-container">
-      <label for="categoria">Nombre categoría:</label>
-      <input id="categoria" [(ngModel)]="categoria" placeholder="Ingrese el nombre de la categoría" />
-      <button (click)="generarEstadisticas()">Generar estadísticas</button>
-    </div>
-  
-    <table>
-      <thead>
-        <tr>
-          <th>Más agregado</th>
-          <th>Más gustado</th>
-          <th>Menos gustado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of estadisticas; let i = index">
-          <td>{{ item.masAgregado }}</td>
-          <td>{{ item.masGustado }}</td>
-          <td>{{ item.menosGustado }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <h1>Estadísticas</h1>
+  <div class="estadisticas-content">
+    <!-- Aquí puedes agregar gráficos, tablas o cualquier otro contenido relacionado con las estadísticas -->
   </div>
+</div>
