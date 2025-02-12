@@ -58,11 +58,18 @@ class Elemento
     #[ORM\OneToMany(targetEntity: UsuarioGestionaElemento::class, mappedBy: 'elemento', orphanRemoval: true)]
     private Collection $usuarioGestionaElementos;
 
+    /**
+     * @var Collection<int, UsuarioElementoPositivo>
+     */
+    #[ORM\OneToMany(targetEntity: UsuarioElementoPositivo::class, mappedBy: 'elemento', orphanRemoval: true)]
+    private Collection $usuarioElementoPositivos;
+
     public function __construct()
     {
         $this->listaContieneElementos = new ArrayCollection();
         $this->usuarioReportaElementos = new ArrayCollection();
         $this->usuarioGestionaElementos = new ArrayCollection();
+        $this->usuarioElementoPositivos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +252,36 @@ class Elemento
             // set the owning side to null (unless already changed)
             if ($usuarioGestionaElemento->getElemento() === $this) {
                 $usuarioGestionaElemento->setElemento(null);
+            }
+        }
+
+        return $this;
+    }
+
+     /**
+     * @return Collection<int, UsuarioElementoPositivo>
+     */
+    public function getUsuarioElementoPositivos(): Collection
+    {
+        return $this->usuarioElementoPositivos;
+    }
+
+    public function addUsuarioElementoPositivo(UsuarioElementoPositivo $usuarioElementoPositivo): static
+    {
+        if (!$this->usuarioElementoPositivos->contains($usuarioElementoPositivo)) {
+            $this->usuarioElementoPositivos->add($usuarioElementoPositivo);
+            $usuarioElementoPositivo->setElemento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioElementoPositivo(UsuarioElementoPositivo $usuarioElementoPositivo): static
+    {
+        if ($this->usuarioElementoPositivos->removeElement($usuarioElementoPositivo)) {
+            // set the owning side to null (unless already changed)
+            if ($usuarioElementoPositivo->getElemento() === $this) {
+                $usuarioElementoPositivo->setElemento(null);
             }
         }
 

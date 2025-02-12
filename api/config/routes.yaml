@@ -1,9 +1,15 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
 
 api_login_check:
-    path: /api/login_check
-    methods: POST
+  path: /api/login_check
+  methods: POST
+
+# Nueva ruta para generar estadísticas
+generar_estadisticas:
+  path: /api/generar-estadisticas
+  controller: App\Controller\EstadisticasController::generarEstadisticas
+  methods: POST
