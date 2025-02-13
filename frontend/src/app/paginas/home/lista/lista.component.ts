@@ -376,7 +376,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   resetInput(nombre: string, input: ElementRef, trigger: MatAutocompleteTrigger) {
-    if (nombre.trim() === '') {
+    if (nombre && nombre.trim() === '') {
       input.nativeElement.blur();
     } else {
       nombre = '';
@@ -406,6 +406,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.crearElemento(result);
+      } else {
+        this.nombreElementoBuscarInput.nativeElement.blur(); // Asegurarse de que el input pierda el foco
       }
     });
   }

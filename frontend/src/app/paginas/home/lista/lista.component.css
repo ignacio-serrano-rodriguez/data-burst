@@ -32,8 +32,37 @@
 
 .mat-table {
   border: none;
+  width: 100%; /* Asegurar que la tabla ocupe todo el ancho disponible */
 }
 
 .mat-header-cell, .mat-cell {
   border: none;
+}
+
+/* Quitar las líneas entre los elementos de la tabla */
+.mat-row, .mat-header-row {
+  border-bottom: none;
+}
+
+/* Estilo para agrupar los botones */
+.button-group {
+  display: flex;
+  gap: 8px; /* Espacio entre los botones */
+  flex-wrap: nowrap; /* Evitar que los botones salten a la siguiente línea */
+  align-items: center; /* Alinear los botones verticalmente */
+}
+
+/* Asegurar que las celdas de acciones tengan suficiente espacio */
+.mat-column-acciones {
+  width: 300px; /* Ajustar según sea necesario */
+}
+
+/* Estilo para el input de 'Buscar elemento' */
+.elementoFormulario {
+  width: 100%; /* Asegurar que el input ocupe todo el ancho disponible */
+}
+
+/* Asegurar que el contenedor del input tenga el mismo ancho que la tabla */
+.input-container {
+  width: 100%;
 }
