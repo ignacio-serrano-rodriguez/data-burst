@@ -24,3 +24,16 @@
 .lista-header h2 {
   cursor: pointer;
 }
+
+/* Quitar bordes y sombreado de la tabla */
+.mat-elevation-z8 {
+  box-shadow: none;
+}
+
+.mat-table {
+  border: none;
+}
+
+.mat-header-cell, .mat-cell {
+  border: none;
+}
