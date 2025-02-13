@@ -3,29 +3,29 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete'; // Importar MatAutocompleteModule y MatAutocompleteTrigger
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
 import { Amigo } from '../../../interfaces/Amigo';
-import { HomeComponent } from '../home.component'; // Importar HomeComponent
+import { HomeComponent } from '../home.component';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { RecargaService } from '../../../servicios/recarga.service'; // Importar RecargaService
+import { RecargaService } from '../../../servicios/recarga.service';
 
 @Component({
   selector: 'app-tus-amigos',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     FormsModule,
     MatIconModule,
-    MatAutocompleteModule // Agregar MatAutocompleteModule a los imports
+    MatAutocompleteModule
   ],
   templateUrl: './tus-amigos.component.html',
   styleUrls: ['./tus-amigos.component.css']
@@ -33,11 +33,11 @@ import { RecargaService } from '../../../servicios/recarga.service'; // Importar
 export class TusAmigosComponent implements OnInit {
 
   private amigosService = inject(AmigosService);
-  private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
+  private homeComponent = inject(HomeComponent);
   private router = inject(Router);
-  private recargaService = inject(RecargaService); // Inyectar RecargaService
-  @ViewChild('nombreUsuarioInput') nombreUsuarioInput!: ElementRef; // Referencia al input
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
+  private recargaService = inject(RecargaService);
+  @ViewChild('nombreUsuarioInput') nombreUsuarioInput!: ElementRef;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   amigos: { id: number, nombre: string }[] = [];
   amigosFiltrados: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
@@ -52,20 +52,19 @@ export class TusAmigosComponent implements OnInit {
     this.obtenerAmigos();
 
     this.searchSubject.pipe(
-      debounceTime(300), // Esperar 300ms después de que el usuario deja de escribir
-      distinctUntilChanged() // Emitir solo si el valor es diferente al anterior
+      debounceTime(300),
+      distinctUntilChanged()
     ).subscribe(query => {
-      const usuarioID = Number(localStorage.getItem('id')) || 0;
+      const usuarioID = this.getUsuarioID();
       if (query.length >= 3) {
         this.buscarUsuariosNoAgregados(query, usuarioID);
       } else {
         this.usuariosNoAgregados = [];
         this.noSeEncontraronUsuarios = false;
       }
-      this.buscarAmigosLocal(query); // Buscar amigos locales siempre
+      this.buscarAmigosLocal(query);
     });
 
-    // Suscribirse al evento de recarga de Data Burst
     this.recargaService.recargarDataBurst$.subscribe(() => {
       // No hacer nada para evitar la recarga del componente
     });
@@ -73,7 +72,7 @@ export class TusAmigosComponent implements OnInit {
 
   onNombreUsuarioChange() {
     this.searchSubject.next(this.nombreUsuario.trim());
-    this.autocompleteTrigger.openPanel(); // Abrir el desplegable
+    this.autocompleteTrigger.openPanel();
   }
 
   abrirDesplegable() {
@@ -107,19 +106,19 @@ export class TusAmigosComponent implements OnInit {
   }
 
   seleccionarUsuario(usuarioNombre: string) {
-    this.nombreUsuario = ''; // Limpiar el contenido del input
-    this.autocompleteTrigger.closePanel(); // Cerrar el panel de autocompletado
-    this.agregarUsuario(usuarioNombre); // Ejecutar la acción asignada
+    this.nombreUsuario = '';
+    this.autocompleteTrigger.closePanel();
+    this.agregarUsuario(usuarioNombre);
   }
 
   seleccionarAmigo(amigoNombre: string) {
-    this.nombreUsuario = ''; // Limpiar el contenido del input
-    this.autocompleteTrigger.closePanel(); // Cerrar el panel de autocompletado
-    this.verDetalleAmigo(amigoNombre); // Ejecutar la acción asignada
+    this.nombreUsuario = '';
+    this.autocompleteTrigger.closePanel();
+    this.verDetalleAmigo(amigoNombre);
   }
 
   agregarUsuario(usuarioNombre: string) {
-    const usuarioActualID = Number(localStorage.getItem('id')) || 0;
+    const usuarioActualID = this.getUsuarioID();
 
     let objeto: AgregarUsuario = {
       usuarioID: usuarioActualID,
@@ -130,26 +129,26 @@ export class TusAmigosComponent implements OnInit {
       next: (data) => {
         if (data.exito == true) {
           this.mostrarMensajeInformativo(data.mensaje + " (" + objeto.usuarioAgregar + ")");
-          this.obtenerAmigos(); // Actualizar la lista de amigos
-          this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
-          this.noSeEncontraronUsuarios = false; // Ocultar el mensaje de no se encontraron usuarios
-          this.onNombreUsuarioChange(); // Reiniciar la búsqueda
+          this.obtenerAmigos();
+          this.usuariosNoAgregados = [];
+          this.noSeEncontraronUsuarios = false;
+          this.onNombreUsuarioChange();
         }
       },
       error: (error) => {
         this.mostrarMensajeInformativo(error.error.mensaje + " (" + objeto.usuarioAgregar + ")");
-        this.onNombreUsuarioChange(); // Reiniciar la búsqueda
+        this.onNombreUsuarioChange();
       }
     });
   }
 
   obtenerAmigos() {
-    const usuarioID = Number(localStorage.getItem('id')) || 0;
+    const usuarioID = this.getUsuarioID();
     this.amigosService.obtenerAmigos(usuarioID).subscribe({
       next: (data) => {
         if (data.exito == true) {
           this.amigos = data.amigos;
-          this.amigosFiltrados = this.amigos; // Inicializar amigosFiltrados con todos los amigos
+          this.amigosFiltrados = this.amigos;
         }
       },
       error: (error) => {
@@ -170,25 +169,32 @@ export class TusAmigosComponent implements OnInit {
     const mensajeInformativo = document.getElementById('mensajeInformativo');
     if (mensajeInformativo) {
       mensajeInformativo.textContent = mensaje;
-      mensajeInformativo.style.color = '#61B300'; // Aplicar el color
+      mensajeInformativo.style.color = '#61B300';
       setTimeout(() => {
         mensajeInformativo.textContent = '';
-      }, 5000); // Limpiar el mensaje después de 5 segundos
+      }, 5000);
     }
   }
 
   salirDelInput() {
     if (this.nombreUsuario.trim() === '') {
-      this.nombreUsuarioInput.nativeElement.blur(); // Salir del input si está vacío
+      this.nombreUsuarioInput.nativeElement.blur();
     } else {
-      this.nombreUsuario = ''; // Limpiar el contenido del input
-      this.amigosFiltrados = this.amigos; // Mostrar de nuevo todos los amigos listados
-      this.usuariosNoAgregados = []; // Limpiar la lista de usuarios no agregados
-      this.noSeEncontraronAmigos = false; // Asegurarse de que el mensaje no aparezca
-      this.noSeEncontraronUsuarios = false; // Asegurarse de que el mensaje no aparezca
+      this.nombreUsuario = '';
+      this.amigosFiltrados = this.amigos;
+      this.usuariosNoAgregados = [];
+      this.noSeEncontraronAmigos = false;
+      this.noSeEncontraronUsuarios = false;
       setTimeout(() => {
-        this.autocompleteTrigger.openPanel(); // Abrir el desplegable para mostrar los amigos agregados
+        this.autocompleteTrigger.openPanel();
       }, 0);
     }
+  }
+
+  private getUsuarioID(): number {
+    if (typeof localStorage !== 'undefined') {
+      return Number(localStorage.getItem('id')) || 0;
+    }
+    return 0;
   }
 }

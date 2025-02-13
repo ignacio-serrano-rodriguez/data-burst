@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'; // Importar MatIconModule
-import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete'; // Importar MatAutocompleteModule y MatAutocompleteTrigger
-import { FormsModule } from '@angular/forms'; // Importar FormsModule
+import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { FormsModule } from '@angular/forms';
 
 import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 import { Lista } from '../../../interfaces/Lista';
-import { HomeComponent } from '../home.component'; // Importar HomeComponent
+import { HomeComponent } from '../home.component';
 
 @Component({
   selector: 'app-tus-listas',
@@ -19,27 +19,27 @@ import { HomeComponent } from '../home.component'; // Importar HomeComponent
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule, // Agregar MatIconModule a los imports
-    MatAutocompleteModule, // Agregar MatAutocompleteModule a los imports
+    MatIconModule,
+    MatAutocompleteModule,
     CommonModule,
-    FormsModule // Agregar FormsModule a los imports
+    FormsModule
   ],
   templateUrl: './tus-listas.component.html',
   styleUrls: ['./tus-listas.component.css']
 })
 export class TusListasComponent implements OnInit {
   private listasService = inject(ListasService);
-  private homeComponent = inject(HomeComponent); // Inyectar HomeComponent
+  private homeComponent = inject(HomeComponent);
   listas: Lista[] = [];
   listasFiltradas: Lista[] = [];
-  @Output() listaSeleccionada = new EventEmitter<Lista>(); // Cambiar el tipo de EventEmitter a Lista
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger; // Referencia al MatAutocompleteTrigger
-  @ViewChild('nombreListaInput') nombreListaInput!: ElementRef; // Referencia al input
+  @Output() listaSeleccionada = new EventEmitter<Lista>();
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
+  @ViewChild('nombreListaInput') nombreListaInput!: ElementRef;
 
   nombreLista: string = '';
-  publica: boolean = false; // Variable para el toggle, por defecto false (candado)
+  publica: boolean = false;
   noSeEncontraronListas = false;
-  listaSeleccionadaId: number | null = null; // Variable para la lista seleccionada
+  listaSeleccionadaId: number | null = null;
 
   ngOnInit(): void {
     this.obtenerListas();
@@ -66,39 +66,39 @@ export class TusListasComponent implements OnInit {
     }
 
     let objeto: CrearAsignarLista = {
-      usuarioID: Number(localStorage.getItem('id')) || 0,
+      usuarioID: this.getUsuarioID(),
       nombre: nombreLista,
-      publica: this.publica // Añadir la propiedad publica
+      publica: this.publica
     };
 
     this.listasService.crearAsignarLista(objeto).subscribe({
       next: (data) => {
         if (data.exito == true) {
           this.nombreLista = '';
-          this.publica = false; // Resetear el toggle a su valor por defecto (candado)
-          this.obtenerListas(); // Actualizar la lista de listas
-          this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca después de crear una lista
-          this.seleccionarLista(data.lista); // Pasar directamente la lista creada
+          this.publica = false;
+          this.obtenerListas();
+          this.noSeEncontraronListas = false;
+          this.seleccionarLista(data.lista);
         }
       },
       error: (error) => {
         this.nombreLista = '';
-        this.publica = false; // Resetear el toggle a su valor por defecto (candado)
+        this.publica = false;
         this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.nombre + ")");
       }
     });
   }
 
   obtenerListas() {
-    const usuarioID = Number(localStorage.getItem('id')) || 0;
+    const usuarioID = this.getUsuarioID();
     this.listasService.obtenerListas(usuarioID).subscribe({
       next: (data) => {
         if (data.exito == true) {
           this.listas = data.listas.map(lista => ({
             ...lista,
-            compartida: lista.compartida || false // Inicializar el campo compartida si no está presente
+            compartida: lista.compartida || false
           }));
-          this.listasFiltradas = this.listas; // Inicializar listasFiltradas con todas las listas
+          this.listasFiltradas = this.listas;
         }
       },
       error: (error) => {
@@ -109,7 +109,7 @@ export class TusListasComponent implements OnInit {
 
   seleccionarLista(lista: Lista) {
     this.homeComponent.limpiarMensaje();
-    this.listaSeleccionada.emit(lista); // Emitir la lista seleccionada
+    this.listaSeleccionada.emit(lista);
   }
 
   esNombreListaValido(): boolean {
@@ -126,14 +126,21 @@ export class TusListasComponent implements OnInit {
 
   salirDelInput() {
     if (this.nombreLista.trim() === '') {
-      this.nombreListaInput.nativeElement.blur(); // Salir del input si está vacío
+      this.nombreListaInput.nativeElement.blur();
     } else {
-      this.nombreLista = ''; // Limpiar el contenido del input
-      this.listasFiltradas = this.listas; // Mostrar de nuevo todas las listas listadas
-      this.noSeEncontraronListas = false; // Asegurarse de que el mensaje no aparezca
+      this.nombreLista = '';
+      this.listasFiltradas = this.listas;
+      this.noSeEncontraronListas = false;
       setTimeout(() => {
-        this.autocompleteTrigger.openPanel(); // Abrir el desplegable para mostrar las listas
+        this.autocompleteTrigger.openPanel();
       }, 0);
     }
+  }
+
+  private getUsuarioID(): number {
+    if (typeof localStorage !== 'undefined') {
+      return Number(localStorage.getItem('id')) || 0;
+    }
+    return 0;
   }
 }
