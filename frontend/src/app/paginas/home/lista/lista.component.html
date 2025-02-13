@@ -79,37 +79,31 @@
     </mat-autocomplete>
   </div>
 
-  <ul>
-    <li *ngFor="let elemento of elementos">
-      {{ elemento.nombre }}
-      <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" (click)="elemento.positivo !== true && likeElemento(elemento)">
-        <mat-icon>thumb_up</mat-icon>
-      </button>
-      <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" (click)="elemento.positivo !== false && dislikeElemento(elemento)">
-        <mat-icon>thumb_down</mat-icon>
-      </button>
-      <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" (click)="elemento.positivo !== null && resetLikeDislikeElemento(elemento)">
-        <mat-icon>help_outline</mat-icon>
-      </button>
-      <button mat-icon-button [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" (click)="comentarElemento(elemento)">
-        <mat-icon>comment</mat-icon>
-      </button>
-      <button mat-icon-button (click)="eliminarElemento(elemento.id)">
-        <mat-icon>close</mat-icon>
-      </button>
-      <ul>
-        <li *ngFor="let usuarioComentarioPositivo of elemento.usuariosComentariosPositivos">
-          <ng-container *ngIf="usuarioComentarioPositivo.usuario_id !== usuarioActual">
-            <strong>{{ usuarioComentarioPositivo.usuario }}:</strong>
-            <span>{{ usuarioComentarioPositivo.comentario }}</span>
-            <span [ngClass]="{'like-button': usuarioComentarioPositivo.positivo === true, 'dislike-button': usuarioComentarioPositivo.positivo === false, 'help-button': usuarioComentarioPositivo.positivo === null}">
-              <mat-icon>
-                {{ usuarioComentarioPositivo.positivo === null ? 'help_outline' : (usuarioComentarioPositivo.positivo ? 'thumb_up' : 'thumb_down') }}
-              </mat-icon>
-            </span>
-          </ng-container>
-        </li>
-      </ul>
-    </li>
-  </ul>
+  <table mat-table [dataSource]="elementos" class="mat-elevation-z8">
+    <ng-container matColumnDef="nombre">
+      <td mat-cell *matCellDef="let elemento"> {{ elemento.nombre }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <td mat-cell *matCellDef="let elemento">
+        <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" (click)="elemento.positivo !== true && likeElemento(elemento)">
+          <mat-icon>thumb_up</mat-icon>
+        </button>
+        <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" (click)="elemento.positivo !== false && dislikeElemento(elemento)">
+          <mat-icon>thumb_down</mat-icon>
+        </button>
+        <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" (click)="elemento.positivo !== null && resetLikeDislikeElemento(elemento)">
+          <mat-icon>help_outline</mat-icon>
+        </button>
+        <button mat-icon-button [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" (click)="comentarElemento(elemento)">
+          <mat-icon>comment</mat-icon>
+        </button>
+        <button mat-icon-button (click)="eliminarElemento(elemento.id)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-row *matRowDef="let row; columns: ['nombre', 'acciones'];"></tr>
+  </table>
 </div>

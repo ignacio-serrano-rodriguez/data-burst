@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonToggleModule } from '@angular/material/button-toggle'; // Importar MatButtonToggleModule
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
@@ -27,7 +29,9 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTableModule,
+    MatButtonToggleModule // Agregar MatButtonToggleModule a los imports
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
