@@ -1,6 +1,32 @@
 <div class="estadisticas-container">
-  <h1>Estadísticas</h1>
   <div class="estadisticas-content">
-    <!-- Aquí puedes agregar gráficos, tablas o cualquier otro contenido relacionado con las estadísticas -->
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre Categoría</mat-label>
+      <input matInput [(ngModel)]="categoria">
+    </mat-form-field>
+    <button mat-raised-button (click)="obtenerEstadisticas()" style="background-color: green;">Generar estadísticas</button>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!noEstadisticas">
+      <ng-container matColumnDef="orden">
+        <th mat-header-cell *matHeaderCellDef> Orden </th>
+        <td mat-cell *matCellDef="let element"> {{element.orden}}º </td>
+      </ng-container>
+      <ng-container matColumnDef="masAgregado">
+        <th mat-header-cell *matHeaderCellDef> Más Agregado </th>
+        <td mat-cell *matCellDef="let element"> {{element.masAgregado}} </td>
+      </ng-container>
+      <ng-container matColumnDef="masGustado">
+        <th mat-header-cell *matHeaderCellDef> Más Gustado </th>
+        <td mat-cell *matCellDef="let element"> {{element.masGustado}} </td>
+      </ng-container>
+      <ng-container matColumnDef="menosGustado">
+        <th mat-header-cell *matHeaderCellDef> Menos Gustado </th>
+        <td mat-cell *matCellDef="let element"> {{element.menosGustado}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <span *ngIf="noEstadisticas">No existen estadísticas para la categoría seleccionada.</span>
   </div>
 </div>
