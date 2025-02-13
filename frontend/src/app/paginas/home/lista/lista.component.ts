@@ -14,7 +14,7 @@ import { Elemento } from '../../../interfaces/Elemento';
 import { AgregadorComponent } from './agregador/agregador.component';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
-import { CrearElementoDialogComponent } from './agregador/crear-elemento-dialog/crear-elemento-dialog.component';
+import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elemento-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
@@ -28,11 +28,11 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule
-],
+    MatAutocompleteModule,
+    MatDialogModule
+  ],
   templateUrl: './lista.component.html',
-  styleUrls: ['./lista.component.css'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrls: ['./lista.component.css']
 })
 export class ListaComponent implements OnInit, AfterViewInit {
   @Input() lista: Lista | undefined;
@@ -61,12 +61,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
   private searchSubjectBuscar = new Subject<string>();
   private searchSubjectElemento = new Subject<string>();
 
-  constructor(
-    private listasService: ListasService,
-    private elementosService: ElementosService,
-    private amigosService: AmigosService,
-    private dialog: MatDialog
-  ) {}
+  private elementosService = inject(ElementosService);
+  private listasService = inject(ListasService);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     if (this.lista) {
@@ -256,11 +253,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         if (result) {
           const usuarioID = Number(localStorage.getItem('id'));
           this.listasService.desasignarLista(this.lista!.id, usuarioID).subscribe({
-            next: (data: { exito: boolean }) => {
-              if (data.exito) {
-                this.volverAListasYAmigos.emit();
-              }
-            }
+            next: (data: { exito: boolean }) => {… }
           });
         }
       });
@@ -310,9 +303,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
           if (data.exito) {
             this.obtenerElementosLista(this.lista!.id);
             this.elementosEncontrados = [];
-            this.noSeEncontraronElementos = false;
-            this.nombreElementoBuscar = '';
-            this.onNombreElementoBuscarChange();
           }
         },
         error: () => {
@@ -329,9 +319,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.lista) {
       this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
         next: (data: { exito: boolean }) => {
-          if (data.exito) {
-            this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId);
-          }
+          if (data.exito) {… }
         }
       });
     }
@@ -341,9 +329,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, true).subscribe({
         next: (data: { exito: boolean }) => {
-          if (data.exito) {
-            elemento.positivo = true;
-          }
+          if (data.exito) {… }
         }
       });
     }
@@ -353,9 +339,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, false).subscribe({
         next: (data: { exito: boolean }) => {
-          if (data.exito) {
-            elemento.positivo = false;
-          }
+          if (data.exito) {… }
         }
       });
     }
@@ -365,9 +349,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.lista) {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, null).subscribe({
         next: (data: { exito: boolean }) => {
-          if (data.exito) {
-            elemento.positivo = null;
-          }
+          if (data.exito) {… }
         }
       });
     }
@@ -381,15 +363,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        if (this.lista) {
-          this.elementosService.actualizarComentario(this.lista.id, elemento.id, result).subscribe({
-            next: (data: { exito: boolean }) => {
-              if (data.exito) {
-                elemento.comentario = result;
-              }
-            }
-          });
-        }
+        if (this.lista) {… }
       }
     });
   }
@@ -415,9 +389,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.elementosEncontrados = [];
       this.noSeEncontraronElementos = false;
       setTimeout(() => {
-        if (this.autocompleteTriggerElemento) {
-          this.autocompleteTriggerElemento.openPanel();
-        }
+        if (this.autocompleteTriggerElemento) {… }
       }, 0);
     }
   }
@@ -477,9 +449,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
           this.elementos.push(data.elemento);
           this.noSeEncontraronElementos = false;
 
-          if (this.lista) {
-            this.agregarElemento(data.elemento.id);
-          }
+          if (this.lista) {… }
 
           // Vaciar el input de "Agregar elemento", los resultados de búsqueda y el botón de "Mostrar formulario de creación"
           this.nombreElementoBuscar = '';
