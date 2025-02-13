@@ -751,6 +751,16 @@ class UsuarioController extends AbstractController
         $datosRecibidos = json_decode($request->getContent(), true);
         $usuarioID = $datosRecibidos['usuarioID'];
 
+        if (!$usuarioID) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "ID de usuario no proporcionado."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         try {
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
             if (!$usuario) {
