@@ -372,7 +372,10 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   salirDelInputElemento() {
-    this.resetInput(this.nombreElementoBuscar, this.nombreElementoBuscarInput, this.autocompleteTriggerElemento);
+    this.nombreElementoBuscar = ''; // Limpiar el contenido del input
+    this.elementosEncontrados = []; // Limpiar los elementos encontrados
+    this.nombreElementoBuscarInput.nativeElement.blur(); // Perder el foco del input
+    this.autocompleteTriggerElemento.closePanel(); // Cerrar el panel de autocompletado
   }
 
   resetInput(nombre: string, input: ElementRef, trigger: MatAutocompleteTrigger) {
@@ -390,9 +393,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.agregarElemento(elemento.id);
       this.nombreElementoBuscar = '';
       this.elementosEncontrados = [];
-      this.nombreElementoBuscarInput.nativeElement.blur();
-    } else {
-      this.mostrarFormulario();
     }
   }
 
