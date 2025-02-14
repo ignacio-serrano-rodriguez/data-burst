@@ -398,17 +398,23 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   mostrarFormulario() {
     const nombreElemento = this.nombreElementoBuscar?.trim() || '';
+    console.log('Abriendo diálogo para crear elemento:', nombreElemento);
     const dialogRef = this.dialog.open(CrearElementoDialogComponent, {
       width: '400px',
       data: { nombre: nombreElemento }
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log('Diálogo cerrado, resultado:', result);
       if (result) {
         this.crearElemento(result);
-      } else {
-        this.nombreElementoBuscarInput.nativeElement.blur(); // Asegurarse de que el input pierda el foco
       }
+      this.nombreElementoBuscarInput.nativeElement.blur(); // Asegurarse de que el input pierda el foco
+      if (this.autocompleteTriggerElemento) {
+        console.log('Cerrando panel de autocompletado');
+        this.autocompleteTriggerElemento.closePanel(); // Cerrar el panel de autocompletado
+      }
+      this.mostrarBotonCrear = false; // Asegurarse de que el botón '¿Elemento inexistente? Crear' no se muestre
     });
   }
 

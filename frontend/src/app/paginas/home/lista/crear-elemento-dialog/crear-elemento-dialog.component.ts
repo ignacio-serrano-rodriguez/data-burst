@@ -45,11 +45,13 @@ export class CrearElementoDialogComponent {
 
   guardar() {
     if (this.form.valid) {
+      console.log('Guardando elemento:', this.form.value);
       this.dialogRef.close(this.form.value);
     }
   }
 
   cerrar() {
+    console.log('Cerrando diálogo sin guardar');
     this.dialogRef.close();
   }
 }
