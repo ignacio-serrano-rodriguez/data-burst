@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
-import { MatButtonToggleModule } from '@angular/material/button-toggle'; // Importar MatButtonToggleModule
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
@@ -31,7 +31,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatInputModule,
     MatAutocompleteModule,
     MatTableModule,
-    MatButtonToggleModule // Agregar MatButtonToggleModule a los imports
+    MatButtonToggleModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
@@ -398,30 +398,26 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   mostrarFormulario() {
     const nombreElemento = this.nombreElementoBuscar?.trim() || '';
-    console.log('Abriendo diálogo para crear elemento:', nombreElemento);
     const dialogRef = this.dialog.open(CrearElementoDialogComponent, {
       width: '400px',
       data: { nombre: nombreElemento }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Diálogo cerrado, resultado:', result);
       if (result) {
         this.crearElemento(result);
       }
-      this.nombreElementoBuscarInput.nativeElement.blur(); // Asegurarse de que el input pierda el foco
+      this.nombreElementoBuscarInput.nativeElement.blur();
       if (this.autocompleteTriggerElemento) {
-        console.log('Cerrando panel de autocompletado');
-        this.autocompleteTriggerElemento.closePanel(); // Cerrar el panel de autocompletado
+        this.autocompleteTriggerElemento.closePanel();
       }
-      this.mostrarBotonCrear = false; // Asegurarse de que el botón '¿Elemento inexistente? Crear' no se muestre
+      this.mostrarBotonCrear = false;
     });
   }
 
   crearElemento(datos: any) {
     const usuarioId = localStorage.getItem('id');
     if (!usuarioId) {
-      console.error('Usuario no autenticado');
       return;
     }
 
@@ -453,7 +449,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
         }
       },
       error: error => {
-        console.error('Error al crear el elemento:', error);
       }
     });
   }

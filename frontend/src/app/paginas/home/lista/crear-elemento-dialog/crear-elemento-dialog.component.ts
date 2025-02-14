@@ -40,18 +40,15 @@ export class CrearElementoDialogComponent {
       descripcion: ['']
     });
 
-    // this.dialogRef.updateSize('500px', '600px'); // Ajustar el tamaño del diálogo
   }
 
   guardar() {
     if (this.form.valid) {
-      console.log('Guardando elemento:', this.form.value);
       this.dialogRef.close(this.form.value);
     }
   }
 
   cerrar() {
-    console.log('Cerrando diálogo sin guardar');
     this.dialogRef.close();
   }
 }
