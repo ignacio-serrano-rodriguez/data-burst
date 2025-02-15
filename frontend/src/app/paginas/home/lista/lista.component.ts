@@ -372,10 +372,10 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   salirDelInputElemento() {
-    this.nombreElementoBuscar = ''; // Limpiar el contenido del input
-    this.elementosEncontrados = []; // Limpiar los elementos encontrados
-    this.nombreElementoBuscarInput.nativeElement.blur(); // Perder el foco del input
-    this.autocompleteTriggerElemento.closePanel(); // Cerrar el panel de autocompletado
+    this.nombreElementoBuscar = '';
+    this.elementosEncontrados = [];
+    this.nombreElementoBuscarInput.nativeElement.blur();
+    this.autocompleteTriggerElemento.closePanel();
   }
 
   resetInput(nombre: string, input: ElementRef, trigger: MatAutocompleteTrigger) {

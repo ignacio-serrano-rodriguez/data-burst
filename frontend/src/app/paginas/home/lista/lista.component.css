@@ -1,68 +1,60 @@
-/* Estilos existentes */
-
-/* Estilo para el botón de like */
 .like-button {
   color: green;
 }
 
-/* Estilo para el botón de dislike */
 .dislike-button {
   color: red;
 }
 
-/* Estilo para el botón de interrogación */
 .help-button {
   color: #ffaa00;
 }
 
-/* Estilo para el botón de comentario con texto */
 .comment-button {
   color: #9900b4;
 }
 
-/* Estilo para el nombre de la lista con efecto pointer */
 .lista-header h2 {
   cursor: pointer;
 }
 
-/* Quitar bordes y sombreado de la tabla */
 .mat-elevation-z8 {
   box-shadow: none;
 }
 
 .mat-table {
   border: none;
-  width: 100%; /* Asegurar que la tabla ocupe todo el ancho disponible */
+  width: 100%;
 }
 
 .mat-header-cell, .mat-cell {
   border: none;
 }
 
-/* Quitar las líneas entre los elementos de la tabla */
 .mat-row, .mat-header-row {
   border-bottom: none;
 }
 
-/* Estilo para agrupar los botones */
 .button-group {
   display: flex;
-  gap: 8px; /* Espacio entre los botones */
-  flex-wrap: nowrap; /* Evitar que los botones salten a la siguiente línea */
-  align-items: center; /* Alinear los botones verticalmente */
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
-/* Asegurar que las celdas de acciones tengan suficiente espacio */
+.like-dislike-help-group {
+  background-color: #f4f4f4;
+  border-radius: 5%;
+}
+
 .mat-column-acciones {
-  width: 300px; /* Ajustar según sea necesario */
+  width: 300px;
 }
 
-/* Estilo para el input de 'Buscar elemento' */
 .elementoFormulario {
-  width: 100%; /* Asegurar que el input ocupe todo el ancho disponible */
+  width: 100%;
 }
 
-/* Asegurar que el contenedor del input tenga el mismo ancho que la tabla */
 .input-container {
   width: 100%;
 }
