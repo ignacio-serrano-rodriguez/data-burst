@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Información del Elemento</h1>
+<div mat-dialog-content>
+  <p><strong>Nombre:</strong> {{ data.elemento.nombre }}</p>
+  <p><strong>Fecha de Aparición:</strong> {{ data.elemento.fecha_aparicion }}</p>
+  <p><strong>Información Extra:</strong> {{ data.elemento.informacion_extra }}</p>
+  <p><strong>Descripción:</strong> {{ data.elemento.descripcion }}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-icon-button (click)="cerrar()">
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="agregarElemento()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

@@ -60,17 +60,17 @@
 
   <div class="input-container">  
     <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Buscar elemento</mat-label>
+      <mat-label class="etiquetaFormulario">Buscar elemento a añadir</mat-label>
       <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
-      <button mat-icon-button matPrefix (click)="salirDelInputElemento()">
+      <button mat-icon-button matPrefix (click)="resetBusquedaElemento()">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
   
     <mat-autocomplete #autoElemento="matAutocomplete" (optionSelected)="agregarElementoSinEscribir($event)">
-      <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento">
+      <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre" (click)="mostrarInformacionElemento(elemento)">
+        <mat-icon>info</mat-icon>
         <span>{{ elemento.nombre }}</span>
-        <mat-icon>add</mat-icon>
       </mat-option>
       <mat-option *ngIf="mostrarBotonCrear" (click)="mostrarFormulario()">
         <span>¿Elemento inexistente? Crear</span>

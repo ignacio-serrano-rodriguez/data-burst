@@ -19,6 +19,7 @@ import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog
 import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elemento-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { InformacionElementoDialogComponent } from './informacion-dialog/informacion-elemento-dialog.component';
 
 @Component({
   selector: 'app-lista',
@@ -93,10 +94,10 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   setupSearchSubjects() {
-    this.searchSubjectBuscar.pipe(debounceTime(300), distinctUntilChanged())
+    this.searchSubjectBuscar.pipe(debounceTime(100), distinctUntilChanged())
       .subscribe(query => this.buscarAmigos(query));
 
-    this.searchSubjectElemento.pipe(debounceTime(300), distinctUntilChanged())
+    this.searchSubjectElemento.pipe(debounceTime(100), distinctUntilChanged())
       .subscribe(query => this.buscarElementos(query));
   }
 
@@ -392,13 +393,17 @@ export class ListaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  agregarElementoSinEscribir(event: any) {
-    const elemento = event.option.value;
-    if (elemento && elemento.id) {
-      this.agregarElemento(elemento.id);
-      this.nombreElementoBuscar = '';
-      this.elementosEncontrados = [];
+  resetBusquedaElemento() {
+    this.nombreElementoBuscar = '';
+    this.elementosEncontrados = [];
+    this.nombreElementoBuscarInput.nativeElement.focus();
+    if (this.autocompleteTriggerElemento) {
+      this.autocompleteTriggerElemento.openPanel();
     }
+  }
+
+  agregarElementoSinEscribir(event: any) {
+    // No hacer nada aquí para evitar agregar el elemento al seleccionar la opción
   }
 
   mostrarFormulario() {
@@ -455,6 +460,20 @@ export class ListaComponent implements OnInit, AfterViewInit {
       },
       error: error => {
       }
+    });
+  }
+
+  mostrarInformacionElemento(elemento: Elemento) {
+    const dialogRef = this.dialog.open(InformacionElementoDialogComponent, {
+      width: '400px',
+      data: { elemento, listaId: this.lista?.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.agregado) {
+        this.obtenerElementosLista(this.lista!.id);
+      }
+      this.resetBusquedaElemento();
     });
   }
 }
