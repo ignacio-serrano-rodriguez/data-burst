@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -23,7 +23,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     ReactiveFormsModule
   ],
   templateUrl: './crear-elemento-dialog.component.html',
-  styleUrls: ['./crear-elemento-dialog.component.css']
+  styleUrls: ['./crear-elemento-dialog.component.css'],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }
+  ]
 })
 export class CrearElementoDialogComponent {
   form: FormGroup;
@@ -36,10 +40,9 @@ export class CrearElementoDialogComponent {
     this.form = this.fb.group({
       nombre: [data.nombre || '', Validators.required],
       fechaAparicion: ['', Validators.required],
-      informacionExtra: [''],
-      descripcion: ['']
+      informacionExtra: ['', Validators.required],
+      descripcion: ['', Validators.required]
     });
-
   }
 
   guardar() {
