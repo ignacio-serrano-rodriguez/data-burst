@@ -23,9 +23,9 @@
       <button mat-icon-button (click)="toggleEditarNombre()">
         <mat-icon>{{ editandoNombre ? 'cancel' : 'edit' }}</mat-icon>
       </button>
-      <button mat-icon-button (click)="cambiarVisibilidad()">
-        <mat-icon>{{ lista?.publica ? 'public' : 'lock' }}</mat-icon>
-      </button>
+      <mat-slide-toggle [checked]="listaPublica" (change)="cambiarVisibilidad($event)" color="accent">
+        <mat-icon>{{ listaPublica ? 'public' : 'lock' }}</mat-icon>
+      </mat-slide-toggle>
       <button mat-icon-button (click)="toggleColaborar()">
         <mat-icon [style.color]="mostrarColaborarComponent ? '#61B300' : 'inherit'">group</mat-icon>
       </button>

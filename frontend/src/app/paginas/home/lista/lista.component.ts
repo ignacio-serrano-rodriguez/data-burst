@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
@@ -31,7 +32,8 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
     MatInputModule,
     MatAutocompleteModule,
     MatTableModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatSlideToggleModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],
@@ -60,6 +62,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   noSeEncontraronElementos = false;
   usuarioActual: number = Number(localStorage.getItem('id')) || 0;
   mostrarBotonCrear = false;
+  listaPublica: boolean = false; // Nueva propiedad para manejar la visibilidad
 
   private searchSubjectBuscar = new Subject<string>();
   private searchSubjectElemento = new Subject<string>();
@@ -74,6 +77,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     if (this.lista) {
       this.nuevoNombreLista = this.lista.nombre;
+      this.listaPublica = this.lista.publica; // Inicializar la propiedad listaPublica
       this.obtenerElementosLista(this.lista.id);
       this.obtenerColaboradores(this.lista.id);
     }
@@ -244,13 +248,14 @@ export class ListaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  cambiarVisibilidad() {
+  cambiarVisibilidad(event: any) {
     if (this.lista) {
-      const nuevaVisibilidad = !this.lista.publica;
+      const nuevaVisibilidad = event.checked;
       this.listasService.cambiarVisibilidadLista(this.lista.id, this.usuarioActual, nuevaVisibilidad).subscribe({
         next: data => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
+            this.listaPublica = nuevaVisibilidad; // Actualizar la propiedad listaPublica
           }
         }
       });
