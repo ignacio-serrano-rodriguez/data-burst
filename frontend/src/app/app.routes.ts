@@ -6,11 +6,13 @@ import { AdministracionComponent } from './paginas/administracion/administracion
 import { ErrorComponent } from './paginas/error/error.component';
 import { EstadisticasComponent } from './paginas/estadisticas/estadisticas.component';
 import { AmigoComponent } from './paginas/home/amigo/amigo.component';
+import { ModeracionComponent } from './paginas/moderacion/moderacion.component';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent },
   { path: 'home', component: HomeComponent },
   { path: 'perfil', component: PerfilComponent },
+  { path: 'moderacion', component: ModeracionComponent },
   { path: 'administracion', component: AdministracionComponent },
   { path: 'estadisticas', component: EstadisticasComponent },
   { path: 'amigo', component: AmigoComponent },

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { NotificacionesService } from '../servicios/notificaciones.service'; // Ajustar la ruta del servicio
+import { NotificacionesService } from '../servicios/notificaciones.service';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { RecargaService } from '../servicios/recarga.service';
 import { filter } from 'rxjs/operators';
@@ -23,6 +23,7 @@ import { filter } from 'rxjs/operators';
 export class CabeceraComponent implements OnInit, OnDestroy {
   @Input() nombreUsuario: string = '';
   @Input() rutaActual: string = '';
+  mostrarModeracion: boolean = false;
   mostrarAdministracion: boolean = false;
   permisoUsuario: string = "1";
   nuevasSolicitudes: number = 0;
@@ -43,8 +44,12 @@ export class CabeceraComponent implements OnInit, OnDestroy {
         this.permisoUsuario = localStorage.getItem('permiso') || "1";
 
         if (this.permisoUsuario == "2") {
+          this.mostrarModeracion = true;
+        } else if (this.permisoUsuario == "3") {
+          this.mostrarModeracion = true;
           this.mostrarAdministracion = true;
         } else {
+          this.mostrarModeracion = false;
           this.mostrarAdministracion = false;
         }
 
@@ -53,7 +58,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
         });
 
         this.notificacionesService.actualizarNumeroSolicitudes();
-        this.notificacionesService.iniciarRevisionPeriodica(); // Iniciar revisión periódica
+        this.notificacionesService.iniciarRevisionPeriodica();
       }
 
       this.router.events.pipe(
@@ -65,7 +70,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.notificacionesService.detenerRevisionPeriodica(); // Detener revisión periódica al destruir el componente
+    this.notificacionesService.detenerRevisionPeriodica();
   }
 
   cerrarSesion() {
@@ -85,7 +90,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
 
   recargarHome() {
     this.router.navigate(['/home']).then(() => {
-      this.recargaService.recargarDataBurst(); // Emitir evento para Data Burst
+      this.recargaService.recargarDataBurst();
     });
   }
 

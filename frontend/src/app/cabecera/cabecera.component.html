@@ -18,6 +18,10 @@
             <a class="textoEnlace" [ngClass]="{'bold': rutaActual === '/estadisticas'}">Estadísticas</a>
         </span>
     
+        <span *ngIf="mostrarModeracion" id="moderacion" class="enlaces">
+            <a class="textoEnlace" href="http://localhost:4200/moderacion" [ngClass]="{'bold': rutaActual === '/moderacion'}">Moderación</a>
+        </span>
+
         <span *ngIf="mostrarAdministracion" id="administracion" class="enlaces">
             <a class="textoEnlace" href="http://localhost:4200/administracion" [ngClass]="{'bold': rutaActual === '/administracion'}">Administración</a>
         </span>
