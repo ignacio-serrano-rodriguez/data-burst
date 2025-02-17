@@ -5,36 +5,47 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class RecargaService {
+  private recargarPerfilSource = new Subject<void>();
+  private recargarDataBurstSource = new Subject<void>();
+  private recargarEstadisticasSource = new Subject<void>();
+  private recargarModeracionSource = new Subject<void>();
+  private recargarAdministracionSource = new Subject<void>();
+  private cerrarSesionSource = new Subject<void>();
+  private recargarHomeSource = new Subject<void>();
 
-  private cerrarSesionSubject = new Subject<void>();
-  private recargarHomeSubject = new Subject<void>();
-  private recargarEstadisticasSubject = new Subject<void>();
-  private recargarPerfilSubject = new Subject<void>();
-  private recargarDataBurstSubject = new Subject<void>(); // Nuevo Subject para Data Burst
-
-  cerrarSesion$ = this.cerrarSesionSubject.asObservable();
-  recargarHome$ = this.recargarHomeSubject.asObservable();
-  recargarEstadisticas$ = this.recargarEstadisticasSubject.asObservable();
-  recargarPerfil$ = this.recargarPerfilSubject.asObservable();
-  recargarDataBurst$ = this.recargarDataBurstSubject.asObservable(); // Observable para Data Burst
-
-  cerrarSesion() {
-    this.cerrarSesionSubject.next();
-  }
-
-  recargarHome() {
-    this.recargarHomeSubject.next();
-  }
-
-  recargarEstadisticas() {
-    this.recargarEstadisticasSubject.next();
-  }
+  recargarPerfil$ = this.recargarPerfilSource.asObservable();
+  recargarDataBurst$ = this.recargarDataBurstSource.asObservable();
+  recargarEstadisticas$ = this.recargarEstadisticasSource.asObservable();
+  recargarModeracion$ = this.recargarModeracionSource.asObservable();
+  recargarAdministracion$ = this.recargarAdministracionSource.asObservable();
+  cerrarSesion$ = this.cerrarSesionSource.asObservable();
+  recargarHome$ = this.recargarHomeSource.asObservable();
 
   recargarPerfil() {
-    this.recargarPerfilSubject.next();
+    this.recargarPerfilSource.next();
   }
 
   recargarDataBurst() {
-    this.recargarDataBurstSubject.next(); // Emitir evento para Data Burst
+    this.recargarDataBurstSource.next();
+  }
+
+  recargarEstadisticas() {
+    this.recargarEstadisticasSource.next();
+  }
+
+  recargarModeracion() {
+    this.recargarModeracionSource.next();
+  }
+
+  recargarAdministracion() {
+    this.recargarAdministracionSource.next();
+  }
+
+  cerrarSesion() {
+    this.cerrarSesionSource.next();
+  }
+
+  recargarHome() {
+    this.recargarHomeSource.next();
   }
 }

@@ -99,4 +99,16 @@ export class CabeceraComponent implements OnInit, OnDestroy {
       this.recargaService.recargarEstadisticas();
     });
   }
+
+  recargarModeracion() {
+    this.router.navigate(['/moderacion']).then(() => {
+      this.recargaService.recargarModeracion();
+    });
+  }
+
+  recargarAdministracion() {
+    this.router.navigate(['/administracion']).then(() => {
+      this.recargaService.recargarAdministracion();
+    });
+  }
 }
