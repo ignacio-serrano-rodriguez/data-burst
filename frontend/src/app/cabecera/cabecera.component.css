@@ -15,36 +15,28 @@ span, a, div, button {
 .enlaces {
     min-width: 9em;
     cursor: pointer; /* Cambiar el cursor a pointer */
+    text-align: center; /* Alinear el texto al centro */
 }
 
 #cabecera {
     display: flex;
     flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around; /* Distribuir los bloques con space-around */
     text-align: center;
 
     height: auto;
     background-color: #F4B3FF;
     width: 100%; /* Asegurar que ocupe el 100% del ancho */
     overflow: hidden; /* Evitar desbordamiento */
-}
-
-#cabecera-menu {
-    display: flex;
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-    justify-content: center;
-    align-items: center;
-}
-
-#estadisticas, #administracion {
-    width: auto;
+    padding: 10px 0; /* Añadir padding vertical */
 }
 
 #titulo {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center; /* Asegurar que los elementos estén centrados */
+    gap: 20px; /* Añadir más espacio entre el logo y el texto */
 }
 
 #logoTitulo {
@@ -53,22 +45,35 @@ span, a, div, button {
 
 #textoTitulo {
     display: flex;
-    flex-wrap: wrap;
-    text-align: left;
-
+    flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+    text-align: center; /* Alinear el texto al centro */
+    justify-content: center; /* Asegurar que los elementos estén centrados */
     width: auto;
 }
 
 #textoTitulo span {
-    width: 100%;
-
     font-size: 1.7em;
+}
+
+#menu-section {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    justify-content: center; /* Asegurar que los elementos estén centrados */
+    align-items: center;
+    gap: 20px; /* Añadir más espacio entre los elementos */
+}
+
+#estadisticas, #moderacion, #administracion {
+    width: auto;
+    text-align: center; /* Alinear el texto al centro */
 }
 
 #usuario-section {
     display: flex;
     align-items: center;
     flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    justify-content: center; /* Asegurar que los elementos estén centrados */
+    gap: 20px; /* Añadir más espacio entre los elementos */
 }
 
 #usuario {
@@ -128,63 +133,78 @@ button[mat-icon-button]:hover mat-icon {
     display: none;
 }
 
-/* Tablet */
-@media (max-width: 879px) {
-    #avatarUsuario {
-        margin-left: 3%;
+/* Mobile [350-430) */
+@media (max-width: 429px) {
+    #cabecera {
+        justify-content: center;
+    }
+
+    #menu-section, #usuario-section {
+        display: none; /* Ocultar el menú y la sección de usuario en dispositivos móviles */
+    }
+
+    #hamburger-menu {
+        display: flex; /* Mostrar el menú hamburguesa en dispositivos móviles */
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        height: 35px;
+        width: 35px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
     }
 }
 
-/* Movil */
-@media (max-width: 768px) {
+/* Tablet [430-1280) */
+@media (min-width: 430px) and (max-width: 1279px) {
     #cabecera {
-        justify-content: space-between;
+        justify-content: space-around; /* Distribuir los bloques con space-around */
     }
 
-    #cabecera-menu {
-        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+    #menu-section {
+        display: flex; /* Mostrar el menú en tabletas */
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+        gap: 20px; /* Añadir más espacio entre los elementos */
     }
 
     #usuario-section {
         flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-        justify-content: flex-end;
+        justify-content: center; /* Asegurar que los elementos estén centrados */
+        margin-bottom: 10px; /* Añadir espacio vertical */
+    }
+
+    #titulo {
+        justify-content: center; /* Asegurar que el logo y el texto estén centrados */
+        margin-bottom: 10px; /* Añadir espacio vertical */
     }
 
     #hamburger-menu {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        height: 35px;
-        width: 35px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 15px;
+        display: none; /* Ocultar el menú hamburguesa en tabletas */
     }
 }
 
-@media (max-width: 485px) {
-    a {
-        margin: 1%;
+/* Desktop [1280-infinito) */
+@media (min-width: 1280px) {
+    #cabecera {
+        justify-content: space-around; /* Distribuir los bloques con space-around */
     }
 
-    #avatarUsuario {
-        margin-left: 2%;
+    #menu-section {
+        display: flex; /* Mostrar el menú en escritorios */
+        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
     }
 
-    #cabecera-menu {
-        display: none;
+    #usuario-section {
+        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+        justify-content: center;
+    }
+
+    #titulo {
+        justify-content: center; /* Asegurar que el logo y el texto estén centrados */
     }
 
     #hamburger-menu {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        height: 35px;
-        width: 35px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 15px;
+        display: none; /* Ocultar el menú hamburguesa en escritorios */
     }
 }
