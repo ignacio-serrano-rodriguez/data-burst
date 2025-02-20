@@ -33,8 +33,8 @@ export class DatosComponent {
   public formBuild = inject(FormBuilder);
 
   public formRegistro: FormGroup = this.formBuild.group({
-    mail: [localStorage.getItem('mail') || ''],
-    usuario: [localStorage.getItem('usuario') || ''],
+    mail: [this.getLocalStorageItem('mail') || ''],
+    usuario: [this.getLocalStorageItem('usuario') || ''],
     nuevaContrasenia: [''],
     nuevaContraseniaRepetida: [''],
     contraseniaActual: ['', Validators.required]
@@ -44,7 +44,7 @@ export class DatosComponent {
     if (this.formRegistro.invalid) return;
 
     const objeto: ModificarDatosUsuario = {
-      id: localStorage.getItem('id') || '',
+      id: this.getLocalStorageItem('id') || '',
       mail: this.formRegistro.value.mail,
       usuario: this.formRegistro.value.usuario,
       nueva_contrasenia: this.formRegistro.value.nuevaContrasenia,
@@ -69,7 +69,7 @@ export class DatosComponent {
       next: (data) => {
         if (data.exito == true) {
           document.getElementById("mensajeInformativo")!.innerText = data.mensaje;
-          localStorage.clear();
+          this.clearLocalStorage();
           window.location.reload();
         }
       },
@@ -81,5 +81,18 @@ export class DatosComponent {
 
   recargar() {
     // Lógica para recargar el componente de datos
+  }
+
+  private getLocalStorageItem(key: string): string | null {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem(key);
+    }
+    return null;
+  }
+
+  private clearLocalStorage() {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.clear();
+    }
   }
 }

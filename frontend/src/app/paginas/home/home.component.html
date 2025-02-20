@@ -1,8 +1,14 @@
 <div id="body">
     <span id="mensajeInformativo"></span>
     <div id="mostrarListasYAmigos" *ngIf="mostrarListasYAmigos">
-        <app-tus-listas id="tusListas" (listaSeleccionada)="mostrarLista($event)"></app-tus-listas>
-        <app-tus-amigos id="tusAmigos"></app-tus-amigos>
+        <div class="contenedor-listas-amigos">
+            <div class="columna">
+                <app-tus-listas id="tusListas" (listaSeleccionada)="mostrarLista($event)"></app-tus-listas>
+            </div>
+            <div class="columna">
+                <app-tus-amigos id="tusAmigos"></app-tus-amigos>
+            </div>
+        </div>
     </div>
     <app-lista *ngIf="mostrarListaComponent" [lista]="listaSeleccionada!" (volverAListasYAmigos)="volverAListasYAmigos()"></app-lista>
 </div>

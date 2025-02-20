@@ -1,67 +1,39 @@
-<form id="formulario" [formGroup]="formRegistro">
-	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Mail</mat-label>
-		<input matInput id="mailInput" formControlName="mail">
-	</mat-form-field>
-	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Usuario</mat-label>
-		<input matInput id="usuarioInput" formControlName="usuario">
-	</mat-form-field>
-	<mat-form-field class="elementoFormulario">
-		<mat-label class="etiquetaFormulario">Contraseña actual</mat-label>
-		<input 
-			[type]="hideContraseniaActual ? 'password' : 'text'" 
-			matInput id="contraseniaActualInput" 
-			formControlName="contraseniaActual" 
-			type="password"
-		>
-		<button 
-			mat-icon-button matSuffix 
-			(click)="hideContraseniaActual = !hideContraseniaActual" 
-			[attr.aria-label]="'Hide password'" 
-			[attr.aria-pressed]="hideContraseniaActual">
-			<mat-icon>{{hideContraseniaActual ? 'visibility_off' : 'visibility'}}</mat-icon>
-		</button>
-	</mat-form-field>
-	<mat-form-field class="elementoFormulario">
+<div id="formulario">
+	<form [formGroup]="formRegistro" (ngSubmit)="modificarDatosUsuario()">
+	  <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Correo electrónico</mat-label>
+		<input matInput formControlName="mail" required>
+	  </mat-form-field>
+  
+	  <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Nombre de usuario</mat-label>
+		<input matInput formControlName="usuario" required>
+	  </mat-form-field>
+  
+	  <mat-form-field class="elementoFormulario">
 		<mat-label class="etiquetaFormulario">Nueva contraseña</mat-label>
-		<input 
-			[type]="hideNuevaContrasenia ? 'password' : 'text'" 
-			matInput 
-			id="nuevaContraseniaInput" 
-			formControlName="nuevaContrasenia" 
-			type="password"
-		>
-		<button 
-			mat-icon-button matSuffix 
-			(click)="hideNuevaContrasenia = !hideNuevaContrasenia" 
-			[attr.aria-label]="'Hide password'" 
-			[attr.aria-pressed]="hideNuevaContrasenia">
-			<mat-icon>{{hideNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+		<input matInput [type]="hideNuevaContrasenia ? 'password' : 'text'" formControlName="nuevaContrasenia">
+		<button mat-icon-button matSuffix (click)="hideNuevaContrasenia = !hideNuevaContrasenia" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNuevaContrasenia">
+		  <mat-icon>{{hideNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
 		</button>
-	</mat-form-field>
-	<mat-form-field class="elementoFormulario">
+	  </mat-form-field>
+  
+	  <mat-form-field class="elementoFormulario">
 		<mat-label class="etiquetaFormulario">Repetir nueva contraseña</mat-label>
-		<input 
-			[type]="hideRepetirNuevaContrasenia ? 'password' : 'text'" 
-			matInput id="nuevaContraseniaRepetidaInput" 
-			formControlName="nuevaContraseniaRepetida" 
-			type="password"
-		>
-		<button 
-			mat-icon-button matSuffix 
-			(click)="hideRepetirNuevaContrasenia = !hideRepetirNuevaContrasenia" 
-			[attr.aria-label]="'Hide password'" 
-			[attr.aria-pressed]="hideRepetirNuevaContrasenia">
-			<mat-icon>{{hideRepetirNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+		<input matInput [type]="hideRepetirNuevaContrasenia ? 'password' : 'text'" formControlName="nuevaContraseniaRepetida">
+		<button mat-icon-button matSuffix (click)="hideRepetirNuevaContrasenia = !hideRepetirNuevaContrasenia" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideRepetirNuevaContrasenia">
+		  <mat-icon>{{hideRepetirNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
 		</button>
-	</mat-form-field>
-	<button 
-		id="boton" 
-		class="elementoFormulario" 
-		mat-flat-button 
-		color="primary"
-		(click)="modificarDatosUsuario()">
-		Aplicar cambios
-	</button>
-</form>
+	  </mat-form-field>
+  
+	  <mat-form-field class="elementoFormulario">
+		<mat-label class="etiquetaFormulario">Contraseña actual</mat-label>
+		<input matInput [type]="hideContraseniaActual ? 'password' : 'text'" formControlName="contraseniaActual" required>
+		<button mat-icon-button matSuffix (click)="hideContraseniaActual = !hideContraseniaActual" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideContraseniaActual">
+		  <mat-icon>{{hideContraseniaActual ? 'visibility_off' : 'visibility'}}</mat-icon>
+		</button>
+	  </mat-form-field>
+  
+	  <button mat-raised-button id="boton" type="submit">Guardar cambios</button>
+	</form>
+  </div>

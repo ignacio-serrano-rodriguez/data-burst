@@ -47,22 +47,26 @@
             </mat-menu>
         </div>
     </div>
+
+    <button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="hamburgerMenu" aria-label="Example icon-button with a menu">
+        <mat-icon>menu</mat-icon>
+    </button>
 </mat-toolbar>
 
-<button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-    <mat-icon>more_vert</mat-icon>
-</button>
-<mat-menu #menu="matMenu">
-    <button mat-menu-item>
-        <mat-icon>dialpad</mat-icon>
-        <span>Redial</span>
+<mat-menu #hamburgerMenu="matMenu">
+    <button mat-menu-item (click)="recargarEstadisticas()">
+        <span>Estadísticas</span>
     </button>
-    <button mat-menu-item disabled>
-        <mat-icon>voicemail</mat-icon>
-        <span>Check voice mail</span>
+    <button mat-menu-item *ngIf="mostrarModeracion" (click)="recargarModeracion()">
+        <span>Moderación</span>
     </button>
-    <button mat-menu-item>
-        <mat-icon>notifications_off</mat-icon>
-        <span>Disable alerts</span>
+    <button mat-menu-item *ngIf="mostrarAdministracion" (click)="recargarAdministracion()">
+        <span>Administración</span>
+    </button>
+    <button mat-menu-item (click)="recargarPerfil()">
+        <span>Ver perfil</span>
+    </button>
+    <button mat-menu-item (click)="cerrarSesion()">
+        <span>Cerrar sesión</span>
     </button>
 </mat-menu>

@@ -24,6 +24,11 @@ a
     justify-content: space-around;
 
     background-color: #FBE6FF;
+    width: 100%; /* Asegurar que ocupe el 100% del ancho */
+    overflow: hidden; /* Evitar desbordamiento */
+    flex-shrink: 0;
+    position: relative; /* Cambiado de absolute a relative */
+    bottom: 0;
 }
 
 @media (max-width: 700px)

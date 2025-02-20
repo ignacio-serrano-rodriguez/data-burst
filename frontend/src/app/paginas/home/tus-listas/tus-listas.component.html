@@ -13,14 +13,7 @@
       <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
     </button>
   </mat-form-field>
-  <!-- Botón para crear la lista con icono de añadir en color negro -->
-  <button 
-    id="boton" 
-    class="elementoFormulario" 
-    mat-icon-button
-    color="black"
-    (click)="crearAsignarLista()"
-    [disabled]="!esNombreListaValido()">
+  <button mat-icon-button (click)="crearAsignarLista()">
     <mat-icon>add</mat-icon>
   </button>
 </div>

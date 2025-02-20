@@ -1,56 +1,65 @@
-*
-{
-    padding: 0;
-    margin: 0;
-    border: 0
-}
-
-#body
-{
-    width: 100%;
-
-    padding-top: 2%;
-    padding-bottom: 33%;
-
-    background-color: #c2c2c205;
-
+:host {
     display: flex;
-    flex-wrap: wrap;
-
-    justify-content: space-around;
-    align-items: center;
-    justify-items: center;
-    text-align: center;
-    
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%; /* Asegurar que ocupe el 100% del ancho */
+    overflow-x: hidden; /* Evitar scroll horizontal */
 }
 
-#mensajeInformativo
-{
-    color: #F5A201;
+#perfil-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+    padding: 2%;
+    width: 100%; /* Asegurar que ocupe el 100% del ancho */
+    overflow-y: auto; /* Permitir scroll vertical cuando el contenido sea mayor */
+    overflow-x: hidden; /* Evitar scroll horizontal */
+}
+
+#mensajeInformativo {
     font-family: 'ShareTech';
     font-size: 1.5em;
-    
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1%;
+}
+
+.contenedor-solicitudes-datos {
+    display: flex;
+    justify-content: center;
+    gap: 4%;
     width: 100%;
-
-    height: 2.5em;
+    margin-top: 2%;
 }
 
-#datos
-{
-    width: 37%;
-    min-width: 30em;
-
-    height: 90%;
-
-    margin: auto;
+.columna {
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
-#solicitudes
-{
-    width: 37%;
-    min-width: 30em;
+#solicitudes, #datos {
+    width: 100%;
+    max-width: 600px;
+    margin: 2%;
+}
 
-    height: 90%;
+@media (max-width: 768px) {
+    .contenedor-solicitudes-datos {
+        flex-direction: column;
+        align-items: center;
+    }
 
-    margin: auto;
+    .columna {
+        width: 100%;
+    }
+
+    #solicitudes, #datos {
+        max-width: 90%;
+    }
 }

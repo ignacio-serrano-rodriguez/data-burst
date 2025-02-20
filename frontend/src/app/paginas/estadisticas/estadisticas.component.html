@@ -1,12 +1,12 @@
 <div class="estadisticas-container">
   <div class="estadisticas-content">
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="full-width">
       <mat-label>Nombre Categoría</mat-label>
       <input matInput [(ngModel)]="categoria">
     </mat-form-field>
-    <button mat-raised-button (click)="obtenerEstadisticas()" style="background-color: green;">Generar estadísticas</button>
+    <button mat-raised-button (click)="obtenerEstadisticas()" class="full-width" style="background-color: green;">Generar estadísticas</button>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!noEstadisticas">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width" *ngIf="!noEstadisticas">
       <ng-container matColumnDef="orden">
         <th mat-header-cell *matHeaderCellDef> Orden </th>
         <td mat-cell *matCellDef="let element"> {{element.orden}}º </td>

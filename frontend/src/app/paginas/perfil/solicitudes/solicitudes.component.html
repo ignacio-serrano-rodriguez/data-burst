@@ -1,27 +1,45 @@
-<table>
-  <thead>
-    <tr>
-      <th>Solicitud</th>
-      <th>Tipo</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let solicitud of solicitudesAmistad">
-      <td>{{ solicitud.nombre }}</td>
-      <td>Amistad</td>
-      <td>
-        <button (click)="aceptarSolicitud(solicitud.nombre, 'amistad')">✅</button>
-        <button (click)="denegarSolicitud(solicitud.nombre, 'amistad')">❌</button>
-      </td>
-    </tr>
-    <tr *ngFor="let solicitud of solicitudesLista">
-      <td>{{ solicitud.nombre }} ({{ solicitud.invitador }})</td>
-      <td>Lista</td>
-      <td>
-        <button (click)="aceptarSolicitud(solicitud.nombre, 'lista')">✅</button>
-        <button (click)="denegarSolicitud(solicitud.nombre, 'lista')">❌</button>
-      </td>
-    </tr>
-  </tbody>
+<h2>Solicitudes de Amistad</h2>
+<table mat-table [dataSource]="dataSourceAmistad" class="mat-elevation-z8">
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button (click)="aceptarSolicitud(element.nombre, 'amistad')">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-icon-button (click)="denegarSolicitud(element.nombre, 'amistad')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<h2>Solicitudes de Lista</h2>
+<table mat-table [dataSource]="dataSourceLista" class="mat-elevation-z8">
+  <ng-container matColumnDef="nombre">
+    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button (click)="aceptarSolicitud(element.nombre, 'lista')">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-icon-button (click)="denegarSolicitud(element.nombre, 'lista')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>

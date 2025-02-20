@@ -22,7 +22,7 @@ button:hover
 
 #formulario
 {
-    width: 85%;
+    width: 100%;
     max-width: 486px;
     padding-left: 7.5%;
     padding-right: 7.5%;
@@ -36,4 +36,18 @@ button:hover
     font-size: 1.2em;
     color: #EEF1F2;
     background-color: #61B300;
+}
+
+@media (max-width: 768px) {
+    #formulario {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+@media (max-width: 480px) {
+    #formulario {
+        padding-left: 2%;
+        padding-right: 2%;
+    }
 }

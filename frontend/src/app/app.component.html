@@ -1,7 +1,9 @@
 <ng-container *ngIf="!isInicioRoute">
   <app-cabecera [rutaActual]="rutaActual"></app-cabecera>
 </ng-container>
-<router-outlet></router-outlet>
+<div id="content">
+  <router-outlet></router-outlet>
+</div>
 <ng-container *ngIf="!isInicioRoute">
   <app-pie></app-pie>
 </ng-container>

@@ -1,10 +1,8 @@
-a
-{
+a {
     text-decoration: none;
 }
 
-span, a, div, button
-{
+span, a, div, button {
     margin: 0;
     padding: 0;
     border: 0;
@@ -14,71 +12,66 @@ span, a, div, button
     font-family: 'ShareTech';
 }
 
-.enlaces
-{
+.enlaces {
     min-width: 9em;
     cursor: pointer; /* Cambiar el cursor a pointer */
 }
 
-#cabecera
-{
+#cabecera {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
     align-items: center;
     justify-content: space-between;
     text-align: center;
 
     height: auto;
     background-color: #F4B3FF;
+    width: 100%; /* Asegurar que ocupe el 100% del ancho */
+    overflow: hidden; /* Evitar desbordamiento */
 }
 
 #cabecera-menu {
     display: flex;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
     justify-content: center;
     align-items: center;
 }
 
-#estadisticas, #administracion
-{
-    width: 20%;
+#estadisticas, #administracion {
+    width: auto;
 }
 
-#titulo
-{
+#titulo {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-#logoTitulo
-{
+#logoTitulo {
     width: 3.6em;
 }
 
-#textoTitulo
-{
+#textoTitulo {
     display: flex;
     flex-wrap: wrap;
     text-align: left;
 
-    width: 46%;
+    width: auto;
 }
 
-#textoTitulo span
-{
+#textoTitulo span {
     width: 100%;
 
     font-size: 1.7em;
 }
 
-#usuario-section
-{
+#usuario-section {
     display: flex;
     align-items: center;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
 }
 
-#usuario
-{
+#usuario {
     display: flex;
     flex-wrap: nowrap;
 
@@ -92,8 +85,7 @@ button[mat-icon-button] {
     background-color: #F4B3FF; 
 }
 
-.botonMenuUsuario
-{
+.botonMenuUsuario {
     background-color: white;
 
     font-size: 1.15em;
@@ -101,29 +93,24 @@ button[mat-icon-button] {
     padding: 0.5em;
 }
 
-#nombreUsuario
-{
+#nombreUsuario {
     font-size: 1em;
     min-width: 7em;
 }
 
-#avatarUsuario
-{
+#avatarUsuario {
     width: 2.5em;
 }
 
-#verPerfil
-{
+#verPerfil {
     width: 100%;
 }
 
-.textoEnlace:hover
-{
+.textoEnlace:hover {
     text-decoration: underline;
 }
 
-button:hover
-{
+button:hover {
     cursor: pointer;
 }
 
@@ -142,24 +129,46 @@ button[mat-icon-button]:hover mat-icon {
 }
 
 /* Tablet */
-@media (max-width:879px)
-{
-    #avatarUsuario
-    {
+@media (max-width: 879px) {
+    #avatarUsuario {
         margin-left: 3%;
     }
 }
 
 /* Movil */
-@media (max-width:485px)
-{
-    a
-    {
+@media (max-width: 768px) {
+    #cabecera {
+        justify-content: space-between;
+    }
+
+    #cabecera-menu {
+        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+    }
+
+    #usuario-section {
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+        justify-content: flex-end;
+    }
+
+    #hamburger-menu {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        height: 35px;
+        width: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+    }
+}
+
+@media (max-width: 485px) {
+    a {
         margin: 1%;
     }
 
-    #avatarUsuario
-    {
+    #avatarUsuario {
         margin-left: 2%;
     }
 
@@ -168,9 +177,9 @@ button[mat-icon-button]:hover mat-icon {
     }
 
     #hamburger-menu {
-        position: fixed;
-        bottom: 2px;
-        right: 4px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
         height: 35px;
         width: 35px;
         display: flex;

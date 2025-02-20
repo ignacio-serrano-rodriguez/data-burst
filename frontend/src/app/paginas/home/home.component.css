@@ -1,76 +1,70 @@
-*
-{
-    padding: 0;
-    margin: 0;
-    border: 0
+:host {
+    overflow-x: hidden; /* Evitar scroll horizontal */
 }
 
-#body
-{
-    width: 100%;
-
-    padding-top: 2%;
-    padding-bottom: 33%;
-
-    background-color: #c2c2c205;
-
+#body {
     display: flex;
-    flex-wrap: wrap;
-
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
-    justify-items: center;
-    text-align: center;
-    
+    justify-content: flex-start;
+    width: 100%;
+    flex-grow: 1;
+    padding: 2%;
+    overflow-y: auto; /* Permitir scroll vertical cuando el contenido sea mayor */
+    overflow-x: hidden; /* Evitar scroll horizontal */
 }
 
-#mensajeInformativo
-{
-    color: #F5A201; /* Color amarillo para mensajes de error */
+#mensajeInformativo {
     font-family: 'ShareTech';
     font-size: 1.5em;
-    
-    width: 100%;
-
-    height: 2.5em;
-}
-
-#tusListas
-{
-    width: 37%;
-    min-width: 30em;
-
-    height: 90%;
-
-    margin: auto;
-}
-
-#tusAmigos
-{
-    width: 37%;
-    min-width: 30em;
-
-    height: 90%;
-
-    margin: auto;
-}
-
-.mensaje-positivo {
-    color: #61B300 !important; /* Color verde para mensajes positivos */
-}
-
-.mensaje-negativo {
-    color: #F5A201 !important; /* Color amarillo para mensajes negativos */
-}
-
-#mostrarListasYAmigos {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 1%;
 }
 
-/* Móvil */
-@media (max-width: 480px) {
-    #mostrarListasYAmigos {
+.mensaje-exito {
+    color: #61B300;
+}
+
+.mensaje-error {
+    color: #F5A201;
+}
+
+.contenedor-listas-amigos {
+    display: flex;
+    justify-content: center;
+    gap: 4%;
+    width: 100%;
+    margin-top: 2%;
+    flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
+}
+
+.columna {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#tusListas, #tusAmigos {
+    width: 100%;
+    max-width: 600px;
+    margin: 2%;
+}
+
+@media (max-width: 768px) {
+    .contenedor-listas-amigos {
         flex-direction: column;
+        align-items: center;
+    }
+
+    .columna {
+        width: 100%;
+    }
+
+    #tusListas, #tusAmigos {
+        max-width: 90%;
     }
 }

@@ -2,3 +2,18 @@
 ul li a {
     cursor: pointer;
 }
+
+.input-button-container {
+    display: flex;
+    align-items: center;
+}
+
+.elementoFormulario {
+    flex-grow: 1;
+    min-width: 300px; /* Ajusta este valor según sea necesario */
+    max-width: 100%; /* Asegura que no se desborde */
+}
+
+button[mat-icon-button] {
+    margin-left: 8px;
+}
