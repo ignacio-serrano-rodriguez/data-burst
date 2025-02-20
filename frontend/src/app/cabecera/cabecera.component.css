@@ -22,21 +22,22 @@ span, a, div, button {
     display: flex;
     flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
     align-items: center;
-    justify-content: space-around; /* Distribuir los bloques con space-around */
+    justify-content: space-between; /* Distribuir los bloques con space-between */
     text-align: center;
 
     height: auto;
     background-color: #F4B3FF;
     width: 100%; /* Asegurar que ocupe el 100% del ancho */
     overflow: hidden; /* Evitar desbordamiento */
-    padding: 10px 0; /* Añadir padding vertical */
+    padding: 10px 10px; /* Reducir el padding horizontal */
 }
 
 #titulo {
     display: flex;
     align-items: center;
-    justify-content: center; /* Asegurar que los elementos estén centrados */
+    justify-content: flex-start; /* Alinear a la izquierda */
     gap: 20px; /* Añadir más espacio entre el logo y el texto */
+    order: 0; /* Asegurar que el título esté en la primera fila */
 }
 
 #logoTitulo {
@@ -61,6 +62,7 @@ span, a, div, button {
     justify-content: center; /* Asegurar que los elementos estén centrados */
     align-items: center;
     gap: 20px; /* Añadir más espacio entre los elementos */
+    order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
 }
 
 #estadisticas, #moderacion, #administracion {
@@ -71,9 +73,10 @@ span, a, div, button {
 #usuario-section {
     display: flex;
     align-items: center;
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-    justify-content: center; /* Asegurar que los elementos estén centrados */
-    gap: 20px; /* Añadir más espacio entre los elementos */
+    flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+    justify-content: flex-end; /* Alinear a la derecha */
+    gap: 5px; /* Reducir el espacio entre los elementos */
+    order: 2; /* Asegurar que la parte de usuario esté en la primera fila */
 }
 
 #usuario {
@@ -136,7 +139,7 @@ button[mat-icon-button]:hover mat-icon {
 /* Mobile [350-430) */
 @media (max-width: 429px) {
     #cabecera {
-        justify-content: center;
+        justify-content: space-between;
     }
 
     #menu-section, #usuario-section {
@@ -145,9 +148,7 @@ button[mat-icon-button]:hover mat-icon {
 
     #hamburger-menu {
         display: flex; /* Mostrar el menú hamburguesa en dispositivos móviles */
-        position: absolute;
-        top: 10px;
-        right: 10px;
+        align-self: center; /* Centrar verticalmente */
         height: 35px;
         width: 35px;
         justify-content: center;
@@ -159,52 +160,61 @@ button[mat-icon-button]:hover mat-icon {
 /* Tablet [430-1280) */
 @media (min-width: 430px) and (max-width: 1279px) {
     #cabecera {
-        justify-content: space-around; /* Distribuir los bloques con space-around */
+        justify-content: space-between; /* Distribuir los bloques con space-between */
+        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    }
+
+    #titulo {
+        justify-content: flex-start; /* Alinear a la izquierda */
+    }
+
+    #usuario-section {
+        justify-content: flex-end; /* Alinear a la derecha */
     }
 
     #menu-section {
         display: flex; /* Mostrar el menú en tabletas */
         flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-        gap: 20px; /* Añadir más espacio entre los elementos */
-    }
-
-    #usuario-section {
-        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-        justify-content: center; /* Asegurar que los elementos estén centrados */
-        margin-bottom: 10px; /* Añadir espacio vertical */
-    }
-
-    #titulo {
-        justify-content: center; /* Asegurar que el logo y el texto estén centrados */
-        margin-bottom: 10px; /* Añadir espacio vertical */
-    }
-
-    #hamburger-menu {
-        display: none; /* Ocultar el menú hamburguesa en tabletas */
+        width: 100%; /* Hacer que ocupe toda la línea */
+        justify-content: center; /* Centrar los elementos */
+        order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
     }
 }
 
 /* Desktop [1280-infinito) */
 @media (min-width: 1280px) {
     #cabecera {
-        justify-content: space-around; /* Distribuir los bloques con space-around */
+        justify-content: space-between; /* Distribuir los bloques con space-between */
+        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+    }
+
+    #titulo {
+        justify-content: flex-start; /* Alinear a la izquierda */
     }
 
     #menu-section {
         display: flex; /* Mostrar el menú en escritorios */
         flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+        order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
     }
 
     #usuario-section {
-        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
-        justify-content: center;
+        justify-content: flex-end; /* Alinear a la derecha */
+    }
+}
+
+/* Tablet y Desktop cuando los elementos se envuelven */
+@media (min-width: 430px) and (max-width: 1279px), (min-width: 1280px) {
+    #cabecera.wrap {
+        justify-content: center; /* Centrar los elementos */
     }
 
-    #titulo {
-        justify-content: center; /* Asegurar que el logo y el texto estén centrados */
+    #titulo, #usuario-section {
+        justify-content: center; /* Centrar los elementos */
+        width: 100%; /* Ocupa toda la línea */
     }
 
-    #hamburger-menu {
-        display: none; /* Ocultar el menú hamburguesa en escritorios */
+    #menu-section {
+        order: 2; /* Mover el menú a la tercera fila */
     }
 }

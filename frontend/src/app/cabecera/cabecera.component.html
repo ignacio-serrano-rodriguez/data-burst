@@ -1,4 +1,4 @@
-<mat-toolbar id="cabecera">
+<mat-toolbar id="cabecera" [ngClass]="{'wrap': isWrapped}">
     <div id="titulo" class="enlaces" (click)="recargarHome()">
         <a>
             <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
@@ -8,6 +8,9 @@
                 <a>Data Burst</a>
             </span>
         </h2> 
+        <button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="hamburgerMenu" aria-label="Example icon-button with a menu">
+            <mat-icon>menu</mat-icon>
+        </button>
     </div>
 
     <div id="menu-section">
@@ -44,10 +47,6 @@
             </button>
         </mat-menu>
     </div>
-
-    <button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="hamburgerMenu" aria-label="Example icon-button with a menu">
-        <mat-icon>menu</mat-icon>
-    </button>
 </mat-toolbar>
 
 <mat-menu #hamburgerMenu="matMenu">
@@ -62,5 +61,8 @@
     </button>
     <button mat-menu-item (click)="recargarPerfil()">
         <span>Ver perfil</span>
+    </button>
+    <button mat-menu-item (click)="cerrarSesion()">
+        <span>Cerrar sesión</span>
     </button>
 </mat-menu>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
@@ -27,6 +27,7 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   mostrarAdministracion: boolean = false;
   permisoUsuario: string = "1";
   nuevasSolicitudes: number = 0;
+  isWrapped = false;
 
   constructor(
     private notificacionesService: NotificacionesService,
@@ -67,10 +68,24 @@ export class CabeceraComponent implements OnInit, OnDestroy {
         this.rutaActual = event.urlAfterRedirects;
       });
     }
+
+    this.checkWrap();
   }
 
   ngOnDestroy() {
     this.notificacionesService.detenerRevisionPeriodica();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkWrap();
+  }
+
+  checkWrap() {
+    const cabecera = document.getElementById('cabecera');
+    if (cabecera) {
+      this.isWrapped = cabecera.scrollWidth > cabecera.clientWidth;
+    }
   }
 
   cerrarSesion() {
