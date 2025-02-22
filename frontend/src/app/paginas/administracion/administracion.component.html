@@ -2,9 +2,26 @@
   <mat-card-title>Administración de Usuarios</mat-card-title>
   <mat-card-content>
     <form>
+      
+      <!-- Campo con autocomplete para seleccionar un usuario -->
       <mat-form-field appearance="fill">
         <mat-label>Seleccionar Usuario</mat-label>
-        <input matInput placeholder="Nombre de usuario">
+        <!-- Vinculamos el form control y el autocomplete -->
+        <input
+          matInput
+          [matAutocomplete]="auto"
+          [formControl]="usuarioControl"
+          placeholder="Nombre de usuario"
+        />
+
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let usuario of usuariosFiltrados$ | async"
+            [value]="usuario.usuario"
+          >
+            {{ usuario.usuario }}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
@@ -17,7 +34,10 @@
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button type="submit" class="green-button">Guardar Cambios</button>
+      <button mat-raised-button type="submit" class="green-button">
+        Guardar Cambios
+      </button>
+
     </form>
   </mat-card-content>
 </mat-card>
