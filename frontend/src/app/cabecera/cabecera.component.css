@@ -54,6 +54,7 @@ span, a, div, button {
 
 #textoTitulo span {
     font-size: 1.7em;
+    min-width: 100px; /* Reservar suficiente espacio para el texto en bold */
 }
 
 #menu-section {
@@ -82,10 +83,8 @@ span, a, div, button {
 #usuario {
     display: flex;
     flex-wrap: nowrap;
-
     align-items: center;
     text-align: center;
-
     background-color: #F4B3FF;
 }
 
@@ -95,15 +94,18 @@ button[mat-icon-button] {
 
 .botonMenuUsuario {
     background-color: white;
-
     font-size: 1.15em;
-
     padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
 }
 
 #nombreUsuario {
     font-size: 1em;
-    min-width: 7em;
+    min-width: 120px; /* Reservar suficiente espacio para el texto en bold */
 }
 
 #avatarUsuario {
@@ -217,4 +219,39 @@ button[mat-icon-button]:hover mat-icon {
     #menu-section {
         order: 2; /* Mover el menú a la tercera fila */
     }
+}
+
+/* Centrar los elementos del menú de hamburguesa */
+mat-menu {
+    text-align: center;
+}
+
+mat-menu button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+/* Reducir el espacio vertical entre los elementos del menú */
+mat-menu button.botonMenuUsuario {
+    margin: 0;
+    padding: 0.5em 0;
+}
+
+/* Reducir el espacio vertical entre 'Ver perfil' y 'Cerrar sesión' en el menú de usuario */
+mat-menu #verPerfil + button {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Reservar suficiente espacio para el texto en bold en la sección del perfil */
+#nombreUsuario {
+    min-width: 120px; /* Ajustar según sea necesario */
+}
+
+/* Reservar suficiente espacio para el contenedor del perfil */
+#usuario-section {
+    min-width: 200px; /* Ajustar según sea necesario */
 }

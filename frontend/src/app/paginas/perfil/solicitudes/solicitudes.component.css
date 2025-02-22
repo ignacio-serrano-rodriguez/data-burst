@@ -1,38 +1,40 @@
-table 
-{
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Asegurar que ocupe el 100% del ancho */
+  overflow-x: hidden; /* Evitar scroll horizontal */
+  flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
+}
+
+table {
   margin: auto;
   width: 100%;
   max-width: 800px;
   border-collapse: collapse;
 }
 
-th, td 
-{
+th, td {
   border: none;
-  padding: 8px;
+  padding: 4px; /* Reducir el padding */
   text-align: left; /* Alinear el contenido de las celdas a la izquierda */
 }
 
-th 
-{
+th {
   background-color: transparent;
 }
 
-button 
-{
-  font-size: 1.5em;
+button {
+  font-size: 1.2em; /* Reducir el tamaño de la fuente */
   background: none; /* Eliminar el fondo */
   border: 1px solid transparent; /* Eliminar el borde */
   padding: 0; /* Eliminar el padding */
   cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
 }
 
-button:not(:last-child) 
-{
-  margin-right: 10px; /* Agregar margen derecho a todos los botones excepto al último */
+button:not(:last-child) {
+  margin-right: 5px; /* Reducir el margen derecho */
 }
 
-button:hover 
-{
+button:hover {
   background: rgba(128, 128, 128, 0.37);
 }

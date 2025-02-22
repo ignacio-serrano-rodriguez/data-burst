@@ -1,7 +1,7 @@
 :host {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    min-height: 100vh; /* Asegurar que ocupe al menos el 100% de la altura de la ventana */
     width: 100%; /* Asegurar que ocupe el 100% del ancho */
     overflow-x: hidden; /* Evitar scroll horizontal */
 }
@@ -12,41 +12,47 @@
     align-items: center;
     justify-content: flex-start;
     flex-grow: 1;
-    padding: 2%;
+    padding: 1%; /* Reducir el padding */
     width: 100%; /* Asegurar que ocupe el 100% del ancho */
-    overflow-y: auto; /* Permitir scroll vertical cuando el contenido sea mayor */
+    overflow-y: hidden; /* Evitar scroll vertical */
     overflow-x: hidden; /* Evitar scroll horizontal */
 }
 
 #mensajeInformativo {
     font-family: 'ShareTech';
-    font-size: 1.5em;
+    font-size: 1.2em; /* Reducir el tamaño de la fuente */
     text-align: center;
     align-items: center;
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 1%;
+    margin-bottom: 0.5%; /* Reducir el margen inferior */
 }
 
 .contenedor-solicitudes-datos {
     display: flex;
     justify-content: center;
-    gap: 4%;
+    gap: 2%; /* Reducir el espacio entre columnas */
     width: 100%;
-    margin-top: 2%;
+    margin-top: 1%; /* Reducir el margen superior */
+    flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
+    overflow-y: hidden; /* Evitar scroll vertical */
 }
 
 .columna {
     flex: 1;
     display: flex;
     justify-content: center;
+    flex-direction: column; /* Asegurar que los elementos dentro de la columna se alineen verticalmente */
+    overflow-y: hidden; /* Evitar scroll vertical */
 }
 
 #solicitudes, #datos {
     width: 100%;
     max-width: 600px;
-    margin: 2%;
+    margin: 1%; /* Reducir el margen */
+    flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
+    overflow-y: hidden; /* Evitar scroll vertical */
 }
 
 @media (max-width: 768px) {

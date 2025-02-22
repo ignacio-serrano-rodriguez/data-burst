@@ -41,7 +41,6 @@
             <button id="verPerfil" class="botonMenuUsuario" (click)="recargarPerfil()">
                 <span class="textoEnlace">Ver perfil</span>
             </button>
-            <br/>
             <button class="botonMenuUsuario" (click)="cerrarSesion()">
                 <span class="textoEnlace">Cerrar sesión</span>
             </button>
@@ -50,19 +49,19 @@
 </mat-toolbar>
 
 <mat-menu #hamburgerMenu="matMenu">
-    <button mat-menu-item (click)="recargarEstadisticas()">
-        <span>Estadísticas</span>
+    <button mat-menu-item class="botonMenuUsuario" (click)="recargarEstadisticas()">
+        <span class="textoEnlace">Estadísticas</span>
     </button>
-    <button mat-menu-item *ngIf="mostrarModeracion" (click)="recargarModeracion()">
-        <span>Moderación</span>
+    <button mat-menu-item class="botonMenuUsuario" *ngIf="mostrarModeracion" (click)="recargarModeracion()">
+        <span class="textoEnlace">Moderación</span>
     </button>
-    <button mat-menu-item *ngIf="mostrarAdministracion" (click)="recargarAdministracion()">
-        <span>Administración</span>
+    <button mat-menu-item class="botonMenuUsuario" *ngIf="mostrarAdministracion" (click)="recargarAdministracion()">
+        <span class="textoEnlace">Administración</span>
     </button>
-    <button mat-menu-item (click)="recargarPerfil()">
-        <span>Ver perfil</span>
+    <button mat-menu-item class="botonMenuUsuario" (click)="recargarPerfil()">
+        <span class="textoEnlace">Ver perfil</span>
     </button>
-    <button mat-menu-item (click)="cerrarSesion()">
-        <span>Cerrar sesión</span>
+    <button mat-menu-item class="botonMenuUsuario" (click)="cerrarSesion()">
+        <span class="textoEnlace">Cerrar sesión</span>
     </button>
 </mat-menu>
