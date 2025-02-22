@@ -9,4 +9,33 @@
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+    padding: 16px;
+    max-width: 600px;
+    margin: auto;
+}
+
+mat-card-title {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 16px;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+}
+
+.green-button {
+    background-color: #4CAF50 !important; /* Color verde */
+    color: white !important;
+}
+
+.green-button:hover {
+    background-color: #4CAF50 !important; /* Mantener el mismo color verde al pasar el cursor */
 }

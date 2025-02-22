@@ -1,1 +1,23 @@
-<p>administracion works!</p>
+<mat-card id="administracion-container">
+  <mat-card-title>Administración de Usuarios</mat-card-title>
+  <mat-card-content>
+    <form>
+      <mat-form-field appearance="fill">
+        <mat-label>Seleccionar Usuario</mat-label>
+        <input matInput placeholder="Nombre de usuario">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de Cuenta</mat-label>
+        <mat-select>
+          <mat-option value="suspensa">Suspensa</mat-option>
+          <mat-option value="usuario">Usuario</mat-option>
+          <mat-option value="moderador">Moderador</mat-option>
+          <mat-option value="administrador">Administrador</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" class="green-button">Guardar Cambios</button>
+    </form>
+  </mat-card-content>
+</mat-card>
