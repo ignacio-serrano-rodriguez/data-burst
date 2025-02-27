@@ -46,7 +46,7 @@ New-Item -ItemType Directory -Path "./migrations" -Force
 Write-Output "`n${scriptName} -> Iniciando el proceso de Symfony en segundo plano.`n"
 Start-Sleep -Seconds 3
 symfony server:stop
-composer update --lock
+composer install
 php bin/console doctrine:database:create
 php bin/console make:migration
 
