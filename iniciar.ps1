@@ -3,21 +3,19 @@ $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
 Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 
-# Comprobar si Docker Desktop se está ejecutando
-$dockerProcess = Get-Process -Name "Docker Desktop" -ErrorAction SilentlyContinue
-if (-not $dockerProcess) {
-    Write-Output "`n${scriptName} -> Docker Desktop no se está ejecutando. Iniciándolo."
-    Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
-    # Esperar a que Docker Desktop se inicie completamente
-    Write-Output "`n${scriptName} -> Esperando a que Docker Desktop se inicie completamente."
-    Start-Sleep -Seconds 30
+# Comprobar si MariaDB está en ejecución en Windows
+$mariaDBService = Get-Service -Name "MariaDB" -ErrorAction SilentlyContinue
+if ($mariaDBService -and $mariaDBService.Status -ne "Running") {
+    Write-Output "`n${scriptName} -> El servicio de MariaDB no está en ejecución. Iniciándolo."
+    Start-Service -Name "MariaDB"
+    # Esperar a que MariaDB se inicie completamente
+    Write-Output "`n${scriptName} -> Esperando a que MariaDB se inicie completamente."
+    Start-Sleep -Seconds 5
+} elseif (-not $mariaDBService) {
+    Write-Output "`n${scriptName} -> El servicio de MariaDB no está instalado como servicio de Windows. Asegúrate de que esté en ejecución manualmente."
 } else {
-    Write-Output "`n${scriptName} -> Docker Desktop ya se está ejecutando."
+    Write-Output "`n${scriptName} -> El servicio de MariaDB ya está en ejecución."
 }
-
-# Definición del nombre del contenedor y su volumen.
-$containerName = "data_burst-BD"
-$volumeContainerName = "data_burst-BD_volume"
 
 # Verificar y eliminar el directorio de migraciones si existe.
 $migrationsPath = "./api/migrations"
@@ -25,18 +23,6 @@ if (Test-Path -Path $migrationsPath) {
     Write-Output "`n${scriptName} -> El directorio de migraciones existe. Eliminándolo."
     Remove-Item -Recurse -Force -Path $migrationsPath
 }
-
-# Comprueba si el contenedor ya existe, en caso afirmativo lo elimina.
-$containerExists = docker ps -a --filter "name=$containerName" --format "{{.Names}}" | Select-String -Pattern "^$containerName$"
-if ($containerExists) {
-    Write-Output "`n${scriptName} -> El contenedor de la BD existe.`n"
-    Write-Output "${scriptName} -> Eliminando el contenedor de la BD."
-    docker rm -f $containerName
-}
-
-# Crea e inicia el contenedor.
-Write-Output "`n${scriptName} -> Creando el contenedor de la BD.`n"
-docker run --name ${containerName} -d -p 3306:3306 -e MARIADB_ROOT_PASSWORD=root -v ${volumeContainerName}:/var/lib/mysql mariadb
 
 # Inicio del servicio de Symfony en segundo plano.
 Set-Location -Path "./api"
@@ -47,7 +33,12 @@ Write-Output "`n${scriptName} -> Iniciando el proceso de Symfony en segundo plan
 Start-Sleep -Seconds 3
 symfony server:stop
 composer install
-php bin/console doctrine:database:create
+
+# Intentar crear la base de datos si no existe
+Write-Output "`n${scriptName} -> Intentando crear la base de datos si no existe.`n"
+php bin/console doctrine:database:create --if-not-exists
+
+# Crear migraciones
 php bin/console make:migration
 
 # Crear un archivo temporal con la respuesta "yes"
@@ -76,8 +67,8 @@ Start-Process powershell -ArgumentList "cd `"$PWD`"; Write-Output 'Esta es la te
 # Volver al directorio de trabajo original
 Set-Location -Path "../"
 
-# Llamar al script obtener-sql.ps1 para obtener el esquema de la base de datos
-Write-Output "`n${scriptName} -> Ejecutando el script obtener-sql.ps1 para obtener el esquema de la base de datos.`n"
+# Llamar al script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos
+Write-Output "`n${scriptName} -> Ejecutando el script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos local.`n"
 .\obtener-esquema-sql.ps1
 
 # Aplicación web inicializada correctamente.

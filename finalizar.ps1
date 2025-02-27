@@ -3,10 +3,6 @@ $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
 Write-Output "`n${scriptName} -> Finalizando la aplicación web."
 
-# Definición del nombre del contenedor y su volumen.
-$containerName = "data_burst-BD"
-$volumeContainerName = "data_burst-BD_volume"
-
 # Eliminar el proceso de Angular.
 $angularProcess = Get-Process -Name "node" -ErrorAction SilentlyContinue
 if ($angularProcess) {
@@ -24,10 +20,9 @@ if ($symfonyProcess) {
     Set-Location -Path "../"
 }
 
-# Eliminar el contenedor de la BD.
-Write-Output "${scriptName} -> Eliminando el contenedor de la BD."
-docker rm -f $containerName
-Write-Output "${scriptName} -> No se ha eliminado el volumen del contenedor."
+# Nota sobre MariaDB
+Write-Output "${scriptName} -> La base de datos MariaDB local permanece en ejecución."
+Write-Output "${scriptName} -> Si deseas detener el servicio de MariaDB, puedes hacerlo manualmente desde Servicios de Windows."
 
 # Eliminar directorio de migraciones.
 Write-Output "${scriptName} -> Eliminando directorio de migraciones."
