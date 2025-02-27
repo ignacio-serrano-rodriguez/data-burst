@@ -1,13 +1,17 @@
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
+# Obtener la ruta raíz del proyecto (un nivel arriba de scripts)
+$proyectoRaiz = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
+
 Write-Output "`n${scriptName} -> Iniciando el proceso para obtener el esquema de la base de datos local."
 
 # Definición de credenciales y nombre de la base de datos
 $dbUser = "root"
 $dbPassword = "root"
 $dbName = "data_burst"
-$outputFile = "data_burst_schema.sql"
+# Guardar el archivo en la raíz del proyecto, no en la carpeta scripts
+$outputFile = "$proyectoRaiz/data_burst_schema.sql"
 
 # Buscar el ejecutable mysql.exe en ubicaciones comunes
 $mysqlPaths = @(

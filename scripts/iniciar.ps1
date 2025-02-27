@@ -1,6 +1,9 @@
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
+# Obtener la ruta raíz del proyecto (un nivel arriba de scripts)
+$proyectoRaiz = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
+
 Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 
 # Comprobar si MariaDB está en ejecución en Windows
@@ -18,14 +21,14 @@ if ($mariaDBService -and $mariaDBService.Status -ne "Running") {
 }
 
 # Verificar y eliminar el directorio de migraciones si existe.
-$migrationsPath = "./api/migrations"
+$migrationsPath = "$proyectoRaiz/api/migrations"
 if (Test-Path -Path $migrationsPath) {
     Write-Output "`n${scriptName} -> El directorio de migraciones existe. Eliminándolo."
     Remove-Item -Recurse -Force -Path $migrationsPath
 }
 
 # Inicio del servicio de Symfony en segundo plano.
-Set-Location -Path "./api"
+Set-Location -Path "$proyectoRaiz/api"
 Write-Output ""
 Write-Output "${scriptName} -> Generando directorio de migraciones."
 New-Item -ItemType Directory -Path "./migrations" -Force
@@ -60,16 +63,16 @@ Start-Process powershell -ArgumentList "cd `"$PWD`"; Write-Output 'Esta es la te
 
 # Inicio del servicio de Angular en una nueva terminal y redirigir la salida de error a este terminal
 Write-Output "${scriptName} -> Iniciando el proceso de Angular en una nueva terminal.`n"
-Set-Location -Path "../frontend"
+Set-Location -Path "$proyectoRaiz/frontend"
 npm ci
 Start-Process powershell -ArgumentList "cd `"$PWD`"; Write-Output 'Esta es la terminal de Angular'; ng serve 2>&1"
 
 # Volver al directorio de trabajo original
-Set-Location -Path "../"
+Set-Location -Path "$proyectoRaiz/scripts"
 
 # Llamar al script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos
-Write-Output "`n${scriptName} -> Ejecutando el script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos local.`n"
-.\obtener-esquema-sql.ps1
+Write-Output "`n${scriptName} -> Ejecutando el script obtener-esquema-sql-local.ps1 para obtener el esquema de la base de datos local.`n"
+& "$proyectoRaiz\scripts\obtener-esquema-sql.ps1"
 
 # Aplicación web inicializada correctamente.
 Write-Output "`n${scriptName} -> Aplicación web inicializada."

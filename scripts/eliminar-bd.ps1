@@ -1,5 +1,7 @@
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
+# Obtener la ruta del proyecto (un nivel arriba de scripts)
+$proyectoRaiz = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 
 Write-Output "`n${scriptName} -> Eliminando la base de datos 'data_burst' de MariaDB local."
 

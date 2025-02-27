@@ -1,13 +1,13 @@
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
-Write-Output "`n${scriptName} -> Iniciando el proceso para insertar datos de prueba en la base de datos."
+Write-Output "`n${scriptName} -> Iniciando el proceso para insertar datos de prueba en la base de datos (completo)."
 
 # Definición de credenciales y nombre de la base de datos
 $dbUser = "root"
 $dbPassword = "root"
 $dbName = "data_burst"
-$inputFile = (Get-Item "mock-data-basic.sql").FullName  # Ruta absoluta
+$inputFile = (Get-Item "poblar-bd-completo.sql").FullName  # Ruta absoluta
 
 # Verificar que el archivo SQL existe
 if (-not (Test-Path -Path $inputFile)) {

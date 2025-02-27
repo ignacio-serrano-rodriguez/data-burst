@@ -17,8 +17,3 @@ TRUNCATE TABLE usuario;
 
 -- Reactivar restricciones de clave foránea
 SET FOREIGN_KEY_CHECKS = 1;
-
--- Insertar usuarios de prueba
-INSERT INTO usuario (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, idioma)
-VALUES 
-('admin@databurst.com', 'admin', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 3, '2023-01-01 10:00:00', 'Administrador', 'Sistema', NULL, '1980-01-15', 'España', 'Informático', 'Ingeniería Informática', 'es');

@@ -1,6 +1,9 @@
 # Obtención del nombre del script.
 $scriptName = [System.IO.Path]::GetFileName($PSCommandPath)
 
+# Obtener la ruta del proyecto (un nivel arriba de scripts)
+$proyectoRaiz = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
+
 Write-Output "`n${scriptName} -> Finalizando la aplicación web."
 
 # Eliminar el proceso de Angular.
@@ -14,10 +17,12 @@ if ($angularProcess) {
 $symfonyProcess = Get-Process -Name "symfony" -ErrorAction SilentlyContinue
 if ($symfonyProcess) {
     Write-Output "${scriptName} -> Deteniendo el proceso de Symfony."
-    Set-Location -Path "./api"
+    # Cambiar al directorio api desde la raíz del proyecto
+    Set-Location -Path "$proyectoRaiz/api"
     symfony server:stop
     Stop-Process -Id $symfonyProcess.Id -Force
-    Set-Location -Path "../"
+    # Volver al directorio scripts
+    Set-Location -Path "$proyectoRaiz/scripts"
 }
 
 # Nota sobre MariaDB
@@ -26,7 +31,8 @@ Write-Output "${scriptName} -> Si deseas detener el servicio de MariaDB, puedes 
 
 # Eliminar directorio de migraciones.
 Write-Output "${scriptName} -> Eliminando directorio de migraciones."
-Remove-Item -Recurse -Force -Path "./api/migrations"
+# Usar la ruta absoluta para el directorio de migraciones
+Remove-Item -Recurse -Force -Path "$proyectoRaiz/api/migrations" -ErrorAction SilentlyContinue
 
 Write-Output "`n${scriptName} -> Aplicación web finalizada."
 
