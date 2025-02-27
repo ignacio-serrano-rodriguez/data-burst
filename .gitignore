@@ -6,17 +6,18 @@ desktop.ini
 # -- API --
 
 ###> symfony/framework-bundle ###
-api/.env
-api/.env.local
-api/.env.local.php
-api/.env.*.local
-api/config/secrets/prod/prod.decrypt.private.php
-api/public/bundles/
-api/var/
-api/vendor/
-api/templates
-api/config/jwt/*.pem
-api/migrations/*
+api*/.env
+api*/.env.local
+api*/.env.local.php
+api*/.env.*.local
+api*/.env.dev
+api*/config/secrets/prod/prod.decrypt.private.php
+api*/public/bundles/
+api*/var/
+api*/vendor/
+api*/templates
+api*/config/jwt/*.pem
+api*/migrations/*
 ###< symfony/framework-bundle ###
 
 # -- FRONTEND --
