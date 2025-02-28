@@ -21,13 +21,13 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Insertar usuarios de prueba
 INSERT INTO usuario (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, idioma)
 VALUES 
-('admin@databurst.com', 'admin', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 3, '2023-01-01 10:00:00', 'Administrador', 'Sistema', NULL, '1980-01-15', 'España', 'Informático', 'Ingeniería Informática', 'es'),
-('moderador@databurst.com', 'moderador', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 2, '2023-01-02 11:30:00', 'Moderador', 'Principal', NULL, '1985-05-20', 'España', 'Moderador', 'Comunicación', 'es'),
-('usuario1@databurst.com', 'usuario1', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 1, '2023-01-03 14:20:00', 'Ana', 'García', 'López', '1990-03-12', 'España', 'Profesora', 'Magisterio', 'es'),
-('usuario2@databurst.com', 'usuario2', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 1, '2023-01-04 09:15:00', 'Carlos', 'Martínez', 'Rodríguez', '1988-07-08', 'México', 'Ingeniero', 'Ingeniería Civil', 'es'),
-('usuario3@databurst.com', 'usuario3', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 1, '2023-01-05 16:45:00', 'Laura', 'Fernández', 'Gómez', '1992-11-27', 'Argentina', 'Médica', 'Medicina', 'es'),
-('usuario4@databurst.com', 'usuario4', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 1, '2023-01-06 08:30:00', 'Miguel', 'Sánchez', 'Pérez', '1987-09-03', 'Colombia', 'Abogado', 'Derecho', 'es'),
-('usuario5@databurst.com', 'usuario5', '$2y$10$8MgZRlF4.vsqYmW1BLNDi.KC6b.8ETSiaIJz9j5jWHGZK3xLsDSPm', 1, 1, '2023-01-07 12:10:00', 'Elena', 'López', 'Torres', '1994-05-15', 'Chile', 'Arquitecta', 'Arquitectura', 'es');
+('admin@databurst.com', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 3, '2023-01-01 10:00:00', 'Administrador', 'Sistema', NULL, '1980-01-15', 'España', 'Informático', 'Ingeniería Informática', 'es'),
+('moderador@databurst.com', 'moderador', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 2, '2023-01-02 11:30:00', 'Moderador', 'Principal', NULL, '1985-05-20', 'España', 'Moderador', 'Comunicación', 'es'),
+('usuario1@databurst.com', 'usuario1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-03 14:20:00', 'Ana', 'García', 'López', '1990-03-12', 'España', 'Profesora', 'Magisterio', 'es'),
+('usuario2@databurst.com', 'usuario2', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-04 09:15:00', 'Carlos', 'Martínez', 'Rodríguez', '1988-07-08', 'México', 'Ingeniero', 'Ingeniería Civil', 'es'),
+('usuario3@databurst.com', 'usuario3', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-05 16:45:00', 'Laura', 'Fernández', 'Gómez', '1992-11-27', 'Argentina', 'Médica', 'Medicina', 'es'),
+('usuario4@databurst.com', 'usuario4', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-06 08:30:00', 'Miguel', 'Sánchez', 'Pérez', '1987-09-03', 'Colombia', 'Abogado', 'Derecho', 'es'),
+('usuario5@databurst.com', 'usuario5', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-07 12:10:00', 'Elena', 'López', 'Torres', '1994-05-15', 'Chile', 'Arquitecta', 'Arquitectura', 'es');
 
 -- Insertar elementos
 INSERT INTO elemento (usuario_id, nombre, fecha_aparicion, informacion_extra, puntuacion, descripcion, momento_creacion)

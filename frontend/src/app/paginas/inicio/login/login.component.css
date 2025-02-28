@@ -36,3 +36,14 @@ button:hover
     color: #EEF1F2;
     background-color: #61B300;
 }
+
+/* Estilos para el botón deshabilitado */
+#boton-login:disabled {
+    opacity: 0.6; /* Añade transparencia */
+    cursor: not-allowed; /* Cambia el cursor para indicar que no está disponible */
+}
+
+/* Deshabilitar el subrayado en hover cuando el botón está deshabilitado */
+#boton-login:disabled:hover {
+    text-decoration: none;
+}
