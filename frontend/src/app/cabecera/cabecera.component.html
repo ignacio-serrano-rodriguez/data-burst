@@ -56,19 +56,19 @@
 </mat-toolbar>
 
 <mat-menu #hamburgerMenu="matMenu">
-    <button mat-menu-item class="botonMenuUsuario" (click)="recargarEstadisticas()">
+    <button mat-menu-item class="botonMenuUsuarioHamburguesa" (click)="recargarEstadisticas()">
         <span class="textoEnlace">Estadísticas</span>
     </button>
-    <button mat-menu-item class="botonMenuUsuario" *ngIf="mostrarModeracion" (click)="recargarModeracion()">
+    <button mat-menu-item class="botonMenuUsuarioHamburguesa" *ngIf="mostrarModeracion" (click)="recargarModeracion()">
         <span class="textoEnlace">Moderación</span>
     </button>
-    <button mat-menu-item class="botonMenuUsuario" *ngIf="mostrarAdministracion" (click)="recargarAdministracion()">
+    <button mat-menu-item class="botonMenuUsuarioHamburguesa" *ngIf="mostrarAdministracion" (click)="recargarAdministracion()">
         <span class="textoEnlace">Administración</span>
     </button>
-    <button mat-menu-item class="botonMenuUsuario" (click)="recargarPerfil()">
+    <button mat-menu-item class="botonMenuUsuarioHamburguesa" (click)="recargarPerfil()">
         <span class="textoEnlace">Ver perfil</span>
     </button>
-    <button mat-menu-item class="botonMenuUsuario" (click)="cerrarSesion()">
+    <button mat-menu-item class="botonMenuUsuarioHamburguesa" (click)="cerrarSesion()">
         <span class="textoEnlace">Cerrar sesión</span>
     </button>
 </mat-menu>

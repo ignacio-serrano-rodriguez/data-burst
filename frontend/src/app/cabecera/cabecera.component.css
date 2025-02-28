@@ -21,7 +21,6 @@ span, a, div, button {
 
 #cabecera {
     display: flex;
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
     align-items: center;
     justify-content: space-between; /* Distribuir los bloques con space-between */
     text-align: center;
@@ -67,7 +66,6 @@ span, a, div, button {
 
 #menu-section {
     display: flex;
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
     justify-content: center; /* Asegurar que los elementos estén centrados */
     align-items: center;
     gap: 20px; /* Añadir más espacio entre los elementos */
@@ -105,6 +103,17 @@ button[mat-icon-button] {
 }
 
 .botonMenuUsuario {
+    background-color: white;
+    padding: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.botonMenuUsuarioHamburguesa {
     background-color: white;
     padding: 0.5em;
     display: flex;
@@ -154,9 +163,6 @@ button[mat-icon-button]:hover mat-icon {
 @media (max-width: 429px) {
     #titulo {
         flex: 1;
-    }
-
-    #cabecera {
         justify-content: space-between;
     }
 
@@ -175,39 +181,25 @@ button[mat-icon-button]:hover mat-icon {
     }
 }
 
-/* Tablet [430-1280) */
-@media (min-width: 430px) and (max-width: 1279px) {
-    #cabecera {
-        justify-content: space-between; /* Distribuir los bloques con space-between */
-        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-    }
-
+/* Tablet [430-1024) */
+@media (min-width: 430px) and (max-width: 1024px) {
     #titulo {
-        justify-content: flex-start; /* Alinear a la izquierda */
+        flex: 1;
+        justify-content: space-between;
     }
 
-    #usuario-section {
-        justify-content: flex-end; /* Alinear a la derecha */
+    #menu-section, #usuario-section {
+        display: none; /* Ocultar el menú y la sección de usuario en dispositivos móviles */
     }
 
-    /* #textoTitulo {
-        font-size: 0.6em;
-    }
-
-    #estadisticas, #moderacion, #administracion {
-        font-size: 0.7em;
-    }
-
-    #nombreUsuario {
-        font-size: 1.2em;
-    } */
-
-    #menu-section {
-        display: flex; /* Mostrar el menú en tabletas */
-        flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
-        width: 100%; /* Hacer que ocupe toda la línea */
-        justify-content: center; /* Centrar los elementos */
-        order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
+    #hamburger-menu {
+        display: flex; /* Mostrar el menú hamburguesa en dispositivos móviles */
+        align-self: center; /* Centrar verticalmente */
+        height: 35px;
+        width: 35px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
     }
 }
 
@@ -230,22 +222,6 @@ button[mat-icon-button]:hover mat-icon {
 
     #usuario-section {
         justify-content: flex-end; /* Alinear a la derecha */
-    }
-}
-
-/* Tablet y Desktop cuando los elementos se envuelven */
-@media (min-width: 430px) and (max-width: 1279px), (min-width: 1280px) {
-    #cabecera.wrap {
-        justify-content: center; /* Centrar los elementos */
-    }
-
-    #titulo, #usuario-section {
-        justify-content: center; /* Centrar los elementos */
-        width: 100%; /* Ocupa toda la línea */
-    }
-
-    #menu-section {
-        order: 2; /* Mover el menú a la tercera fila */
     }
 }
 
