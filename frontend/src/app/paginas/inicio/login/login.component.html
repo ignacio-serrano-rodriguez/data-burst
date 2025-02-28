@@ -9,13 +9,17 @@
         [type]="hide ? 'password' : 'text'" 
         matInput 
         formControlName="contrasenia" 
-        type="password">
-      <button 
+        type="password"
+      />
+      <button
+        title="{{hide ? 'Mostrar contraseña' : 'Ocultar contraseña'}}"
         mat-icon-button 
         matSuffix 
         (click)="hide = !hide" 
         [attr.aria-label]="'Hide password'" 
-        [attr.aria-pressed]="hide">
+        [attr.aria-pressed]="hide"
+        type="button"
+      >
         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
     </mat-form-field>
@@ -23,8 +27,10 @@
       id="boton-login" 
       class="elementoFormulario" 
       mat-flat-button color="primary"
-      [disabled]="formLogin.invalid"
-      (click)="iniciarSesion()">
+      [disabled]="formLogin.invalid || loading"
+      (click)="iniciarSesion()"
+      type="submit"
+    >
       Acceder
     </button>
   </form>

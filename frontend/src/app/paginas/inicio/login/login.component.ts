@@ -28,6 +28,7 @@ import { Login } from '../../../interfaces/Login';
 export class LoginComponent {
 
   hide = true;
+  loading = false;
 
   private accesoService = inject(accesoService);
   private router = inject(Router);
@@ -44,6 +45,8 @@ export class LoginComponent {
       return;
     }
 
+    this.loading = true;
+
     const objeto: Login = {
       usuario: this.formLogin.value.usuario,
       contrasenia: this.formLogin.value.contrasenia
@@ -51,6 +54,7 @@ export class LoginComponent {
 
     this.accesoService.login(objeto).subscribe({
       next: (data) => {
+        this.loading = false;
         if (data.exito == true) {
           let mensajeInformativo = document.getElementById("mensajeInformativo");
           if (mensajeInformativo) {
@@ -80,6 +84,7 @@ export class LoginComponent {
         }
       },
       error: (error) => {
+        this.loading = false;
         let mensajeInformativo = document.getElementById("mensajeInformativo");
         if (mensajeInformativo) {
           mensajeInformativo.classList.remove("mensaje-exito");
