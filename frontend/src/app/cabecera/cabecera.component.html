@@ -1,9 +1,12 @@
-<mat-toolbar id="cabecera" [ngClass]="{'wrap': isWrapped}">
-    <div id="titulo" class="enlaces" (click)="recargarHome()">
-        <a>
+<mat-toolbar
+    id="cabecera"
+    [ngClass]="{'wrap': isWrapped}"
+>
+    <div id="titulo" (click)="recargarHome()">
+        <a class="titulo-enlace">
             <img id="logoTitulo" src="..\..\..\assets\dataBurstLogo.svg" alt="logo de Data Burst"/>
         </a>
-        <h2 id="textoTitulo" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/home'}">
+        <h2 id="textoTitulo" class="enlaces textoEnlace" [ngClass]="{'bold': rutaActual === '/home'}">
             <span class="palabraTitulo">
                 <a>Data Burst</a>
             </span>
@@ -28,7 +31,11 @@
     </div>
     
     <div id="usuario-section">
-        <button mat-icon-button (click)="recargarPerfil()">
+        <button
+            mat-icon-button
+            (click)="recargarPerfil()"
+            title="Notificaciones"
+        >
             <mat-icon>notifications</mat-icon>
             <span *ngIf="nuevasSolicitudes > 0" class="badge">{{ nuevasSolicitudes }}</span>
         </button>

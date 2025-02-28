@@ -1,3 +1,7 @@
+:host {
+    height: 104px;
+}
+
 a {
     text-decoration: none;
 }
@@ -7,15 +11,12 @@ span, a, div, button {
     padding: 0;
     border: 0;
 
-    font-size: 1.1em;
     color: #AE00CD;
     font-family: 'ShareTech';
 }
 
 .enlaces {
-    min-width: 9em;
     cursor: pointer; /* Cambiar el cursor a pointer */
-    text-align: center; /* Alinear el texto al centro */
 }
 
 #cabecera {
@@ -25,7 +26,7 @@ span, a, div, button {
     justify-content: space-between; /* Distribuir los bloques con space-between */
     text-align: center;
 
-    height: auto;
+    height: 100%;
     background-color: #F4B3FF;
     width: 100%; /* Asegurar que ocupe el 100% del ancho */
     overflow: hidden; /* Evitar desbordamiento */
@@ -35,9 +36,16 @@ span, a, div, button {
 #titulo {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Alinear a la izquierda */
-    gap: 20px; /* Añadir más espacio entre el logo y el texto */
+    gap: 0.5em; /* Añadir más espacio entre el logo y el texto */
     order: 0; /* Asegurar que el título esté en la primera fila */
+    width: 100%;
+    justify-content: center;
+    flex: 0;
+    width: 100%;
+}
+
+.titulo-enlace {
+    display: flex;
 }
 
 #logoTitulo {
@@ -64,9 +72,12 @@ span, a, div, button {
     align-items: center;
     gap: 20px; /* Añadir más espacio entre los elementos */
     order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
+    width: 100%;
+    flex: 1;
 }
 
 #estadisticas, #moderacion, #administracion {
+    font-size: 1.1em;
     width: auto;
     text-align: center; /* Alinear el texto al centro */
 }
@@ -78,6 +89,7 @@ span, a, div, button {
     justify-content: flex-end; /* Alinear a la derecha */
     gap: 5px; /* Reducir el espacio entre los elementos */
     order: 2; /* Asegurar que la parte de usuario esté en la primera fila */
+    flex: 0;
 }
 
 #usuario {
@@ -94,7 +106,6 @@ button[mat-icon-button] {
 
 .botonMenuUsuario {
     background-color: white;
-    font-size: 1.15em;
     padding: 0.5em;
     display: flex;
     justify-content: center;
@@ -104,8 +115,9 @@ button[mat-icon-button] {
 }
 
 #nombreUsuario {
-    font-size: 1em;
-    min-width: 120px; /* Reservar suficiente espacio para el texto en bold */
+    font-size: 1.7em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 #avatarUsuario {
@@ -140,6 +152,10 @@ button[mat-icon-button]:hover mat-icon {
 
 /* Mobile [350-430) */
 @media (max-width: 429px) {
+    #titulo {
+        flex: 1;
+    }
+
     #cabecera {
         justify-content: space-between;
     }
@@ -173,6 +189,18 @@ button[mat-icon-button]:hover mat-icon {
     #usuario-section {
         justify-content: flex-end; /* Alinear a la derecha */
     }
+
+    /* #textoTitulo {
+        font-size: 0.6em;
+    }
+
+    #estadisticas, #moderacion, #administracion {
+        font-size: 0.7em;
+    }
+
+    #nombreUsuario {
+        font-size: 1.2em;
+    } */
 
     #menu-section {
         display: flex; /* Mostrar el menú en tabletas */
@@ -244,14 +272,4 @@ mat-menu button.botonMenuUsuario {
 mat-menu #verPerfil + button {
     margin-top: 0;
     padding-top: 0;
-}
-
-/* Reservar suficiente espacio para el texto en bold en la sección del perfil */
-#nombreUsuario {
-    min-width: 120px; /* Ajustar según sea necesario */
-}
-
-/* Reservar suficiente espacio para el contenedor del perfil */
-#usuario-section {
-    min-width: 200px; /* Ajustar según sea necesario */
 }
