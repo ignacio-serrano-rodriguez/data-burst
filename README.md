@@ -24,8 +24,8 @@ Red social de creación de listas donde se contienen elementos valorables.
 
 ## Requisitos para el arranque de la aplicación en desarrollo local (Windows 11 pro)
 
+- **Servicio MariaDB Server 11.4.5 en ejecución**.
 - **PowerShell 7.4.6**.
-- **MariaDB Server 11.4.5**.
 - **angular-cli para Angular 17**.
 - **php 8.3.17 y composer**
 - **Symfony Console 7.1**.
@@ -37,22 +37,22 @@ Red social de creación de listas donde se contienen elementos valorables.
 
 ## Scripts de arranque de la aplicación en desarrollo local (Windows 11 pro)
 
-#### [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/iniciar.ps1)
+#### [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/iniciar.ps1)
 
-Inicia la aplicación web comprobando y gestionando el servicio MariaDB, regenerando las migraciones de base de datos necesarias. Lanza los servicios de Symfony y Angular en terminales independientes, actualiza el esquema de la base de datos y muestra información de acceso.
+Inicia la aplicación web comprobando el servicio MariaDB, regenerando las migraciones de base de datos necesarias. Lanza los servicios de Symfony y Angular en terminales independientes, actualiza el esquema de la base de datos y muestra información de acceso.
 
-#### [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/finalizar.ps1)
+#### [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/finalizar.ps1)
 
 Finaliza la aplicación web. Detiene los procesos de Angular y Symfony, elimina el directorio de migraciones y deja una nota informando que la base de datos MariaDB local permanece en ejecución.
 
-#### [obtener-esquema-sql.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/obtener-esquema-sql.ps1)
+#### [obtener-esquema-sql.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/obtener-esquema-sql.ps1)
 
 Extrae automáticamente el esquema de la base de datos local (sin datos) utilizando mysqldump y lo guarda en 'data_burst_schema.sql'. Incluye detección automática del ejecutable MySQL/MariaDB, pruebas de conexión y manejo de errores con sugerencias de solución.
 
-#### [eliminar-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/eliminar-bd.ps1)
+#### [eliminar-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/eliminar-bd.ps1)
 
 Elimina la base de datos 'data_burst' de MariaDB local mediante detección automática del ejecutable mysql.exe. Verifica la existencia de la base de datos antes de eliminarla, utiliza credenciales predeterminadas (root/root) y proporciona retroalimentación sobre el resultado.
 
 ## Funcionalidades del desarrollo
 
-Para aplicar cambios en la BD desde el ORM, es necesario [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/finalizar.ps1), [eliminar-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/eliminar-bd.ps1) e [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/iniciar.ps1) de nuevo.
+Para aplicar cambios en la BD desde el ORM, es necesario [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/finalizar.ps1), [eliminar-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/eliminar-bd.ps1) e [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/iniciar.ps1) de nuevo.

@@ -6,20 +6,81 @@ $proyectoRaiz = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 
 Write-Output "`n${scriptName} -> Iniciando la aplicación web."
 
-# Comprobar si MariaDB está en ejecución en Windows
+# Comprobar si MariaDB está instalado y en ejecución
 $mariaDBService = Get-Service -Name "MariaDB" -ErrorAction SilentlyContinue
-if ($mariaDBService -and $mariaDBService.Status -ne "Running") {
-    Write-Output "`n${scriptName} -> El servicio de MariaDB no está en ejecución. Iniciándolo."
-    Start-Service -Name "MariaDB"
-    # Esperar a que MariaDB se inicie completamente
-    Write-Output "`n${scriptName} -> Esperando a que MariaDB se inicie completamente."
-    Start-Sleep -Seconds 5
-} elseif (-not $mariaDBService) {
-    Write-Output "`n${scriptName} -> El servicio de MariaDB no está instalado como servicio de Windows. Asegúrate de que esté en ejecución manualmente."
-} else {
-    Write-Output "`n${scriptName} -> El servicio de MariaDB ya está en ejecución."
+
+if ($mariaDBService) {
+    if ($mariaDBService.Status -ne "Running") {
+        Write-Output "`n${scriptName} -> ERROR: El servicio de MariaDB no está en ejecución."
+        Write-Output "Para que la aplicación funcione correctamente, debes iniciar el servicio MariaDB manualmente:"
+        Write-Output "1. Abre el Panel de Control > Herramientas administrativas > Servicios"
+        Write-Output "2. Busca el servicio 'MariaDB'"
+        Write-Output "3. Haz clic derecho y selecciona 'Iniciar'"
+        Write-Output "4. Vuelve a ejecutar este script cuando el servicio esté iniciado."
+        
+        Write-Output "`n${scriptName} -> Operación cancelada. El servicio MariaDB debe estar en ejecución."
+        Read-Host "Presiona Enter para salir"
+        exit 1
+    } else {
+        Write-Output "`n${scriptName} -> El servicio de MariaDB ya está en ejecución."
+    }
+}
+else {
+    Write-Output "`n${scriptName} -> ERROR: El servicio de MariaDB no está instalado como servicio de Windows."
+    Write-Output "Para que la aplicación funcione correctamente, necesitas:"
+    Write-Output "1. Instalar MariaDB como servicio de Windows"
+    Write-Output "2. Iniciar el servicio"
+    Write-Output "3. Volver a ejecutar este script"
+    
+    Write-Output "`n${scriptName} -> Operación cancelada. MariaDB debe estar instalado e iniciado como servicio."
+    Read-Host "Presiona Enter para salir"
+    exit 1
 }
 
+# Verificar conectividad a la base de datos
+Write-Output "`n${scriptName} -> Verificando conectividad a MariaDB..."
+$mysqlCheck = $null
+try {
+    # Buscar mysql.exe en ubicaciones comunes
+    $mysqlPaths = @(
+        "C:\Program Files\MariaDB*\bin\mysql.exe",
+        "C:\Program Files (x86)\MariaDB*\bin\mysql.exe",
+        "C:\MariaDB*\bin\mysql.exe"
+    )
+    
+    $mysqlExe = $null
+    foreach ($path in $mysqlPaths) {
+        $found = Get-Item -Path $path -ErrorAction SilentlyContinue
+        if ($found) {
+            $mysqlExe = $found.FullName
+            break
+        }
+    }
+    
+    if ($mysqlExe) {
+        $mysqlCheck = & $mysqlExe -u root -proot -e "SELECT 'Connection test';" 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            Write-Output "`n${scriptName} -> Conexión a MariaDB establecida correctamente."
+        } else {
+            throw "Error al conectar a MariaDB: $mysqlCheck"
+        }
+    } else {
+        Write-Output "`n${scriptName} -> ERROR: No se encontró el ejecutable mysql.exe."
+        Write-Output "`n${scriptName} -> Verifica que MariaDB esté correctamente instalado."
+        Read-Host "Presiona Enter para salir"
+        exit 1
+    }
+} catch {
+    Write-Output "`n${scriptName} -> ERROR: No se pudo conectar a MariaDB."
+    Write-Output "Verifica que MariaDB está ejecutándose y que las credenciales son correctas."
+    Write-Output "El error fue: $_"
+    
+    Write-Output "`n${scriptName} -> Operación cancelada. Se requiere una conexión funcional a MariaDB."
+    Read-Host "Presiona Enter para salir"
+    exit 1
+}
+
+# El resto del script continúa igual...
 # Verificar y eliminar el directorio de migraciones si existe.
 $migrationsPath = "$proyectoRaiz/api/migrations"
 if (Test-Path -Path $migrationsPath) {
@@ -71,7 +132,7 @@ Start-Process powershell -ArgumentList "cd `"$PWD`"; Write-Output 'Esta es la te
 Set-Location -Path "$proyectoRaiz/scripts"
 
 # Llamar al script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos
-Write-Output "`n${scriptName} -> Ejecutando el script obtener-esquema-sql-local.ps1 para obtener el esquema de la base de datos local.`n"
+Write-Output "`n${scriptName} -> Ejecutando el script obtener-esquema-sql.ps1 para obtener el esquema de la base de datos local.`n"
 & "$proyectoRaiz\scripts\obtener-esquema-sql.ps1"
 
 # Aplicación web inicializada correctamente.
