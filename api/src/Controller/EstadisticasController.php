@@ -31,16 +31,27 @@ class EstadisticasController extends AbstractController
         }
 
         try {
-            // Lógica para obtener las estadísticas
-            $masAgregado = $this->estadisticasRepository->obtenerMasAgregado($nombre);
-            $masGustado = $this->estadisticasRepository->obtenerMasGustado($nombre);
-            $menosGustado = $this->estadisticasRepository->obtenerMenosGustado($nombre);
-
+            $masAgregado = $this->estadisticasRepository->obtenerMasAgregado(nombre: $nombre, page: 1);
+            $masAgregadoCount = $this->estadisticasRepository->obtenerMasAgregadoCount(nombre: $nombre);
+            $masGustado = $this->estadisticasRepository->obtenerMasGustado(nombre: $nombre, page: 1);
+            $masGustadoCount = $this->estadisticasRepository->obtenerMasGustadoCount(nombre: $nombre);
+            $menosGustado = $this->estadisticasRepository->obtenerMenosGustado(nombre: $nombre, page: 1);
+            $menosGustadoCount = $this->estadisticasRepository->obtenerMenosGustadoCount(nombre: $nombre);
+            
             return new JsonResponse(
                 [
-                    'masAgregado' => $masAgregado,
-                    'masGustado' => $masGustado,
-                    'menosGustado' => $menosGustado
+                    'masAgregado' => [
+                        'items' => $masAgregado,
+                        'total' => $masAgregadoCount
+                    ],
+                    'masGustado' => [
+                        'items' => $masGustado,
+                        'total' => $masGustadoCount
+                    ],
+                    'menosGustado' => [
+                        'items' => $menosGustado,
+                        'total' => $menosGustadoCount
+                    ],
                 ],
                 Response::HTTP_OK
             );
