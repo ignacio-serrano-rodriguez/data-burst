@@ -5,6 +5,11 @@ use App\Entity\Lista;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/*
+cada página tiene que 
+
+*/
+
 /**
  * @extends ServiceEntityRepository<Lista>
  */
@@ -15,9 +20,10 @@ class EstadisticasRepository extends ServiceEntityRepository
         parent::__construct($registry, Lista::class);
     }
 
-    public function obtenerMasAgregado(string $nombre): array
+    public function obtenerMasAgregado(string $nombre, int $page = 1, int $limit = 10): array
     {
-        // Lógica para obtener los elementos más agregados en la lista con el nombre especificado
+        $offset = ($page - 1) * $limit;
+        
         return $this->createQueryBuilder('l')
             ->select('e.nombre, COUNT(e.id) as total')
             ->leftJoin('l.listaContieneElementos', 'lce')
@@ -26,7 +32,8 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->setParameter('nombre', $nombre)
             ->groupBy('e.nombre')
             ->orderBy('total', 'DESC')
-            ->setMaxResults(3) // Devolver solo los tres primeros resultados
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

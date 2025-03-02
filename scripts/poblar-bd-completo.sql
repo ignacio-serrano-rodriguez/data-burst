@@ -41,7 +41,49 @@ VALUES
 (7, 'Stranger Things', '2016-07-15', 'Serie de TV', 88, 'Serie de ciencia ficción y terror ambientada en los años 80 que sigue a un grupo de niños en el pueblo de Hawkins.', '2023-02-07 16:40:00'),
 (5, 'Harry Potter y la Piedra Filosofal', '1997-06-26', 'Libro', 89, 'Primera novela de la serie Harry Potter que introduce el mundo mágico creado por J.K. Rowling.', '2023-02-08 13:15:00'),
 (6, 'El Señor de los Anillos: La Comunidad del Anillo', '2001-12-19', 'Película', 94, 'Adaptación cinematográfica de la primera parte de la trilogía de J.R.R. Tolkien.', '2023-02-09 19:30:00'),
-(7, 'Grand Theft Auto V', '2013-09-17', 'Videojuego', 91, 'Videojuego de mundo abierto desarrollado por Rockstar Games ambientado en el ficticio estado de San Andreas.', '2023-02-10 10:45:00');
+(7, 'Grand Theft Auto V', '2013-09-17', 'Videojuego', 91, 'Videojuego de mundo abierto desarrollado por Rockstar Games ambientado en el ficticio estado de San Andreas.', '2023-02-10 10:45:00'),
+
+-- Libros clásicos
+(3, 'Cien años de soledad', '1967-05-30', 'Libro', 97, 'Obra maestra del realismo mágico que narra la historia de la familia Buendía a lo largo de siete generaciones en el ficticio pueblo de Macondo.', '2023-03-15 10:20:00'),
+(4, 'Don Quijote de la Mancha', '1605-01-16', 'Libro', 96, 'Considerada la primera novela moderna, narra las aventuras del ingenioso hidalgo Don Quijote y su fiel escudero Sancho Panza.', '2023-03-16 11:30:00'),
+(5, 'Orgullo y prejuicio', '1813-01-28', 'Libro', 94, 'Novela romántica de Jane Austen que explora temas de clase, matrimonio y moralidad en la Inglaterra rural del siglo XIX.', '2023-03-17 09:15:00'),
+(6, 'Crimen y castigo', '1866-12-22', 'Libro', 93, 'Exploración psicológica de un estudiante que comete un asesinato y su posterior lucha con la culpa y la redención.', '2023-03-18 14:45:00'),
+(7, 'El Gran Gatsby', '1925-04-10', 'Libro', 92, 'Retrato de la era del jazz y crítica del sueño americano a través de la historia de Jay Gatsby y su amor por Daisy Buchanan.', '2023-03-19 16:30:00'),
+
+-- Literatura contemporánea
+(3, 'La sombra del viento', '2001-05-01', 'Libro', 91, 'Thriller literario ambientado en la Barcelona posterior a la Guerra Civil Española que mezcla intriga, misterio y romance.', '2023-03-20 10:10:00'),
+(4, 'Nunca me abandones', '2005-02-24', 'Libro', 90, 'Historia distópica sobre un grupo de estudiantes que descubren un terrible secreto sobre su existencia.', '2023-03-21 15:20:00'),
+(5, 'La carretera', '2006-09-26', 'Libro', 89, 'Relato post-apocalíptico sobre un padre y su hijo que viajan a través de un paisaje devastado en busca de supervivencia.', '2023-03-22 13:45:00'),
+(6, 'El nombre del viento', '2007-03-27', 'Libro', 93, 'Primera entrega de la Crónica del Asesino de Reyes, narra la historia del músico, ladrón y mago Kvothe.', '2023-03-23 11:05:00'),
+(7, 'Los detectives salvajes', '1998-11-12', 'Libro', 92, 'Novela coral que sigue la búsqueda de una poeta mexicana desaparecida por parte de dos jóvenes poetas.', '2023-03-24 09:30:00'),
+
+-- Ciencia ficción y fantasía
+(3, 'Dune', '1965-08-01', 'Libro', 95, 'Epopeya de ciencia ficción que combina política, religión y ecología en un futuro lejano donde se disputa el control de un planeta desértico.', '2023-03-25 14:15:00'),
+(4, 'Neuromante', '1984-07-01', 'Libro', 88, 'Novela fundacional del género cyberpunk que explora un futuro dominado por corporaciones, hackers y realidad virtual.', '2023-03-26 16:50:00'),
+(5, 'Fundación', '1951-05-01', 'Libro', 91, 'Saga que narra el colapso de un imperio galáctico y los intentos de preservar el conocimiento humano durante la edad oscura resultante.', '2023-03-27 10:25:00'),
+(6, 'Juego de Tronos', '1996-08-01', 'Libro', 94, 'Primera entrega de Canción de Hielo y Fuego, una compleja historia de intrigas políticas en un mundo medieval de fantasía.', '2023-03-28 13:40:00'),
+(7, 'El Silmarillion', '1977-09-15', 'Libro', 87, 'Compendio de mitos y leyendas del universo de la Tierra Media creado por J.R.R. Tolkien.', '2023-03-29 15:15:00'),
+
+-- No ficción y ensayo
+(3, 'Sapiens: De animales a dioses', '2011-02-10', 'Libro', 90, 'Historia de la humanidad que explora cómo una especie insignificante de simios se convirtió en la dominante del planeta.', '2023-03-30 11:20:00'),
+(4, 'El infinito en un junco', '2019-11-13', 'Libro', 89, 'Ensayo sobre la historia de los libros, las bibliotecas y la pasión por la lectura a lo largo de los siglos.', '2023-03-31 09:45:00'),
+(5, 'Pensar rápido, pensar despacio', '2011-10-25', 'Libro', 92, 'Exploración de los dos sistemas de pensamiento humano y cómo afectan nuestras decisiones y juicios.', '2023-04-01 14:30:00'),
+(6, 'Los años del hambre', '2022-03-17', 'Libro', 86, 'Historia de la posguerra española a través de testimonios y documentos sobre la escasez alimentaria.', '2023-04-02 10:50:00'),
+(7, 'El gen egoísta', '1976-04-30', 'Libro', 88, 'Revolucionaria visión de la evolución centrada en los genes como unidades de selección natural.', '2023-04-03 16:25:00'),
+
+-- Literatura latinoamericana
+(3, 'Pedro Páramo', '1955-03-01', 'Libro', 93, 'Novela sobre un hombre que busca a su padre en un pueblo fantasma habitado por almas en pena.', '2023-04-04 13:10:00'),
+(4, 'Rayuela', '1963-06-28', 'Libro', 91, 'Obra experimental que invita al lector a saltar entre capítulos para crear diferentes experiencias de lectura.', '2023-04-05 11:45:00'),
+(5, 'La casa de los espíritus', '1982-01-01', 'Libro', 90, 'Saga familiar que entrelaza lo político y lo mágico a lo largo de varias generaciones en un país sudamericano.', '2023-04-06 09:30:00'),
+(6, 'Ficciones', '1944-01-01', 'Libro', 95, 'Colección de cuentos que juegan con conceptos filosóficos, laberintos mentales y paradojas.', '2023-04-07 15:20:00'),
+(7, 'Conversación en La Catedral', '1969-01-01', 'Libro', 89, 'Novela que retrata la corrupción política y moral durante la dictadura de Odría en Perú.', '2023-04-08 12:40:00'),
+
+-- Bestsellers recientes
+(3, 'Los pilares de la Tierra', '1989-10-01', 'Libro', 92, 'Épica historia sobre la construcción de una catedral en la Inglaterra medieval del siglo XII.', '2023-04-09 10:15:00'),
+(4, 'La chica del tren', '2015-01-13', 'Libro', 87, 'Thriller psicológico sobre una mujer alcohólica que cree haber presenciado un crimen desde la ventana de un tren.', '2023-04-10 14:50:00'),
+(5, 'Eleanor Oliphant está perfectamente', '2017-05-09', 'Libro', 88, 'Historia sobre una mujer solitaria con un pasado traumático que comienza a abrirse al mundo.', '2023-04-11 16:30:00'),
+(6, 'El proyecto Hail Mary', '2021-05-04', 'Libro', 93, 'Un maestro de ciencias amnésico despierta solo en una nave espacial con la misión de salvar a la humanidad.', '2023-04-12 11:25:00'),
+(7, 'Reina Roja', '2018-11-08', 'Libro', 90, 'Thriller futurista donde una detective especial investiga asesinatos en una sociedad vigilada por inteligencia artificial.', '2023-04-13 09:40:00');
 
 -- Insertar listas
 INSERT INTO lista (nombre)
@@ -57,6 +99,39 @@ VALUES
 -- Insertar relaciones lista_contiene_elemento
 INSERT INTO lista_contiene_elemento (lista_id, elemento_id, momento_contencion)
 VALUES 
+-- Lista 3 (Libros) - Contiene los libros que acabamos de insertar (IDs 11-40)
+(3, 11, '2023-04-14 10:00:00'),
+(3, 12, '2023-04-14 10:01:00'),
+(3, 13, '2023-04-14 10:02:00'),
+(3, 14, '2023-04-14 10:03:00'),
+(3, 15, '2023-04-14 10:04:00'),
+(3, 16, '2023-04-14 10:05:00'),
+(3, 17, '2023-04-14 10:06:00'),
+(3, 18, '2023-04-14 10:07:00'),
+(3, 19, '2023-04-14 10:08:00'),
+(3, 20, '2023-04-14 10:09:00'),
+(3, 21, '2023-04-14 10:10:00'),
+(3, 22, '2023-04-14 10:11:00'),
+(3, 23, '2023-04-14 10:12:00'),
+(3, 24, '2023-04-14 10:13:00'),
+(3, 25, '2023-04-14 10:14:00'),
+(3, 26, '2023-04-14 10:15:00'),
+(3, 27, '2023-04-14 10:16:00'),
+(3, 28, '2023-04-14 10:17:00'),
+(3, 29, '2023-04-14 10:18:00'),
+(3, 30, '2023-04-14 10:19:00'),
+(3, 31, '2023-04-14 10:20:00'),
+(3, 32, '2023-04-14 10:21:00'),
+(3, 33, '2023-04-14 10:22:00'),
+(3, 34, '2023-04-14 10:23:00'),
+(3, 35, '2023-04-14 10:24:00'),
+(3, 36, '2023-04-14 10:25:00'),
+(3, 37, '2023-04-14 10:26:00'),
+(3, 38, '2023-04-14 10:27:00'),
+(3, 39, '2023-04-14 10:28:00'),
+(3, 40, '2023-04-14 10:29:00'),
+
+-- Otras relaciones de listas y elementos
 (1, 1, '2023-03-01 10:15:00'),
 (1, 3, '2023-03-01 10:16:00'),
 (1, 7, '2023-03-01 10:17:00'),
