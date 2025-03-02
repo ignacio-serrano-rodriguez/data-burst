@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { EstadisticasService } from '../../servicios/estadisticas.service';
 
 interface Estadistica {
@@ -23,26 +24,31 @@ interface Estadistica {
     MatInputModule,
     MatButtonModule,
     MatTableModule,
+    MatPaginatorModule,
     FormsModule
   ],
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.css']
 })
-export class EstadisticasComponent implements OnInit {
+export class EstadisticasComponent implements AfterViewInit {
   categoria: string = '';
   displayedColumns: string[] = ['orden', 'masAgregado', 'masGustado', 'menosGustado'];
-  dataSource: Estadistica[] = [];
+  dataSource = new MatTableDataSource<Estadistica>([]);
   noEstadisticas: boolean = false;
 
-  constructor(private estadisticasService: EstadisticasService) { }
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  ngOnInit(): void { }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator ?? null;
+  }
+
+  constructor(private estadisticasService: EstadisticasService) { }
 
   obtenerEstadisticas(): void {
     this.estadisticasService.generarEstadisticas(this.categoria).subscribe(
       data => {
-        this.dataSource = this.combinarDatos(data.masAgregado, data.masGustado, data.menosGustado);
-        this.noEstadisticas = this.dataSource.length === 0;
+        this.dataSource.data = this.combinarDatos(data.masAgregado, data.masGustado, data.menosGustado);
+        this.noEstadisticas = this.dataSource.data.length === 0;
       },
       error => {
         console.error('Error al generar estadísticas:', error);
