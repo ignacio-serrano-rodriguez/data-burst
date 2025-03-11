@@ -10,7 +10,11 @@ export class EstadisticasService {
 
     constructor(private http: HttpClient) { }
 
-    generarEstadisticas(categoria: string): Observable<any> {
-        return this.http.post<any>(this.apiUrl, { categoria });
+    generarEstadisticas(categoria: string, page: number = 1, limit: number = 10): Observable<any> {
+        return this.http.post<any>(this.apiUrl, {
+            categoria: categoria,
+            page: page,
+            limit: limit
+        });
     }
 }

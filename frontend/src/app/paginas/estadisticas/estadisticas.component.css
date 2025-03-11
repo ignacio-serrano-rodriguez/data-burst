@@ -1,42 +1,73 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%; /* Asegurar que ocupe el 100% del ancho */
-  overflow-x: hidden; /* Evitar desbordamiento horizontal */
+  display: block;
+  width: 100%;
+  position: relative;
 }
 
 .estadisticas-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
   padding: 2%;
-  width: 100%; /* Asegurar que ocupe el 100% del ancho */
-  overflow: hidden; /* Evitar desbordamiento */
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .estadisticas-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+  margin: 0 auto;
   max-width: 800px;
 }
 
+/* Botón y campo de entrada */
 .full-width {
   width: 100%;
   margin-bottom: 16px;
 }
 
-table {
-  margin-top: 16px;
-  width: 100%; /* Asegurar que la tabla ocupe el 100% del ancho */
+/* Estilo para el botón idéntico al de registro */
+.boton-estadisticas {
+  padding-top: 1.4em;
+  padding-bottom: 1.4em;
+  font-size: 1.2em;
+  color: #EEF1F2;
+  background-color: #61B300;
+  width: 100%;
 }
 
-@media (max-width: 768px) {
-  .estadisticas-content {
-    padding: 0 16px;
-  }
+/* Spinner de carga */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* Color personalizado para el spinner */
+.spinner-color ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
+  stroke: #AE00CD;
+}
+
+/* Contenedor de la tabla */
+.tabla-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+/* Estilos específicos de la tabla */
+.tabla-container table {
+  width: 100%;
+}
+
+/* Mensaje cuando no hay datos */
+.no-data-message {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  color: #666;
+}
+
+/* Contenedor para el paginador */
+.paginador-centrado {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }

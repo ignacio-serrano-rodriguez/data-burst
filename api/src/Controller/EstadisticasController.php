@@ -22,6 +22,8 @@ class EstadisticasController extends AbstractController
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $nombre = $datosRecibidos['categoria'] ?? null;
+        $page = (int)($datosRecibidos['page'] ?? 1);
+        $limit = (int)($datosRecibidos['limit'] ?? 10);
 
         if ($nombre === null) {
             return new JsonResponse(
@@ -31,11 +33,24 @@ class EstadisticasController extends AbstractController
         }
 
         try {
-            $masAgregado = $this->estadisticasRepository->obtenerMasAgregado(nombre: $nombre, page: 1);
+            // Si la categoría está vacía, intentar hacer una búsqueda más flexible
+            if (empty($nombre)) {
+                // Buscar las categorías disponibles para sugerirlas al usuario
+                $categorias = $this->estadisticasRepository->obtenerCategoriasDisponibles();
+                return new JsonResponse(
+                    [
+                        "mensaje" => "Por favor, ingrese alguna de las siguientes categorías:",
+                        "categorias_disponibles" => $categorias
+                    ],
+                    Response::HTTP_OK
+                );
+            }
+
+            $masAgregado = $this->estadisticasRepository->obtenerMasAgregado(nombre: $nombre, page: $page, limit: $limit);
             $masAgregadoCount = $this->estadisticasRepository->obtenerMasAgregadoCount(nombre: $nombre);
-            $masGustado = $this->estadisticasRepository->obtenerMasGustado(nombre: $nombre, page: 1);
+            $masGustado = $this->estadisticasRepository->obtenerMasGustado(nombre: $nombre, page: $page, limit: $limit);
             $masGustadoCount = $this->estadisticasRepository->obtenerMasGustadoCount(nombre: $nombre);
-            $menosGustado = $this->estadisticasRepository->obtenerMenosGustado(nombre: $nombre, page: 1);
+            $menosGustado = $this->estadisticasRepository->obtenerMenosGustado(nombre: $nombre, page: $page, limit: $limit);
             $menosGustadoCount = $this->estadisticasRepository->obtenerMenosGustadoCount(nombre: $nombre);
             
             return new JsonResponse(

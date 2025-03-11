@@ -121,4 +121,12 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function obtenerCategoriasDisponibles(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('DISTINCT l.nombre')
+            ->getQuery()
+            ->getScalarResult();
+    }
 }
