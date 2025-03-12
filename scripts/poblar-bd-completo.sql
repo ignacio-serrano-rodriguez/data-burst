@@ -1,4 +1,3 @@
--- Desactivar restricciones de clave foránea temporalmente para facilitar la carga
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Limpiar tablas existentes
@@ -21,13 +20,36 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Insertar usuarios de prueba
 INSERT INTO usuario (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, idioma)
 VALUES 
-('admin@databurst.com', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 3, '2023-01-01 10:00:00', 'Administrador', 'Sistema', NULL, '1980-01-15', 'España', 'Informático', 'Ingeniería Informática', 'es'),
-('moderador@databurst.com', 'moderador', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 2, '2023-01-02 11:30:00', 'Moderador', 'Principal', NULL, '1985-05-20', 'España', 'Moderador', 'Comunicación', 'es'),
+('admin1@databurst.com', 'admin1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 3, '2023-01-01 10:00:00', 'Ignacio', 'Serrano', 'Rodríguez', '2000-03-24', 'España', 'Informático', 'Ingeniería Informática', 'es'),
+('moderador1@databurst.com', 'moderador1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 2, '2023-01-02 11:30:00', 'Rosa María', 'Durán', 'Guzmán', '2000-03-06', 'España', 'Enfemera', 'Enfermería', 'es'),
 ('usuario1@databurst.com', 'usuario1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-03 14:20:00', 'Ana', 'García', 'López', '1990-03-12', 'España', 'Profesora', 'Magisterio', 'es'),
 ('usuario2@databurst.com', 'usuario2', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-04 09:15:00', 'Carlos', 'Martínez', 'Rodríguez', '1988-07-08', 'México', 'Ingeniero', 'Ingeniería Civil', 'es'),
 ('usuario3@databurst.com', 'usuario3', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-05 16:45:00', 'Laura', 'Fernández', 'Gómez', '1992-11-27', 'Argentina', 'Médica', 'Medicina', 'es'),
 ('usuario4@databurst.com', 'usuario4', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-06 08:30:00', 'Miguel', 'Sánchez', 'Pérez', '1987-09-03', 'Colombia', 'Abogado', 'Derecho', 'es'),
-('usuario5@databurst.com', 'usuario5', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-07 12:10:00', 'Elena', 'López', 'Torres', '1994-05-15', 'Chile', 'Arquitecta', 'Arquitectura', 'es');
+('usuario5@databurst.com', 'usuario5', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-07 12:10:00', 'Elena', 'López', 'Torres', '1994-05-15', 'Chile', 'Arquitecta', 'Arquitectura', 'es'),
+('usuario6@databurst.com', 'usuario6', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-08 10:25:00', 'Javier', 'Ruiz', 'Morales', '1991-08-22', 'Perú', 'Periodista', 'Comunicación', 'es'),
+('usuario7@databurst.com', 'usuario7', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-09 14:35:00', 'Natalia', 'Herrera', 'Vega', '1989-02-14', 'Ecuador', 'Psicóloga', 'Psicología', 'es'),
+('usuario8@databurst.com', 'usuario8', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-10 09:50:00', 'Pablo', 'Ortega', 'Díaz', '1993-04-30', 'Uruguay', 'Biólogo', 'Biología Marina', 'es'),
+('usuario9@databurst.com', 'usuario9', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-11 15:40:00', 'Carmen', 'Navarro', 'Fuentes', '1986-12-05', 'Venezuela', 'Veterinaria', 'Medicina Veterinaria', 'es'),
+('usuario10@databurst.com', 'usuario10', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-12 11:15:00', 'Roberto', 'Vargas', 'Castro', '1995-07-17', 'Paraguay', 'Chef', 'Gastronomía', 'es'),
+('usuario11@databurst.com', 'usuario11', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-13 13:20:00', 'Silvia', 'Mendoza', 'Rojas', '1990-10-28', 'Bolivia', 'Fotógrafa', 'Bellas Artes', 'es'),
+('usuario12@databurst.com', 'usuario12', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-14 16:30:00', 'Andrés', 'Jiménez', 'Rivera', '1987-05-03', 'Costa Rica', 'Músico', 'Conservatorio', 'es'),
+('usuario13@databurst.com', 'usuario13', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-15 10:45:00', 'Paula', 'González', 'Soto', '1992-01-19', 'Guatemala', 'Enfermera', 'Enfermería', 'es'),
+('usuario14@databurst.com', 'usuario14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-16 14:10:00', 'Diego', 'Torres', 'Molina', '1989-06-24', 'Honduras', 'Programador', 'Ingeniería de Software', 'es'),
+('usuario15@databurst.com', 'usuario15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-17 09:30:00', 'Marina', 'Ramírez', 'Paredes', '1993-11-11', 'El Salvador', 'Diseñadora', 'Diseño Gráfico', 'es'),
+('usuario16@databurst.com', 'usuario16', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-18 12:20:00', 'Fernando', 'Castro', 'Luna', '1988-03-07', 'Panamá', 'Economista', 'Economía', 'es'),
+('usuario17@databurst.com', 'usuario17', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-19 15:50:00', 'Lucía', 'Morales', 'Campos', '1994-09-29', 'Nicaragua', 'Dentista', 'Odontología', 'es'),
+('usuario18@databurst.com', 'usuario18', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-20 11:40:00', 'Raúl', 'Vega', 'Méndez', '1986-04-16', 'República Dominicana', 'Actor', 'Arte Dramático', 'es'),
+('usuario19@databurst.com', 'usuario19', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-21 14:25:00', 'Beatriz', 'Díaz', 'Santos', '1991-12-01', 'Cuba', 'Nutricionista', 'Nutrición', 'es'),
+('usuario20@databurst.com', 'usuario20', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-22 10:05:00', 'Héctor', 'Ortiz', 'Ríos', '1990-08-13', 'Puerto Rico', 'Piloto', 'Aeronáutica', 'es'),
+('usuario21@databurst.com', 'usuario21', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-23 15:15:00', 'Isabel', 'Medina', 'Cruz', '1989-02-26', 'Francia', 'Traductora', 'Filología', 'fr'),
+('usuario22@databurst.com', 'usuario22', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-24 09:55:00', 'Alejandro', 'Reyes', 'Varela', '1992-05-10', 'Inglaterra', 'Profesor', 'Educación', 'en'),
+('usuario23@databurst.com', 'usuario23', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-25 13:40:00', 'Valeria', 'Peña', 'Guzmán', '1987-11-25', 'Alemania', 'Consultora', 'Administración', 'de'),
+('usuario24@databurst.com', 'usuario24', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-26 16:10:00', 'Gabriel', 'Luna', 'Flores', '1993-07-08', 'Italia', 'Historiador', 'Historia del Arte', 'it'),
+('usuario25@databurst.com', 'usuario25', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-27 10:35:00', 'Camila', 'Sanz', 'Vidal', '1991-04-21', 'Portugal', 'Arqueóloga', 'Arqueología', 'pt'),
+('usuario26@databurst.com', 'usuario26', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-28 14:50:00', 'Mateo', 'Duarte', 'Aguilar', '1988-09-14', 'Holanda', 'Fisioterapeuta', 'Fisioterapia', 'nl'),
+('usuario27@databurst.com', 'usuario27', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-29 11:20:00', 'Sara', 'Ibáñez', 'Mora', '1994-01-03', 'Bélgica', 'Astrónoma', 'Astrofísica', 'fr'),
+('usuario28@databurst.com', 'usuario28', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1, 1, '2023-01-30 15:05:00', 'Daniel', 'Rojas', 'Paz', '1990-06-18', 'Suiza', 'Relojero', 'Ingeniería de Precisión', 'de');
 
 -- Insertar elementos
 INSERT INTO elemento (usuario_id, nombre, fecha_aparicion, informacion_extra, puntuacion, descripcion, momento_creacion)
