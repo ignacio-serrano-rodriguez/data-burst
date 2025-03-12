@@ -59,3 +59,8 @@
   width: 100%;
   min-width: 450px;
 }
+
+/* Evitar subrayado en hover para botones de iconos */
+button[mat-icon-button]:hover {
+  text-decoration: none;
+}

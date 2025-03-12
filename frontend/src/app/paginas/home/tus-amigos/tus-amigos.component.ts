@@ -197,4 +197,8 @@ export class TusAmigosComponent implements OnInit {
     }
     return 0;
   }
+
+  obtenerTituloBotonClose(): string {
+    return "Limpiar";
+  }
 }

@@ -476,4 +476,44 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.resetBusquedaElemento();
     });
   }
+
+  obtenerTituloBotonCerrarAmigo(): string {
+    if (!this.nombreAmigoBuscar || this.nombreAmigoBuscar.trim() === '') {
+      return "Cancelar búsqueda";
+    } else {
+      return "Limpiar entrada";
+    }
+  }
+
+  obtenerTituloBotonCerrarElemento(): string {
+    if (!this.nombreElementoBuscar || this.nombreElementoBuscar.trim() === '') {
+      return "Cancelar búsqueda";
+    } else {
+      return "Limpiar entrada";
+    }
+  }
+
+  obtenerTituloBotonLike(elemento: Elemento): string {
+    if (elemento.positivo === true) {
+      return "Te gusta";
+    } else {
+      return "Me gusta";
+    }
+  }
+
+  obtenerTituloBotonDislike(elemento: Elemento): string {
+    if (elemento.positivo === false) {
+      return "No te gusta";
+    } else {
+      return "No me gusta";
+    }
+  }
+
+  obtenerTituloBotonHelp(elemento: Elemento): string {
+    if (elemento.positivo === null) {
+      return "Sin opinión";
+    } else {
+      return "Eliminar opinión";
+    }
+  }
 }

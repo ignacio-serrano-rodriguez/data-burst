@@ -17,3 +17,8 @@ ul li a {
 button[mat-icon-button] {
     margin-left: 8px;
 }
+
+/* Evitar subrayado en hover para botones de iconos */
+button[mat-icon-button]:hover {
+    text-decoration: none;
+}

@@ -143,4 +143,21 @@ export class TusListasComponent implements OnInit {
     }
     return 0;
   }
+
+  obtenerTituloBotonAnadir(): string {
+    const nombreListaValido = this.esNombreListaValido();
+
+    // Lista existente en el array de listas
+    const listaExistente = this.listas.find(
+      lista => lista.nombre.toLowerCase() === this.nombreLista.trim().toLowerCase()
+    );
+
+    if (!nombreListaValido) {
+      return "Ingrese un nombre para la lista";
+    } else if (listaExistente) {
+      return "Asignar a lista existente";
+    } else {
+      return "Crear nueva lista";
+    }
+  }
 }

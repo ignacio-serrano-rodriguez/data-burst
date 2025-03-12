@@ -6,7 +6,7 @@
   <mat-form-field class="elementoFormulario">
     <mat-label class="etiquetaFormulario">Nombre del usuario</mat-label>
     <input matInput id="nombreUsuario" #nombreUsuarioInput [(ngModel)]="nombreUsuario" (input)="onNombreUsuarioChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
-    <button mat-icon-button matPrefix (click)="salirDelInput()">
+    <button mat-icon-button matPrefix (click)="salirDelInput()" [title]="obtenerTituloBotonClose()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
