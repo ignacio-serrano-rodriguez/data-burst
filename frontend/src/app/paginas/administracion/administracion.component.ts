@@ -24,7 +24,7 @@ interface Usuario {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule, // ¡Añadido FormsModule para ngModel!
+    FormsModule,
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -38,8 +38,8 @@ interface Usuario {
   styleUrls: ['./administracion.component.css']
 })
 export class AdministracionComponent implements OnInit {
-  // Configuración de la tabla
-  displayedColumns: string[] = ['id', 'usuario', 'mail', 'permiso'];
+  // Configuración de la tabla - Eliminado 'id' de las columnas
+  displayedColumns: string[] = ['usuario', 'mail', 'permiso'];
   dataSource = new MatTableDataSource<Usuario>([]);
   isLoading: boolean = false;
 
@@ -129,6 +129,12 @@ export class AdministracionComponent implements OnInit {
   }
 
   actualizarPermiso(usuario: Usuario): void {
+    // Evitar la modificación del usuario con ID 1
+    if (usuario.id === 1) {
+      console.log('No se puede modificar el permiso del administrador principal (ID 1)');
+      return;
+    }
+
     console.log(`Actualizando permiso del usuario ${usuario.usuario} a ${usuario.permiso}`);
     this.administracionService.actualizarPermiso(usuario.id, usuario.permiso).subscribe({
       next: (resp) => {
@@ -150,11 +156,11 @@ export class AdministracionComponent implements OnInit {
     });
   }
 
-  // Helper para mostrar el nombre del permiso en la interfaz si es necesario
+  // Helper para mostrar el nombre del permiso en la interfaz - Actualizado
   obtenerNombrePermiso(permiso: string): string {
     switch (permiso) {
-      case '0': return 'Suspendida';
-      case '1': return 'Usuario';
+      case '0': return 'Ninguno';
+      case '1': return 'Normal';
       case '2': return 'Moderador';
       case '3': return 'Administrador';
       default: return 'Desconocido';

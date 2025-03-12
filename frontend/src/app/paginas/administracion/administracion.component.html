@@ -9,12 +9,6 @@
     <!-- Tabla de usuarios -->
     <div *ngIf="!isLoading" class="tabla-container">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
-        <!-- Columna ID -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef> ID </th>
-          <td mat-cell *matCellDef="let usuario"> {{usuario.id}} </td>
-        </ng-container>
-
         <!-- Columna Usuario -->
         <ng-container matColumnDef="usuario">
           <th mat-header-cell *matHeaderCellDef> Usuario </th>
@@ -30,9 +24,16 @@
         <ng-container matColumnDef="permiso">
           <th mat-header-cell *matHeaderCellDef> Permiso </th>
           <td mat-cell *matCellDef="let usuario">
-            <mat-select [(ngModel)]="usuario.permiso" (selectionChange)="actualizarPermiso(usuario)">
-              <mat-option value="0" title="Cuenta suspendida">Suspendida</mat-option>
-              <mat-option value="1" title="Usuario estándar">Usuario</mat-option>
+            <!-- Usuario ID 1: Mostrar como texto -->
+            <span *ngIf="usuario.id === 1" class="permiso-administrador-principal">
+              Administrador
+            </span>
+            
+            <!-- Otros usuarios: Mostrar selector -->
+            <mat-select *ngIf="usuario.id !== 1" [(ngModel)]="usuario.permiso" 
+                        (selectionChange)="actualizarPermiso(usuario)">
+              <mat-option value="0" title="Sin privilegios">Ninguno</mat-option>
+              <mat-option value="1" title="Usuario estándar">Normal</mat-option>
               <mat-option value="2" title="Permisos de moderación">Moderador</mat-option>
               <mat-option value="3" title="Permisos completos">Administrador</mat-option>
             </mat-select>
