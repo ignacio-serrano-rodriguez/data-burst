@@ -26,7 +26,6 @@ class UsuarioController extends AbstractController
         JWTTokenManagerInterface $JWTManager
     ) 
     {
-
         $datosRecibidos = json_decode($request->getContent(), true);
         $nombreUsuario = $datosRecibidos['usuario'];
         $contrasenia = $datosRecibidos['contrasenia'];
@@ -39,27 +38,32 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-                    "exito" => false,
-                    "mensaje" => "Inicio de sesión fallido.",
-                    'token' => ''
+                    'mensaje' => 'Usuario o contraseña incorrectos.'
                 ],
                 Response::HTTP_BAD_REQUEST
             );
         }
-
         else if (!password_verify($contrasenia, $usuario->getContrasenia())) 
         {
             $respuestaJson = new JsonResponse
             (
                 [
-                    "exito" => false,
-                    "mensaje" => "Inicio de sesión fallido.",
-                    'token' => ''
+                    'mensaje' => 'Usuario o contraseña incorrectos.'
                 ],
                 Response::HTTP_BAD_REQUEST
             );
         }
-
+        // Comprobar si el usuario tiene permiso 0 (cuenta bloqueada)
+        else if ($usuario->getPermiso() === 0 || $usuario->getPermiso() === "0")
+        {
+            $respuestaJson = new JsonResponse
+            (
+                [
+                    'mensaje' => 'Esta cuenta ha sido suspendida. Contacte con administración.'
+                ],
+                Response::HTTP_FORBIDDEN
+            );
+        }
         else 
         {
             $token = $JWTManager->create($usuario);
@@ -67,78 +71,26 @@ class UsuarioController extends AbstractController
             $respuestaJson = new JsonResponse
             (
                 [
-
-                    "exito" => true,
-                    "mensaje" => "Inicio de sesión exitoso.",
                     'token' => $token,
-
+                    'exito' => true,
+                    'mensaje' => 'Inicio de sesión exitoso.',
                     'id' => $usuario->getId(),
                     'mail' => $usuario->getMail(),
                     'usuario' => $usuario->getUsuario(),
-                    'verificado' => $usuario->isVerificado(),
-                    'nombre' => $usuario->getNombre(),
-                    'apellido_1' => $usuario->getApellido1(),
-                    'apellido_2' => $usuario->getApellido2(),
-                    'fechaNacimiento' => $usuario->getFechaNacimiento(),
-                    'pais' => $usuario->getPais(),
-                    'profesion' => $usuario->getProfesion(),
-                    'estudios' => $usuario->getEstudios(),
-                    'idioma' => $usuario->getIdioma(),
-                    'permiso' => $usuario->getPermiso()
-
+                    'verificado' => $usuario->isVerificado() ?? false,
+                    'nombre' => $usuario->getNombre() ?? '',
+                    'apellido_1' => $usuario->getApellido1() ?? '',
+                    'apellido_2' => $usuario->getApellido2() ?? '',
+                    'fechaNacimiento' => $usuario->getFechaNacimiento() ? $usuario->getFechaNacimiento()->format('Y-m-d') : '',
+                    'pais' => $usuario->getPais() ?? '',
+                    'profesion' => $usuario->getProfesion() ?? '',
+                    'estudios' => $usuario->getEstudios() ?? '',
+                    'idioma' => $usuario->getIdioma() ?? '',
+                    'permiso' => $usuario->getPermiso() ?? 1
                 ],
                 Response::HTTP_OK
             );
         }        
-
-        return $respuestaJson;
-    }
-
-    #[Route("/api/registro", name: "registro", methods: ["POST"])]
-    public function registro
-    (
-        Request $request, 
-        EntityManagerInterface $entityManager
-    )
-    {
-        $respuestaJson = null;
-        $datosRecibidos = json_decode($request->getContent(), true);
-
-        $nombreUsuario = $datosRecibidos['usuario'];
-        $mail = $datosRecibidos['mail'];
-        $contrasenia = $datosRecibidos['contrasenia'];
-
-        $usuario = new Usuario();
-        $usuario->setUsuario($nombreUsuario);
-        $usuario->setMail($mail);
-        $usuario->setContrasenia($contrasenia);
-
-        try 
-        {
-            $entityManager->persist($usuario);
-            $entityManager->flush();
-        
-            $respuestaJson = new JsonResponse
-            (
-                [
-                    "exito" => true,
-                    "mensaje" => "Usuario creado exitosamente."
-                ],
-                Response::HTTP_CREATED
-            );
-        } 
-        
-        catch (\Throwable $th) 
-        {
-            $respuestaJson = new JsonResponse
-            (
-                [
-                    "exito" => false,
-                    "mensaje" => "Registro fallido."
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
 
         return $respuestaJson;
     }

@@ -55,7 +55,7 @@ export class LoginComponent {
     this.accesoService.login(objeto).subscribe({
       next: (data) => {
         this.loading = false;
-        if (data.exito == true) {
+        if (data.exito) {
           let mensajeInformativo = document.getElementById("mensajeInformativo");
           if (mensajeInformativo) {
             mensajeInformativo.classList.remove("mensaje-error");
@@ -85,11 +85,20 @@ export class LoginComponent {
       },
       error: (error) => {
         this.loading = false;
+        let mensaje = "Error al iniciar sesión";
+
+        // Manejar respuesta de cuenta suspendida (código 403)
+        if (error.status === 403) {
+          mensaje = "Esta cuenta ha sido suspendida. Contacte con administración.";
+        } else if (error.error && error.error.mensaje) {
+          mensaje = error.error.mensaje;
+        }
+
         let mensajeInformativo = document.getElementById("mensajeInformativo");
         if (mensajeInformativo) {
           mensajeInformativo.classList.remove("mensaje-exito");
           mensajeInformativo.classList.add("mensaje-error");
-          mensajeInformativo.innerText = error.error.mensaje;
+          mensajeInformativo.innerText = mensaje;
         }
       }
     });
