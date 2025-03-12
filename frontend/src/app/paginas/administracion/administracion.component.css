@@ -1,41 +1,59 @@
 :host {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-#administracion-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-grow: 1;
+    display: block;
+    width: 100%;
+    position: relative;
+  }
+  
+  #administracion-container {
     padding: 16px;
-    max-width: 600px;
+    max-width: 1000px;
     margin: auto;
-}
-
-mat-card-title {
+  }
+  
+  mat-card-title {
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 16px;
-}
-
-mat-form-field {
+  }
+  
+  .full-width {
     width: 100%;
     margin-bottom: 16px;
-}
-
-button[type="submit"] {
-    display: block;
+  }
+  
+  /* Spinner de carga */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  /* Color personalizado para el spinner */
+  .spinner-color ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
+    stroke: #AE00CD;
+  }
+  
+  /* Contenedor de la tabla */
+  .tabla-container {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  
+  /* Estilos específicos de la tabla */
+  .tabla-container table {
     width: 100%;
+  }
+  
+  /* Contenedor para el paginador */
+  .paginador-centrado {
+    display: flex;
+    justify-content: center;
     margin-top: 16px;
-}
-
-.green-button {
-    background-color: #4CAF50 !important; /* Color verde */
-    color: white !important;
-}
-
-.green-button:hover {
-    background-color: #4CAF50 !important; /* Mantener el mismo color verde al pasar el cursor */
-}
+    margin-bottom: 16px;
+  }
+  
+  /* Estilos para la columna de permiso */
+  .mat-column-permiso {
+    width: 150px;
+  }

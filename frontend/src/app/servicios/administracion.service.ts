@@ -15,6 +15,12 @@ export interface RespuestaObtenerUsuarios {
     error?: string;
 }
 
+export interface RespuestaActualizarPermiso {
+    exito: boolean;
+    mensaje?: string;
+    error?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdministracionService {
     private http = inject(HttpClient);
@@ -24,6 +30,15 @@ export class AdministracionService {
         return this.http.post<RespuestaObtenerUsuarios>(
             `${this.api}/obtener-usuarios`,
             {}
+        ).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    actualizarPermiso(usuarioId: number, permiso: string): Observable<RespuestaActualizarPermiso> {
+        return this.http.post<RespuestaActualizarPermiso>(
+            `${this.api}/actualizar-permiso`,
+            { usuarioId, permiso }
         ).pipe(
             catchError(this.handleError)
         );

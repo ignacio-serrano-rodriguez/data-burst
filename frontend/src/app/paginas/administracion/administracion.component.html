@@ -1,43 +1,60 @@
 <mat-card id="administracion-container">
   <mat-card-title>Administración de Usuarios</mat-card-title>
   <mat-card-content>
-    <form>
-      
-      <!-- Campo con autocomplete para seleccionar un usuario -->
-      <mat-form-field appearance="fill">
-        <mat-label>Seleccionar Usuario</mat-label>
-        <!-- Vinculamos el form control y el autocomplete -->
-        <input
-          matInput
-          [matAutocomplete]="auto"
-          [formControl]="usuarioControl"
-          placeholder="Nombre de usuario"
-        />
+    <!-- Spinner de carga -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <mat-spinner diameter="40" class="spinner-color"></mat-spinner>
+    </div>
 
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option
-            *ngFor="let usuario of usuariosFiltrados$ | async"
-            [value]="usuario.usuario"
-          >
-            {{ usuario.usuario }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
+    <!-- Tabla de usuarios -->
+    <div *ngIf="!isLoading" class="tabla-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
+        <!-- Columna ID -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let usuario"> {{usuario.id}} </td>
+        </ng-container>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Tipo de Cuenta</mat-label>
-        <mat-select>
-          <mat-option value="suspensa">Suspensa</mat-option>
-          <mat-option value="usuario">Usuario</mat-option>
-          <mat-option value="moderador">Moderador</mat-option>
-          <mat-option value="administrador">Administrador</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <!-- Columna Usuario -->
+        <ng-container matColumnDef="usuario">
+          <th mat-header-cell *matHeaderCellDef> Usuario </th>
+          <td mat-cell *matCellDef="let usuario"> {{usuario.usuario}} </td>
+        </ng-container>
 
-      <button mat-raised-button type="submit" class="green-button">
-        Guardar Cambios
-      </button>
+        <!-- Columna Email -->
+        <ng-container matColumnDef="mail">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let usuario"> {{usuario.mail}} </td>
+        </ng-container>
 
-    </form>
+        <ng-container matColumnDef="permiso">
+          <th mat-header-cell *matHeaderCellDef> Permiso </th>
+          <td mat-cell *matCellDef="let usuario">
+            <mat-select [(ngModel)]="usuario.permiso" (selectionChange)="actualizarPermiso(usuario)">
+              <mat-option value="0" title="Cuenta suspendida">Suspendida</mat-option>
+              <mat-option value="1" title="Usuario estándar">Usuario</mat-option>
+              <mat-option value="2" title="Permisos de moderación">Moderador</mat-option>
+              <mat-option value="3" title="Permisos completos">Administrador</mat-option>
+            </mat-select>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <!-- Paginador con clases personalizadas -->
+      <div class="paginador-centrado">
+        <mat-paginator 
+          [length]="totalItems"
+          [pageSize]="10"
+          [hidePageSize]="true"
+          [pageIndex]="pageIndex"
+          (page)="handlePageEvent($event)"
+          showFirstLastButtons
+          aria-label="Navegar entre páginas">
+        </mat-paginator>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>

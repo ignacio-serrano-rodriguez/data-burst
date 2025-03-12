@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -6,40 +6,52 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { AdministracionService, RespuestaObtenerUsuarios } from '../../servicios/administracion.service';
+import { CommonModule } from '@angular/common';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormsModule } from '@angular/forms';
 
-// Importamos para Reactive Forms y autocomplete
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { CommonModule } from '@angular/common'; // Importar CommonModule para usar el pipe async
-import { Observable, startWith, map } from 'rxjs';
+interface Usuario {
+  id: number;
+  usuario: string;
+  mail: string | null;
+  permiso: string;
+}
 
 @Component({
   selector: 'app-administracion',
   standalone: true,
   imports: [
-    CommonModule, // Asegurarse de importar CommonModule
+    CommonModule,
+    FormsModule, // ¡Añadido FormsModule para ngModel!
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
     MatCardModule,
     MatButtonModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './administracion.component.html',
   styleUrls: ['./administracion.component.css']
 })
 export class AdministracionComponent implements OnInit {
+  // Configuración de la tabla
+  displayedColumns: string[] = ['id', 'usuario', 'mail', 'permiso'];
+  dataSource = new MatTableDataSource<Usuario>([]);
+  isLoading: boolean = false;
 
-  // Control para el input de usuario
-  usuarioControl = new FormControl('');
+  // Propiedades para paginación
+  totalItems: number = 0;
+  pageSize: number = 10;
+  pageIndex: number = 0;
 
-  // Lista completa de usuarios
-  usuarios: { id: number; usuario: string; mail: string | null; permiso: string | null }[] = [];
+  // Para la paginación manual
+  usuariosFiltrados: Usuario[] = [];
 
-  // Lista filtrada que se vinculará al autocomplete
-  usuariosFiltrados$: Observable<{ id: number; usuario: string; mail: string | null; permiso: string | null }[]>
-    = new Observable();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private router: Router,
@@ -47,36 +59,105 @@ export class AdministracionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Verificación de permisos, sin cambios
+    // Verificación de permisos
     if (typeof localStorage !== 'undefined') {
       const permiso = localStorage.getItem('permiso');
       if (permiso !== "3") {
         this.router.navigate(['home']);
+        return;
       }
     } else {
       this.router.navigate(['home']);
+      return;
     }
 
-    // Cargar lista de usuarios al iniciar
+    // Cargar datos de usuarios
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios(): void {
+    this.isLoading = true;
+
     this.administracionService.obtenerUsuarios().subscribe({
       next: (resp: RespuestaObtenerUsuarios) => {
-        if (resp.exito) {
-          this.usuarios = resp.usuarios ?? [];
-          // Configurar el filtro para el autocomplete
-          this.usuariosFiltrados$ = this.usuarioControl.valueChanges.pipe(
-            startWith(''),
-            map(valor => this.filtrarUsuarios(valor))
-          );
+        if (resp.exito && resp.usuarios) {
+          // Normalizar datos para asegurar que todos los permisos sean strings
+          const usuariosNormalizados = resp.usuarios.map(usuario => ({
+            ...usuario,
+            permiso: usuario.permiso !== null ? String(usuario.permiso) : '1' // Default a usuario normal si es null
+          }));
+
+          // Guardar todos los usuarios para paginación manual
+          this.usuariosFiltrados = [...usuariosNormalizados];
+          this.totalItems = usuariosNormalizados.length;
+
+          // Actualizar la vista con la página actual
+          this.actualizarVistaPaginacion();
+
+          // Actualizar paginador
+          setTimeout(() => {
+            if (this.paginator) {
+              this.paginator.pageIndex = this.pageIndex;
+              this.paginator._changePageSize(this.pageSize);
+            }
+            this.isLoading = false;
+          }, 0);
+        } else {
+          this.isLoading = false;
         }
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error al cargar usuarios:', err);
+        this.isLoading = false;
       }
     });
   }
 
-  private filtrarUsuarios(texto: string | null): typeof this.usuarios {
-    const filtro = (texto ?? '').toLowerCase();
-    return this.usuarios.filter((u) => u.usuario.toLowerCase().includes(filtro));
+  actualizarVistaPaginacion(): void {
+    const inicio = this.pageIndex * this.pageSize;
+    const fin = inicio + this.pageSize;
+    this.dataSource.data = this.usuariosFiltrados.slice(inicio, fin);
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    console.log('Evento de paginación:', event);
+    this.pageIndex = event.pageIndex;
+    this.pageSize = 10; // Mantener fijo a 10 elementos por página
+
+    // Actualizar datos para la página actual
+    this.actualizarVistaPaginacion();
+  }
+
+  actualizarPermiso(usuario: Usuario): void {
+    console.log(`Actualizando permiso del usuario ${usuario.usuario} a ${usuario.permiso}`);
+    this.administracionService.actualizarPermiso(usuario.id, usuario.permiso).subscribe({
+      next: (resp) => {
+        if (resp.exito) {
+          // También actualizar en el array de usuariosFiltrados para mantener coherencia
+          const usuarioEnArray = this.usuariosFiltrados.find(u => u.id === usuario.id);
+          if (usuarioEnArray) {
+            usuarioEnArray.permiso = usuario.permiso;
+          }
+
+          console.log('Permiso actualizado correctamente');
+        } else {
+          console.error('Error al actualizar permiso:', resp.error);
+        }
+      },
+      error: (err) => {
+        console.error('Error al actualizar permiso:', err);
+      }
+    });
+  }
+
+  // Helper para mostrar el nombre del permiso en la interfaz si es necesario
+  obtenerNombrePermiso(permiso: string): string {
+    switch (permiso) {
+      case '0': return 'Suspendida';
+      case '1': return 'Usuario';
+      case '2': return 'Moderador';
+      case '3': return 'Administrador';
+      default: return 'Desconocido';
+    }
   }
 }

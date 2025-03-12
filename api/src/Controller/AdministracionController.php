@@ -40,4 +40,42 @@ class AdministracionController extends AbstractController
             ]);
         }
     }
+
+    #[Route("/api/actualizar-permiso", name: "actualizar_permiso", methods: ["POST"])]
+    public function actualizarPermiso(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $datos = json_decode($request->getContent(), true);
+            $usuarioId = $datos['usuarioId'] ?? null;
+            $permiso = $datos['permiso'] ?? null;
+
+            if (!$usuarioId || $permiso === null) {
+                return new JsonResponse([
+                    'exito' => false,
+                    'error' => 'Datos incompletos'
+                ]);
+            }
+
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
+            if (!$usuario) {
+                return new JsonResponse([
+                    'exito' => false,
+                    'error' => 'Usuario no encontrado'
+                ]);
+            }
+
+            $usuario->setPermiso($permiso);
+            $entityManager->flush();
+
+            return new JsonResponse([
+                'exito' => true,
+                'mensaje' => 'Permiso actualizado correctamente'
+            ]);
+        } catch (\Throwable $th) {
+            return new JsonResponse([
+                'exito' => false,
+                'error' => $th->getMessage()
+            ]);
+        }
+    }
 }
