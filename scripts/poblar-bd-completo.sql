@@ -116,51 +116,127 @@ VALUES
 ('Videojuegos'),
 ('Lo mejor del 2023'),
 ('Para ver este fin de semana'),
-('Recomendaciones para principiantes');
+('Recomendaciones para principiantes'),
+('Clásicos literarios'),
+('Ciencia ficción y fantasía'),
+('Literatura latinoamericana'),
+('Novela histórica'),
+('Literatura contemporánea'),
+('Libros de no ficción'),
+('Mis favoritos de todos los tiempos'),
+('Lecturas pendientes'),
+('Libros para el verano'),
+('Lecturas académicas'),
+('Novela negra y thrillers'),
+('Recomendados por amigos'),
+('Libros premiados');
 
--- Insertar relaciones lista_contiene_elemento
+-- Insertar usuario_manipula_lista (asignar listas a usuarios)
+INSERT INTO usuario_manipula_lista (usuario_id, lista_id, publica, momento_manipulacion)
+VALUES 
+(3, 1, 1, '2023-03-10 09:30:00'),
+(3, 2, 1, '2023-03-10 09:35:00'),
+(4, 3, 1, '2023-03-11 14:20:00'),
+(5, 4, 0, '2023-03-12 16:45:00'),
+(6, 5, 1, '2023-03-13 11:15:00'),
+(7, 6, 0, '2023-03-14 18:30:00'),
+(4, 7, 1, '2023-03-15 10:10:00'),
+(8, 8, 1, '2023-03-16 11:20:00'),
+(9, 9, 1, '2023-03-17 14:45:00'),
+(10, 10, 1, '2023-03-18 09:30:00'),
+(11, 11, 1, '2023-03-19 16:15:00'),
+(12, 12, 1, '2023-03-20 13:50:00'),
+(13, 13, 0, '2023-03-21 10:25:00'),
+(14, 14, 1, '2023-03-22 15:40:00'),
+(15, 15, 0, '2023-03-23 12:10:00'),
+(16, 16, 1, '2023-03-24 09:55:00'),
+(17, 17, 1, '2023-03-25 17:30:00'),
+(18, 18, 1, '2023-03-26 14:15:00'),
+(19, 19, 0, '2023-03-27 11:40:00'),
+(20, 20, 1, '2023-03-28 16:05:00');
+
+-- Insertar relaciones lista_contiene_elemento para distribuir los libros en diferentes listas
 INSERT INTO lista_contiene_elemento (lista_id, elemento_id, momento_contencion)
 VALUES 
--- Lista 3 (Libros) - Contiene los libros que acabamos de insertar (IDs 11-40)
-(3, 11, '2023-04-14 10:00:00'),
-(3, 12, '2023-04-14 10:01:00'),
-(3, 13, '2023-04-14 10:02:00'),
-(3, 14, '2023-04-14 10:03:00'),
-(3, 15, '2023-04-14 10:04:00'),
-(3, 16, '2023-04-14 10:05:00'),
-(3, 17, '2023-04-14 10:06:00'),
-(3, 18, '2023-04-14 10:07:00'),
-(3, 19, '2023-04-14 10:08:00'),
-(3, 20, '2023-04-14 10:09:00'),
-(3, 21, '2023-04-14 10:10:00'),
-(3, 22, '2023-04-14 10:11:00'),
-(3, 23, '2023-04-14 10:12:00'),
-(3, 24, '2023-04-14 10:13:00'),
-(3, 25, '2023-04-14 10:14:00'),
-(3, 26, '2023-04-14 10:15:00'),
-(3, 27, '2023-04-14 10:16:00'),
-(3, 28, '2023-04-14 10:17:00'),
-(3, 29, '2023-04-14 10:18:00'),
-(3, 30, '2023-04-14 10:19:00'),
-(3, 31, '2023-04-14 10:20:00'),
-(3, 32, '2023-04-14 10:21:00'),
-(3, 33, '2023-04-14 10:22:00'),
-(3, 34, '2023-04-14 10:23:00'),
-(3, 35, '2023-04-14 10:24:00'),
-(3, 36, '2023-04-14 10:25:00'),
-(3, 37, '2023-04-14 10:26:00'),
-(3, 38, '2023-04-14 10:27:00'),
-(3, 39, '2023-04-14 10:28:00'),
-(3, 40, '2023-04-14 10:29:00'),
-
--- Otras relaciones de listas y elementos
+-- Lista 1 (Series) - Contiene elementos originales
 (1, 1, '2023-03-01 10:15:00'),
 (1, 3, '2023-03-01 10:16:00'),
 (1, 7, '2023-03-01 10:17:00'),
+
+-- Lista 2 (Películas) - Contiene elementos originales
 (2, 2, '2023-03-02 15:30:00'),
 (2, 9, '2023-03-02 15:31:00'),
-(3, 4, '2023-03-03 09:20:00'),
-(3, 8, '2023-03-03 09:21:00'),
+
+-- Distribuir los libros clásicos en la lista "Clásicos literarios" (lista 8)
+(8, 11, '2023-04-14 10:00:00'),
+(8, 12, '2023-04-14 10:01:00'),
+(8, 13, '2023-04-14 10:02:00'),
+(8, 14, '2023-04-14 10:03:00'),
+(8, 15, '2023-04-14 10:04:00'),
+
+-- Distribuir los libros contemporáneos en la lista "Literatura contemporánea" (lista 12)
+(12, 16, '2023-04-14 10:05:00'),
+(12, 17, '2023-04-14 10:06:00'),
+(12, 18, '2023-04-14 10:07:00'),
+(12, 19, '2023-04-14 10:08:00'),
+(12, 20, '2023-04-14 10:09:00'),
+
+-- Distribuir los libros de ciencia ficción y fantasía en su lista correspondiente (lista 9)
+(9, 21, '2023-04-14 10:10:00'),
+(9, 22, '2023-04-14 10:11:00'),
+(9, 23, '2023-04-14 10:12:00'),
+(9, 24, '2023-04-14 10:13:00'),
+(9, 25, '2023-04-14 10:14:00'),
+
+-- Distribuir los libros no ficción en la lista "Libros de no ficción" (lista 13)
+(13, 26, '2023-04-14 10:15:00'),
+(13, 27, '2023-04-14 10:16:00'),
+(13, 28, '2023-04-14 10:17:00'),
+(13, 29, '2023-04-14 10:18:00'),
+(13, 30, '2023-04-14 10:19:00'),
+
+-- Distribuir la literatura latinoamericana en su lista correspondiente (lista 10)
+(10, 31, '2023-04-14 10:20:00'),
+(10, 32, '2023-04-14 10:21:00'),
+(10, 33, '2023-04-14 10:22:00'),
+(10, 34, '2023-04-14 10:23:00'),
+(10, 35, '2023-04-14 10:24:00'),
+
+-- Distribuir bestsellers en la lista "Libros premiados" (lista 20)
+(20, 36, '2023-04-14 10:25:00'),
+(20, 37, '2023-04-14 10:26:00'),
+(20, 38, '2023-04-14 10:27:00'),
+(20, 39, '2023-04-14 10:28:00'),
+(20, 40, '2023-04-14 10:29:00'),
+
+-- Mezclar algunos libros en "Mis favoritos de todos los tiempos" (lista 14)
+(14, 11, '2023-04-15 09:00:00'),
+(14, 16, '2023-04-15 09:01:00'),
+(14, 21, '2023-04-15 09:02:00'),
+(14, 31, '2023-04-15 09:03:00'),
+(14, 36, '2023-04-15 09:04:00'),
+
+-- Añadir algunos a "Lecturas pendientes" (lista 15)
+(15, 12, '2023-04-16 11:30:00'),
+(15, 17, '2023-04-16 11:31:00'),
+(15, 22, '2023-04-16 11:32:00'),
+(15, 27, '2023-04-16 11:33:00'),
+(15, 32, '2023-04-16 11:34:00'),
+(15, 37, '2023-04-16 11:35:00'),
+
+-- Añadir algunos a "Libros para el verano" (lista 16)
+(16, 13, '2023-04-17 14:15:00'),
+(16, 18, '2023-04-17 14:16:00'),
+(16, 23, '2023-04-17 14:17:00'),
+(16, 33, '2023-04-17 14:18:00'),
+(16, 38, '2023-04-17 14:19:00'),
+
+-- Añadir algunos a "Novela negra y thrillers" (lista 18)
+(18, 14, '2023-04-18 16:45:00'),
+(18, 37, '2023-04-18 16:46:00'),
+(18, 40, '2023-04-18 16:47:00'),
+
+-- Otras relaciones originales
 (4, 5, '2023-03-04 14:10:00'),
 (4, 10, '2023-03-04 14:11:00'),
 (5, 1, '2023-03-05 11:45:00'),
@@ -171,17 +247,6 @@ VALUES
 (7, 8, '2023-03-07 12:20:00'),
 (7, 3, '2023-03-07 12:21:00');
 
--- Insertar usuario_manipula_lista
-INSERT INTO usuario_manipula_lista (usuario_id, lista_id, publica, momento_manipulacion)
-VALUES 
-(3, 1, 1, '2023-03-10 09:30:00'),
-(3, 2, 1, '2023-03-10 09:35:00'),
-(4, 3, 1, '2023-03-11 14:20:00'),
-(5, 4, 0, '2023-03-12 16:45:00'),
-(6, 5, 1, '2023-03-13 11:15:00'),
-(7, 6, 0, '2023-03-14 18:30:00'),
-(4, 7, 1, '2023-03-15 10:10:00');
-
 -- Insertar usuario_agrega_usuario (amistades)
 INSERT INTO usuario_agrega_usuario (usuario_1_id, usuario_2_id, momento_agregacion)
 VALUES 
@@ -191,22 +256,57 @@ VALUES
 (4, 6, '2023-04-04 11:30:00'),
 (5, 7, '2023-04-05 16:20:00'),
 (6, 7, '2023-04-06 13:15:00'),
-(3, 6, '2023-04-07 10:10:00');
+(3, 6, '2023-04-07 10:10:00'),
+(8, 9, '2023-04-08 09:30:00'),
+(9, 10, '2023-04-08 11:45:00'),
+(10, 11, '2023-04-08 14:20:00'),
+(11, 12, '2023-04-08 16:35:00'),
+(12, 13, '2023-04-09 10:15:00'),
+(13, 14, '2023-04-09 13:40:00'),
+(14, 15, '2023-04-09 15:55:00');
 
--- Insertar comentarios de usuarios sobre elementos
+-- Insertar comentarios de usuarios sobre elementos (especialmente sobre libros)
 INSERT INTO usuario_elemento_comentario (usuario_id, elemento_id, comentario, momento_comentario)
 VALUES 
+-- Comentarios originales
 (3, 2, '¡Una obra maestra del cine! La actuación de Marlon Brando es insuperable.', '2023-05-01 14:30:00'),
 (4, 1, 'La mejor serie que he visto en mi vida. Bryan Cranston merece todos los premios.', '2023-05-02 16:45:00'),
 (5, 3, 'Un clásico que nunca pasa de moda, sigo viéndolo después de tantos años.', '2023-05-03 10:20:00'),
 (6, 5, 'La libertad y el mundo abierto que ofrece este juego es increíble. Nintendo se superó.', '2023-05-04 19:15:00'),
 (7, 4, 'Libro que te hace reflexionar sobre la libertad y el poder. Muy actual a pesar de ser de 1949.', '2023-05-05 12:30:00'),
-(3, 7, 'La nostalgia de los 80 está muy bien representada, y la trama es adictiva.', '2023-05-06 15:40:00'),
-(4, 9, 'Los efectos especiales siguen siendo impresionantes incluso hoy. Peter Jackson hizo un trabajo excepcional.', '2023-05-07 11:25:00');
 
--- Insertar valoraciones positivas/negativas
+-- Comentarios sobre libros clásicos
+(8, 11, 'Una obra maestra del realismo mágico. La forma en que García Márquez construye Macondo es fascinante.', '2023-05-10 09:15:00'),
+(9, 12, 'El mejor libro de la literatura española. La relación entre Don Quijote y Sancho es inigualable.', '2023-05-10 11:30:00'),
+(10, 13, 'Jane Austen retrata perfectamente la sociedad de su época. Elizabeth Bennet es un personaje adelantado a su tiempo.', '2023-05-10 14:45:00'),
+(11, 14, 'La exploración psicológica de Raskolnikov es increíblemente profunda. Dostoievski era un genio.', '2023-05-10 17:00:00'),
+(12, 15, 'Un retrato perfecto de los excesos de los años 20 y la decadencia del sueño americano.', '2023-05-10 19:15:00'),
+
+-- Comentarios sobre literatura contemporánea
+(13, 16, 'Un thriller literario con Barcelona como protagonista. La prosa de Ruiz Zafón es adictiva.', '2023-05-11 10:00:00'),
+(14, 17, 'Una distopía sutil y desgarradora. La forma en que Ishiguro revela la verdad poco a poco es magistral.', '2023-05-11 12:15:00'),
+(15, 18, 'McCarthy escribe el apocalipsis como nadie. La relación padre-hijo es el corazón de esta historia desoladora.', '2023-05-11 14:30:00'),
+(16, 19, 'La construcción del mundo y el sistema de magia son fascinantes. Estoy esperando ansiosamente la tercera parte.', '2023-05-11 16:45:00'),
+(17, 20, 'Bolaño revolucionó la literatura latinoamericana con esta novela. Su estructura es innovadora.', '2023-05-11 19:00:00'),
+
+-- Comentarios sobre ciencia ficción y fantasía
+(18, 21, 'El worldbuilding de Herbert es inigualable. Los conceptos religiosos y políticos están muy bien desarrollados.', '2023-05-12 09:30:00'),
+(19, 22, 'Gibson prácticamente inventó el cyberpunk con esta novela. Su visión del futuro sigue siendo relevante.', '2023-05-12 11:45:00'),
+(20, 23, 'Asimov era un visionario. Su concepto de psicohistoria es fascinante y la caída del imperio está muy bien construida.', '2023-05-12 14:00:00'),
+(21, 24, 'Martin subvierte todas las expectativas del género de fantasía. Nadie está a salvo en esta saga.', '2023-05-12 16:15:00'),
+(22, 25, 'La mitología creada por Tolkien es increíblemente detallada. Este libro es la base de todo El Señor de los Anillos.', '2023-05-12 18:30:00'),
+
+-- Comentarios sobre libros de no ficción
+(23, 26, 'Harari tiene una forma fascinante de explicar la historia y evolución humana. Muy revelador.', '2023-05-13 10:45:00'),
+(24, 27, 'Un ensayo bellísimo sobre la historia de los libros. La erudición de Vallejo es impresionante.', '2023-05-13 13:00:00'),
+(25, 28, 'Kahneman explica perfectamente cómo funciona nuestra mente y por qué tomamos decisiones irracionales.', '2023-05-13 15:15:00'),
+(26, 29, 'Un documento histórico esencial para entender la posguerra española. Las historias son desgarradoras.', '2023-05-13 17:30:00'),
+(27, 30, 'Dawkins revolucionó la forma de entender la evolución. Su tesis sigue siendo relevante hoy en día.', '2023-05-13 19:45:00');
+
+-- Insertar valoraciones positivas/negativas sobre elementos (especialmente sobre libros)
 INSERT INTO usuario_elemento_positivo (usuario_id, elemento_id, positivo, momento_positivo)
 VALUES 
+-- Valoraciones originales
 (3, 1, 1, '2023-06-01 10:15:00'),
 (3, 2, 1, '2023-06-01 10:16:00'),
 (4, 1, 1, '2023-06-02 14:30:00'),
@@ -216,28 +316,128 @@ VALUES
 (6, 5, 1, '2023-06-04 16:40:00'),
 (6, 9, 1, '2023-06-04 16:41:00'),
 (7, 7, 1, '2023-06-05 12:15:00'),
-(7, 10, 0, '2023-06-05 12:16:00');
+(7, 10, 0, '2023-06-05 12:16:00'),
+
+-- Valoraciones para libros clásicos
+(8, 11, 1, '2023-06-10 09:00:00'),
+(9, 11, 1, '2023-06-10 09:01:00'),
+(10, 11, 1, '2023-06-10 09:02:00'),
+(11, 11, 1, '2023-06-10 09:03:00'),
+(12, 11, 0, '2023-06-10 09:04:00'),
+(8, 12, 1, '2023-06-10 09:05:00'),
+(9, 12, 1, '2023-06-10 09:06:00'),
+(10, 12, 0, '2023-06-10 09:07:00'),
+(11, 13, 1, '2023-06-10 09:08:00'),
+(12, 13, 1, '2023-06-10 09:09:00'),
+(8, 14, 1, '2023-06-10 09:10:00'),
+(9, 14, 0, '2023-06-10 09:11:00'),
+(10, 15, 1, '2023-06-10 09:12:00'),
+(11, 15, 1, '2023-06-10 09:13:00'),
+
+-- Valoraciones para literatura contemporánea
+(12, 16, 1, '2023-06-11 10:00:00'),
+(13, 16, 1, '2023-06-11 10:01:00'),
+(14, 16, 1, '2023-06-11 10:02:00'),
+(15, 16, 0, '2023-06-11 10:03:00'),
+(12, 17, 1, '2023-06-11 10:04:00'),
+(13, 17, 1, '2023-06-11 10:05:00'),
+(14, 18, 0, '2023-06-11 10:06:00'),
+(15, 18, 1, '2023-06-11 10:07:00'),
+(12, 19, 1, '2023-06-11 10:08:00'),
+(13, 20, 1, '2023-06-11 10:09:00'),
+(14, 20, 0, '2023-06-11 10:10:00'),
+
+-- Valoraciones para ciencia ficción y fantasía
+(15, 21, 1, '2023-06-12 11:00:00'),
+(16, 21, 1, '2023-06-12 11:01:00'),
+(17, 21, 1, '2023-06-12 11:02:00'),
+(18, 21, 0, '2023-06-12 11:03:00'),
+(15, 22, 1, '2023-06-12 11:04:00'),
+(16, 23, 1, '2023-06-12 11:05:00'),
+(17, 23, 0, '2023-06-12 11:06:00'),
+(18, 24, 1, '2023-06-12 11:07:00'),
+(19, 24, 1, '2023-06-12 11:08:00'),
+(20, 24, 1, '2023-06-12 11:09:00'),
+(21, 24, 1, '2023-06-12 11:10:00'),
+(22, 24, 0, '2023-06-12 11:11:00'),
+(19, 25, 1, '2023-06-12 11:12:00'),
+
+-- Valoraciones para libros de no ficción
+(20, 26, 1, '2023-06-13 12:00:00'),
+(21, 26, 1, '2023-06-13 12:01:00'),
+(22, 26, 1, '2023-06-13 12:02:00'),
+(23, 26, 0, '2023-06-13 12:03:00'),
+(20, 27, 1, '2023-06-13 12:04:00'),
+(21, 28, 1, '2023-06-13 12:05:00'),
+(22, 28, 1, '2023-06-13 12:06:00'),
+(23, 28, 1, '2023-06-13 12:07:00'),
+(24, 29, 0, '2023-06-13 12:08:00'),
+(25, 29, 0, '2023-06-13 12:09:00'),
+(24, 30, 1, '2023-06-13 12:10:00'),
+(25, 30, 1, '2023-06-13 12:11:00'),
+
+-- Valoraciones para literatura latinoamericana
+(23, 31, 1, '2023-06-14 13:00:00'),
+(24, 31, 1, '2023-06-14 13:01:00'),
+(25, 31, 1, '2023-06-14 13:02:00'),
+(26, 31, 1, '2023-06-14 13:03:00'),
+(27, 31, 0, '2023-06-14 13:04:00'),
+(23, 32, 1, '2023-06-14 13:05:00'),
+(24, 33, 1, '2023-06-14 13:06:00'),
+(25, 34, 1, '2023-06-14 13:07:00'),
+(26, 34, 1, '2023-06-14 13:08:00'),
+(27, 34, 1, '2023-06-14 13:09:00'),
+(23, 35, 0, '2023-06-14 13:10:00'),
+
+-- Valoraciones para bestsellers
+(24, 36, 1, '2023-06-15 14:00:00'),
+(25, 36, 1, '2023-06-15 14:01:00'),
+(26, 36, 1, '2023-06-15 14:02:00'),
+(27, 36, 1, '2023-06-15 14:03:00'),
+(28, 36, 0, '2023-06-15 14:04:00'),
+(24, 37, 1, '2023-06-15 14:05:00'),
+(25, 37, 0, '2023-06-15 14:06:00'),
+(26, 38, 1, '2023-06-15 14:07:00'),
+(27, 38, 1, '2023-06-15 14:08:00'),
+(28, 39, 1, '2023-06-15 14:09:00'),
+(24, 39, 1, '2023-06-15 14:10:00'),
+(25, 40, 1, '2023-06-15 14:11:00'),
+(26, 40, 1, '2023-06-15 14:12:00'),
+(27, 40, 0, '2023-06-15 14:13:00');
 
 -- Insertar reportes de elementos
 INSERT INTO usuario_reporta_elemento (usuario_id, elemento_id, descripcion, momento_reporte)
 VALUES 
 (4, 2, 'Contiene información incorrecta sobre el año de estreno.', '2023-07-01 14:20:00'),
 (6, 3, 'La descripción tiene errores ortográficos.', '2023-07-02 16:30:00'),
-(7, 5, 'Hay un error en el nombre del desarrollador del juego.', '2023-07-03 10:15:00');
+(7, 5, 'Hay un error en el nombre del desarrollador del juego.', '2023-07-03 10:15:00'),
+(9, 11, 'La fecha de publicación es incorrecta.', '2023-07-04 09:30:00'),
+(12, 16, 'Hay un error en el nombre del autor.', '2023-07-05 11:45:00'),
+(15, 21, 'La información sobre la saga está incompleta.', '2023-07-06 14:00:00'),
+(18, 26, 'La descripción tiene información imprecisa sobre las teorías del autor.', '2023-07-07 16:15:00'),
+(21, 31, 'Hay un error en el país de origen del autor.', '2023-07-08 10:30:00'),
+(24, 36, 'La descripción contiene spoilers importantes sin advertencia.', '2023-07-09 13:45:00');
 
 -- Insertar gestiones de elementos por administradores
 INSERT INTO usuario_gestiona_elemento (usuario_administrador_id, elemento_id, momento_gestion, nombre_antiguo, fecha_aparicion_antigua, informacion_extra_antigua, descripcion_antigua)
 VALUES 
 (1, 2, '2023-08-01 09:30:00', 'El Padrino (The Godfather)', '1972-03-15', 'Película de crimen', 'La historia de la familia Corleone y su papel en la mafia americana.'),
 (2, 4, '2023-08-02 11:45:00', '1984 - George Orwell', '1949-06-08', 'Novela', 'Novela distópica sobre un futuro totalitario.'),
-(1, 7, '2023-08-03 14:20:00', 'Stranger Things - Netflix', '2016-07-15', 'Serie TV', 'Serie de Netflix sobre fenómenos sobrenaturales en un pequeño pueblo.'); 
+(1, 7, '2023-08-03 14:20:00', 'Stranger Things - Netflix', '2016-07-15', 'Serie TV', 'Serie de Netflix sobre fenómenos sobrenaturales en un pequeño pueblo.'),
+(1, 11, '2023-08-04 10:00:00', 'Cien años de soledad - Gabriel García Márquez', '1967-05-30', 'Novela', 'Historia de la familia Buendía en el pueblo de Macondo.'),
+(2, 21, '2023-08-05 15:30:00', 'Dune - Frank Herbert', '1965-08-01', 'Novela de ciencia ficción', 'Historia sobre el planeta desértico Arrakis y la especia melange.'),
+(1, 31, '2023-08-06 13:15:00', 'Pedro Páramo - Juan Rulfo', '1955-03-01', 'Novela', 'Historia de Juan Preciado buscando a su padre en Comala.');
 
 -- Insertar gestiones de usuarios por administradores
 INSERT INTO usuario_gestiona_usuario (usuario_normal_id, usuario_administrador_id, permiso_antiguo, momento_gestion)
 VALUES 
 (3, 1, 1, '2023-09-01 10:30:00'),
 (4, 1, 1, '2023-09-02 14:15:00'),
-(5, 2, 1, '2023-09-03 16:20:00');
+(5, 2, 1, '2023-09-03 16:20:00'),
+(10, 1, 1, '2023-09-04 09:45:00'),
+(15, 2, 1, '2023-09-05 11:30:00'),
+(20, 1, 1, '2023-09-06 14:00:00'),
+(25, 2, 1, '2023-09-07 16:45:00');
 
 -- Insertar invitaciones a listas
 INSERT INTO invitacion (invitador_id, invitado_id, lista_id)
@@ -247,4 +447,12 @@ VALUES
 (4, 6, 3),
 (5, 7, 4),
 (6, 3, 5),
-(7, 4, 6);
+(7, 4, 6),
+(8, 9, 8),
+(9, 10, 9),
+(10, 11, 10),
+(11, 12, 11),
+(12, 13, 12),
+(13, 14, 13),
+(14, 15, 14),
+(15, 16, 15);
