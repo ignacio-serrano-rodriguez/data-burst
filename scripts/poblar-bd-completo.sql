@@ -538,30 +538,21 @@ INSERT INTO lista_categoria (lista_id, categoria_id, momento_asignacion) VALUES
 
 -- Clásicos literarios
 (8, 1, '2023-03-16 11:21:00'),  -- Libros
-(8, 12, '2023-03-16 11:22:00'), -- Clásicos
 
 -- Ciencia ficción y fantasía
 (9, 1, '2023-03-17 14:46:00'),  -- Libros
-(9, 13, '2023-03-17 14:47:00'), -- Ciencia ficción
-(9, 14, '2023-03-17 14:48:00'), -- Fantasía
 
 -- Literatura latinoamericana
 (10, 1, '2023-03-18 09:31:00'), -- Libros
-(10, 16, '2023-03-18 09:32:00'),-- Literatura latinoamericana
 
 -- Novela histórica
 (11, 1, '2023-03-19 16:16:00'), -- Libros
-(11, 17, '2023-03-19 16:17:00'),-- Novela histórica
 
 -- Literatura contemporánea
 (12, 1, '2023-03-20 13:51:00'), -- Libros
-(12, 15, '2023-03-20 13:52:00'),-- Literatura contemporánea
 
 -- Libros de no ficción
 (13, 1, '2023-03-21 10:26:00'), -- Libros
-(13, 11, '2023-03-21 10:27:00'),-- No ficción
-(13, 19, '2023-03-21 10:28:00'),-- Ensayo
-(13, 21, '2023-03-21 10:29:00'),-- Divulgación científica
 
 -- Mis favoritos de todos los tiempos
 (14, 1, '2023-03-22 15:41:00'), -- Libros
@@ -576,13 +567,9 @@ INSERT INTO lista_categoria (lista_id, categoria_id, momento_asignacion) VALUES
 
 -- Lecturas académicas
 (17, 1, '2023-03-25 17:31:00'), -- Libros
-(17, 11, '2023-03-25 17:32:00'),-- No ficción
-(17, 19, '2023-03-25 17:33:00'),-- Ensayo
-(17, 21, '2023-03-25 17:34:00'),-- Divulgación científica
 
 -- Novela negra y thrillers
 (18, 1, '2023-03-26 14:16:00'), -- Libros
-(18, 18, '2023-03-26 14:17:00'),-- Novela negra
 
 -- Recomendados por amigos
 (19, 1, '2023-03-27 11:41:00'), -- Libros
@@ -590,9 +577,7 @@ INSERT INTO lista_categoria (lista_id, categoria_id, momento_asignacion) VALUES
 (19, 3, '2023-03-27 11:43:00'), -- Series
 
 -- Libros premiados
-(20, 1, '2023-03-28 16:06:00'), -- Libros
-(20, 10, '2023-03-28 16:07:00'),-- Ficción
-(20, 11, '2023-03-28 16:08:00'); -- No ficción
+(20, 1, '2023-03-28 16:06:00'); -- Libros
 
 -- Insertar usuario_agrega_usuario (amistades)
 INSERT INTO usuario_agrega_usuario (usuario_1_id, usuario_2_id, momento_agregacion)

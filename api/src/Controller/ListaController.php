@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controller;
-
 use App\Entity\Lista;
 use App\Entity\Usuario;
 use App\Entity\UsuarioManipulaLista;
@@ -10,6 +8,8 @@ use App\Entity\UsuarioElementoPositivo;
 use App\Entity\UsuarioElementoComentario;
 use App\Entity\Elemento;
 use App\Entity\Invitacion;
+use App\Entity\Categoria;
+use App\Entity\ListaCategoria;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,16 +19,64 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ListaController extends AbstractController
 {
+    #[Route("/api/obtener-categorias", name: "obtener_categorias", methods: ["GET"])]
+    public function obtenerCategorias(EntityManagerInterface $entityManager)
+    {
+        try {
+            $categorias = $entityManager->getRepository(Categoria::class)->findAll();
+            
+            $categoriasData = [];
+            foreach ($categorias as $categoria) {
+                $categoriasData[] = [
+                    'id' => $categoria->getId(),
+                    'nombre' => $categoria->getNombre(),
+                    'descripcion' => $categoria->getDescripcion(),
+                    'categoria_padre_id' => $categoria->getCategoriaPadre() ? $categoria->getCategoriaPadre()->getId() : null
+                ];
+            }
+            
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Categorías obtenidas exitosamente.",
+                    "categorias" => $categoriasData
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al obtener categorías: " . $th->getMessage()
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
     #[Route("/api/crear-asignar-lista", name: "crear_asignar_lista", methods: ["POST"])]
     public function crearAsignarLista(Request $request, EntityManagerInterface $entityManager)
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $nombreLista = $datosRecibidos['nombre'];
         $usuarioID = $datosRecibidos['usuarioID'];
-        $publica = $datosRecibidos['publica'] ?? true; // Obtener la propiedad publica, por defecto true
+        $publica = $datosRecibidos['publica'] ?? true;
+        $categoriaIds = $datosRecibidos['categorias'] ?? [];
+        
         $respuestaJson = null;
 
         try {
+            // Verificar si hay categorías seleccionadas
+            if (empty($categoriaIds)) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Debe seleccionar al menos una categoría para la lista."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
             $lista = new Lista();
             $lista->setNombre($nombreLista);
 
@@ -46,12 +94,38 @@ class ListaController extends AbstractController
             $usuarioManipulaLista = new UsuarioManipulaLista();
             $usuarioManipulaLista->setLista($lista);
             $usuarioManipulaLista->setUsuario($usuario);
-            $usuarioManipulaLista->setPublica($publica); // Asignar la propiedad `publica` a `UsuarioManipulaLista`
-            $usuarioManipulaLista->setMomentoManipulacion(new \DateTime()); // Asignar la fecha y hora actual
+            $usuarioManipulaLista->setPublica($publica);
+            $usuarioManipulaLista->setMomentoManipulacion(new \DateTime());
 
             $entityManager->persist($lista);
             $entityManager->persist($usuarioManipulaLista);
+            
+            // Asignar categorías a la lista
+            foreach ($categoriaIds as $categoriaId) {
+                $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
+                
+                if (!$categoria) {
+                    continue; // Saltamos categorías inválidas
+                }
+                
+                $listaCategoria = new ListaCategoria();
+                $listaCategoria->setLista($lista);
+                $listaCategoria->setCategoria($categoria);
+                $listaCategoria->setMomentoAsignacion(new \DateTime());
+                
+                $entityManager->persist($listaCategoria);
+            }
+            
             $entityManager->flush();
+            
+            // Obtener las categorías asignadas para incluirlas en la respuesta
+            $categorias = [];
+            foreach ($lista->getListaCategorias() as $listaCategoria) {
+                $categorias[] = [
+                    'id' => $listaCategoria->getCategoria()->getId(),
+                    'nombre' => $listaCategoria->getCategoria()->getNombre()
+                ];
+            }
 
             $respuestaJson = new JsonResponse(
                 [
@@ -60,7 +134,8 @@ class ListaController extends AbstractController
                     "lista" => [
                         "id" => $lista->getId(),
                         "nombre" => $lista->getNombre(),
-                        "publica" => $usuarioManipulaLista->isPublica()
+                        "publica" => $usuarioManipulaLista->isPublica(),
+                        "categorias" => $categorias
                     ]
                 ],
                 Response::HTTP_CREATED
@@ -69,7 +144,7 @@ class ListaController extends AbstractController
             $respuestaJson = new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Creación y asignación de la lista fallida."
+                    "mensaje" => "Creación y asignación de la lista fallida: " . $th->getMessage()
                 ],
                 Response::HTTP_BAD_REQUEST
             );
@@ -112,11 +187,33 @@ class ListaController extends AbstractController
             foreach ($listasAsignadas as $listaAsignada) {
                 $lista = $listaAsignada->getLista();
                 $compartida = count($entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista])) > 1;
+                
+                // Obtener categorías de la lista
+                $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+                $categorias = [];
+                
+                // Procesar cada categoría asociada a la lista
+                foreach ($listaCategorias as $listaCategoria) {
+                    $categoria = $listaCategoria->getCategoria();
+                    if ($categoria) {  // Asegurarse de que la categoría existe
+                        $categorias[] = [
+                            'id' => $categoria->getId(),
+                            'nombre' => $categoria->getNombre()
+                        ];
+                    }
+                }
+                
+                // Si no hay categorías asociadas, agregar un mensaje o un array vacío
+                if (empty($categorias)) {
+                    $categorias = [];  // Mantener como array vacío para consistencia
+                }
+                
                 $dataListas[] = [
                     'id' => $lista->getId(),
                     'nombre' => $lista->getNombre(),
-                    'publica' => $listaAsignada->isPublica(), // Cambiar a `isPublica` de `UsuarioManipulaLista`
-                    'compartida' => $compartida
+                    'publica' => $listaAsignada->isPublica(),
+                    'compartida' => $compartida,
+                    'categorias' => $categorias
                 ];
             }
 
@@ -132,7 +229,7 @@ class ListaController extends AbstractController
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Error al obtener listas."
+                    "mensaje" => "Error al obtener listas: " . $th->getMessage()
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
@@ -195,11 +292,26 @@ class ListaController extends AbstractController
                     Response::HTTP_NOT_FOUND
                 );
             }
+            
+            // Obtener categorías de la lista
+            $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+            $categorias = [];
+            
+            foreach ($listaCategorias as $listaCategoria) {
+                $categoria = $listaCategoria->getCategoria();
+                $categorias[] = [
+                    'id' => $categoria->getId(),
+                    'nombre' => $categoria->getNombre(),
+                    'descripcion' => $categoria->getDescripcion(),
+                    'categoria_padre_id' => $categoria->getCategoriaPadre() ? $categoria->getCategoriaPadre()->getId() : null
+                ];
+            }
 
             $dataLista = [
                 'id' => $lista->getId(),
                 'nombre' => $lista->getNombre(),
-                'publica' => $usuarioManipulaLista->isPublica() // Incluir la propiedad publica de UsuarioManipulaLista
+                'publica' => $usuarioManipulaLista->isPublica(),
+                'categorias' => $categorias
             ];
 
             return new JsonResponse(
@@ -214,7 +326,7 @@ class ListaController extends AbstractController
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Error al obtener la lista."
+                    "mensaje" => "Error al obtener la lista: " . $th->getMessage()
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
@@ -672,5 +784,127 @@ class ListaController extends AbstractController
             ],
             Response::HTTP_OK
         );
+    }
+
+    #[Route("/api/actualizar-categorias-lista", name: "actualizar_categorias_lista", methods: ["POST"])]
+    public function actualizarCategoriasLista(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        $listaId = $datosRecibidos['lista_id'] ?? null;
+        $categoriaIds = $datosRecibidos['categorias'] ?? [];
+        $usuarioId = $datosRecibidos['usuario_id'] ?? null;
+
+        if ($listaId === null || $usuarioId === null) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Datos incompletos."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        try {
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            // Verificar que el usuario tiene acceso a la lista
+            $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
+            if (!$usuario) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Usuario no encontrado."
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $usuarioManipulaLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findOneBy([
+                'lista' => $lista,
+                'usuario' => $usuario
+            ]);
+
+            if (!$usuarioManipulaLista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "No tienes permisos para editar esta lista."
+                    ],
+                    Response::HTTP_FORBIDDEN
+                );
+            }
+
+            // Eliminar todas las categorías actuales
+            $categoriasExistentes = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+            foreach ($categoriasExistentes as $categoriaExistente) {
+                $entityManager->remove($categoriaExistente);
+            }
+            
+            // Asignar las nuevas categorías
+            if (empty($categoriaIds)) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Debe seleccionar al menos una categoría para la lista."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+            
+            foreach ($categoriaIds as $categoriaId) {
+                $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
+                
+                if (!$categoria) {
+                    continue; // Saltamos categorías inválidas
+                }
+                
+                $listaCategoria = new ListaCategoria();
+                $listaCategoria->setLista($lista);
+                $listaCategoria->setCategoria($categoria);
+                $listaCategoria->setMomentoAsignacion(new \DateTime());
+                
+                $entityManager->persist($listaCategoria);
+            }
+            
+            $entityManager->flush();
+            
+            // Obtener las categorías actualizadas
+            $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+            $categorias = [];
+            
+            foreach ($listaCategorias as $listaCategoria) {
+                $categoria = $listaCategoria->getCategoria();
+                $categorias[] = [
+                    'id' => $categoria->getId(),
+                    'nombre' => $categoria->getNombre()
+                ];
+            }
+
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Categorías de la lista actualizadas exitosamente.",
+                    "categorias" => $categorias
+                ],
+                Response::HTTP_OK
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al actualizar categorías: " . $th->getMessage()
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }

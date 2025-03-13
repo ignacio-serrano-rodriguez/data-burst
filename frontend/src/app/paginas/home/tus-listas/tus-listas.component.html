@@ -19,13 +19,13 @@
     </button>
   </mat-form-field>
   <button 
-  mat-icon-button 
-  (click)="crearAsignarLista()" 
-  [title]="obtenerTituloBotonAnadir()"
-  [disabled]="!esNombreListaValido()"
->
-  <mat-icon>add</mat-icon>
-</button>
+    mat-icon-button 
+    (click)="crearAsignarLista()" 
+    [title]="obtenerTituloBotonAnadir()"
+    [disabled]="!esNombreListaValido() || !tieneCategoriaSeleccionada()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
 
 <mat-autocomplete #auto="matAutocomplete">
@@ -37,5 +37,19 @@
     <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
   </mat-option>
 </mat-autocomplete>
+
+<!-- Selector simplificado de categorías - Solo categorías principales -->
+<div class="categoria-container">
+  <mat-form-field class="categoria-form-field">
+    <mat-label>Selecciona una categoría</mat-label>
+    <mat-select [(ngModel)]="categoriaSeleccionada" (selectionChange)="seleccionarCategoria()">
+      <mat-option *ngIf="categoriasPrincipales.length === 0" disabled>Cargando categorías...</mat-option>
+      <mat-option *ngFor="let categoria of categoriasPrincipales" [value]="categoria.id">
+        {{ categoria.nombre }}
+      </mat-option>
+    </mat-select>
+    <mat-hint>Categoría requerida para crear una lista</mat-hint>
+  </mat-form-field>
+</div>
 
 <div id="mensajeInformativo"></div>

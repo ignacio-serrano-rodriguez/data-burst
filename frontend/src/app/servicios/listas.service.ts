@@ -18,6 +18,14 @@ export class ListasService {
   private http = inject(HttpClient);
   private api: string = configuracion_app.api;
 
+  obtenerCategorias(): Observable<{ exito: boolean, mensaje: string, categorias: any[] }> {
+    return this.http.get<{ exito: boolean, mensaje: string, categorias: any[] }>(
+      `${this.api}/obtener-categorias`
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   crearAsignarLista(objeto: CrearAsignarLista): Observable<RespuestaCrearAsignarLista> {
     return this.http.post<RespuestaCrearAsignarLista>(
       `${this.api}/crear-asignar-lista`,
