@@ -10,12 +10,75 @@ TRUNCATE TABLE usuario_manipula_lista;
 TRUNCATE TABLE usuario_agrega_usuario;
 TRUNCATE TABLE lista_contiene_elemento;
 TRUNCATE TABLE invitacion;
+TRUNCATE TABLE elemento_categoria;
+TRUNCATE TABLE lista_categoria;
 TRUNCATE TABLE elemento;
 TRUNCATE TABLE lista;
+TRUNCATE TABLE categoria;
 TRUNCATE TABLE usuario;
 
 -- Reactivar restricciones de clave foránea
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- Insertar categorías principales
+INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
+(1, 'Libros', 'Todo tipo de obras literarias', NULL),
+(2, 'Películas', 'Largometrajes y cortometrajes cinematográficos', NULL),
+(3, 'Series', 'Series y programas de televisión', NULL),
+(4, 'Videojuegos', 'Juegos para diversas plataformas', NULL),
+(5, 'Música', 'Álbumes, canciones y conciertos', NULL);
+
+-- Insertar subcategorías de Libros
+INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
+(10, 'Ficción', 'Literatura de ficción en general', 1),
+(11, 'No ficción', 'Ensayos, biografías y textos basados en hechos', 1),
+(12, 'Clásicos', 'Obras clásicas de la literatura universal', 10),
+(13, 'Ciencia ficción', 'Narrativa especulativa basada en elementos científicos', 10),
+(14, 'Fantasía', 'Obras con elementos mágicos o sobrenaturales', 10),
+(15, 'Literatura contemporánea', 'Obras de ficción de autores contemporáneos', 10),
+(16, 'Literatura latinoamericana', 'Obras de autores latinoamericanos', 10),
+(17, 'Novela histórica', 'Ficción ambientada en periodos históricos', 10),
+(18, 'Novela negra', 'Thrillers y novelas de misterio o crimen', 10),
+(19, 'Ensayo', 'Textos analíticos y reflexivos', 11),
+(20, 'Biografía', 'Relatos sobre la vida de personas reales', 11),
+(21, 'Divulgación científica', 'Textos que explican la ciencia para el público general', 11);
+
+-- Insertar subcategorías de Películas
+INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
+(30, 'Drama', 'Películas centradas en conflictos emocionales', 2),
+(31, 'Comedia', 'Películas con intención humorística', 2),
+(32, 'Acción', 'Películas con secuencias de acción y aventuras', 2),
+(33, 'Ciencia ficción', 'Películas con elementos científicos especulativos', 2),
+(34, 'Fantasía', 'Películas con elementos mágicos o sobrenaturales', 2),
+(35, 'Terror', 'Películas destinadas a provocar miedo', 2),
+(36, 'Documental', 'Películas basadas en hechos reales', 2),
+(37, 'Animación', 'Películas realizadas mediante técnicas de animación', 2);
+
+-- Insertar subcategorías de Series
+INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
+(50, 'Drama', 'Series centradas en conflictos emocionales', 3),
+(51, 'Comedia', 'Series con intención humorística', 3),
+(52, 'Ciencia ficción', 'Series con elementos científicos especulativos', 3),
+(53, 'Fantasía', 'Series con elementos mágicos o sobrenaturales', 3),
+(54, 'Animación', 'Series realizadas mediante técnicas de animación', 3),
+(55, 'Documental', 'Series basadas en hechos reales', 3);
+
+-- Insertar subcategorías de Videojuegos
+INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
+(70, 'Acción', 'Juegos basados en reflejos y habilidad', 4),
+(71, 'Aventura', 'Juegos basados en exploración y narrativa', 4),
+(72, 'Rol', 'Juegos con desarrollo de personajes y estadísticas', 4),
+(73, 'Estrategia', 'Juegos basados en la toma de decisiones tácticas', 4),
+(74, 'Simulación', 'Juegos que simulan actividades reales', 4),
+(75, 'Mundo abierto', 'Juegos con libertad de exploración en un mundo virtual', 4);
+
+-- Insertar subcategorías de Música
+INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
+(90, 'Rock', 'Música basada en guitarras eléctricas y batería', 5),
+(91, 'Pop', 'Música comercial y accesible', 5),
+(92, 'Clásica', 'Música orquestal y de tradición académica', 5),
+(93, 'Jazz', 'Música con énfasis en la improvisación', 5),
+(94, 'Electrónica', 'Música creada con instrumentos electrónicos', 5);
 
 -- Insertar usuarios de prueba
 INSERT INTO usuario (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, idioma)
@@ -246,6 +309,290 @@ VALUES
 (6, 2, '2023-03-06 18:31:00'),
 (7, 8, '2023-03-07 12:20:00'),
 (7, 3, '2023-03-07 12:21:00');
+
+-- Insertar categorías para elementos
+INSERT INTO elemento_categoria (elemento_id, categoria_id, momento_asignacion) VALUES
+-- Breaking Bad
+(1, 3, '2023-02-01 15:35:00'),  -- Series
+(1, 50, '2023-02-01 15:36:00'), -- Drama
+
+-- El Padrino
+(2, 2, '2023-02-02 10:25:00'),  -- Películas
+(2, 30, '2023-02-02 10:26:00'), -- Drama
+
+-- Los Simpson
+(3, 3, '2023-02-03 18:50:00'),  -- Series
+(3, 51, '2023-02-03 18:51:00'), -- Comedia
+(3, 54, '2023-02-03 18:52:00'), -- Animación
+
+-- 1984
+(4, 1, '2023-02-04 09:20:00'),  -- Libros
+(4, 10, '2023-02-04 09:21:00'), -- Ficción
+(4, 12, '2023-02-04 09:22:00'), -- Clásicos
+(4, 13, '2023-02-04 09:23:00'), -- Ciencia ficción
+
+-- The Legend of Zelda
+(5, 4, '2023-02-05 14:35:00'),  -- Videojuegos
+(5, 71, '2023-02-05 14:36:00'), -- Aventura
+(5, 75, '2023-02-05 14:37:00'), -- Mundo abierto
+
+-- Pink Floyd
+(6, 5, '2023-02-06 11:25:00'),  -- Música
+(6, 90, '2023-02-06 11:26:00'), -- Rock
+
+-- Stranger Things
+(7, 3, '2023-02-07 16:45:00'),  -- Series
+(7, 52, '2023-02-07 16:46:00'), -- Ciencia ficción
+(7, 53, '2023-02-07 16:47:00'), -- Fantasía
+
+-- Harry Potter
+(8, 1, '2023-02-08 13:20:00'),  -- Libros
+(8, 10, '2023-02-08 13:21:00'), -- Ficción
+(8, 14, '2023-02-08 13:22:00'), -- Fantasía
+
+-- El Señor de los Anillos
+(9, 2, '2023-02-09 19:35:00'),  -- Películas
+(9, 34, '2023-02-09 19:36:00'), -- Fantasía
+
+-- GTA V
+(10, 4, '2023-02-10 10:50:00'), -- Videojuegos
+(10, 70, '2023-02-10 10:51:00'),-- Acción
+(10, 75, '2023-02-10 10:52:00'),-- Mundo abierto
+
+-- Libros clásicos
+(11, 1, '2023-03-15 10:25:00'), -- Libros
+(11, 10, '2023-03-15 10:26:00'),-- Ficción
+(11, 16, '2023-03-15 10:27:00'),-- Literatura latinoamericana
+(11, 12, '2023-03-15 10:28:00'),-- Clásicos
+
+(12, 1, '2023-03-16 11:35:00'), -- Libros
+(12, 10, '2023-03-16 11:36:00'),-- Ficción
+(12, 12, '2023-03-16 11:37:00'),-- Clásicos
+(12, 16, '2023-03-16 11:38:00'),-- Literatura latinoamericana
+
+(13, 1, '2023-03-17 09:20:00'), -- Libros
+(13, 10, '2023-03-17 09:21:00'),-- Ficción
+(13, 12, '2023-03-17 09:22:00'),-- Clásicos
+
+(14, 1, '2023-03-18 14:50:00'), -- Libros
+(14, 10, '2023-03-18 14:51:00'),-- Ficción
+(14, 12, '2023-03-18 14:52:00'),-- Clásicos
+(14, 18, '2023-03-18 14:53:00'),-- Novela negra
+
+(15, 1, '2023-03-19 16:35:00'), -- Libros
+(15, 10, '2023-03-19 16:36:00'),-- Ficción
+(15, 12, '2023-03-19 16:37:00'),-- Clásicos
+(15, 15, '2023-03-19 16:38:00'),-- Literatura contemporánea
+
+-- Literatura contemporánea
+(16, 1, '2023-03-20 10:15:00'), -- Libros
+(16, 10, '2023-03-20 10:16:00'),-- Ficción
+(16, 15, '2023-03-20 10:17:00'),-- Literatura contemporánea
+(16, 18, '2023-03-20 10:18:00'),-- Novela negra
+
+(17, 1, '2023-03-21 15:25:00'), -- Libros
+(17, 10, '2023-03-21 15:26:00'),-- Ficción
+(17, 15, '2023-03-21 15:27:00'),-- Literatura contemporánea
+(17, 13, '2023-03-21 15:28:00'),-- Ciencia ficción
+
+(18, 1, '2023-03-22 13:50:00'), -- Libros
+(18, 10, '2023-03-22 13:51:00'),-- Ficción
+(18, 15, '2023-03-22 13:52:00'),-- Literatura contemporánea
+(18, 13, '2023-03-22 13:53:00'),-- Ciencia ficción
+
+(19, 1, '2023-03-23 11:10:00'), -- Libros
+(19, 10, '2023-03-23 11:11:00'),-- Ficción
+(19, 15, '2023-03-23 11:12:00'),-- Literatura contemporánea
+(19, 14, '2023-03-23 11:13:00'),-- Fantasía
+
+(20, 1, '2023-03-24 09:35:00'), -- Libros
+(20, 10, '2023-03-24 09:36:00'),-- Ficción
+(20, 15, '2023-03-24 09:37:00'),-- Literatura contemporánea
+(20, 16, '2023-03-24 09:38:00'),-- Literatura latinoamericana
+
+-- Ciencia ficción y fantasía
+(21, 1, '2023-03-25 14:20:00'), -- Libros
+(21, 10, '2023-03-25 14:21:00'),-- Ficción
+(21, 13, '2023-03-25 14:22:00'),-- Ciencia ficción
+
+(22, 1, '2023-03-26 16:55:00'), -- Libros
+(22, 10, '2023-03-26 16:56:00'),-- Ficción
+(22, 13, '2023-03-26 16:57:00'),-- Ciencia ficción
+
+(23, 1, '2023-03-27 10:30:00'), -- Libros
+(23, 10, '2023-03-27 10:31:00'),-- Ficción
+(23, 13, '2023-03-27 10:32:00'),-- Ciencia ficción
+
+(24, 1, '2023-03-28 13:45:00'), -- Libros
+(24, 10, '2023-03-28 13:46:00'),-- Ficción
+(24, 14, '2023-03-28 13:47:00'),-- Fantasía
+
+(25, 1, '2023-03-29 15:20:00'), -- Libros
+(25, 10, '2023-03-29 15:21:00'),-- Ficción
+(25, 14, '2023-03-29 15:22:00'),-- Fantasía
+
+-- No ficción y ensayo
+(26, 1, '2023-03-30 11:25:00'), -- Libros
+(26, 11, '2023-03-30 11:26:00'),-- No ficción
+(26, 19, '2023-03-30 11:27:00'),-- Ensayo
+(26, 21, '2023-03-30 11:28:00'),-- Divulgación científica
+
+(27, 1, '2023-03-31 09:50:00'), -- Libros
+(27, 11, '2023-03-31 09:51:00'),-- No ficción
+(27, 19, '2023-03-31 09:52:00'),-- Ensayo
+(27, 21, '2023-03-31 09:53:00'),-- Divulgación científica
+
+(28, 1, '2023-04-01 14:35:00'), -- Libros
+(28, 11, '2023-04-01 14:36:00'),-- No ficción
+(28, 19, '2023-04-01 14:37:00'),-- Ensayo
+(28, 21, '2023-04-01 14:38:00'),-- Divulgación científica
+
+(29, 1, '2023-04-02 10:55:00'), -- Libros
+(29, 11, '2023-04-02 10:56:00'),-- No ficción
+(29, 19, '2023-04-02 10:57:00'),-- Ensayo
+(29, 17, '2023-04-02 10:58:00'),-- Novela histórica
+
+(30, 1, '2023-04-03 16:30:00'), -- Libros
+(30, 11, '2023-04-03 16:31:00'),-- No ficción
+(30, 19, '2023-04-03 16:32:00'),-- Ensayo
+(30, 21, '2023-04-03 16:33:00'),-- Divulgación científica
+
+-- Literatura latinoamericana
+(31, 1, '2023-04-04 13:15:00'), -- Libros
+(31, 10, '2023-04-04 13:16:00'),-- Ficción
+(31, 16, '2023-04-04 13:17:00'),-- Literatura latinoamericana
+
+(32, 1, '2023-04-05 11:50:00'), -- Libros
+(32, 10, '2023-04-05 11:51:00'),-- Ficción
+(32, 16, '2023-04-05 11:52:00'),-- Literatura latinoamericana
+(32, 15, '2023-04-05 11:53:00'),-- Literatura contemporánea
+
+(33, 1, '2023-04-06 09:35:00'), -- Libros
+(33, 10, '2023-04-06 09:36:00'),-- Ficción
+(33, 16, '2023-04-06 09:37:00'),-- Literatura latinoamericana
+(33, 15, '2023-04-06 09:38:00'),-- Literatura contemporánea
+
+(34, 1, '2023-04-07 15:25:00'), -- Libros
+(34, 10, '2023-04-07 15:26:00'),-- Ficción
+(34, 16, '2023-04-07 15:27:00'),-- Literatura latinoamericana
+(34, 12, '2023-04-07 15:28:00'),-- Clásicos
+
+(35, 1, '2023-04-08 12:45:00'), -- Libros
+(35, 10, '2023-04-08 12:46:00'),-- Ficción
+(35, 16, '2023-04-08 12:47:00'),-- Literatura latinoamericana
+
+-- Bestsellers recientes
+(36, 1, '2023-04-09 10:20:00'), -- Libros
+(36, 10, '2023-04-09 10:21:00'),-- Ficción
+(36, 17, '2023-04-09 10:22:00'),-- Novela histórica
+(36, 15, '2023-04-09 10:23:00'),-- Literatura contemporánea
+
+(37, 1, '2023-04-10 14:55:00'), -- Libros
+(37, 10, '2023-04-10 14:56:00'),-- Ficción
+(37, 18, '2023-04-10 14:57:00'),-- Novela negra
+(37, 15, '2023-04-10 14:58:00'),-- Literatura contemporánea
+
+(38, 1, '2023-04-11 16:35:00'), -- Libros
+(38, 10, '2023-04-11 16:36:00'),-- Ficción
+(38, 15, '2023-04-11 16:37:00'),-- Literatura contemporánea
+
+(39, 1, '2023-04-12 11:30:00'), -- Libros
+(39, 10, '2023-04-12 11:31:00'),-- Ficción
+(39, 13, '2023-04-12 11:32:00'),-- Ciencia ficción
+(39, 15, '2023-04-12 11:33:00'),-- Literatura contemporánea
+
+(40, 1, '2023-04-13 09:45:00'), -- Libros
+(40, 10, '2023-04-13 09:46:00'),-- Ficción
+(40, 18, '2023-04-13 09:47:00'),-- Novela negra
+(40, 15, '2023-04-13 09:48:00'); -- Literatura contemporánea
+
+-- Insertar categorías para listas
+INSERT INTO lista_categoria (lista_id, categoria_id, momento_asignacion) VALUES
+-- Series
+(1, 3, '2023-03-10 09:31:00'),  -- Series
+
+-- Películas
+(2, 2, '2023-03-10 09:36:00'),  -- Películas
+
+-- Libros
+(3, 1, '2023-03-11 14:21:00'),  -- Libros
+
+-- Videojuegos
+(4, 4, '2023-03-12 16:46:00'),  -- Videojuegos
+
+-- Lo mejor del 2023
+(5, 2, '2023-03-13 11:16:00'),  -- Películas
+(5, 3, '2023-03-13 11:17:00'),  -- Series
+(5, 1, '2023-03-13 11:18:00'),  -- Libros
+(5, 4, '2023-03-13 11:19:00'),  -- Videojuegos
+
+-- Para ver este fin de semana
+(6, 2, '2023-03-14 18:31:00'),  -- Películas
+(6, 3, '2023-03-14 18:32:00'),  -- Series
+
+-- Recomendaciones para principiantes
+(7, 1, '2023-03-15 10:11:00'),  -- Libros
+(7, 2, '2023-03-15 10:12:00'),  -- Películas
+(7, 3, '2023-03-15 10:13:00'),  -- Series
+(7, 4, '2023-03-15 10:14:00'),  -- Videojuegos
+
+-- Clásicos literarios
+(8, 1, '2023-03-16 11:21:00'),  -- Libros
+(8, 12, '2023-03-16 11:22:00'), -- Clásicos
+
+-- Ciencia ficción y fantasía
+(9, 1, '2023-03-17 14:46:00'),  -- Libros
+(9, 13, '2023-03-17 14:47:00'), -- Ciencia ficción
+(9, 14, '2023-03-17 14:48:00'), -- Fantasía
+
+-- Literatura latinoamericana
+(10, 1, '2023-03-18 09:31:00'), -- Libros
+(10, 16, '2023-03-18 09:32:00'),-- Literatura latinoamericana
+
+-- Novela histórica
+(11, 1, '2023-03-19 16:16:00'), -- Libros
+(11, 17, '2023-03-19 16:17:00'),-- Novela histórica
+
+-- Literatura contemporánea
+(12, 1, '2023-03-20 13:51:00'), -- Libros
+(12, 15, '2023-03-20 13:52:00'),-- Literatura contemporánea
+
+-- Libros de no ficción
+(13, 1, '2023-03-21 10:26:00'), -- Libros
+(13, 11, '2023-03-21 10:27:00'),-- No ficción
+(13, 19, '2023-03-21 10:28:00'),-- Ensayo
+(13, 21, '2023-03-21 10:29:00'),-- Divulgación científica
+
+-- Mis favoritos de todos los tiempos
+(14, 1, '2023-03-22 15:41:00'), -- Libros
+(14, 2, '2023-03-22 15:42:00'), -- Películas
+(14, 3, '2023-03-22 15:43:00'), -- Series
+
+-- Lecturas pendientes
+(15, 1, '2023-03-23 12:11:00'), -- Libros
+
+-- Libros para el verano
+(16, 1, '2023-03-24 09:56:00'), -- Libros
+
+-- Lecturas académicas
+(17, 1, '2023-03-25 17:31:00'), -- Libros
+(17, 11, '2023-03-25 17:32:00'),-- No ficción
+(17, 19, '2023-03-25 17:33:00'),-- Ensayo
+(17, 21, '2023-03-25 17:34:00'),-- Divulgación científica
+
+-- Novela negra y thrillers
+(18, 1, '2023-03-26 14:16:00'), -- Libros
+(18, 18, '2023-03-26 14:17:00'),-- Novela negra
+
+-- Recomendados por amigos
+(19, 1, '2023-03-27 11:41:00'), -- Libros
+(19, 2, '2023-03-27 11:42:00'), -- Películas
+(19, 3, '2023-03-27 11:43:00'), -- Series
+
+-- Libros premiados
+(20, 1, '2023-03-28 16:06:00'), -- Libros
+(20, 10, '2023-03-28 16:07:00'),-- Ficción
+(20, 11, '2023-03-28 16:08:00'); -- No ficción
 
 -- Insertar usuario_agrega_usuario (amistades)
 INSERT INTO usuario_agrega_usuario (usuario_1_id, usuario_2_id, momento_agregacion)

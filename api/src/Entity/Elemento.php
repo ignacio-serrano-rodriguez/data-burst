@@ -64,12 +64,27 @@ class Elemento
     #[ORM\OneToMany(targetEntity: UsuarioElementoPositivo::class, mappedBy: 'elemento', orphanRemoval: true)]
     private Collection $usuarioElementoPositivos;
 
+    /**
+     * @var Collection<int, ElementoCategoria>
+     */
+    #[ORM\OneToMany(mappedBy: 'elemento', targetEntity: ElementoCategoria::class, orphanRemoval: true)]
+    private Collection $elementoCategorias;
+
+    /**
+     * @return Collection<int, ElementoCategoria>
+     */
+    public function getElementoCategorias(): Collection
+    {
+        return $this->elementoCategorias;
+    }
+
     public function __construct()
     {
         $this->listaContieneElementos = new ArrayCollection();
         $this->usuarioReportaElementos = new ArrayCollection();
         $this->usuarioGestionaElementos = new ArrayCollection();
         $this->usuarioElementoPositivos = new ArrayCollection();
+        $this->elementoCategorias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -287,4 +302,39 @@ class Elemento
 
         return $this;
     }
+
+    public function addElementoCategoria(ElementoCategoria $elementoCategoria): static
+    {
+        if (!$this->elementoCategorias->contains($elementoCategoria)) {
+            $this->elementoCategorias->add($elementoCategoria);
+            $elementoCategoria->setElemento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementoCategoria(ElementoCategoria $elementoCategoria): static
+    {
+        if ($this->elementoCategorias->removeElement($elementoCategoria)) {
+            if ($elementoCategoria->getElemento() === $this) {
+                $elementoCategoria->setElemento(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Helper method to get categories directly
+     * @return Collection<int, Categoria>
+     */
+    public function getCategorias(): Collection
+    {
+        $categorias = new ArrayCollection();
+        foreach ($this->elementoCategorias as $elementoCategoria) {
+            $categorias->add($elementoCategoria->getCategoria());
+        }
+        return $categorias;
+    }
+    
 }

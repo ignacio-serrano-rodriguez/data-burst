@@ -36,10 +36,17 @@ class Lista
     #[ORM\OneToMany(targetEntity: ListaContieneElemento::class, mappedBy: 'lista', orphanRemoval: true)]
     private Collection $listaContieneElementos;
 
+    /**
+     * @var Collection<int, ListaCategoria>
+     */
+    #[ORM\OneToMany(mappedBy: 'lista', targetEntity: ListaCategoria::class, orphanRemoval: true)]
+    private Collection $listaCategorias;
+
     public function __construct()
     {
         $this->usuarioManipulaListas = new ArrayCollection();
         $this->listaContieneElementos = new ArrayCollection();
+        $this->listaCategorias = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,5 +131,47 @@ class Lista
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ListaCategoria>
+     */
+    public function getListaCategorias(): Collection
+    {
+        return $this->listaCategorias;
+    }
+
+    public function addListaCategoria(ListaCategoria $listaCategoria): static
+    {
+        if (!$this->listaCategorias->contains($listaCategoria)) {
+            $this->listaCategorias->add($listaCategoria);
+            $listaCategoria->setLista($this);
+        }
+
+        return $this;
+    }
+
+    public function removeListaCategoria(ListaCategoria $listaCategoria): static
+    {
+        if ($this->listaCategorias->removeElement($listaCategoria)) {
+            if ($listaCategoria->getLista() === $this) {
+                $listaCategoria->setLista(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Helper method to get categories directly
+     * @return Collection<int, Categoria>
+     */
+    public function getCategorias(): Collection
+    {
+        $categorias = new ArrayCollection();
+        foreach ($this->listaCategorias as $listaCategoria) {
+            $categorias->add($listaCategoria->getCategoria());
+        }
+        return $categorias;
     }
 }
