@@ -24,13 +24,6 @@ class Categoria
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subcategorias')]
-    #[ORM\JoinColumn(name: 'categoria_padre_id', referencedColumnName: 'id', nullable: true)]
-    private ?Categoria $categoriaPadre = null;
-
-    #[ORM\OneToMany(mappedBy: 'categoriaPadre', targetEntity: self::class)]
-    private Collection $subcategorias;
-
     #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: ElementoCategoria::class, orphanRemoval: true)]
     private Collection $elementoCategorias;
 
@@ -39,7 +32,6 @@ class Categoria
 
     public function __construct()
     {
-        $this->subcategorias = new ArrayCollection();
         $this->elementoCategorias = new ArrayCollection();
         $this->listaCategorias = new ArrayCollection();
     }
@@ -69,47 +61,6 @@ class Categoria
     public function setDescripcion(?string $descripcion): static
     {
         $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    public function getCategoriaPadre(): ?self
-    {
-        return $this->categoriaPadre;
-    }
-
-    public function setCategoriaPadre(?self $categoriaPadre): static
-    {
-        $this->categoriaPadre = $categoriaPadre;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getSubcategorias(): Collection
-    {
-        return $this->subcategorias;
-    }
-
-    public function addSubcategoria(self $subcategoria): static
-    {
-        if (!$this->subcategorias->contains($subcategoria)) {
-            $this->subcategorias->add($subcategoria);
-            $subcategoria->setCategoriaPadre($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubcategoria(self $subcategoria): static
-    {
-        if ($this->subcategorias->removeElement($subcategoria)) {
-            if ($subcategoria->getCategoriaPadre() === $this) {
-                $subcategoria->setCategoriaPadre(null);
-            }
-        }
 
         return $this;
     }

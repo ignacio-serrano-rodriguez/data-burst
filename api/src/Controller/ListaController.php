@@ -30,8 +30,7 @@ class ListaController extends AbstractController
                 $categoriasData[] = [
                     'id' => $categoria->getId(),
                     'nombre' => $categoria->getNombre(),
-                    'descripcion' => $categoria->getDescripcion(),
-                    'categoria_padre_id' => $categoria->getCategoriaPadre() ? $categoria->getCategoriaPadre()->getId() : null
+                    'descripcion' => $categoria->getDescripcion()
                 ];
             }
             
@@ -302,8 +301,7 @@ class ListaController extends AbstractController
                 $categorias[] = [
                     'id' => $categoria->getId(),
                     'nombre' => $categoria->getNombre(),
-                    'descripcion' => $categoria->getDescripcion(),
-                    'categoria_padre_id' => $categoria->getCategoriaPadre() ? $categoria->getCategoriaPadre()->getId() : null
+                    'descripcion' => $categoria->getDescripcion()
                 ];
             }
 

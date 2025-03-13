@@ -21,12 +21,12 @@ TRUNCATE TABLE usuario;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- Insertar categorías principales
-INSERT INTO categoria (id, nombre, descripcion, categoria_padre_id) VALUES
-(1, 'Libros', 'Todo tipo de obras literarias', NULL),
-(2, 'Películas', 'Largometrajes y cortometrajes cinematográficos', NULL),
-(3, 'Series', 'Series y programas de televisión', NULL),
-(4, 'Videojuegos', 'Juegos para diversas plataformas', NULL),
-(5, 'Música', 'Álbumes, canciones y conciertos', NULL);
+INSERT INTO categoria (id, nombre, descripcion) VALUES
+(1, 'Libros', 'Todo tipo de obras literarias'),
+(2, 'Películas', 'Largometrajes y cortometrajes cinematográficos'),
+(3, 'Series', 'Series y programas de televisión'),
+(4, 'Videojuegos', 'Juegos para diversas plataformas'),
+(5, 'Música', 'Álbumes, canciones y conciertos');
 
 -- Insertar usuarios de prueba
 INSERT INTO usuario (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, idioma)

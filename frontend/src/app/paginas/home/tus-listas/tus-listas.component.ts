@@ -86,8 +86,7 @@ export class TusListasComponent implements OnInit {
       next: (data) => {
         if (data.exito) {
           this.categorias = data.categorias;
-          // Only get the main categories (where categoria_padre_id is null)
-          this.categoriasPrincipales = this.categorias.filter(cat => cat.categoria_padre_id === null);
+          this.categoriasPrincipales = this.categorias;
         }
       },
       error: (error) => {
@@ -95,11 +94,6 @@ export class TusListasComponent implements OnInit {
         this.homeComponent.mostrarMensajeNegativo('Error al cargar categorías. Por favor, intente de nuevo.');
       }
     });
-  }
-
-  // Método para obtener subcategorías de una categoría principal
-  obtenerSubcategorias(categoriaId: number): Categoria[] {
-    return this.categorias.filter(cat => cat.categoria_padre_id === categoriaId);
   }
 
   agregarCategoria() {
