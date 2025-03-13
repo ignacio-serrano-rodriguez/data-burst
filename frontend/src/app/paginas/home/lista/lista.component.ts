@@ -20,6 +20,7 @@ import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elem
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { InformacionElementoDialogComponent } from './informacion-dialog/informacion-elemento-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-lista',
@@ -34,7 +35,8 @@ import { InformacionElementoDialogComponent } from './informacion-dialog/informa
     MatAutocompleteModule,
     MatTableModule,
     MatButtonToggleModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatChipsModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css'],

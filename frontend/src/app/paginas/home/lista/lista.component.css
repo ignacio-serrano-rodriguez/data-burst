@@ -60,7 +60,39 @@
   min-width: 450px;
 }
 
-/* Evitar subrayado en hover para botones de iconos */
 button[mat-icon-button]:hover {
   text-decoration: none;
+}
+
+.lista-categoria {
+  margin: 8px 0;
+}
+
+.lista-categoria mat-chip-set {
+  display: inline-block;
+}
+
+.lista-categoria mat-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lista-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.lista-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.categoria-text {
+  display: inline-block;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  margin: 4px 0;
 }

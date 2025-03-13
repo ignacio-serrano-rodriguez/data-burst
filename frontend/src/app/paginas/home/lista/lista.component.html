@@ -13,7 +13,6 @@
         <mat-label>Nombre de la Lista</mat-label>
         <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()">
       </mat-form-field>
-      <!-- Botones de edición con tooltips -->
       <button mat-icon-button color="black" (click)="cancelarEdicion()" title="Cancelar edición">
         <mat-icon>cancel</mat-icon>
       </button>
@@ -21,6 +20,13 @@
         <mat-icon>save</mat-icon>
       </button>
     </div>
+    
+    <ng-container *ngIf="lista && lista.categorias && lista.categorias.length > 0">
+      <div class="lista-categoria">
+        <span class="categoria-text">Categoría: {{ lista.categorias[0].nombre }}</span>
+      </div>
+    </ng-container>
+    
     <div class="lista-actions">
       <!-- Botón editar nombre con tooltip dinámico -->
       <button mat-icon-button (click)="toggleEditarNombre()" [title]="editandoNombre ? 'Cancelar edición' : 'Editar nombre'">
