@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatOptionModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
@@ -35,7 +36,8 @@ interface Categoria {
     FormsModule,
     MatSelectModule,
     MatChipsModule,
-    MatOptionModule
+    MatOptionModule,
+    MatSlideToggleModule
   ],
   templateUrl: './tus-listas.component.html',
   styleUrls: ['./tus-listas.component.css']
@@ -214,8 +216,8 @@ export class TusListasComponent implements OnInit {
     this.homeComponent.limpiarMensaje();
   }
 
-  togglePublica() {
-    this.publica = !this.publica;
+  togglePublica(event: any) {
+    this.publica = event.checked;
   }
 
   salirDelInput() {

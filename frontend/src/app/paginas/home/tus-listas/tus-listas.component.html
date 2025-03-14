@@ -1,23 +1,19 @@
 <h2>Tus listas</h2>
 
-<!-- Contenedor para alinear el input y el botón en la misma línea -->
 <div class="input-button-container">
-  <!-- Input para crear y asignar listas con icono de toggle -->
   <mat-form-field class="elementoFormulario">
     <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
     <input matInput id="nombreLista" #nombreListaInput [(ngModel)]="nombreLista" (input)="buscarListasLocal(nombreLista)" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.enter)="crearAsignarLista()" (keydown.escape)="salirDelInput()">
     <button mat-icon-button matPrefix (click)="salirDelInput()" title="Limpiar">
       <mat-icon>close</mat-icon>
     </button>
-    <button 
-      mat-icon-button 
-      matSuffix 
-      (click)="togglePublica()" 
-      title="{{publica ? 'Lista pública' : 'Lista privada'}}"
-    >
+    
+    <!-- Replaced button with slide toggle -->
+    <mat-slide-toggle matSuffix [checked]="publica" (change)="togglePublica($event)" color="accent" [title]="publica ? 'Lista pública' : 'Lista privada'" class="visibility-toggle">
       <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
-    </button>
+    </mat-slide-toggle>
   </mat-form-field>
+  
   <button 
     mat-icon-button 
     (click)="crearAsignarLista()" 
