@@ -1,5 +1,4 @@
 <div>
-  <!-- Botón volver con tooltip -->
   <button mat-icon-button (click)="volver()" title="Volver a mis listas">
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -13,34 +12,34 @@
         <mat-label>Nombre de la Lista</mat-label>
         <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()">
       </mat-form-field>
-      <button mat-icon-button color="black" (click)="cancelarEdicion()" title="Cancelar edición">
+      <button mat-icon-button (click)="cancelarEdicion()" title="Cancelar edición">
         <mat-icon>cancel</mat-icon>
       </button>
-      <button mat-icon-button color="black" (click)="guardarNombre()" title="Guardar nuevo nombre">
+      <button mat-icon-button (click)="guardarNombre()" title="Guardar nuevo nombre">
         <mat-icon>save</mat-icon>
       </button>
     </div>
     
     <ng-container *ngIf="lista && lista.categorias && lista.categorias.length > 0">
       <div class="lista-categoria">
-        <span class="categoria-text">Categoría: {{ lista.categorias[0].nombre }}</span>
+        <mat-chip-set>
+          <mat-chip color="accent" highlighted>
+            {{ lista.categorias[0].nombre }}
+          </mat-chip>
+        </mat-chip-set>
       </div>
     </ng-container>
     
     <div class="lista-actions">
-      <!-- Botón editar nombre con tooltip dinámico -->
       <button mat-icon-button (click)="toggleEditarNombre()" [title]="editandoNombre ? 'Cancelar edición' : 'Editar nombre'">
         <mat-icon>{{ editandoNombre ? 'cancel' : 'edit' }}</mat-icon>
       </button>
-      <!-- Toggle de visibilidad con tooltip dinámico -->
       <mat-slide-toggle [checked]="listaPublica" (change)="cambiarVisibilidad($event)" color="accent" [title]="listaPublica ? 'Cambiar a lista privada' : 'Cambiar a lista pública'">
         <mat-icon>{{ listaPublica ? 'public' : 'lock' }}</mat-icon>
       </mat-slide-toggle>
-      <!-- Botón colaborar con tooltip dinámico -->
       <button mat-icon-button (click)="toggleColaborar()" [title]="mostrarColaborarComponent ? 'Ocultar panel de colaboradores' : 'Añadir colaboradores'">
         <mat-icon [style.color]="mostrarColaborarComponent ? '#61B300' : 'inherit'">group</mat-icon>
       </button>
-      <!-- Botón eliminar lista con tooltip -->
       <button mat-icon-button (click)="eliminarLista()" title="Eliminar lista">
         <mat-icon>delete</mat-icon>
       </button>
@@ -49,10 +48,9 @@
 
   <div *ngIf="mostrarColaborarComponent">
     <div class="input-button-container">
-      <mat-form-field class="elementoFormulario">
-        <mat-label class="etiquetaFormulario">Invitar amigos</mat-label>
+      <mat-form-field class="full-width">
+        <mat-label>Invitar amigos</mat-label>
         <input matInput id="nombreAmigoBuscar" #nombreAmigoBuscarInput [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
-        <!-- Botón cerrar input amigos con tooltip dinámico -->
         <button mat-icon-button matPrefix (click)="salirDelInput()" [title]="obtenerTituloBotonCerrarAmigo()">
           <mat-icon>close</mat-icon>
         </button>
@@ -72,10 +70,9 @@
   </div>
 
   <div class="input-container">  
-    <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Buscar elemento a añadir</mat-label>
+    <mat-form-field class="full-width">
+      <mat-label>Buscar elemento a añadir</mat-label>
       <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
-      <!-- Botón cerrar input elementos con tooltip dinámico -->
       <button mat-icon-button matPrefix (click)="resetBusquedaElemento()" [title]="obtenerTituloBotonCerrarElemento()">
         <mat-icon>close</mat-icon>
       </button>
@@ -102,32 +99,27 @@
       <td mat-cell *matCellDef="let elemento" class="mat-column-acciones">
         <div class="button-group">
           <div class="like-dislike-help-group">
-            <!-- Botón like con tooltip dinámico -->
             <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" 
                     (click)="elemento.positivo !== true && likeElemento(elemento)"
                     [title]="obtenerTituloBotonLike(elemento)">
               <mat-icon>thumb_up</mat-icon>
             </button>
-            <!-- Botón dislike con tooltip dinámico -->
             <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" 
                     (click)="elemento.positivo !== false && dislikeElemento(elemento)"
                     [title]="obtenerTituloBotonDislike(elemento)">
               <mat-icon>thumb_down</mat-icon>
             </button>
-            <!-- Botón help con tooltip dinámico -->
             <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" 
                     (click)="elemento.positivo !== null && resetLikeDislikeElemento(elemento)"
                     [title]="obtenerTituloBotonHelp(elemento)">
               <mat-icon>help_outline</mat-icon>
             </button>
           </div>
-          <!-- Botón comentario con tooltip dinámico -->
           <button mat-icon-button [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" 
                   (click)="comentarElemento(elemento)"
                   [title]="elemento.comentario && elemento.comentario.trim().length > 0 ? 'Editar comentario' : 'Añadir comentario'">
             <mat-icon>comment</mat-icon>
           </button>
-          <!-- Botón eliminar elemento con tooltip -->
           <button mat-icon-button (click)="eliminarElemento(elemento.id)" title="Eliminar elemento">
             <mat-icon>close</mat-icon>
           </button>

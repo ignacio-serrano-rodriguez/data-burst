@@ -14,8 +14,35 @@
   color: #9900b4;
 }
 
+.lista-header {
+  display: flex;
+  flex-direction: column;
+}
+
 .lista-header h2 {
   cursor: pointer;
+}
+
+.lista-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lista-categoria {
+  margin: 8px 0;
+}
+
+.lista-categoria mat-chip-set {
+  display: inline-block;
+}
+
+.lista-categoria mat-chip {
+  background-color: #ae00cdb8;
+  color: white;
+  font-weight: 500;
+  padding: 4px 12px; 
 }
 
 .mat-elevation-z8 {
@@ -27,12 +54,8 @@
   width: 100%;
 }
 
-.mat-header-cell, .mat-cell {
-  border: none;
-}
-
-.mat-row, .mat-header-row {
-  border-bottom: none;
+.mat-column-acciones {
+  width: 300px;
 }
 
 .button-group {
@@ -47,52 +70,11 @@
   border-radius: 5%;
 }
 
-.mat-column-acciones {
-  width: 300px;
-}
-
-.elementoFormulario {
+.full-width {
   width: 100%;
 }
 
 .input-container {
   width: 100%;
   min-width: 450px;
-}
-
-button[mat-icon-button]:hover {
-  text-decoration: none;
-}
-
-.lista-categoria {
-  margin: 8px 0;
-}
-
-.lista-categoria mat-chip-set {
-  display: inline-block;
-}
-
-.lista-categoria mat-chip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lista-header {
-  display: flex;
-  flex-direction: column;
-}
-
-.lista-actions {
-  margin-top: 8px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.categoria-text {
-  display: inline-block;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.87);
-  margin: 4px 0;
 }
