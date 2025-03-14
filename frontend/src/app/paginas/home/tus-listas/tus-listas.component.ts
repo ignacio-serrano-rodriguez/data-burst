@@ -10,6 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ViewChildren, QueryList } from '@angular/core';
+import { MatOption } from '@angular/material/core';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
@@ -43,19 +46,26 @@ interface Categoria {
   styleUrls: ['./tus-listas.component.css']
 })
 export class TusListasComponent implements OnInit {
+
   private listasService = inject(ListasService);
   private homeComponent = inject(HomeComponent);
+
   listas: Lista[] = [];
   listasFiltradas: Lista[] = [];
+
   @Output() listaSeleccionada = new EventEmitter<Lista>();
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   @ViewChild('nombreListaInput') nombreListaInput!: ElementRef;
+  @ViewChild('categoriaInput') categoriaInput!: ElementRef;
+  @ViewChild('autoCategoria') autocompleteCategorias!: MatAutocompleteTrigger;
+  @ViewChildren(MatOption) options!: QueryList<MatOption>;
 
   nombreLista: string = '';
   publica: boolean = false;
   noSeEncontraronListas = false;
   listaSeleccionadaId: number | null = null;
-
+  categoriaBusqueda: string = '';
+  categoriasFiltradas: Categoria[] = [];
   categorias: Categoria[] = [];
   categoriasPrincipales: Categoria[] = [];
   categoriaSeleccionada: number | null = null;
@@ -68,12 +78,10 @@ export class TusListasComponent implements OnInit {
 
   seleccionarCategoria() {
     if (this.categoriaSeleccionada) {
-      this.categoriasSeleccionadas = [];
-
       const categoria = this.categorias.find(cat => cat.id === this.categoriaSeleccionada);
-
       if (categoria) {
         this.categoriasSeleccionadas = [categoria];
+        this.categoriaBusqueda = categoria.nombre;
       }
     }
   }
@@ -84,6 +92,7 @@ export class TusListasComponent implements OnInit {
         if (data.exito) {
           this.categorias = data.categorias;
           this.categoriasPrincipales = this.categorias;
+          this.categoriasFiltradas = this.categorias; // Initialize filtered list
         }
       },
       error: (error) => {
@@ -99,6 +108,43 @@ export class TusListasComponent implements OnInit {
       if (categoria) {
         this.categoriasSeleccionadas.push(categoria);
       }
+    }
+  }
+
+  filtrarCategorias(busqueda: string) {
+    if (busqueda) {
+      this.categoriasFiltradas = this.categorias.filter(
+        cat => cat.nombre.toLowerCase().includes(busqueda.toLowerCase())
+      );
+    } else {
+      this.categoriasFiltradas = this.categorias;
+    }
+  }
+
+  limpiarCategoriaInput() {
+    this.categoriaBusqueda = '';
+    this.categoriasFiltradas = this.categorias;
+    this.categoriaSeleccionada = null;
+    this.categoriasSeleccionadas = [];
+
+    if (this.categoriaInput) {
+      this.categoriaInput.nativeElement.blur();
+    }
+  }
+
+  abrirDesplegableCategoria() {
+    if (this.autocompleteCategorias) {
+      this.autocompleteCategorias.openPanel();
+    }
+  }
+
+  onCategoriaSelected(event: MatAutocompleteSelectedEvent) {
+    const selectedName = event.option.value;
+    const categoria = this.categorias.find(cat => cat.nombre === selectedName);
+
+    if (categoria) {
+      this.categoriaSeleccionada = categoria.id;
+      this.categoriasSeleccionadas = [categoria];
     }
   }
 

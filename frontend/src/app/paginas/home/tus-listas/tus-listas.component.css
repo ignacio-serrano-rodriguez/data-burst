@@ -116,6 +116,10 @@ mat-chip {
   align-items: center;
 }
 
+.categoria-form-field {
+  width: 100%;
+}
+
 ::ng-deep .mat-optgroup-label {
   font-weight: 500 !important;
   color: #3f51b5 !important;
@@ -137,4 +141,8 @@ mat-chip {
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+::ng-deep .mat-mdc-autocomplete-panel {
+  max-height: 270px;
 }

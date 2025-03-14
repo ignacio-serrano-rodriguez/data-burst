@@ -3,28 +3,31 @@
 <div class="input-button-container">
   <mat-form-field class="elementoFormulario">
     <mat-label>Nombre de la lista</mat-label>
-    <input matInput id="nombreLista" #nombreListaInput [(ngModel)]="nombreLista" (input)="buscarListasLocal(nombreLista)" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.enter)="crearAsignarLista()" (keydown.escape)="salirDelInput()">
+    <input matInput id="nombreLista" #nombreListaInput [(ngModel)]="nombreLista" 
+           (input)="buscarListasLocal(nombreLista)" [matAutocomplete]="auto" 
+           (focus)="abrirDesplegable()" (keydown.enter)="crearAsignarLista()" 
+           (keydown.escape)="salirDelInput()">
     <button mat-icon-button matPrefix (click)="salirDelInput()" title="Limpiar">
       <mat-icon>close</mat-icon>
     </button>
     
-    <mat-slide-toggle matSuffix [checked]="publica" (change)="togglePublica($event)" color="accent" [title]="publica ? 'Lista pública' : 'Lista privada'" class="visibility-toggle">
+    <mat-slide-toggle matSuffix [checked]="publica" (change)="togglePublica($event)" 
+                     color="accent" [title]="publica ? 'Lista pública' : 'Lista privada'" 
+                     class="visibility-toggle">
       <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
     </mat-slide-toggle>
   </mat-form-field>
   
-  <button 
-    mat-icon-button 
-    (click)="crearAsignarLista()" 
-    [title]="obtenerTituloBotonAnadir()"
-    [disabled]="!esNombreListaValido() || !tieneCategoriaSeleccionada()"
-  >
+  <button mat-icon-button (click)="crearAsignarLista()" 
+          [title]="obtenerTituloBotonAnadir()"
+          [disabled]="!esNombreListaValido() || !tieneCategoriaSeleccionada()">
     <mat-icon>add</mat-icon>
   </button>
 </div>
 
 <mat-autocomplete #auto="matAutocomplete">
-  <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista)">
+  <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" 
+              (click)="seleccionarLista(lista)">
     <div class="lista-option-content">
       <span class="lista-nombre">{{ lista.nombre }}</span>
       
@@ -45,14 +48,21 @@
 <div class="categoria-container">
   <mat-form-field class="categoria-form-field">
     <mat-label>Selecciona una categoría</mat-label>
-    <mat-select [(ngModel)]="categoriaSeleccionada" (selectionChange)="seleccionarCategoria()">
-      <mat-option *ngIf="categorias.length === 0" disabled>Cargando categorías...</mat-option>
-      <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
-        {{ categoria.nombre }}
-      </mat-option>
-    </mat-select>
+    <input matInput id="categoriaInput" #categoriaInput [(ngModel)]="categoriaBusqueda" 
+           (input)="filtrarCategorias(categoriaBusqueda)" [matAutocomplete]="autoCategoria" 
+           (focus)="abrirDesplegableCategoria()" (keydown.escape)="limpiarCategoriaInput()">
+    <button mat-icon-button matPrefix (click)="limpiarCategoriaInput()" title="Limpiar">
+      <mat-icon>close</mat-icon>
+    </button>
     <mat-hint>Categoría requerida para crear una lista</mat-hint>
   </mat-form-field>
 </div>
+
+<mat-autocomplete #autoCategoria="matAutocomplete" (optionSelected)="onCategoriaSelected($event)">
+  <mat-option *ngIf="categoriasFiltradas.length === 0" disabled>No se encontraron categorías</mat-option>
+  <mat-option *ngFor="let categoria of categoriasFiltradas" [value]="categoria.nombre" [id]="categoria.id.toString()">
+    {{ categoria.nombre }}
+  </mat-option>
+</mat-autocomplete>
 
 <div id="mensajeInformativo"></div>
