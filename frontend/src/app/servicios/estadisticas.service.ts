@@ -6,13 +6,17 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class EstadisticasService {
-    private apiUrl = 'http://127.0.0.1:8000/api/generar-estadisticas';
+    private apiUrl = 'http://127.0.0.1:8000/api';
 
     constructor(private http: HttpClient) { }
 
-    generarEstadisticas(categoria: string, page: number = 1, limit: number = 10): Observable<any> {
-        return this.http.post<any>(this.apiUrl, {
-            categoria: categoria,
+    obtenerCategorias(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/obtener-categorias`);
+    }
+
+    generarEstadisticas(categoriaId: number, page: number = 1, limit: number = 10): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/generar-estadisticas`, {
+            categoria_id: categoriaId,
             page: page,
             limit: limit
         });

@@ -2,13 +2,9 @@
 namespace App\Repository;
 
 use App\Entity\Lista;
+use App\Entity\Categoria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
-/*
-cada página tiene que 
-
-*/
 
 /**
  * @extends ServiceEntityRepository<Lista>
@@ -20,7 +16,7 @@ class EstadisticasRepository extends ServiceEntityRepository
         parent::__construct($registry, Lista::class);
     }
 
-    public function obtenerMasAgregado(string $nombre, int $page = 1, int $limit = 10): array
+    public function obtenerMasAgregado(int $categoriaId, int $page = 1, int $limit = 10): array
     {
         $offset = ($page - 1) * $limit;
 
@@ -28,8 +24,9 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->select('e.nombre, COUNT(e.id) as total')
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
-            ->where('l.nombre = :nombre')
-            ->setParameter('nombre', $nombre)
+            ->leftJoin('l.listaCategorias', 'lc')
+            ->where('lc.categoria = :categoriaId')
+            ->setParameter('categoriaId', $categoriaId)
             ->groupBy('e.nombre')
             ->orderBy('total', 'DESC')
             ->setFirstResult($offset)
@@ -38,21 +35,22 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function obtenerMasAgregadoCount(string $nombre): int
+    public function obtenerMasAgregadoCount(int $categoriaId): int
     {
         $totalQueryBuilder = $this->createQueryBuilder('l')
             ->select('COUNT(DISTINCT e.nombre) as totalCount')
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
-            ->where('l.nombre = :nombre')
-            ->setParameter('nombre', $nombre);
+            ->leftJoin('l.listaCategorias', 'lc')
+            ->where('lc.categoria = :categoriaId')
+            ->setParameter('categoriaId', $categoriaId);
 
         return (int)$totalQueryBuilder
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    public function obtenerMasGustado(string $nombre, int $page = 1, int $limit = 10): array
+    public function obtenerMasGustado(int $categoriaId, int $page = 1, int $limit = 10): array
     {
         $offset = ($page - 1) * $limit;
 
@@ -61,8 +59,9 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
             ->leftJoin('e.usuarioElementoPositivos', 'uep')
-            ->where('l.nombre = :nombre')
-            ->setParameter('nombre', $nombre)
+            ->leftJoin('l.listaCategorias', 'lc')
+            ->where('lc.categoria = :categoriaId')
+            ->setParameter('categoriaId', $categoriaId)
             ->groupBy('e.nombre')
             ->orderBy('total', 'DESC')
             ->setFirstResult($offset)
@@ -71,23 +70,24 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function obtenerMasGustadoCount(string $nombre): int
+    public function obtenerMasGustadoCount(int $categoriaId): int
     {
         $totalQueryBuilder = $this->createQueryBuilder('l')
             ->select('COUNT(DISTINCT e.nombre) as totalCount')
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
             ->leftJoin('e.usuarioElementoPositivos', 'uep')
-            ->where('l.nombre = :nombre')
+            ->leftJoin('l.listaCategorias', 'lc')
+            ->where('lc.categoria = :categoriaId')
             ->andWhere('uep.positivo = true OR uep.positivo IS NULL')
-            ->setParameter('nombre', $nombre);
+            ->setParameter('categoriaId', $categoriaId);
 
         return (int)$totalQueryBuilder
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    public function obtenerMenosGustado(string $nombre, int $page = 1, int $limit = 10): array
+    public function obtenerMenosGustado(int $categoriaId, int $page = 1, int $limit = 10): array
     {
         $offset = ($page - 1) * $limit;
 
@@ -96,8 +96,9 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
             ->leftJoin('e.usuarioElementoPositivos', 'uep')
-            ->where('l.nombre = :nombre')
-            ->setParameter('nombre', $nombre)
+            ->leftJoin('l.listaCategorias', 'lc')
+            ->where('lc.categoria = :categoriaId')
+            ->setParameter('categoriaId', $categoriaId)
             ->groupBy('e.nombre')
             ->orderBy('total', 'DESC')
             ->setFirstResult($offset)
@@ -106,27 +107,20 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function obtenerMenosGustadoCount(string $nombre): int
+    public function obtenerMenosGustadoCount(int $categoriaId): int
     {
         $totalQueryBuilder = $this->createQueryBuilder('l')
-        ->select('COUNT(DISTINCT e.nombre) as totalCount')
-        ->leftJoin('l.listaContieneElementos', 'lce')
-        ->leftJoin('lce.elemento', 'e')
-        ->leftJoin('e.usuarioElementoPositivos', 'uep')
-        ->where('l.nombre = :nombre')
-        ->andWhere('uep.positivo = false OR uep.positivo IS NULL')
-        ->setParameter('nombre', $nombre);
+            ->select('COUNT(DISTINCT e.nombre) as totalCount')
+            ->leftJoin('l.listaContieneElementos', 'lce')
+            ->leftJoin('lce.elemento', 'e')
+            ->leftJoin('e.usuarioElementoPositivos', 'uep')
+            ->leftJoin('l.listaCategorias', 'lc')
+            ->where('lc.categoria = :categoriaId')
+            ->andWhere('uep.positivo = false OR uep.positivo IS NULL')
+            ->setParameter('categoriaId', $categoriaId);
 
         return (int)$totalQueryBuilder
             ->getQuery()
             ->getSingleScalarResult();
-    }
-
-    public function obtenerCategoriasDisponibles(): array
-    {
-        return $this->createQueryBuilder('l')
-            ->select('DISTINCT l.nombre')
-            ->getQuery()
-            ->getScalarResult();
     }
 }

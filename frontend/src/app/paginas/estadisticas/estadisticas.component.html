@@ -1,30 +1,25 @@
 <div class="estadisticas-container">
   <div class="estadisticas-content">
+    <!-- Selector de categorías -->
     <mat-form-field appearance="fill" class="full-width">
-      <mat-label>Nombre Categoría</mat-label>
-      <input matInput [(ngModel)]="categoria" placeholder="Ejemplo: Libros, Películas, Series">
-      <mat-hint>Ingrese el nombre exacto de la categoría (sensible a mayúsculas/minúsculas)</mat-hint>
+      <mat-label>Selecciona una categoría</mat-label>
+      <mat-select [(ngModel)]="categoriaSeleccionada" (selectionChange)="onCategoriaChange()">
+        <mat-option *ngIf="categorias.length === 0" disabled>Cargando categorías...</mat-option>
+        <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
+          {{ categoria.nombre }}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Seleccione una categoría para ver sus estadísticas</mat-hint>
     </mat-form-field>
-    <!-- Reemplaza el botón existente con este -->
-    <!-- Botón de generar estadísticas con el mismo estilo que Crear usuario -->
-    <button 
-    mat-flat-button
-    class="boton-estadisticas"
-    (click)="obtenerEstadisticas(true)" 
-    [disabled]="isLoading">
-    <span *ngIf="!isLoading">Generar estadísticas</span>
-    <span *ngIf="isLoading">Procesando...</span>
-    </button>
 
     <!-- Spinner de carga con color morado -->
     <div *ngIf="isLoading" class="loading-spinner">
-    <mat-spinner diameter="40" class="spinner-color"></mat-spinner>
+      <mat-spinner diameter="40" class="spinner-color"></mat-spinner>
     </div>
 
     <!-- Mostramos la tabla solo cuando hay datos y no está cargando -->
     <div *ngIf="!isLoading && !noEstadisticas" class="tabla-container">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
-        <!-- Columnas sin cambios -->
         <ng-container matColumnDef="orden">
           <th mat-header-cell *matHeaderCellDef> Orden </th>
           <td mat-cell *matCellDef="let element"> {{element.orden}}º </td>

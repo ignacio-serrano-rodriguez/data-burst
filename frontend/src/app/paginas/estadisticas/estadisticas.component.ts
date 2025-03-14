@@ -7,6 +7,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 import { EstadisticasService } from '../../servicios/estadisticas.service';
 
 interface Estadistica {
@@ -31,6 +32,11 @@ interface EstadisticaResponse {
   };
 }
 
+interface Categoria {
+  id: number;
+  nombre: string;
+}
+
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
@@ -42,50 +48,78 @@ interface EstadisticaResponse {
     MatTableModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     FormsModule
   ],
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.css']
 })
 export class EstadisticasComponent implements OnInit, AfterViewInit {
-  categoria: string = '';
+  categorias: Categoria[] = [];
+  categoriaSeleccionada: number | null = null;
   displayedColumns: string[] = ['orden', 'masAgregado', 'masGustado', 'menosGustado'];
   dataSource = new MatTableDataSource<Estadistica>([]);
-  noEstadisticas: boolean = true; // Iniciar como true para no mostrar la tabla
-  isLoading: boolean = false; // Nueva propiedad para indicador de carga
+  noEstadisticas: boolean = true;
+  isLoading: boolean = false;
 
   // Propiedades para manejar la paginación del servidor
   totalItems: number = 0;
   pageSize: number = 10;
   pageIndex: number = 0;
   isFirstSearch: boolean = true;
-  busquedaRealizada: boolean = false; // Nueva propiedad para rastrear si ya se hizo una búsqueda
+  busquedaRealizada: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private estadisticasService: EstadisticasService) { }
 
   ngOnInit() {
-    // Inicialización de variables
+    this.cargarCategorias();
   }
 
   ngAfterViewInit() {
-    // No asignar this.dataSource.paginator = this.paginator
+    // No asignamos paginator ya que usamos paginación en el servidor
+  }
+
+  cargarCategorias(): void {
+    this.isLoading = true;
+    this.estadisticasService.obtenerCategorias().subscribe({
+      next: (response) => {
+        if (response.exito && response.categorias) {
+          this.categorias = response.categorias;
+        } else {
+          console.error('Error al cargar categorías:', response.mensaje);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al obtener categorías:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onCategoriaChange(): void {
+    if (this.categoriaSeleccionada !== null) {
+      this.obtenerEstadisticas(true);
+    }
   }
 
   obtenerEstadisticas(resetPage: boolean = false): void {
+    if (!this.categoriaSeleccionada) return;
+
     if (resetPage) {
       this.pageIndex = 0;
       this.isFirstSearch = true;
     }
 
-    this.isLoading = true; // Activar indicador de carga
-    this.busquedaRealizada = true; // Marcar que se ha realizado una búsqueda
+    this.isLoading = true;
+    this.busquedaRealizada = true;
 
-    console.log('Buscando estadísticas para categoría:', this.categoria, 'Página:', this.pageIndex + 1);
+    console.log('Buscando estadísticas para categoría ID:', this.categoriaSeleccionada, 'Página:', this.pageIndex + 1);
 
     this.estadisticasService.generarEstadisticas(
-      this.categoria,
+      this.categoriaSeleccionada,
       this.pageIndex + 1,
       this.pageSize
     ).subscribe({
@@ -99,20 +133,14 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
         if (hasData) {
           this.dataSource.data = this.combinarDatos(response.masAgregado, response.masGustado, response.menosGustado);
 
-          // Solo actualizar el totalItems en la primera búsqueda o si es mayor que el existente
           if (this.isFirstSearch) {
-            // Obtener el total máximo de los tres tipos de datos
             const maxTotal = Math.max(
               response.masAgregado.total || 0,
               response.masGustado.total || 0,
               response.menosGustado.total || 0
             );
-
-            // Si tenemos datos pero total=0, establecer al menos un valor mínimo
             this.totalItems = maxTotal > 0 ? maxTotal : 32;
             this.isFirstSearch = false;
-
-            console.log(`Estableciendo total inicial: ${this.totalItems}`);
           }
 
           this.noEstadisticas = false;
@@ -120,38 +148,25 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
           this.noEstadisticas = true;
         }
 
-        // Forzar la actualización del paginador después de un pequeño retraso
         setTimeout(() => {
           if (this.paginator) {
             this.paginator.pageIndex = this.pageIndex;
-            // Forzar la actualización del paginador
             this.paginator._changePageSize(this.pageSize);
           }
-          this.isLoading = false; // Desactivar indicador de carga
+          this.isLoading = false;
         }, 0);
       },
       error: (error) => {
         console.error('Error al generar estadísticas:', error);
         this.noEstadisticas = true;
-        this.isLoading = false; // Desactivar indicador de carga
+        this.isLoading = false;
       }
     });
   }
 
   handlePageEvent(event: PageEvent): void {
-    console.log('Evento de paginación:', event);
-    console.log(`Total de elementos según paginador: ${event.length}`);
-
-    // Guardamos el pageIndex anterior para debug
-    const oldPageIndex = this.pageIndex;
-
-    // Actualizamos el índice de página
     this.pageIndex = event.pageIndex;
     this.pageSize = 10;
-
-    console.log(`Navegando de página ${oldPageIndex} a página ${this.pageIndex}`);
-
-    // Llamar a obtenerEstadisticas sin reiniciar la página
     this.obtenerEstadisticas(false);
   }
 
@@ -163,11 +178,11 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
     );
 
     const combinedData: Estadistica[] = [];
-    const baseIndex = this.pageIndex * this.pageSize; // Calcular el índice base según la página
+    const baseIndex = this.pageIndex * this.pageSize;
 
     for (let i = 0; i < maxLength; i++) {
       combinedData.push({
-        orden: baseIndex + i + 1, // El orden comienza desde el índice base + 1
+        orden: baseIndex + i + 1,
         masAgregado: masAgregado.items[i] ? masAgregado.items[i].nombre : '',
         masGustado: masGustado.items[i] ? masGustado.items[i].nombre : '',
         menosGustado: menosGustado.items[i] ? menosGustado.items[i].nombre : ''
