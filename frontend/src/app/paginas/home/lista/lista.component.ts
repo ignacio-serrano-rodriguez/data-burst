@@ -79,13 +79,28 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     if (this.lista) {
+      console.log('Lista received by list component:', this.lista); // Debug logging
+
       this.nuevoNombreLista = this.lista.nombre;
-      this.listaPublica = this.lista.publica; // Inicializar la propiedad listaPublica
+      this.listaPublica = this.lista.publica;
+
+      if (!this.lista.categorias || this.lista.categorias.length === 0) {
+        console.log('Lista has no categories, fetching list data again');
+
+        this.listasService.obtenerLista(this.lista.id, this.usuarioActual).subscribe({
+          next: response => {
+            if (response.exito && response.lista && response.lista.categorias) {
+              console.log('Categories fetched successfully:', response.lista.categorias);
+              this.lista!.categorias = response.lista.categorias;
+            }
+          },
+          error: error => console.error('Error fetching list details:', error)
+        });
+      }
+
       this.obtenerElementosLista(this.lista.id);
       this.obtenerColaboradores(this.lista.id);
     }
-
-    this.setupSearchSubjects();
   }
 
   ngAfterViewInit(): void {

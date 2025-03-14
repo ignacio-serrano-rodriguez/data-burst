@@ -3,5 +3,5 @@ export interface Lista {
   nombre: string;
   compartida: boolean;
   publica: boolean;
-  categorias?: { id: number, nombre: string }[];
+  categorias: { id: number, nombre: string }[];
 }

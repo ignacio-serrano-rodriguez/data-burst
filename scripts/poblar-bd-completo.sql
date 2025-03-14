@@ -30,7 +30,7 @@ INSERT INTO categoria (id, nombre) VALUES
 (10, 'Manga'),
 (11, 'Cómics'),
 (12, 'Podcasts'),
-(13, 'Programas');
+(13, 'Programas TV');
 
 INSERT INTO usuario (mail, usuario, contrasenia, verificado, permiso, momento_registro, nombre, apellido_1, apellido_2, fecha_nacimiento, pais, profesion, estudios, idioma)
 VALUES 

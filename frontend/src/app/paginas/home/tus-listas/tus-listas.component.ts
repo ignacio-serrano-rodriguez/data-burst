@@ -170,17 +170,24 @@ export class TusListasComponent implements OnInit {
         if (data.exito == true) {
           this.nombreLista = '';
           this.publica = false;
-          this.categoriasSeleccionadas = []; // Limpiar categorías seleccionadas
-          this.categoriaSeleccionada = null;
-          this.obtenerListas();
-          this.noSeEncontraronListas = false;
-          this.seleccionarLista(data.lista);
+
+          if (data.lista) {
+            if (!data.lista.categorias && this.categoriasSeleccionadas.length > 0) {
+              data.lista.categorias = this.categoriasSeleccionadas.map(cat => ({
+                id: cat.id,
+                nombre: cat.nombre
+              }));
+            }
+
+            this.categoriasSeleccionadas = [];
+            this.categoriaSeleccionada = null;
+            this.obtenerListas();
+            this.noSeEncontraronListas = false;
+            this.seleccionarLista(data.lista);
+          }
         }
       },
       error: (error) => {
-        this.nombreLista = '';
-        this.publica = false;
-        this.homeComponent.mostrarMensajeNegativo(error.error.mensaje + " (" + objeto.nombre + ")");
       }
     });
   }
