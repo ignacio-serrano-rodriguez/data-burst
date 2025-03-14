@@ -2,13 +2,12 @@
 
 <div class="input-button-container">
   <mat-form-field class="elementoFormulario">
-    <mat-label class="etiquetaFormulario">Nombre de la lista</mat-label>
+    <mat-label>Nombre de la lista</mat-label>
     <input matInput id="nombreLista" #nombreListaInput [(ngModel)]="nombreLista" (input)="buscarListasLocal(nombreLista)" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.enter)="crearAsignarLista()" (keydown.escape)="salirDelInput()">
     <button mat-icon-button matPrefix (click)="salirDelInput()" title="Limpiar">
       <mat-icon>close</mat-icon>
     </button>
     
-    <!-- Replaced button with slide toggle -->
     <mat-slide-toggle matSuffix [checked]="publica" (change)="togglePublica($event)" color="accent" [title]="publica ? 'Lista pública' : 'Lista privada'" class="visibility-toggle">
       <mat-icon>{{ publica ? 'public' : 'lock' }}</mat-icon>
     </mat-slide-toggle>
@@ -26,15 +25,23 @@
 
 <mat-autocomplete #auto="matAutocomplete">
   <mat-option *ngFor="let lista of listasFiltradas" [value]="lista.nombre" (click)="seleccionarLista(lista)">
-    {{ lista.nombre }}
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
-    <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
+    <div class="lista-option-content">
+      <span class="lista-nombre">{{ lista.nombre }}</span>
+      
+      <span *ngIf="lista.categorias && lista.categorias.length > 0" class="lista-categoria-chip">
+        {{ lista.categorias[0].nombre }}
+      </span>
+      
+      <span class="lista-icons">
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.publica">public</mat-icon>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.publica">lock</mat-icon>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="lista.compartida">group</mat-icon>
+        <mat-icon style="color: rgba(128, 128, 128, 0.6);" *ngIf="!lista.compartida">person</mat-icon>
+      </span>
+    </div>
   </mat-option>
 </mat-autocomplete>
 
-<!-- Selector simplificado de categorías - Solo categorías principales -->
 <div class="categoria-container">
   <mat-form-field class="categoria-form-field">
     <mat-label>Selecciona una categoría</mat-label>

@@ -1,124 +1,140 @@
-/* Cambiar el cursor a pointer para los elementos de las listas asignadas */
 ul li a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .input-button-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .elementoFormulario {
-    flex-grow: 1;
-    min-width: 300px; /* Ajusta este valor según sea necesario */
-    max-width: 100%; /* Asegura que no se desborde */
+  flex-grow: 1;
+  min-width: 300px;
+  max-width: 100%;
 }
 
-/* Estilos para los botones de iconos */
 button[mat-icon-button] {
-    margin-left: 8px;
+  margin-left: 8px;
 }
 
-/* Evitar subrayado en hover para botones de iconos */
 button[mat-icon-button]:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-/* Estado deshabilitado para botón de añadir */
 button[mat-icon-button]:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-/* Estilos para el selector de categorías */
 .categoria-container {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .categoria-form-field {
-    width: 100%;
+  width: 100%;
 }
 
-/* Estilos para las categorías seleccionadas */
-.categorias-seleccionadas {
-    margin-top: 16px;
-    margin-bottom: 16px;
+.categorias-seleccionadas,
+.categoria-seleccionada {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
-.categorias-seleccionadas h3 {
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.87);
+.categorias-seleccionadas h3,
+.categoria-seleccionada h3 {
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 mat-chip-set {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 mat-chip {
-    margin-right: 8px;
-    margin-bottom: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
 }
 
-/* Estilo para el contenedor del botón de acción de categoría */
+.categoria-chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  padding: 4px 12px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.categoria-chip span {
+  margin-right: 8px;
+}
+
 .accion-categoria-container {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
-/* Estilo para resaltar visualmente las categorías en el desplegable */
+.visibility-toggle {
+  margin-left: 8px;
+}
+
+.visibility-toggle mat-icon {
+  margin-left: 4px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.lista-option-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.lista-nombre {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lista-categoria-chip {
+  background-color: #ae00cdb8;
+  color: white;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin: 0 8px;
+  white-space: nowrap;
+}
+
+.lista-icons {
+  display: flex;
+  align-items: center;
+}
+
 ::ng-deep .mat-optgroup-label {
-    font-weight: 500 !important;
-    color: #3f51b5 !important;
+  font-weight: 500 !important;
+  color: #3f51b5 !important;
 }
 
-/* Add these styles to your CSS file */
+::ng-deep .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+  padding-right: 8px;
+}
 
-.categoria-seleccionada {
-    margin-top: 16px;
-    margin-bottom: 16px;
-  }
-  
-  .categoria-seleccionada h3 {
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.87);
-  }
-  
-  .categoria-chip {
-    display: inline-flex;
-    align-items: center;
-    background-color: #f0f0f0;
-    border-radius: 16px;
-    padding: 4px 12px;
-    margin-right: 8px;
-    margin-bottom: 8px;
-  }
-  
-  .categoria-chip span {
-    margin-right: 8px;
-  }
+::ng-deep .mat-mdc-slide-toggle.mat-accent {
+  margin: 0 8px;
+}
 
-  .visibility-toggle {
-    margin-left: 8px;
-  }
-  
-  /* Style to align the icon within the toggle */
-  .visibility-toggle mat-icon {
-    margin-left: 4px;
-    font-size: 18px;
-    vertical-align: middle;
-  }
-  
-  /* Fix form field suffix alignment */
-  ::ng-deep .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
-    padding-right: 8px;
-  }
-  
-  ::ng-deep .mat-mdc-slide-toggle.mat-accent {
-    margin: 0 8px;
-  }
+::ng-deep .mat-mdc-option {
+  padding-right: 16px !important;
+}
+
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}

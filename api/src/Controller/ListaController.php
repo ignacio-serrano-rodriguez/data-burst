@@ -64,7 +64,6 @@ class ListaController extends AbstractController
         $respuestaJson = null;
 
         try {
-            // Verificar si hay categorías seleccionadas
             if (empty($categoriaIds)) {
                 return new JsonResponse(
                     [
@@ -98,25 +97,22 @@ class ListaController extends AbstractController
             $entityManager->persist($lista);
             $entityManager->persist($usuarioManipulaLista);
             
-            // Asignar categorías a la lista
             foreach ($categoriaIds as $categoriaId) {
                 $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
                 
                 if (!$categoria) {
-                    continue; // Saltamos categorías inválidas
+                    continue;
                 }
                 
                 $listaCategoria = new ListaCategoria();
                 $listaCategoria->setLista($lista);
                 $listaCategoria->setCategoria($categoria);
-                // La línea $listaCategoria->setMomentoAsignacion(new \DateTime()); ya no es necesaria
                 
                 $entityManager->persist($listaCategoria);
             }
             
             $entityManager->flush();
             
-            // Obtener las categorías asignadas para incluirlas en la respuesta
             $categorias = [];
             foreach ($lista->getListaCategorias() as $listaCategoria) {
                 $categorias[] = [
@@ -186,24 +182,15 @@ class ListaController extends AbstractController
                 $lista = $listaAsignada->getLista();
                 $compartida = count($entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista])) > 1;
                 
-                // Obtener categorías de la lista
                 $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
                 $categorias = [];
                 
-                // Procesar cada categoría asociada a la lista
                 foreach ($listaCategorias as $listaCategoria) {
                     $categoria = $listaCategoria->getCategoria();
-                    if ($categoria) {  // Asegurarse de que la categoría existe
-                        $categorias[] = [
-                            'id' => $categoria->getId(),
-                            'nombre' => $categoria->getNombre()
-                        ];
-                    }
-                }
-                
-                // Si no hay categorías asociadas, agregar un mensaje o un array vacío
-                if (empty($categorias)) {
-                    $categorias = [];  // Mantener como array vacío para consistencia
+                    $categorias[] = [
+                        'id' => $categoria->getId(),
+                        'nombre' => $categoria->getNombre()
+                    ];
                 }
                 
                 $dataListas[] = [
@@ -263,7 +250,6 @@ class ListaController extends AbstractController
                 );
             }
 
-            // Obtener el usuario desde el ID
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
             if (!$usuario) {
                 return new JsonResponse(
@@ -275,7 +261,6 @@ class ListaController extends AbstractController
                 );
             }
 
-            // Obtener la relación entre el usuario y la lista
             $usuarioManipulaLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findOneBy([
                 'lista' => $lista,
                 'usuario' => $usuario
@@ -291,7 +276,6 @@ class ListaController extends AbstractController
                 );
             }
             
-            // Obtener categorías de la lista
             $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
             $categorias = [];
             
@@ -408,17 +392,14 @@ class ListaController extends AbstractController
             $entityManager->remove($usuarioManipulaLista);
             $entityManager->flush();
 
-            // Verificar si hay más relaciones de usuarios con esta lista
             $relacionesRestantes = $entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista]);
 
             if (count($relacionesRestantes) === 0) {
-                // Eliminar todas las relaciones entre la lista y los elementos
                 $elementosRelacionados = $entityManager->getRepository(ListaContieneElemento::class)->findBy(['lista' => $lista]);
                 foreach ($elementosRelacionados as $relacion) {
                     $entityManager->remove($relacion);
                 }
 
-                // Eliminar la lista
                 $entityManager->remove($lista);
                 $entityManager->flush();
             }
@@ -472,7 +453,6 @@ class ListaController extends AbstractController
                 );
             }
 
-            // Obtener el usuario desde el ID
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
             if (!$usuario) {
                 return new JsonResponse(
@@ -484,7 +464,6 @@ class ListaController extends AbstractController
                 );
             }
 
-            // Obtener la relación entre el usuario y la lista
             $usuarioManipulaLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findOneBy([
                 'lista' => $lista,
                 'usuario' => $usuario
@@ -500,7 +479,7 @@ class ListaController extends AbstractController
                 );
             }
 
-            $usuarioManipulaLista->setPublica($publica); // Asignar la propiedad `publica` a `UsuarioManipulaLista`
+            $usuarioManipulaLista->setPublica($publica);
             $entityManager->flush();
 
             return new JsonResponse(
@@ -754,7 +733,7 @@ class ListaController extends AbstractController
 
                 $usuariosComentariosPositivos[] = [
                     'usuario_id' => $usuario->getId(),
-                    'usuario' => $usuario->getUsuario(), // Asegurarse de obtener el nombre del usuario
+                    'usuario' => $usuario->getUsuario(),
                     'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
                     'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
                 ];
@@ -812,7 +791,6 @@ class ListaController extends AbstractController
                 );
             }
 
-            // Verificar que el usuario tiene acceso a la lista
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioId);
             if (!$usuario) {
                 return new JsonResponse(
@@ -839,13 +817,11 @@ class ListaController extends AbstractController
                 );
             }
 
-            // Eliminar todas las categorías actuales
             $categoriasExistentes = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
             foreach ($categoriasExistentes as $categoriaExistente) {
                 $entityManager->remove($categoriaExistente);
             }
             
-            // Asignar las nuevas categorías
             if (empty($categoriaIds)) {
                 return new JsonResponse(
                     [
@@ -860,20 +836,18 @@ class ListaController extends AbstractController
                 $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
                 
                 if (!$categoria) {
-                    continue; // Saltamos categorías inválidas
+                    continue;
                 }
                 
                 $listaCategoria = new ListaCategoria();
                 $listaCategoria->setLista($lista);
                 $listaCategoria->setCategoria($categoria);
-                // La línea $listaCategoria->setMomentoAsignacion(new \DateTime()); ha sido eliminada
                 
                 $entityManager->persist($listaCategoria);
             }
             
             $entityManager->flush();
             
-            // Obtener las categorías actualizadas
             $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
             $categorias = [];
             

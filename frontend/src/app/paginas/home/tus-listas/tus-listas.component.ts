@@ -56,7 +56,6 @@ export class TusListasComponent implements OnInit {
   noSeEncontraronListas = false;
   listaSeleccionadaId: number | null = null;
 
-  // Nuevas propiedades para categorías
   categorias: Categoria[] = [];
   categoriasPrincipales: Categoria[] = [];
   categoriaSeleccionada: number | null = null;
@@ -69,20 +68,16 @@ export class TusListasComponent implements OnInit {
 
   seleccionarCategoria() {
     if (this.categoriaSeleccionada) {
-      // Clear any previous selections
       this.categoriasSeleccionadas = [];
 
-      // Find the selected category
       const categoria = this.categorias.find(cat => cat.id === this.categoriaSeleccionada);
 
       if (categoria) {
-        // Add directly to selected categories
         this.categoriasSeleccionadas = [categoria];
       }
     }
   }
 
-  // Método para obtener categorías
   obtenerCategorias() {
     this.listasService.obtenerCategorias().subscribe({
       next: (data) => {
@@ -103,10 +98,6 @@ export class TusListasComponent implements OnInit {
       const categoria = this.categorias.find(cat => cat.id === this.categoriaSeleccionada);
       if (categoria) {
         this.categoriasSeleccionadas.push(categoria);
-
-        // Opcional: Mantener la categoría seleccionada para facilitar la adición de más categorías
-        // O limpiarlo si prefieres que el usuario seleccione nuevamente
-        // this.categoriaSeleccionada = null; 
       }
     }
   }
@@ -251,7 +242,6 @@ export class TusListasComponent implements OnInit {
     const nombreListaValido = this.esNombreListaValido();
     const tieneCategorias = this.tieneCategoriaSeleccionada();
 
-    // Lista existente en el array de listas
     const listaExistente = this.listas.find(
       lista => lista.nombre.toLowerCase() === this.nombreLista.trim().toLowerCase()
     );
