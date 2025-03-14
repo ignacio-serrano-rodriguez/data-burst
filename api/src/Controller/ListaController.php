@@ -29,8 +29,7 @@ class ListaController extends AbstractController
             foreach ($categorias as $categoria) {
                 $categoriasData[] = [
                     'id' => $categoria->getId(),
-                    'nombre' => $categoria->getNombre(),
-                    'descripcion' => $categoria->getDescripcion()
+                    'nombre' => $categoria->getNombre()
                 ];
             }
             
@@ -110,7 +109,7 @@ class ListaController extends AbstractController
                 $listaCategoria = new ListaCategoria();
                 $listaCategoria->setLista($lista);
                 $listaCategoria->setCategoria($categoria);
-                $listaCategoria->setMomentoAsignacion(new \DateTime());
+                // La línea $listaCategoria->setMomentoAsignacion(new \DateTime()); ya no es necesaria
                 
                 $entityManager->persist($listaCategoria);
             }
@@ -300,8 +299,7 @@ class ListaController extends AbstractController
                 $categoria = $listaCategoria->getCategoria();
                 $categorias[] = [
                     'id' => $categoria->getId(),
-                    'nombre' => $categoria->getNombre(),
-                    'descripcion' => $categoria->getDescripcion()
+                    'nombre' => $categoria->getNombre()
                 ];
             }
 
@@ -868,7 +866,7 @@ class ListaController extends AbstractController
                 $listaCategoria = new ListaCategoria();
                 $listaCategoria->setLista($lista);
                 $listaCategoria->setCategoria($categoria);
-                $listaCategoria->setMomentoAsignacion(new \DateTime());
+                // La línea $listaCategoria->setMomentoAsignacion(new \DateTime()); ha sido eliminada
                 
                 $entityManager->persist($listaCategoria);
             }
