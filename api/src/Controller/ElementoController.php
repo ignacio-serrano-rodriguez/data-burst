@@ -58,8 +58,6 @@ class ElementoController extends AbstractController
                 'id' => $elemento->getId(),
                 'nombre' => $elemento->getNombre(),
                 'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
-                'informacion_extra' => $elemento->getInformacionExtra(),
-                'puntuacion' => $elemento->getPuntuacion(),
                 'descripcion' => $elemento->getDescripcion(),
                 'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s')
             ];
@@ -94,8 +92,6 @@ class ElementoController extends AbstractController
         $elemento = new Elemento();
         $elemento->setNombre($datosRecibidos['nombre']);
         $elemento->setFechaAparicion(new \DateTime($datosRecibidos['fecha_aparicion']));
-        $elemento->setInformacionExtra($datosRecibidos['informacion_extra']);
-        $elemento->setPuntuacion(0); // Puntuación por defecto
         $elemento->setDescripcion($datosRecibidos['descripcion']);
         $elemento->setMomentoCreacion(new \DateTime());
         $elemento->setUsuario($usuario);
@@ -112,8 +108,6 @@ class ElementoController extends AbstractController
                         'id' => $elemento->getId(),
                         'nombre' => $elemento->getNombre(),
                         'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
-                        'informacion_extra' => $elemento->getInformacionExtra(),
-                        'puntuacion' => $elemento->getPuntuacion(),
                         'descripcion' => $elemento->getDescripcion(),
                         'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s')
                     ]

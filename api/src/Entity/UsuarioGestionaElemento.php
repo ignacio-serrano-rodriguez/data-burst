@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -25,15 +24,12 @@ class UsuarioGestionaElemento
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha_aparicion_antigua = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $informacion_extra_antigua = null;
-
     #[ORM\Column(type: Types::TEXT)]
     private ?string $descripcion_antigua = null;
 
     #[ORM\ManyToOne(inversedBy: 'usuarioGestionaElementos')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Usuario $usuario_administrador = null;
+    #[ORM\JoinColumn(name: "usuario_id", nullable: false)]
+    private ?Usuario $usuario = null;
 
     #[ORM\ManyToOne(inversedBy: 'usuarioGestionaElementos')]
     #[ORM\JoinColumn(nullable: false)]
@@ -87,18 +83,6 @@ class UsuarioGestionaElemento
         return $this;
     }
 
-    public function getInformacionExtraAntigua(): ?string
-    {
-        return $this->informacion_extra_antigua;
-    }
-
-    public function setInformacionExtraAntigua(string $informacion_extra_antigua): static
-    {
-        $this->informacion_extra_antigua = $informacion_extra_antigua;
-
-        return $this;
-    }
-
     public function getDescripcionAntigua(): ?string
     {
         return $this->descripcion_antigua;
@@ -111,14 +95,14 @@ class UsuarioGestionaElemento
         return $this;
     }
 
-    public function getUsuarioAdministrador(): ?Usuario
+    public function getUsuario(): ?Usuario
     {
-        return $this->usuario_administrador;
+        return $this->usuario;
     }
 
-    public function setUsuarioAdministrador(?Usuario $usuario_administrador): static
+    public function setUsuario(?Usuario $usuario): static
     {
-        $this->usuario_administrador = $usuario_administrador;
+        $this->usuario = $usuario;
 
         return $this;
     }

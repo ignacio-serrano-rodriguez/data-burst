@@ -452,8 +452,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
       id: 0,
       nombre: datos.nombre,
       fecha_aparicion: datos.fechaAparicion,
-      informacion_extra: datos.informacionExtra,
-      puntuacion: 0,
       descripcion: datos.descripcion,
       momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10),

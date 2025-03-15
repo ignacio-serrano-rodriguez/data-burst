@@ -743,8 +743,6 @@ class ListaController extends AbstractController
                 'id' => $elemento->getId(),
                 'nombre' => $elemento->getNombre(),
                 'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
-                'informacion_extra' => $elemento->getInformacionExtra(),
-                'puntuacion' => $elemento->getPuntuacion(),
                 'descripcion' => $elemento->getDescripcion(),
                 'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
                 'usuariosComentariosPositivos' => $usuariosComentariosPositivos

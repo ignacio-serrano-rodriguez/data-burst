@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -23,12 +22,6 @@ class Elemento
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $fecha_aparicion = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $informacion_extra = null;
-
-    #[ORM\Column]
-    private ?int $puntuacion = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $descripcion = null;
@@ -123,30 +116,6 @@ class Elemento
         return $this;
     }
 
-    public function getInformacionExtra(): ?string
-    {
-        return $this->informacion_extra;
-    }
-
-    public function setInformacionExtra(string $informacion_extra): static
-    {
-        $this->informacion_extra = $informacion_extra;
-
-        return $this;
-    }
-
-    public function getPuntuacion(): ?int
-    {
-        return $this->puntuacion;
-    }
-
-    public function setPuntuacion(int $puntuacion): static
-    {
-        $this->puntuacion = $puntuacion;
-
-        return $this;
-    }
-
     public function getDescripcion(): ?string
     {
         return $this->descripcion;
@@ -204,7 +173,6 @@ class Elemento
     public function removeListaContieneElemento(ListaContieneElemento $listaContieneElemento): static
     {
         if ($this->listaContieneElementos->removeElement($listaContieneElemento)) {
-            // set the owning side to null (unless already changed)
             if ($listaContieneElemento->getElemento() === $this) {
                 $listaContieneElemento->setElemento(null);
             }
@@ -234,7 +202,6 @@ class Elemento
     public function removeUsuarioReportaElemento(UsuarioReportaElemento $usuarioReportaElemento): static
     {
         if ($this->usuarioReportaElementos->removeElement($usuarioReportaElemento)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioReportaElemento->getElemento() === $this) {
                 $usuarioReportaElemento->setElemento(null);
             }
@@ -264,7 +231,6 @@ class Elemento
     public function removeUsuarioGestionaElemento(UsuarioGestionaElemento $usuarioGestionaElemento): static
     {
         if ($this->usuarioGestionaElementos->removeElement($usuarioGestionaElemento)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioGestionaElemento->getElemento() === $this) {
                 $usuarioGestionaElemento->setElemento(null);
             }
@@ -273,7 +239,7 @@ class Elemento
         return $this;
     }
 
-     /**
+    /**
      * @return Collection<int, UsuarioElementoPositivo>
      */
     public function getUsuarioElementoPositivos(): Collection
@@ -336,5 +302,4 @@ class Elemento
         }
         return $categorias;
     }
-    
 }

@@ -88,7 +88,7 @@ class Usuario implements UserInterface
     /**
      * @var Collection<int, UsuarioGestionaElemento>
      */
-    #[ORM\OneToMany(targetEntity: UsuarioGestionaElemento::class, mappedBy: 'usuario_administrador', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: UsuarioGestionaElemento::class, mappedBy: 'usuario', orphanRemoval: true)]
     private Collection $usuarioGestionaElementos;
 
     /**
@@ -349,7 +349,6 @@ class Usuario implements UserInterface
     public function removeElemento(Elemento $elemento): static
     {
         if ($this->elementos->removeElement($elemento)) {
-            // set the owning side to null (unless already changed)
             if ($elemento->getUsuario() === $this) {
                 $elemento->setUsuario(null);
             }
@@ -379,7 +378,6 @@ class Usuario implements UserInterface
     public function removeUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
     {
         if ($this->usuarioManipulaListas->removeElement($usuarioManipulaLista)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioManipulaLista->getUsuario() === $this) {
                 $usuarioManipulaLista->setUsuario(null);
             }
@@ -409,7 +407,6 @@ class Usuario implements UserInterface
     public function removeUsuarioReportaElemento(UsuarioReportaElemento $usuarioReportaElemento): static
     {
         if ($this->usuarioReportaElementos->removeElement($usuarioReportaElemento)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioReportaElemento->getUsuario() === $this) {
                 $usuarioReportaElemento->setUsuario(null);
             }
@@ -430,7 +427,7 @@ class Usuario implements UserInterface
     {
         if (!$this->usuarioGestionaElementos->contains($usuarioGestionaElemento)) {
             $this->usuarioGestionaElementos->add($usuarioGestionaElemento);
-            $usuarioGestionaElemento->setUsuarioAdministrador($this);
+            $usuarioGestionaElemento->setUsuario($this);
         }
 
         return $this;
@@ -439,9 +436,8 @@ class Usuario implements UserInterface
     public function removeUsuarioGestionaElemento(UsuarioGestionaElemento $usuarioGestionaElemento): static
     {
         if ($this->usuarioGestionaElementos->removeElement($usuarioGestionaElemento)) {
-            // set the owning side to null (unless already changed)
-            if ($usuarioGestionaElemento->getUsuarioAdministrador() === $this) {
-                $usuarioGestionaElemento->setUsuarioAdministrador(null);
+            if ($usuarioGestionaElemento->getUsuario() === $this) {
+                $usuarioGestionaElemento->setUsuario(null);
             }
         }
 
@@ -469,7 +465,6 @@ class Usuario implements UserInterface
     public function removeUsuarioAgregaUsuario(UsuarioAgregaUsuario $usuarioAgregaUsuario): static
     {
         if ($this->usuarioAgregaUsuarios->removeElement($usuarioAgregaUsuario)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioAgregaUsuario->getUsuario1() === $this) {
                 $usuarioAgregaUsuario->setUsuario1(null);
             }
@@ -499,7 +494,6 @@ class Usuario implements UserInterface
     public function removeUsuarioGestionaUsuario(UsuarioGestionaUsuario $usuarioGestionaUsuario): static
     {
         if ($this->usuarioGestionaUsuarios->removeElement($usuarioGestionaUsuario)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioGestionaUsuario->getUsuarioNormal() === $this) {
                 $usuarioGestionaUsuario->setUsuarioNormal(null);
             }
