@@ -5,12 +5,12 @@ export interface Elemento {
     descripcion: string;
     momento_creacion: string;
     usuario_id: number;
-    positivo: boolean | null;
+    puntuacion: boolean | null;
     comentario: string | null;
-    usuariosComentariosPositivos: {
+    usuariosComentariosPuntuaciones: {
         usuario_id: number;
         usuario: string;
-        positivo: boolean | null;
+        puntuacion: boolean | null;
         comentario: string | null;
     }[];
 }

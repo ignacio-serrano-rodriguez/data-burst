@@ -4,7 +4,7 @@ use App\Entity\Lista;
 use App\Entity\Usuario;
 use App\Entity\UsuarioManipulaLista;
 use App\Entity\ListaContieneElemento;
-use App\Entity\UsuarioElementoPositivo;
+use App\Entity\UsuarioElementoPuntuacion;
 use App\Entity\UsuarioElementoComentario;
 use App\Entity\Elemento;
 use App\Entity\Invitacion;
@@ -592,7 +592,7 @@ class ListaController extends AbstractController
         $datosRecibidos = json_decode($request->getContent(), true);
         $listaId = $datosRecibidos['lista_id'];
         $elementoId = $datosRecibidos['elemento_id'];
-        $positivo = $datosRecibidos['positivo'];
+        $puntuacion = $datosRecibidos['puntuacion'];
         $usuarioId = $datosRecibidos['usuario_id'];
 
         $lista = $entityManager->getRepository(Lista::class)->find($listaId);
@@ -609,19 +609,19 @@ class ListaController extends AbstractController
             );
         }
 
-        $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
+        $UsuarioElementoPuntuacion = $entityManager->getRepository(UsuarioElementoPuntuacion::class)->findOneBy([
             'usuario' => $usuario,
             'elemento' => $elemento
         ]);
 
-        if (!$usuarioElementoPositivo) {
-            $usuarioElementoPositivo = new UsuarioElementoPositivo();
-            $usuarioElementoPositivo->setUsuario($usuario);
-            $usuarioElementoPositivo->setElemento($elemento);
+        if (!$UsuarioElementoPuntuacion) {
+            $UsuarioElementoPuntuacion = new UsuarioElementoPuntuacion();
+            $UsuarioElementoPuntuacion->setUsuario($usuario);
+            $UsuarioElementoPuntuacion->setElemento($elemento);
         }
 
-        $usuarioElementoPositivo->setPositivo($positivo);
-        $entityManager->persist($usuarioElementoPositivo);
+        $UsuarioElementoPuntuacion->setpuntuacion($puntuacion);
+        $entityManager->persist($UsuarioElementoPuntuacion);
         $entityManager->flush();
 
         return new JsonResponse(
@@ -716,12 +716,12 @@ class ListaController extends AbstractController
             $elemento = $listaContieneElemento->getElemento();
             $usuariosManipulanLista = $entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista]);
 
-            $usuariosComentariosPositivos = [];
+            $usuariosComentariosPuntuaciones = [];
 
             foreach ($usuariosManipulanLista as $usuarioManipulaLista) {
                 $usuario = $usuarioManipulaLista->getUsuario();
 
-                $usuarioElementoPositivo = $entityManager->getRepository(UsuarioElementoPositivo::class)->findOneBy([
+                $UsuarioElementoPuntuacion = $entityManager->getRepository(UsuarioElementoPuntuacion::class)->findOneBy([
                     'usuario' => $usuario,
                     'elemento' => $elemento
                 ]);
@@ -731,10 +731,10 @@ class ListaController extends AbstractController
                     'elemento' => $elemento
                 ]);
 
-                $usuariosComentariosPositivos[] = [
+                $usuariosComentariosPuntuaciones[] = [
                     'usuario_id' => $usuario->getId(),
                     'usuario' => $usuario->getUsuario(),
-                    'positivo' => $usuarioElementoPositivo ? $usuarioElementoPositivo->getPositivo() : null,
+                    'puntuacion' => $UsuarioElementoPuntuacion ? $UsuarioElementoPuntuacion->getpuntuacion() : null,
                     'comentario' => $usuarioElementoComentario ? $usuarioElementoComentario->getComentario() : null
                 ];
             }
@@ -745,7 +745,7 @@ class ListaController extends AbstractController
                 'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
                 'descripcion' => $elemento->getDescripcion(),
                 'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
-                'usuariosComentariosPositivos' => $usuariosComentariosPositivos
+                'usuariosComentariosPuntuaciones' => $usuariosComentariosPuntuaciones
             ];
         }
 

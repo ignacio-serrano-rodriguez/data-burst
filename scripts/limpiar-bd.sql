@@ -4,7 +4,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Limpiar tablas existentes
 TRUNCATE TABLE usuario_reporta_elemento;
 TRUNCATE TABLE usuario_elemento_comentario;
-TRUNCATE TABLE usuario_elemento_positivo;
+TRUNCATE TABLE usuario_elemento_puntuacion;
 TRUNCATE TABLE usuario_gestiona_elemento;
 TRUNCATE TABLE usuario_gestiona_usuario;
 TRUNCATE TABLE usuario_manipula_lista;

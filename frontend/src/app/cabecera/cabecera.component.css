@@ -167,12 +167,12 @@ button[mat-icon-button]:hover mat-icon {
     }
 
     #menu-section, #usuario-section {
-        display: none; /* Ocultar el menú y la sección de usuario en dispositivos móviles */
+        display: none; 
     }
 
     #hamburger-menu {
-        display: flex; /* Mostrar el menú hamburguesa en dispositivos móviles */
-        align-self: center; /* Centrar verticalmente */
+        display: flex; 
+        align-self: center; 
         height: 35px;
         width: 35px;
         justify-content: center;
@@ -189,12 +189,12 @@ button[mat-icon-button]:hover mat-icon {
     }
 
     #menu-section, #usuario-section {
-        display: none; /* Ocultar el menú y la sección de usuario en dispositivos móviles */
+        display: none;
     }
 
     #hamburger-menu {
-        display: flex; /* Mostrar el menú hamburguesa en dispositivos móviles */
-        align-self: center; /* Centrar verticalmente */
+        display: flex; 
+        align-self: center; 
         height: 35px;
         width: 35px;
         justify-content: center;
@@ -206,26 +206,25 @@ button[mat-icon-button]:hover mat-icon {
 /* Desktop [1280-infinito) */
 @media (min-width: 1280px) {
     #cabecera {
-        justify-content: space-between; /* Distribuir los bloques con space-between */
-        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
+        justify-content: space-between; 
+        flex-wrap: nowrap; 
     }
 
     #titulo {
-        justify-content: flex-start; /* Alinear a la izquierda */
-    }
+        justify-content: flex-start;
+    }    
 
     #menu-section {
-        display: flex; /* Mostrar el menú en escritorios */
-        flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
-        order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
+        display: flex; 
+        flex-wrap: nowrap; 
+        order: 1; 
     }
 
     #usuario-section {
-        justify-content: flex-end; /* Alinear a la derecha */
+        justify-content: flex-end; 
     }
 }
 
-/* Centrar los elementos del menú de hamburguesa */
 mat-menu {
     text-align: center;
 }
@@ -238,13 +237,11 @@ mat-menu button {
     text-align: center;
 }
 
-/* Reducir el espacio vertical entre los elementos del menú */
 mat-menu button.botonMenuUsuario {
     margin: 0;
     padding: 0.5em 0;
 }
 
-/* Reducir el espacio vertical entre 'Ver perfil' y 'Cerrar sesión' en el menú de usuario */
 mat-menu #verPerfil + button {
     margin-top: 0;
     padding-top: 0;

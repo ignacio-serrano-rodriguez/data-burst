@@ -5,7 +5,7 @@ import { ListaComponent } from "./lista/lista.component";
 import { CommonModule } from '@angular/common';
 import { RecargaService } from '../../servicios/recarga.service';
 import { Subscription } from 'rxjs';
-import { Lista } from '../../interfaces/Lista'; // Importar Lista
+import { Lista } from '../../interfaces/Lista';
 
 @Component({
   selector: 'app-home',
@@ -28,9 +28,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   usuarioLogueado: string = '(usuario logueado)';
   mostrarListasYAmigos = true;
   mostrarListaComponent = false;
-  listaSeleccionada: Lista | undefined = undefined; // Cambiar el tipo a Lista | undefined
+  listaSeleccionada: Lista | undefined = undefined;
 
-  constructor(private recargaService: RecargaService) {}
+  constructor(private recargaService: RecargaService) { }
 
   ngOnInit() {
     this.recargaSubscription = this.recargaService.recargarHome$.subscribe(() => {

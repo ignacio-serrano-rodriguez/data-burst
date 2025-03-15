@@ -52,10 +52,10 @@ class Elemento
     private Collection $usuarioGestionaElementos;
 
     /**
-     * @var Collection<int, UsuarioElementoPositivo>
+     * @var Collection<int, UsuarioElementoPuntuacion>
      */
-    #[ORM\OneToMany(targetEntity: UsuarioElementoPositivo::class, mappedBy: 'elemento', orphanRemoval: true)]
-    private Collection $usuarioElementoPositivos;
+    #[ORM\OneToMany(targetEntity: UsuarioElementoPuntuacion::class, mappedBy: 'elemento', orphanRemoval: true)]
+    private Collection $UsuarioElementoPuntuacions;
 
     /**
      * @var Collection<int, ElementoCategoria>
@@ -76,7 +76,7 @@ class Elemento
         $this->listaContieneElementos = new ArrayCollection();
         $this->usuarioReportaElementos = new ArrayCollection();
         $this->usuarioGestionaElementos = new ArrayCollection();
-        $this->usuarioElementoPositivos = new ArrayCollection();
+        $this->UsuarioElementoPuntuacions = new ArrayCollection();
         $this->elementoCategorias = new ArrayCollection();
     }
 
@@ -240,29 +240,28 @@ class Elemento
     }
 
     /**
-     * @return Collection<int, UsuarioElementoPositivo>
+     * @return Collection<int, UsuarioElementoPuntuacion>
      */
-    public function getUsuarioElementoPositivos(): Collection
+    public function getUsuarioElementoPuntuacions(): Collection
     {
-        return $this->usuarioElementoPositivos;
+        return $this->UsuarioElementoPuntuacions;
     }
 
-    public function addUsuarioElementoPositivo(UsuarioElementoPositivo $usuarioElementoPositivo): static
+    public function addUsuarioElementoPuntuacion(UsuarioElementoPuntuacion $UsuarioElementoPuntuacion): static
     {
-        if (!$this->usuarioElementoPositivos->contains($usuarioElementoPositivo)) {
-            $this->usuarioElementoPositivos->add($usuarioElementoPositivo);
-            $usuarioElementoPositivo->setElemento($this);
+        if (!$this->UsuarioElementoPuntuacions->contains($UsuarioElementoPuntuacion)) {
+            $this->UsuarioElementoPuntuacions->add($UsuarioElementoPuntuacion);
+            $UsuarioElementoPuntuacion->setElemento($this);
         }
 
         return $this;
     }
 
-    public function removeUsuarioElementoPositivo(UsuarioElementoPositivo $usuarioElementoPositivo): static
+    public function removeUsuarioElementoPuntuacion(UsuarioElementoPuntuacion $UsuarioElementoPuntuacion): static
     {
-        if ($this->usuarioElementoPositivos->removeElement($usuarioElementoPositivo)) {
-            // set the owning side to null (unless already changed)
-            if ($usuarioElementoPositivo->getElemento() === $this) {
-                $usuarioElementoPositivo->setElemento(null);
+        if ($this->UsuarioElementoPuntuacions->removeElement($UsuarioElementoPuntuacion)) {
+            if ($UsuarioElementoPuntuacion->getElemento() === $this) {
+                $UsuarioElementoPuntuacion->setElemento(null);
             }
         }
 

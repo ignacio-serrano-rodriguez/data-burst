@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Entity;
 
-use App\Repository\UsuarioElementoPositivoRepository;
+use App\Repository\UsuarioElementoPuntuacionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UsuarioElementoPositivoRepository::class)]
+#[ORM\Entity(repositoryClass: UsuarioElementoPuntuacionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class UsuarioElementoPositivo
+class UsuarioElementoPuntuacion
 {
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Usuario::class)]
@@ -20,10 +19,10 @@ class UsuarioElementoPositivo
     private ?Elemento $elemento = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private ?bool $positivo = null;
+    private ?bool $puntuacion = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $momento_positivo = null;
+    private ?\DateTimeInterface $momento_puntuacion = null;
 
     public function getUsuario(): ?Usuario
     {
@@ -49,35 +48,35 @@ class UsuarioElementoPositivo
         return $this;
     }
 
-    public function getPositivo(): ?bool
+    public function getPuntuacion(): ?bool
     {
-        return $this->positivo;
+        return $this->puntuacion;
     }
 
-    public function setPositivo(?bool $positivo): self
+    public function setPuntuacion(?bool $puntuacion): self
     {
-        $this->positivo = $positivo;
-        $this->momento_positivo = new \DateTime(); // Actualizar momento_positivo cuando cambie positivo
+        $this->puntuacion = $puntuacion;
+        $this->momento_puntuacion = new \DateTime(); 
 
         return $this;
     }
 
-    public function getMomentoPositivo(): ?\DateTimeInterface
+    public function getMomentoPuntuacion(): ?\DateTimeInterface
     {
-        return $this->momento_positivo;
+        return $this->momento_puntuacion;
     }
 
-    public function setMomentoPositivo(?\DateTimeInterface $momento_positivo): self
+    public function setMomentoPuntuacion(?\DateTimeInterface $momento_puntuacion): self
     {
-        $this->momento_positivo = $momento_positivo;
+        $this->momento_puntuacion = $momento_puntuacion;
 
         return $this;
     }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function actualizarMomentoPositivo(): void
+    public function actualizarMomentoPuntuacion(): void
     {
-        $this->momento_positivo = new \DateTime();
+        $this->momento_puntuacion = new \DateTime();
     }
 }

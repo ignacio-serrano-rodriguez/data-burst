@@ -99,18 +99,18 @@
       <td mat-cell *matCellDef="let elemento" class="mat-column-acciones">
         <div class="button-group">
           <div class="like-dislike-help-group">
-            <button mat-icon-button [ngClass]="{'like-button': elemento.positivo === true}" 
-                    (click)="elemento.positivo !== true && likeElemento(elemento)"
+            <button mat-icon-button [ngClass]="{'like-button': elemento.puntuacion === true}" 
+                    (click)="elemento.puntuacion !== true && likeElemento(elemento)"
                     [title]="obtenerTituloBotonLike(elemento)">
               <mat-icon>thumb_up</mat-icon>
             </button>
-            <button mat-icon-button [ngClass]="{'dislike-button': elemento.positivo === false}" 
-                    (click)="elemento.positivo !== false && dislikeElemento(elemento)"
+            <button mat-icon-button [ngClass]="{'dislike-button': elemento.puntuacion === false}" 
+                    (click)="elemento.puntuacion !== false && dislikeElemento(elemento)"
                     [title]="obtenerTituloBotonDislike(elemento)">
               <mat-icon>thumb_down</mat-icon>
             </button>
-            <button mat-icon-button [ngClass]="{'help-button': elemento.positivo === null}" 
-                    (click)="elemento.positivo !== null && resetLikeDislikeElemento(elemento)"
+            <button mat-icon-button [ngClass]="{'help-button': elemento.puntuacion === null}" 
+                    (click)="elemento.puntuacion !== null && resetLikeDislikeElemento(elemento)"
                     [title]="obtenerTituloBotonHelp(elemento)">
               <mat-icon>help_outline</mat-icon>
             </button>

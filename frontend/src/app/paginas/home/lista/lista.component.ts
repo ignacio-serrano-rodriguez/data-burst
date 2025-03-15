@@ -65,7 +65,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   noSeEncontraronElementos = false;
   usuarioActual: number = Number(localStorage.getItem('id')) || 0;
   mostrarBotonCrear = false;
-  listaPublica: boolean = false; // Nueva propiedad para manejar la visibilidad
+  listaPublica: boolean = false;
 
   private searchSubjectBuscar = new Subject<string>();
   private searchSubjectElemento = new Subject<string>();
@@ -79,18 +79,14 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     if (this.lista) {
-      console.log('Lista received by list component:', this.lista); // Debug logging
 
       this.nuevoNombreLista = this.lista.nombre;
       this.listaPublica = this.lista.publica;
 
       if (!this.lista.categorias || this.lista.categorias.length === 0) {
-        console.log('Lista has no categories, fetching list data again');
-
         this.listasService.obtenerLista(this.lista.id, this.usuarioActual).subscribe({
           next: response => {
             if (response.exito && response.lista && response.lista.categorias) {
-              console.log('Categories fetched successfully:', response.lista.categorias);
               this.lista!.categorias = response.lista.categorias;
             }
           },
@@ -184,13 +180,19 @@ export class ListaComponent implements OnInit, AfterViewInit {
       next: data => {
         if (data.exito) {
           const usuarioId = this.usuarioActual;
-          this.elementos = data.elementos.map(elemento => ({
-            ...elemento,
-            positivo: elemento.usuariosComentariosPositivos.find(u => u.usuario_id === usuarioId)?.positivo || null,
-            comentario: elemento.usuariosComentariosPositivos.find(u => u.usuario_id === usuarioId)?.comentario || '',
-            usuariosComentariosPositivos: elemento.usuariosComentariosPositivos.filter(u => u.usuario_id !== usuarioId)
-          }));
+          this.elementos = data.elementos.map(elemento => {
+            const commentsPuntuaciones = elemento.usuariosComentariosPuntuaciones || [];
+            const userReview = commentsPuntuaciones.find(u => u.usuario_id === usuarioId);
+            return {
+              ...elemento,
+              puntuacion: userReview?.puntuacion !== undefined ? userReview.puntuacion : null,
+              comentario: userReview?.comentario || '',
+              usuariosComentariosPuntuaciones: commentsPuntuaciones.filter(u => u.usuario_id !== usuarioId)
+            };
+          });
         }
+      },
+      error: err => {
       }
     });
   }
@@ -273,7 +275,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
         next: data => {
           if (data.exito) {
             this.lista!.publica = nuevaVisibilidad;
-            this.listaPublica = nuevaVisibilidad; // Actualizar la propiedad listaPublica
+            this.listaPublica = nuevaVisibilidad;
           }
         }
       });
@@ -340,7 +342,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, true).subscribe({
         next: data => {
           if (data.exito) {
-            elemento.positivo = true;
+            elemento.puntuacion = true;
           }
         }
       });
@@ -352,7 +354,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, false).subscribe({
         next: data => {
           if (data.exito) {
-            elemento.positivo = false;
+            elemento.puntuacion = false;
           }
         }
       });
@@ -364,7 +366,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, null).subscribe({
         next: data => {
           if (data.exito) {
-            elemento.positivo = null;
+            elemento.puntuacion = null;
           }
         }
       });
@@ -420,7 +422,6 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   agregarElementoSinEscribir(event: any) {
-    // No hacer nada aquí para evitar agregar el elemento al seleccionar la opción
   }
 
   mostrarFormulario() {
@@ -455,9 +456,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
       descripcion: datos.descripcion,
       momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10),
-      positivo: null,
+      puntuacion: null,
       comentario: null,
-      usuariosComentariosPositivos: []
+      usuariosComentariosPuntuaciones: []
     };
 
     this.elementosService.crearElemento(nuevoElemento).subscribe({
@@ -509,7 +510,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   obtenerTituloBotonLike(elemento: Elemento): string {
-    if (elemento.positivo === true) {
+    if (elemento.puntuacion === true) {
       return "Te gusta";
     } else {
       return "Me gusta";
@@ -517,7 +518,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   obtenerTituloBotonDislike(elemento: Elemento): string {
-    if (elemento.positivo === false) {
+    if (elemento.puntuacion === false) {
       return "No te gusta";
     } else {
       return "No me gusta";
@@ -525,7 +526,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   obtenerTituloBotonHelp(elemento: Elemento): string {
-    if (elemento.positivo === null) {
+    if (elemento.puntuacion === null) {
       return "Sin opinión";
     } else {
       return "Eliminar opinión";

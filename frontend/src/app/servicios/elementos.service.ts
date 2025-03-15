@@ -14,44 +14,44 @@ export class ElementosService {
 
   buscarElementos(query: string, listaId?: number): Observable<RespuestaBuscarElementos> {
     return this.http.post<RespuestaBuscarElementos>(
-      `${this.api}/buscar-elementos`, 
+      `${this.api}/buscar-elementos`,
       { query, lista_id: listaId }
     );
   }
 
   crearElemento(elemento: Elemento): Observable<RespuestaCrearElemento> {
     return this.http.post<RespuestaCrearElemento>(
-      `${this.api}/crear-elemento`, 
+      `${this.api}/crear-elemento`,
       elemento
     );
   }
 
   asignarElemento(listaId: number, elementoId: number): Observable<RespuestaAsignarElemento> {
     return this.http.post<RespuestaAsignarElemento>(
-      `${this.api}/asignar-elemento`, 
+      `${this.api}/asignar-elemento`,
       { lista_id: listaId, elemento_id: elementoId }
     );
   }
 
   quitarElemento(listaId: number, elementoId: number): Observable<{ exito: boolean, mensaje: string }> {
     return this.http.post<{ exito: boolean, mensaje: string }>(
-      `${this.api}/quitar-elemento`, 
+      `${this.api}/quitar-elemento`,
       { lista_id: listaId, elemento_id: elementoId }
     );
   }
 
-  toggleLikeDislike(listaId: number, elementoId: number, positivo: boolean | null): Observable<{ exito: boolean, mensaje: string }> {
+  toggleLikeDislike(listaId: number, elementoId: number, puntuacion: boolean | null): Observable<{ exito: boolean, mensaje: string }> {
     const usuarioId = Number(localStorage.getItem('id')) || 0;
     return this.http.post<{ exito: boolean, mensaje: string }>(
-      `${this.api}/toggle-like-dislike`, 
-      { lista_id: listaId, elemento_id: elementoId, positivo, usuario_id: usuarioId }
+      `${this.api}/toggle-like-dislike`,
+      { lista_id: listaId, elemento_id: elementoId, puntuacion, usuario_id: usuarioId }
     );
   }
 
   actualizarComentario(listaId: number, elementoId: number, comentario: string): Observable<{ exito: boolean, mensaje: string }> {
     const usuarioId = Number(localStorage.getItem('id')) || 0;
     return this.http.post<{ exito: boolean, mensaje: string }>(
-      `${this.api}/actualizar-comentario`, 
+      `${this.api}/actualizar-comentario`,
       { lista_id: listaId, elemento_id: elementoId, comentario, usuario_id: usuarioId }
     );
   }
