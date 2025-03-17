@@ -40,7 +40,6 @@ export class CrearElementoDialogComponent {
     this.form = this.fb.group({
       nombre: [data.nombre || '', Validators.required],
       fechaAparicion: ['', Validators.required],
-      informacionExtra: ['', Validators.required],
       descripcion: ['', Validators.required]
     });
   }
