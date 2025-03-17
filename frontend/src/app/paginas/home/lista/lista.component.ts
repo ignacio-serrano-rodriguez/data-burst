@@ -450,36 +450,27 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   crearElemento(datos: any) {
     const usuarioId = localStorage.getItem('id');
-    if (!usuarioId) {
+    if (!usuarioId || !this.lista) {
       return;
     }
 
-    const nuevoElemento: Elemento = {
-      id: 0,
+    const nuevoElemento: any = {
       nombre: datos.nombre,
       fecha_aparicion: datos.fechaAparicion,
       descripcion: datos.descripcion,
-      momento_creacion: new Date().toISOString(),
       usuario_id: parseInt(usuarioId, 10),
-      puntuacion: null,
-      comentario: null,
-      usuariosComentariosPuntuaciones: []
+      lista_id: this.lista.id
     };
 
     this.elementosService.crearElemento(nuevoElemento).subscribe({
       next: data => {
         if (data.exito) {
-          this.elementos.push(data.elemento);
-          this.noSeEncontraronElementos = false;
-          if (this.lista) {
-            this.agregarElemento(data.elemento.id);
-          }
+          this.agregarElemento(data.elemento.id);
           this.nombreElementoBuscar = '';
-          this.elementosEncontrados = [];
-          this.mostrarBotonCrear = false;
         }
       },
       error: error => {
+        console.error('Error creating element:', error);
       }
     });
   }

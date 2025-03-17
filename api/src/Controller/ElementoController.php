@@ -125,6 +125,20 @@ class ElementoController extends AbstractController
                 Response::HTTP_BAD_REQUEST
             );
         }
+        
+        $lista = null;
+        if (isset($datosRecibidos['lista_id'])) {
+            $lista = $entityManager->getRepository(Lista::class)->find($datosRecibidos['lista_id']);
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+        }
 
         $elemento = new Elemento();
         $elemento->setNombre($datosRecibidos['nombre']);
@@ -135,6 +149,19 @@ class ElementoController extends AbstractController
 
         try {
             $entityManager->persist($elemento);
+            
+            if ($lista) {
+                $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+                foreach ($listaCategorias as $listaCategoria) {
+                    $categoria = $listaCategoria->getCategoria();
+                    
+                    $elementoCategoria = new ElementoCategoria();
+                    $elementoCategoria->setElemento($elemento);
+                    $elementoCategoria->setCategoria($categoria);
+                    $entityManager->persist($elementoCategoria);
+                }
+            }
+            
             $entityManager->flush();
 
             return new JsonResponse(
