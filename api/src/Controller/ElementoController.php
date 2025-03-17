@@ -6,6 +6,8 @@ use App\Entity\Elemento;
 use App\Entity\Usuario;
 use App\Entity\Lista;
 use App\Entity\ListaContieneElemento;
+use App\Entity\ListaCategoria; 
+use App\Entity\ElementoCategoria; 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,15 +38,50 @@ class ElementoController extends AbstractController
         $qb = $entityManager->getRepository(Elemento::class)->createQueryBuilder('e');
 
         if ($listaId) {
-            $qb->where('e.nombre LIKE :query')
-                ->andWhere($qb->expr()->notIn('e.id', 
+            $lista = $entityManager->getRepository(Lista::class)->find($listaId);
+            
+            if (!$lista) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Lista no encontrada.",
+                        "elementos" => []
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+            
+            $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+            
+            if (empty($listaCategorias)) {
+                return new JsonResponse(
+                    [
+                        "exito" => true,
+                        "mensaje" => "No hay categorías asociadas a esta lista.",
+                        "elementos" => []
+                    ],
+                    Response::HTTP_OK
+                );
+            }
+            
+            $categoriaIds = [];
+            foreach ($listaCategorias as $listaCategoria) {
+                $categoriaIds[] = $listaCategoria->getCategoria()->getId();
+            }
+            
+            $qb->join('App\Entity\ElementoCategoria', 'ec', 'WITH', 'ec.elemento = e.id')
+            ->where('e.nombre LIKE :query')
+            ->andWhere($qb->expr()->notIn('e.id', 
                     $entityManager->getRepository(ListaContieneElemento::class)->createQueryBuilder('lce')
                         ->select('IDENTITY(lce.elemento)')
                         ->where('lce.lista = :listaId')
                         ->getDQL()
                 ))
-                ->setParameter('query', '%' . $query . '%')
-                ->setParameter('listaId', $listaId);
+            ->andWhere('ec.categoria IN (:categoriaIds)')
+            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('listaId', $listaId)
+            ->setParameter('categoriaIds', $categoriaIds)
+            ->distinct();
         } else {
             $qb->where('e.nombre LIKE :query')
                 ->setParameter('query', '%' . $query . '%');
