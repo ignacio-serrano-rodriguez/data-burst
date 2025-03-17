@@ -108,28 +108,28 @@ VALUES
 (6, 'El proyecto Hail Mary', '2021-05-04', 'Un maestro de ciencias amnésico despierta solo en una nave espacial con la misión de salvar a la humanidad.', '2023-04-12 11:25:00'),
 (7, 'Reina Roja', '2018-11-08', 'Thriller futurista donde una detective especial investiga asesinatos en una sociedad vigilada por inteligencia artificial.', '2023-04-13 09:40:00');
 
-INSERT INTO lista (nombre)
+INSERT INTO lista (id, nombre)
 VALUES 
-('Series'),
-('Películas'),
-('Libros'),
-('Videojuegos'),
-('Lo mejor del 2023'),
-('Para ver este fin de semana'),
-('Recomendaciones para principiantes'),
-('Clásicos literarios'),
-('Ciencia ficción y fantasía'),
-('Literatura latinoamericana'),
-('Novela histórica'),
-('Literatura contemporánea'),
-('Libros de no ficción'),
-('Mis favoritos de todos los tiempos'),
-('Lecturas pendientes'),
-('Libros para el verano'),
-('Lecturas académicas'),
-('Novela negra y thrillers'),
-('Recomendados por amigos'),
-('Libros premiados');
+(1, 'Series'),
+(2, 'Películas'),
+(3, 'Libros'),
+(4, 'Videojuegos'),
+(5, 'Lo mejor del 2023'),
+(6, 'Para ver este fin de semana'),
+(7, 'Recomendaciones para principiantes'),
+(8, 'Clásicos literarios'),
+(9, 'Ciencia ficción y fantasía'),
+(10, 'Literatura latinoamericana'),
+(11, 'Novela histórica'),
+(12, 'Literatura contemporánea'),
+(13, 'Libros de no ficción'),
+(14, 'Mis favoritos de todos los tiempos'),
+(15, 'Lecturas pendientes'),
+(16, 'Libros para el verano'),
+(17, 'Lecturas académicas'),
+(18, 'Novela negra y thrillers'),
+(19, 'Recomendados por amigos'),
+(20, 'Libros premiados');
 
 INSERT INTO usuario_manipula_lista (usuario_id, lista_id, publica, momento_manipulacion)
 VALUES 
