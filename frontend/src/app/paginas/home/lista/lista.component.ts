@@ -96,6 +96,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
       this.obtenerElementosLista(this.lista.id);
       this.obtenerColaboradores(this.lista.id);
+
+      this.setupSearchSubjects();
     }
   }
 
@@ -154,7 +156,14 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   buscarElementos(query: string) {
-    if (query.length >= 3 && this.lista) {
+    if (!query || query.trim().length < 3) {
+      this.elementosEncontrados = [];
+      this.noSeEncontraronElementos = false;
+      this.mostrarBotonCrear = !!query && query.trim().length > 0;
+      return;
+    }
+
+    if (this.lista) {
       this.elementosService.buscarElementos(query, this.lista.id)
         .subscribe({
           next: data => {
@@ -162,16 +171,12 @@ export class ListaComponent implements OnInit, AfterViewInit {
             this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
             this.mostrarBotonCrear = true;
           },
-          error: () => {
+          error: (err) => {
             this.elementosEncontrados = [];
             this.noSeEncontraronElementos = true;
             this.mostrarBotonCrear = true;
           }
         });
-    } else {
-      this.elementosEncontrados = [];
-      this.noSeEncontraronElementos = false;
-      this.mostrarBotonCrear = true;
     }
   }
 
