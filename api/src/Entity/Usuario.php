@@ -119,7 +119,6 @@ class Usuario implements UserInterface
         $this->momento_registro = new \DateTime();
         $this->permiso = 1;
 
-        // Cambiar cuando se implemente el envío de correos de verificación
         if ($this->verificado === null) 
         {
             $this->verificado = true;
@@ -131,7 +130,7 @@ class Usuario implements UserInterface
         return $this->id;
     }
 
-    public function setId(string $id): static
+    public function setId(int $id): static
     {
         $this->id = $id;
 

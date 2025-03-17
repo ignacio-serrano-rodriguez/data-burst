@@ -20,10 +20,6 @@ class Lista
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
-    // Eliminar la propiedad `publica`
-    // #[ORM\Column]
-    // private ?bool $publica = true;
-
     /**
      * @var Collection<int, UsuarioManipulaLista>
      */
@@ -54,7 +50,7 @@ class Lista
         return $this->id;
     }
 
-    public function setId(string $id): static
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -94,7 +90,6 @@ class Lista
     public function removeUsuarioManipulaLista(UsuarioManipulaLista $usuarioManipulaLista): static
     {
         if ($this->usuarioManipulaListas->removeElement($usuarioManipulaLista)) {
-            // set the owning side to null (unless already changed)
             if ($usuarioManipulaLista->getLista() === $this) {
                 $usuarioManipulaLista->setLista(null);
             }
@@ -124,7 +119,6 @@ class Lista
     public function removeListaContieneElemento(ListaContieneElemento $listaContieneElemento): static
     {
         if ($this->listaContieneElementos->removeElement($listaContieneElemento)) {
-            // set the owning side to null (unless already changed)
             if ($listaContieneElemento->getLista() === $this) {
                 $listaContieneElemento->setLista(null);
             }
