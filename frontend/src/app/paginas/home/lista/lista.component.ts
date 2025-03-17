@@ -484,17 +484,22 @@ export class ListaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  mostrarInformacionElemento(elemento: Elemento) {
+  mostrarInformacionElemento(elemento: any): void {
     const dialogRef = this.dialog.open(InformacionElementoDialogComponent, {
-      width: '400px',
-      data: { elemento, listaId: this.lista?.id }
+      width: '500px',
+      data: {
+        elemento: elemento,
+        listaId: this.lista!.id,
+        mostrarBotonAgregar: true
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result?.agregado) {
         this.obtenerElementosLista(this.lista!.id);
+        this.nombreElementoBuscar = '';
+        this.elementosEncontrados = [];
       }
-      this.resetBusquedaElemento();
     });
   }
 
@@ -536,5 +541,16 @@ export class ListaComponent implements OnInit, AfterViewInit {
     } else {
       return "Eliminar opinión";
     }
+  }
+
+  mostrarInformacionElementoExistente(elemento: any): void {
+    const dialogRef = this.dialog.open(InformacionElementoDialogComponent, {
+      width: '500px',
+      data: {
+        elemento: elemento,
+        listaId: this.lista!.id,
+        mostrarBotonAgregar: false // Don't show the add button for existing elements
+      }
+    });
   }
 }

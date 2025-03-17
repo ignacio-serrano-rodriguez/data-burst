@@ -5,11 +5,11 @@
   <p><strong>Descripción:</strong> {{ data.elemento.descripcion }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-icon-button (click)="cerrar()">
+  <button mat-icon-button (click)="cerrar()" title="Cerrar">
     <mat-icon>cancel</mat-icon>
   </button>
   <span class="spacer"></span>
-  <button mat-icon-button (click)="agregarElemento()">
+  <button *ngIf="data.mostrarBotonAgregar" mat-icon-button (click)="agregarElemento()" title="Añadir a la lista">
     <mat-icon>add</mat-icon>
   </button>
 </div>
