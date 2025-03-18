@@ -11,6 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Usuario {
   id: number;
@@ -32,23 +33,23 @@ interface Usuario {
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatIconModule
   ],
   templateUrl: './administracion.component.html',
   styleUrls: ['./administracion.component.css']
 })
 export class AdministracionComponent implements OnInit {
-  // Configuración de la tabla - Eliminado 'id' de las columnas
   displayedColumns: string[] = ['usuario', 'mail', 'permiso'];
   dataSource = new MatTableDataSource<Usuario>([]);
   isLoading: boolean = false;
+  searchTerm: string = '';
 
-  // Propiedades para paginación
   totalItems: number = 0;
   pageSize: number = 10;
   pageIndex: number = 0;
 
-  // Para la paginación manual
+  allUsuarios: Usuario[] = [];
   usuariosFiltrados: Usuario[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -59,7 +60,6 @@ export class AdministracionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Verificación de permisos
     if (typeof localStorage !== 'undefined') {
       const permiso = localStorage.getItem('permiso');
       if (permiso !== "3") {
@@ -71,7 +71,6 @@ export class AdministracionComponent implements OnInit {
       return;
     }
 
-    // Cargar datos de usuarios
     this.cargarUsuarios();
   }
 
@@ -81,20 +80,17 @@ export class AdministracionComponent implements OnInit {
     this.administracionService.obtenerUsuarios().subscribe({
       next: (resp: RespuestaObtenerUsuarios) => {
         if (resp.exito && resp.usuarios) {
-          // Normalizar datos para asegurar que todos los permisos sean strings
           const usuariosNormalizados = resp.usuarios.map(usuario => ({
             ...usuario,
-            permiso: usuario.permiso !== null ? String(usuario.permiso) : '1' // Default a usuario normal si es null
+            permiso: usuario.permiso !== null ? String(usuario.permiso) : '1'
           }));
 
-          // Guardar todos los usuarios para paginación manual
+          this.allUsuarios = [...usuariosNormalizados];
           this.usuariosFiltrados = [...usuariosNormalizados];
           this.totalItems = usuariosNormalizados.length;
 
-          // Actualizar la vista con la página actual
           this.actualizarVistaPaginacion();
 
-          // Actualizar paginador
           setTimeout(() => {
             if (this.paginator) {
               this.paginator.pageIndex = this.pageIndex;
@@ -113,6 +109,33 @@ export class AdministracionComponent implements OnInit {
     });
   }
 
+  applyFilter(): void {
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      this.usuariosFiltrados = [...this.allUsuarios];
+    } else {
+      const searchTermLower = this.searchTerm.toLowerCase().trim();
+      this.usuariosFiltrados = this.allUsuarios.filter(usuario => {
+        const usuarioMatch = usuario.usuario?.toLowerCase().includes(searchTermLower);
+        const mailMatch = usuario.mail?.toLowerCase().includes(searchTermLower);
+        return usuarioMatch || mailMatch;
+      });
+    }
+
+    this.totalItems = this.usuariosFiltrados.length;
+    this.pageIndex = 0;
+
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
+
+    this.actualizarVistaPaginacion();
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.applyFilter();
+  }
+
   actualizarVistaPaginacion(): void {
     const inicio = this.pageIndex * this.pageSize;
     const fin = inicio + this.pageSize;
@@ -122,14 +145,11 @@ export class AdministracionComponent implements OnInit {
   handlePageEvent(event: PageEvent): void {
     console.log('Evento de paginación:', event);
     this.pageIndex = event.pageIndex;
-    this.pageSize = 10; // Mantener fijo a 10 elementos por página
-
-    // Actualizar datos para la página actual
+    this.pageSize = 10;
     this.actualizarVistaPaginacion();
   }
 
   actualizarPermiso(usuario: Usuario): void {
-    // Evitar la modificación del usuario con ID 1
     if (usuario.id === 1) {
       console.log('No se puede modificar el permiso del administrador principal (ID 1)');
       return;
@@ -139,7 +159,6 @@ export class AdministracionComponent implements OnInit {
     this.administracionService.actualizarPermiso(usuario.id, usuario.permiso).subscribe({
       next: (resp) => {
         if (resp.exito) {
-          // También actualizar en el array de usuariosFiltrados para mantener coherencia
           const usuarioEnArray = this.usuariosFiltrados.find(u => u.id === usuario.id);
           if (usuarioEnArray) {
             usuarioEnArray.permiso = usuario.permiso;
@@ -156,7 +175,6 @@ export class AdministracionComponent implements OnInit {
     });
   }
 
-  // Helper para mostrar el nombre del permiso en la interfaz - Actualizado
   obtenerNombrePermiso(permiso: string): string {
     switch (permiso) {
       case '0': return 'Ninguno';

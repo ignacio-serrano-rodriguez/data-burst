@@ -1,59 +1,204 @@
 :host {
-    display: block;
-    width: 100%;
-    position: relative;
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  background-color: #f5f5f5;
+}
+
+.admin-dashboard {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-container {
+  width: 100%;
+  max-width: 1200px;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-header {
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+}
+
+.admin-subheader {
+  text-align: center;
+  color: #666;
+  margin: 8px 0 0;
+}
+
+.admin-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+}
+
+.admin-content {
+  padding: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.admin-table {
+  width: 100%;
+}
+
+.admin-table .mat-mdc-header-cell {
+  background-color: #f9f9f9;
+  color: #333;
+  font-weight: 500;
+  padding: 16px;
+}
+
+.admin-table .mat-mdc-cell {
+  padding: 12px 16px;
+}
+
+.admin-table .mat-mdc-cell:last-child {
+  padding-right: 16px;
+}
+
+.user-info, .email-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info mat-icon, .email-info mat-icon {
+  margin-right: 8px;
+  color: #666;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.permission-selector {
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+.permission-field {
+  width: 180px;
+}
+
+.admin-badge {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #AE00CD;
+  color: white;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 0;
+}
+
+.admin-badge mat-icon {
+  margin-right: 4px;
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+}
+
+.permission-option {
+  display: flex;
+  align-items: center;
+}
+
+.permission-option mat-icon {
+  margin-right: 8px;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+.admin-paginator {
+  margin: 16px auto;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 16px 8px;
   }
   
-  #administracion-container {
-    padding: 16px;
-    max-width: 1000px;
-    margin: auto;
+  .admin-header h1 {
+    font-size: 24px;
   }
   
-  mat-card-title {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 16px;
+  .permission-field {
+    width: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-container {
+    border-radius: 0;
   }
   
-  .full-width {
-    width: 100%;
-    margin-bottom: 16px;
+  .admin-table .mat-mdc-cell {
+    padding: 12px 8px;
   }
   
-  /* Spinner de carga */
-  .loading-spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
+  .user-info mat-icon, 
+  .email-info mat-icon {
+    display: none;
   }
-  
-  /* Color personalizado para el spinner */
-  .spinner-color ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
-    stroke: #AE00CD;
-  }
-  
-  /* Contenedor de la tabla */
-  .tabla-container {
-    margin-top: 20px;
-    overflow-x: auto;
-  }
-  
-  /* Estilos específicos de la tabla */
-  .tabla-container table {
-    width: 100%;
-  }
-  
-  /* Contenedor para el paginador */
-  .paginador-centrado {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-    margin-bottom: 16px;
-  }
-  
-  /* Estilos para la columna de permiso */
-  .mat-column-permiso {
-    width: 150px;
-  }
+}
+
+.search-container {
+  margin-bottom: 16px;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 500px;
+}
+
+.search-field .mat-icon {
+  color: #666;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin: 16px 0;
+}
+
+.no-results mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.no-results p {
+  font-size: 16px;
+  text-align: center;
+  margin: 0;
+}
