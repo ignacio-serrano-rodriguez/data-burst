@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,11 @@ import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
 import { AmigosService } from '../../../servicios/amigos.service';
@@ -17,10 +22,7 @@ import { Elemento } from '../../../interfaces/Elemento';
 import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 import { ComentarioDialogComponent } from './comentario-dialog/comentario-dialog.component';
 import { CrearElementoDialogComponent } from './crear-elemento-dialog/crear-elemento-dialog.component';
-import { FormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { InformacionElementoDialogComponent } from './informacion-dialog/informacion-elemento-dialog.component';
-import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-lista',
@@ -36,11 +38,11 @@ import { MatChipsModule } from '@angular/material/chips';
     MatTableModule,
     MatButtonToggleModule,
     MatSlideToggleModule,
-    MatChipsModule
+    MatChipsModule,
+    MatExpansionModule
   ],
   templateUrl: './lista.component.html',
-  styleUrls: ['./lista.component.css'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  styleUrls: ['./lista.component.css']
 })
 export class ListaComponent implements OnInit, AfterViewInit {
   @Input() lista: Lista | undefined;
@@ -50,22 +52,22 @@ export class ListaComponent implements OnInit, AfterViewInit {
   @ViewChild('nombreElementoBuscarInput') nombreElementoBuscarInput!: ElementRef;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   @ViewChild('autoElemento', { read: MatAutocompleteTrigger }) autocompleteTriggerElemento!: MatAutocompleteTrigger;
+
   elementos: Elemento[] = [];
-  elementosLikeDislike: { [key: number]: boolean | null } = {};
-  amigos: any[] = [];
   colaboradores: any[] = [];
+  amigosEncontrados: any[] = [];
+  elementosEncontrados: any[] = [];
+
   mostrarColaborarComponent = false;
   editandoNombre = false;
+  mostrarBotonCrear = false;
+  listaPublica: boolean = false;
+
   nuevoNombreLista = '';
   nombreAmigoBuscar: string = '';
   nombreElementoBuscar: string = '';
-  amigosEncontrados: any[] = [];
-  elementosEncontrados: any[] = [];
-  noSeEncontraronAmigos = false;
-  noSeEncontraronElementos = false;
+
   usuarioActual: number = Number(localStorage.getItem('id')) || 0;
-  mostrarBotonCrear = false;
-  listaPublica: boolean = false;
 
   private searchSubjectBuscar = new Subject<string>();
   private searchSubjectElemento = new Subject<string>();
@@ -83,19 +85,11 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.listaPublica = this.lista.publica;
 
       if (!this.lista.categoria) {
-        this.listasService.obtenerLista(this.lista.id, this.usuarioActual).subscribe({
-          next: response => {
-            if (response.exito && response.lista && response.lista.categoria) {
-              this.lista!.categoria = response.lista.categoria;
-            }
-          },
-          error: error => console.error('Error fetching list details:', error)
-        });
+        this.fetchListCategory();
       }
 
       this.obtenerElementosLista(this.lista.id);
       this.obtenerColaboradores(this.lista.id);
-
       this.setupSearchSubjects();
     }
   }
@@ -104,82 +98,109 @@ export class ListaComponent implements OnInit, AfterViewInit {
     if (this.editandoNombre) {
       this.nombreListaInput.nativeElement.focus();
     }
-    setTimeout(() => this.autocompleteTriggerElemento?.openPanel(), 0);
   }
 
-  setupSearchSubjects() {
-    this.searchSubjectBuscar.pipe(debounceTime(100), distinctUntilChanged())
-      .subscribe(query => this.buscarAmigos(query));
+  private fetchListCategory(): void {
+    if (!this.lista) return;
 
-    this.searchSubjectElemento.pipe(debounceTime(100), distinctUntilChanged())
-      .subscribe(query => this.buscarElementos(query));
+    this.listasService.obtenerLista(this.lista.id, this.usuarioActual).subscribe({
+      next: response => {
+        if (response.exito && response.lista?.categoria) {
+          this.lista!.categoria = response.lista.categoria;
+        }
+      },
+      error: error => console.error('Error fetching list details:', error)
+    });
   }
 
-  onNombreAmigoBuscarChange() {
-    this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
-    this.autocompleteTrigger?.openPanel();
+  private setupSearchSubjects(): void {
+    this.searchSubjectBuscar.pipe(
+      debounceTime(100),
+      distinctUntilChanged()
+    ).subscribe(query => this.buscarAmigos(query));
+
+    this.searchSubjectElemento.pipe(
+      debounceTime(100),
+      distinctUntilChanged()
+    ).subscribe(query => this.buscarElementos(query));
   }
 
-  onNombreElementoBuscarChange() {
-    this.searchSubjectElemento.next(this.nombreElementoBuscar.trim());
-    this.autocompleteTriggerElemento?.openPanel();
+  volver(): void {
+    this.volverAListasYAmigos.emit();
   }
 
-  abrirDesplegable() {
-    this.autocompleteTrigger?.openPanel();
+  editarNombre(): void {
+    this.editandoNombre = true;
+    setTimeout(() => this.nombreListaInput.nativeElement.focus(), 0);
   }
 
-  abrirDesplegableElemento() {
-    this.mostrarBotonCrear = true;
-    this.autocompleteTriggerElemento?.openPanel();
+  guardarNombre(): void {
+    if (!this.lista || !this.nuevoNombreLista.trim()) return;
+
+    this.listasService.modificarNombreLista(this.lista.id, this.nuevoNombreLista.trim()).subscribe({
+      next: data => {
+        if (data.exito) {
+          this.lista!.nombre = this.nuevoNombreLista.trim();
+          this.editandoNombre = false;
+        }
+      }
+    });
   }
 
-  buscarAmigos(query: string) {
-    if (query.length >= 3) {
-      const usuarioID = this.usuarioActual;
-      this.amigosService.buscarAmigosNoManipulanLista(query, usuarioID, this.lista?.id!)
-        .subscribe({
-          next: data => {
-            this.amigosEncontrados = data.amigos;
-            this.noSeEncontraronAmigos = this.amigosEncontrados.length === 0;
-          },
-          error: () => {
-            this.amigosEncontrados = [];
-            this.noSeEncontraronAmigos = true;
-          }
-        });
-    } else {
-      this.amigosEncontrados = [];
-      this.noSeEncontraronAmigos = false;
-    }
-  }
-
-  buscarElementos(query: string) {
-    if (!query || query.trim().length < 3) {
-      this.elementosEncontrados = [];
-      this.noSeEncontraronElementos = false;
-      this.mostrarBotonCrear = !!query && query.trim().length > 0;
-      return;
-    }
-
+  cancelarEdicion(): void {
+    this.editandoNombre = false;
     if (this.lista) {
-      this.elementosService.buscarElementos(query, this.lista.id)
-        .subscribe({
-          next: data => {
-            this.elementosEncontrados = data.elementos;
-            this.noSeEncontraronElementos = this.elementosEncontrados.length === 0;
-            this.mostrarBotonCrear = true;
-          },
-          error: (err) => {
-            this.elementosEncontrados = [];
-            this.noSeEncontraronElementos = true;
-            this.mostrarBotonCrear = true;
-          }
-        });
+      this.nuevoNombreLista = this.lista.nombre;
     }
   }
 
-  obtenerElementosLista(id: number) {
+  toggleEditarNombre(): void {
+    this.editandoNombre ? this.cancelarEdicion() : this.editarNombre();
+  }
+
+  toggleColaborar(): void {
+    this.mostrarColaborarComponent = !this.mostrarColaborarComponent;
+    if (this.mostrarColaborarComponent && this.lista) {
+      this.obtenerColaboradores(this.lista.id);
+    }
+  }
+
+  eliminarLista(): void {
+    if (!this.lista) return;
+
+    const dialogRef = this.dialog.open(ConfirmacionDialogComponent, {
+      width: '250px',
+      data: { mensaje: '¿Estás seguro de que deseas eliminar esta lista?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.listasService.desasignarLista(this.lista!.id, this.usuarioActual).subscribe({
+          next: data => {
+            if (data.exito) {
+              this.volverAListasYAmigos.emit();
+            }
+          }
+        });
+      }
+    });
+  }
+
+  cambiarVisibilidad(event: any): void {
+    if (!this.lista) return;
+
+    const nuevaVisibilidad = event.checked;
+    this.listasService.cambiarVisibilidadLista(this.lista.id, this.usuarioActual, nuevaVisibilidad).subscribe({
+      next: data => {
+        if (data.exito) {
+          this.lista!.publica = nuevaVisibilidad;
+          this.listaPublica = nuevaVisibilidad;
+        }
+      }
+    });
+  }
+
+  obtenerElementosLista(id: number): void {
     this.listasService.obtenerElementosLista(id).subscribe({
       next: data => {
         if (data.exito) {
@@ -187,6 +208,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
           this.elementos = data.elementos.map(elemento => {
             const commentsPuntuaciones = elemento.usuariosComentariosPuntuaciones || [];
             const userReview = commentsPuntuaciones.find(u => u.usuario_id === usuarioId);
+
             return {
               ...elemento,
               puntuacion: userReview?.puntuacion !== undefined ? userReview.puntuacion : null,
@@ -196,239 +218,58 @@ export class ListaComponent implements OnInit, AfterViewInit {
           });
         }
       },
-      error: err => {
-      }
+      error: err => console.error('Error fetching list elements:', err)
     });
   }
 
-  obtenerColaboradores(listaId: number) {
-    this.listasService.obtenerColaboradores(listaId).subscribe({
-      next: data => {
-        if (data.exito) {
-          this.colaboradores = data.colaboradores.filter(colaborador => colaborador.id !== this.usuarioActual);
-        }
-      }
-    });
-  }
-
-  volver() {
-    this.volverAListasYAmigos.emit();
-  }
-
-  toggleColaborar() {
-    this.mostrarColaborarComponent = !this.mostrarColaborarComponent;
-    if (this.mostrarColaborarComponent && this.lista) {
-      this.obtenerColaboradores(this.lista.id);
+  buscarElementos(query: string): void {
+    if (!query || query.trim().length < 3) {
+      this.elementosEncontrados = [];
+      this.mostrarBotonCrear = !!query && query.trim().length > 0;
+      return;
     }
-  }
 
-  toggleEditarNombre() {
-    this.editandoNombre ? this.cancelarEdicion() : this.editarNombre();
-  }
-
-  editarNombre() {
-    this.editandoNombre = true;
-    setTimeout(() => this.nombreListaInput.nativeElement.focus(), 0);
-  }
-
-  guardarNombre() {
-    if (this.lista && this.nuevoNombreLista.trim()) {
-      this.listasService.modificarNombreLista(this.lista.id, this.nuevoNombreLista.trim()).subscribe({
+    if (this.lista) {
+      this.elementosService.buscarElementos(query, this.lista.id).subscribe({
         next: data => {
-          if (data.exito) {
-            this.lista!.nombre = this.nuevoNombreLista.trim();
-            this.editandoNombre = false;
-          }
-        }
-      });
-    }
-  }
-
-  cancelarEdicion() {
-    this.editandoNombre = false;
-    if (this.lista) {
-      this.nuevoNombreLista = this.lista.nombre;
-    }
-  }
-
-  eliminarLista() {
-    if (this.lista) {
-      const dialogRef = this.dialog.open(ConfirmacionDialogComponent, {
-        width: '250px',
-        data: { mensaje: '¿Estás seguro de que deseas eliminar esta lista?' }
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.listasService.desasignarLista(this.lista!.id, this.usuarioActual).subscribe({
-            next: data => {
-              if (data.exito) {
-                this.volverAListasYAmigos.emit();
-              }
-            }
-          });
-        }
-      });
-    }
-  }
-
-  cambiarVisibilidad(event: any) {
-    if (this.lista) {
-      const nuevaVisibilidad = event.checked;
-      this.listasService.cambiarVisibilidadLista(this.lista.id, this.usuarioActual, nuevaVisibilidad).subscribe({
-        next: data => {
-          if (data.exito) {
-            this.lista!.publica = nuevaVisibilidad;
-            this.listaPublica = nuevaVisibilidad;
-          }
-        }
-      });
-    }
-  }
-
-  invitarAmigo(amigoId: number, amigoNombre: string) {
-    if (this.lista) {
-      this.listasService.invitarAmigo(this.lista.id, amigoId, this.usuarioActual).subscribe({
-        next: data => {
-          if (data.exito) {
-            this.amigosEncontrados = [];
-            this.noSeEncontraronAmigos = false;
-            this.nombreAmigoBuscar = '';
-            this.onNombreAmigoBuscarChange();
-          }
-        },
-        error: () => {
-          this.amigosEncontrados = [];
-          this.noSeEncontraronAmigos = false;
-          this.nombreAmigoBuscar = '';
-          this.onNombreAmigoBuscarChange();
-        }
-      });
-    }
-  }
-
-  agregarElemento(elementoId: number) {
-    if (this.lista) {
-      this.elementosService.asignarElemento(this.lista.id, elementoId).subscribe({
-        next: data => {
-          if (data.exito) {
-            this.obtenerElementosLista(this.lista!.id);
-            this.elementosEncontrados = [];
-            this.noSeEncontraronElementos = false;
-            this.nombreElementoBuscar = '';
-            this.onNombreElementoBuscarChange();
-          }
+          this.elementosEncontrados = data.elementos;
+          this.mostrarBotonCrear = true;
         },
         error: () => {
           this.elementosEncontrados = [];
-          this.noSeEncontraronElementos = false;
-          this.nombreElementoBuscar = '';
-          this.onNombreElementoBuscarChange();
+          this.mostrarBotonCrear = true;
         }
       });
     }
   }
 
-  eliminarElemento(elementoId: number) {
-    if (this.lista) {
-      this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
-        next: data => {
-          if (data.exito) {
-            this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId);
-          }
-        }
-      });
-    }
-  }
+  agregarElemento(elementoId: number): void {
+    if (!this.lista) return;
 
-  likeElemento(elemento: Elemento) {
-    if (this.lista) {
-      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, true).subscribe({
-        next: data => {
-          if (data.exito) {
-            elemento.puntuacion = true;
-          }
+    this.elementosService.asignarElemento(this.lista.id, elementoId).subscribe({
+      next: data => {
+        if (data.exito) {
+          this.obtenerElementosLista(this.lista!.id);
+          this.resetElementSearch();
         }
-      });
-    }
-  }
-
-  dislikeElemento(elemento: Elemento) {
-    if (this.lista) {
-      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, false).subscribe({
-        next: data => {
-          if (data.exito) {
-            elemento.puntuacion = false;
-          }
-        }
-      });
-    }
-  }
-
-  resetLikeDislikeElemento(elemento: Elemento) {
-    if (this.lista) {
-      this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, null).subscribe({
-        next: data => {
-          if (data.exito) {
-            elemento.puntuacion = null;
-          }
-        }
-      });
-    }
-  }
-
-  comentarElemento(elemento: Elemento) {
-    const dialogRef = this.dialog.open(ComentarioDialogComponent, {
-      width: '250px',
-      data: { elementoId: elemento.id, comentario: elemento.comentario || '' }
+      },
+      error: () => this.resetElementSearch()
     });
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined && this.lista) {
-        this.elementosService.actualizarComentario(this.lista.id, elemento.id, result).subscribe({
-          next: data => {
-            if (data.exito) {
-              elemento.comentario = result;
-            }
-          }
-        });
+  eliminarElemento(elementoId: number): void {
+    if (!this.lista) return;
+
+    this.elementosService.quitarElemento(this.lista.id, elementoId).subscribe({
+      next: data => {
+        if (data.exito) {
+          this.elementos = this.elementos.filter(elemento => elemento.id !== elementoId);
+        }
       }
     });
   }
 
-  salirDelInput() {
-    this.resetInput(this.nombreAmigoBuscar, this.nombreAmigoBuscarInput, this.autocompleteTrigger);
-  }
-
-  salirDelInputElemento() {
-    this.nombreElementoBuscar = '';
-    this.elementosEncontrados = [];
-    this.nombreElementoBuscarInput.nativeElement.blur();
-    this.autocompleteTriggerElemento.closePanel();
-  }
-
-  resetInput(nombre: string, input: ElementRef, trigger: MatAutocompleteTrigger) {
-    if (nombre && nombre.trim() === '') {
-      input.nativeElement.blur();
-    } else {
-      nombre = '';
-      setTimeout(() => trigger?.openPanel(), 0);
-    }
-  }
-
-  resetBusquedaElemento() {
-    this.nombreElementoBuscar = '';
-    this.elementosEncontrados = [];
-    this.nombreElementoBuscarInput.nativeElement.focus();
-    if (this.autocompleteTriggerElemento) {
-      this.autocompleteTriggerElemento.openPanel();
-    }
-  }
-
-  agregarElementoSinEscribir(event: any) {
-  }
-
-  mostrarFormulario() {
+  mostrarFormulario(): void {
     const nombreElemento = this.nombreElementoBuscar?.trim() || '';
     const dialogRef = this.dialog.open(CrearElementoDialogComponent, {
       width: '400px',
@@ -447,17 +288,14 @@ export class ListaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  crearElemento(datos: any) {
-    const usuarioId = localStorage.getItem('id');
-    if (!usuarioId || !this.lista) {
-      return;
-    }
+  crearElemento(datos: any): void {
+    if (!this.lista) return;
 
     const nuevoElemento: any = {
       nombre: datos.nombre,
       fecha_aparicion: datos.fechaAparicion,
       descripcion: datos.descripcion,
-      usuario_id: parseInt(usuarioId, 10),
+      usuario_id: this.usuarioActual,
       lista_id: this.lista.id
     };
 
@@ -468,18 +306,18 @@ export class ListaComponent implements OnInit, AfterViewInit {
           this.nombreElementoBuscar = '';
         }
       },
-      error: error => {
-        console.error('Error creating element:', error);
-      }
+      error: error => console.error('Error creating element:', error)
     });
   }
 
   mostrarInformacionElemento(elemento: any): void {
+    if (!this.lista) return;
+
     const dialogRef = this.dialog.open(InformacionElementoDialogComponent, {
       width: '500px',
       data: {
         elemento: elemento,
-        listaId: this.lista!.id,
+        listaId: this.lista.id,
         mostrarBotonAgregar: true
       }
     });
@@ -493,54 +331,196 @@ export class ListaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  obtenerTituloBotonCerrarAmigo(): string {
-    if (!this.nombreAmigoBuscar || this.nombreAmigoBuscar.trim() === '') {
-      return "Cancelar búsqueda";
-    } else {
-      return "Limpiar entrada";
-    }
-  }
-
-  obtenerTituloBotonCerrarElemento(): string {
-    if (!this.nombreElementoBuscar || this.nombreElementoBuscar.trim() === '') {
-      return "Cancelar búsqueda";
-    } else {
-      return "Limpiar entrada";
-    }
-  }
-
-  obtenerTituloBotonLike(elemento: Elemento): string {
-    if (elemento.puntuacion === true) {
-      return "Te gusta";
-    } else {
-      return "Me gusta";
-    }
-  }
-
-  obtenerTituloBotonDislike(elemento: Elemento): string {
-    if (elemento.puntuacion === false) {
-      return "No te gusta";
-    } else {
-      return "No me gusta";
-    }
-  }
-
-  obtenerTituloBotonHelp(elemento: Elemento): string {
-    if (elemento.puntuacion === null) {
-      return "Sin opinión";
-    } else {
-      return "Eliminar opinión";
-    }
-  }
-
   mostrarInformacionElementoExistente(elemento: any): void {
-    const dialogRef = this.dialog.open(InformacionElementoDialogComponent, {
+    if (!this.lista) return;
+
+    this.dialog.open(InformacionElementoDialogComponent, {
       width: '500px',
       data: {
         elemento: elemento,
-        listaId: this.lista!.id,
-        mostrarBotonAgregar: false // Don't show the add button for existing elements
+        listaId: this.lista.id,
+        mostrarBotonAgregar: false
       }
     });
+  }
+
+  likeElemento(elemento: Elemento): void {
+    this.toggleElementRating(elemento, true);
+  }
+
+  dislikeElemento(elemento: Elemento): void {
+    this.toggleElementRating(elemento, false);
+  }
+
+  resetLikeDislikeElemento(elemento: Elemento): void {
+    this.toggleElementRating(elemento, null);
+  }
+
+  private toggleElementRating(elemento: Elemento, rating: boolean | null): void {
+    if (!this.lista) return;
+
+    this.elementosService.toggleLikeDislike(this.lista.id, elemento.id, rating).subscribe({
+      next: data => {
+        if (data.exito) {
+          elemento.puntuacion = rating;
+        }
+      }
+    });
+  }
+
+  comentarElemento(elemento: Elemento): void {
+    if (!this.lista) return;
+
+    const dialogRef = this.dialog.open(ComentarioDialogComponent, {
+      width: '250px',
+      data: { elementoId: elemento.id, comentario: elemento.comentario || '' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.elementosService.actualizarComentario(this.lista!.id, elemento.id, result).subscribe({
+          next: data => {
+            if (data.exito) {
+              elemento.comentario = result;
+            }
+          }
+        });
+      }
+    });
+  }
+
+  obtenerColaboradores(listaId: number): void {
+    this.listasService.obtenerColaboradores(listaId).subscribe({
+      next: data => {
+        if (data.exito) {
+          this.colaboradores = data.colaboradores.filter(
+            colaborador => colaborador.id !== this.usuarioActual
+          );
+        }
+      }
+    });
+  }
+
+  buscarAmigos(query: string): void {
+    if (query.length < 3) {
+      this.amigosEncontrados = [];
+      return;
+    }
+
+    if (!this.lista) return;
+
+    this.amigosService.buscarAmigosNoManipulanLista(query, this.usuarioActual, this.lista.id)
+      .subscribe({
+        next: data => {
+          this.amigosEncontrados = data.amigos;
+        },
+        error: () => {
+          this.amigosEncontrados = [];
+        }
+      });
+  }
+
+  invitarAmigo(amigoId: number, amigoNombre: string): void {
+    if (!this.lista) return;
+
+    this.listasService.invitarAmigo(this.lista.id, amigoId, this.usuarioActual).subscribe({
+      next: data => {
+        if (data.exito) {
+          this.resetFriendSearch();
+        }
+      },
+      error: () => this.resetFriendSearch()
+    });
+  }
+
+  onNombreAmigoBuscarChange(): void {
+    this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+    this.autocompleteTrigger?.openPanel();
+  }
+
+  onNombreElementoBuscarChange(): void {
+    this.searchSubjectElemento.next(this.nombreElementoBuscar.trim());
+    this.autocompleteTriggerElemento?.openPanel();
+  }
+
+  abrirDesplegable(): void {
+    this.autocompleteTrigger?.openPanel();
+  }
+
+  abrirDesplegableElemento(): void {
+    this.mostrarBotonCrear = true;
+    this.autocompleteTriggerElemento?.openPanel();
+  }
+
+  salirDelInput(): void {
+    if (!this.nombreAmigoBuscar || this.nombreAmigoBuscar.trim() === '') {
+      this.nombreAmigoBuscarInput.nativeElement.blur();
+    } else {
+      this.nombreAmigoBuscar = '';
+      setTimeout(() => this.autocompleteTrigger?.openPanel(), 0);
+    }
+  }
+
+  salirDelInputElemento(): void {
+    this.nombreElementoBuscar = '';
+    this.elementosEncontrados = [];
+    this.nombreElementoBuscarInput.nativeElement.blur();
+    this.autocompleteTriggerElemento.closePanel();
+  }
+
+  resetBusquedaElemento(): void {
+    this.nombreElementoBuscar = '';
+    this.elementosEncontrados = [];
+    this.nombreElementoBuscarInput.nativeElement.focus();
+    this.autocompleteTriggerElemento?.openPanel();
+  }
+
+  private resetFriendSearch(): void {
+    this.amigosEncontrados = [];
+    this.nombreAmigoBuscar = '';
+    this.onNombreAmigoBuscarChange();
+  }
+
+  private resetElementSearch(): void {
+    this.elementosEncontrados = [];
+    this.nombreElementoBuscar = '';
+    this.onNombreElementoBuscarChange();
+  }
+
+  obtenerTituloBotonCerrarAmigo(): string {
+    return (!this.nombreAmigoBuscar || this.nombreAmigoBuscar.trim() === '')
+      ? "Cancelar búsqueda"
+      : "Limpiar entrada";
+  }
+
+  obtenerTituloBotonCerrarElemento(): string {
+    return (!this.nombreElementoBuscar || this.nombreElementoBuscar.trim() === '')
+      ? "Cancelar búsqueda"
+      : "Limpiar entrada";
+  }
+
+  obtenerTituloBotonLike(elemento: Elemento): string {
+    return elemento.puntuacion === true ? "Te gusta" : "Me gusta";
+  }
+
+  obtenerTituloBotonDislike(elemento: Elemento): string {
+    return elemento.puntuacion === false ? "No te gusta" : "No me gusta";
+  }
+
+  obtenerTituloBotonHelp(elemento: Elemento): string {
+    return elemento.puntuacion === null ? "Sin opinión" : "Eliminar opinión";
+  }
+
+  agregarElementoSinEscribir(event: any): void {
+    const selectedElementName = event.option.value;
+    const selectedElement = this.elementosEncontrados.find(
+      elemento => elemento.nombre === selectedElementName
+    );
+
+    if (selectedElement) {
+      this.mostrarInformacionElemento(selectedElement);
+    } else if (this.mostrarBotonCrear) {
+      this.mostrarFormulario();
+    }
   }
 }
