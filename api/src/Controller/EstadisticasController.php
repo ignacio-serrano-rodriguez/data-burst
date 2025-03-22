@@ -37,7 +37,6 @@ class EstadisticasController extends AbstractController
         }
 
         try {
-            // Verificar que la categoría existe
             $categoria = $this->entityManager->getRepository(Categoria::class)->find($categoriaId);
             
             if (!$categoria) {

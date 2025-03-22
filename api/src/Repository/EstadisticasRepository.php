@@ -2,7 +2,6 @@
 namespace App\Repository;
 
 use App\Entity\Lista;
-use App\Entity\Categoria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -24,8 +23,7 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->select('e.nombre, COUNT(e.id) as total')
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
-            ->leftJoin('l.listaCategorias', 'lc')
-            ->where('lc.categoria = :categoriaId')
+            ->where('l.categoria = :categoriaId')
             ->setParameter('categoriaId', $categoriaId)
             ->groupBy('e.nombre')
             ->orderBy('total', 'DESC')
@@ -41,8 +39,7 @@ class EstadisticasRepository extends ServiceEntityRepository
             ->select('COUNT(DISTINCT e.nombre) as totalCount')
             ->leftJoin('l.listaContieneElementos', 'lce')
             ->leftJoin('lce.elemento', 'e')
-            ->leftJoin('l.listaCategorias', 'lc')
-            ->where('lc.categoria = :categoriaId')
+            ->where('l.categoria = :categoriaId')
             ->setParameter('categoriaId', $categoriaId);
 
         return (int)$totalQueryBuilder
@@ -54,73 +51,71 @@ class EstadisticasRepository extends ServiceEntityRepository
     {
         $offset = ($page - 1) * $limit;
 
-        return $this->createQueryBuilder('l')
-            ->select('e.nombre, SUM(CASE WHEN uep.puntuacion = true THEN 1 ELSE 0 END) as total')
-            ->leftJoin('l.listaContieneElementos', 'lce')
-            ->leftJoin('lce.elemento', 'e')
-            ->leftJoin('e.UsuarioElementoPuntuacions', 'uep')
-            ->leftJoin('l.listaCategorias', 'lc')
-            ->where('lc.categoria = :categoriaId')
-            ->setParameter('categoriaId', $categoriaId)
-            ->groupBy('e.nombre')
-            ->orderBy('total', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT e.nombre, COUNT(uep.elemento) as total
+             FROM App\Entity\Elemento e
+             LEFT JOIN App\Entity\UsuarioElementoPuntuacion uep WITH uep.elemento = e AND uep.puntuacion = true
+             LEFT JOIN App\Entity\ListaContieneElemento lce WITH lce.elemento = e
+             LEFT JOIN App\Entity\Lista l WITH lce.lista = l
+             WHERE l.categoria = :categoriaId
+             GROUP BY e.nombre
+             ORDER BY total DESC'
+        )
+        ->setParameter('categoriaId', $categoriaId)
+        ->setFirstResult($offset)
+        ->setMaxResults($limit);
+
+        return $query->getResult();
     }
 
     public function obtenerMasGustadoCount(int $categoriaId): int
     {
-        $totalQueryBuilder = $this->createQueryBuilder('l')
-            ->select('COUNT(DISTINCT e.nombre) as totalCount')
-            ->leftJoin('l.listaContieneElementos', 'lce')
-            ->leftJoin('lce.elemento', 'e')
-            ->leftJoin('e.UsuarioElementoPuntuacions', 'uep')
-            ->leftJoin('l.listaCategorias', 'lc')
-            ->where('lc.categoria = :categoriaId')
-            ->andWhere('uep.puntuacion = true OR uep.puntuacion IS NULL')
-            ->setParameter('categoriaId', $categoriaId);
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT COUNT(DISTINCT e.nombre) as totalCount
+             FROM App\Entity\Elemento e
+             LEFT JOIN App\Entity\ListaContieneElemento lce WITH lce.elemento = e
+             LEFT JOIN App\Entity\Lista l WITH lce.lista = l
+             LEFT JOIN App\Entity\UsuarioElementoPuntuacion uep WITH uep.elemento = e
+             WHERE l.categoria = :categoriaId'
+        )
+        ->setParameter('categoriaId', $categoriaId);
 
-        return (int)$totalQueryBuilder
-            ->getQuery()
-            ->getSingleScalarResult();
+        return (int)$query->getSingleScalarResult();
     }
 
     public function obtenerMenosGustado(int $categoriaId, int $page = 1, int $limit = 10): array
     {
         $offset = ($page - 1) * $limit;
 
-        return $this->createQueryBuilder('l')
-            ->select('e.nombre, SUM(CASE WHEN uep.puntuacion = false THEN 1 ELSE 0 END) as total')
-            ->leftJoin('l.listaContieneElementos', 'lce')
-            ->leftJoin('lce.elemento', 'e')
-            ->leftJoin('e.UsuarioElementoPuntuacions', 'uep')
-            ->leftJoin('l.listaCategorias', 'lc')
-            ->where('lc.categoria = :categoriaId')
-            ->setParameter('categoriaId', $categoriaId)
-            ->groupBy('e.nombre')
-            ->orderBy('total', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT e.nombre, COUNT(uep.elemento) as total
+             FROM App\Entity\Elemento e
+             LEFT JOIN App\Entity\UsuarioElementoPuntuacion uep WITH uep.elemento = e AND uep.puntuacion = false
+             LEFT JOIN App\Entity\ListaContieneElemento lce WITH lce.elemento = e
+             LEFT JOIN App\Entity\Lista l WITH lce.lista = l
+             WHERE l.categoria = :categoriaId
+             GROUP BY e.nombre
+             ORDER BY total DESC'
+        )
+        ->setParameter('categoriaId', $categoriaId)
+        ->setFirstResult($offset)
+        ->setMaxResults($limit);
+
+        return $query->getResult();
     }
 
     public function obtenerMenosGustadoCount(int $categoriaId): int
     {
-        $totalQueryBuilder = $this->createQueryBuilder('l')
-            ->select('COUNT(DISTINCT e.nombre) as totalCount')
-            ->leftJoin('l.listaContieneElementos', 'lce')
-            ->leftJoin('lce.elemento', 'e')
-            ->leftJoin('e.UsuarioElementoPuntuacions', 'uep')
-            ->leftJoin('l.listaCategorias', 'lc')
-            ->where('lc.categoria = :categoriaId')
-            ->andWhere('uep.puntuacion = false OR uep.puntuacion IS NULL')
-            ->setParameter('categoriaId', $categoriaId);
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT COUNT(DISTINCT e.nombre) as totalCount
+             FROM App\Entity\Elemento e
+             LEFT JOIN App\Entity\ListaContieneElemento lce WITH lce.elemento = e
+             LEFT JOIN App\Entity\Lista l WITH lce.lista = l
+             LEFT JOIN App\Entity\UsuarioElementoPuntuacion uep WITH uep.elemento = e
+             WHERE l.categoria = :categoriaId'
+        )
+        ->setParameter('categoriaId', $categoriaId);
 
-        return (int)$totalQueryBuilder
-            ->getQuery()
-            ->getSingleScalarResult();
+        return (int)$query->getSingleScalarResult();
     }
 }

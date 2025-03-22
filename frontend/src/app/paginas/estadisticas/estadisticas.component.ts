@@ -19,17 +19,22 @@ interface Estadistica {
   menosGustado: string;
 }
 
+interface EstadisticaItem {
+  nombre: string | null;
+  total: number;
+}
+
 interface EstadisticaResponse {
   masAgregado: {
-    items: any[];
+    items: EstadisticaItem[];
     total: number;
   };
   masGustado: {
-    items: any[];
+    items: EstadisticaItem[];
     total: number;
   };
   menosGustado: {
-    items: any[];
+    items: EstadisticaItem[];
     total: number;
   };
 }
@@ -156,8 +161,6 @@ export class EstadisticasComponent implements OnInit {
     this.isLoading = true;
     this.busquedaRealizada = true;
 
-    console.log('Buscando estadísticas para categoría ID:', this.categoriaSeleccionada, 'Página:', this.pageIndex + 1);
-
     this.estadisticasService.generarEstadisticas(
       this.categoriaSeleccionada,
       this.pageIndex + 1,
@@ -166,11 +169,9 @@ export class EstadisticasComponent implements OnInit {
       next: (response: EstadisticaResponse) => {
         console.log('Respuesta del servidor:', response);
 
-        const hasData = (response.masAgregado?.items?.length > 0) ||
-          (response.masGustado?.items?.length > 0) ||
-          (response.menosGustado?.items?.length > 0);
+        const hasRealData = this.hasActualData(response);
 
-        if (hasData) {
+        if (hasRealData) {
           this.dataSource.data = this.combinarDatos(response.masAgregado, response.masGustado, response.menosGustado);
 
           if (this.isFirstSearch) {
@@ -186,6 +187,7 @@ export class EstadisticasComponent implements OnInit {
           this.noEstadisticas = false;
         } else {
           this.noEstadisticas = true;
+          this.dataSource.data = [];
         }
 
         setTimeout(() => {
@@ -204,18 +206,55 @@ export class EstadisticasComponent implements OnInit {
     });
   }
 
+  private hasActualData(response: EstadisticaResponse): boolean {
+    const hasAgregadoData = response.masAgregado?.items?.some((item: EstadisticaItem) =>
+      item.nombre !== null && item.total > 0
+    ) || false;
+
+    const hasGustadoData = response.masGustado?.items?.some((item: EstadisticaItem) =>
+      item.nombre !== null && item.total > 0
+    ) || false;
+
+    const hasMenosGustadoData = response.menosGustado?.items?.some((item: EstadisticaItem) =>
+      item.nombre !== null && item.total > 0
+    ) || false;
+
+    const hasTotals = (response.masAgregado?.total > 0) ||
+      (response.masGustado?.total > 0) ||
+      (response.menosGustado?.total > 0);
+
+    return hasAgregadoData || hasGustadoData || hasMenosGustadoData || hasTotals;
+  }
+
   handlePageEvent(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = 10;
     this.obtenerEstadisticas(false);
   }
 
-  combinarDatos(masAgregado: any, masGustado: any, menosGustado: any): Estadistica[] {
+  combinarDatos(
+    masAgregado: { items: EstadisticaItem[], total: number },
+    masGustado: { items: EstadisticaItem[], total: number },
+    menosGustado: { items: EstadisticaItem[], total: number }
+  ): Estadistica[] {
+    const filteredMasAgregado = (masAgregado?.items || [])
+      .filter((item: EstadisticaItem) => item.nombre !== null && item.total > 0);
+
+    const filteredMasGustado = (masGustado?.items || [])
+      .filter((item: EstadisticaItem) => item.nombre !== null && item.total > 0);
+
+    const filteredMenosGustado = (menosGustado?.items || [])
+      .filter((item: EstadisticaItem) => item.nombre !== null && item.total > 0);
+
     const maxLength = Math.max(
-      masAgregado.items?.length || 0,
-      masGustado.items?.length || 0,
-      menosGustado.items?.length || 0
+      filteredMasAgregado.length,
+      filteredMasGustado.length,
+      filteredMenosGustado.length
     );
+
+    if (maxLength === 0) {
+      return [];
+    }
 
     const combinedData: Estadistica[] = [];
     const baseIndex = this.pageIndex * this.pageSize;
@@ -223,9 +262,9 @@ export class EstadisticasComponent implements OnInit {
     for (let i = 0; i < maxLength; i++) {
       combinedData.push({
         orden: baseIndex + i + 1,
-        masAgregado: masAgregado.items[i] ? masAgregado.items[i].nombre : '',
-        masGustado: masGustado.items[i] ? masGustado.items[i].nombre : '',
-        menosGustado: menosGustado.items[i] ? menosGustado.items[i].nombre : ''
+        masAgregado: filteredMasAgregado[i] ? filteredMasAgregado[i].nombre || '' : '',
+        masGustado: filteredMasGustado[i] ? filteredMasGustado[i].nombre || '' : '',
+        menosGustado: filteredMenosGustado[i] ? filteredMenosGustado[i].nombre || '' : ''
       });
     }
 
