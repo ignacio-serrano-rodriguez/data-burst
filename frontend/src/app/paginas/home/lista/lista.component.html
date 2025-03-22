@@ -20,11 +20,11 @@
       </button>
     </div>
     
-    <ng-container *ngIf="lista && lista.categorias && lista.categorias.length > 0">
+    <ng-container *ngIf="lista && lista.categoria">
       <div class="lista-categoria">
         <mat-chip-set>
           <mat-chip color="accent" highlighted disabled aria-label="Categoría de la lista (información)">
-            {{ lista.categorias[0].nombre }}
+            {{ lista.categoria.nombre }}
           </mat-chip>
         </mat-chip-set>
       </div>

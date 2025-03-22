@@ -79,15 +79,14 @@ export class ListaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     if (this.lista) {
-
       this.nuevoNombreLista = this.lista.nombre;
       this.listaPublica = this.lista.publica;
 
-      if (!this.lista.categorias || this.lista.categorias.length === 0) {
+      if (!this.lista.categoria) {
         this.listasService.obtenerLista(this.lista.id, this.usuarioActual).subscribe({
           next: response => {
-            if (response.exito && response.lista && response.lista.categorias) {
-              this.lista!.categorias = response.lista.categorias;
+            if (response.exito && response.lista && response.lista.categoria) {
+              this.lista!.categoria = response.lista.categoria;
             }
           },
           error: error => console.error('Error fetching list details:', error)

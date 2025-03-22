@@ -51,37 +51,30 @@ class ElementoController extends AbstractController
                 );
             }
             
-            $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
+            $categoria = $lista->getCategoria();
             
-            if (empty($listaCategorias)) {
+            if (!$categoria) {
                 return new JsonResponse(
                     [
                         "exito" => true,
-                        "mensaje" => "No hay categorías asociadas a esta lista.",
+                        "mensaje" => "No hay categoría asociada a esta lista.",
                         "elementos" => []
                     ],
                     Response::HTTP_OK
                 );
             }
             
-            $categoriaIds = [];
-            foreach ($listaCategorias as $listaCategoria) {
-                $categoriaIds[] = $listaCategoria->getCategoria()->getId();
-            }
-            
-            $qb->join('App\Entity\ElementoCategoria', 'ec', 'WITH', 'ec.elemento = e.id')
-            ->where('e.nombre LIKE :query')
+            $qb->where('e.nombre LIKE :query')
+            ->andWhere('e.categoria = :categoria')
             ->andWhere($qb->expr()->notIn('e.id', 
                     $entityManager->getRepository(ListaContieneElemento::class)->createQueryBuilder('lce')
                         ->select('IDENTITY(lce.elemento)')
                         ->where('lce.lista = :listaId')
                         ->getDQL()
                 ))
-            ->andWhere('ec.categoria IN (:categoriaIds)')
             ->setParameter('query', '%' . $query . '%')
-            ->setParameter('listaId', $listaId)
-            ->setParameter('categoriaIds', $categoriaIds)
-            ->distinct();
+            ->setParameter('categoria', $categoria)
+            ->setParameter('listaId', $listaId);
         } else {
             $qb->where('e.nombre LIKE :query')
                 ->setParameter('query', '%' . $query . '%');
@@ -91,12 +84,21 @@ class ElementoController extends AbstractController
 
         $dataElementos = [];
         foreach ($elementos as $elemento) {
+            $categoriaData = null;
+            if ($elemento->getCategoria()) {
+                $categoriaData = [
+                    'id' => $elemento->getCategoria()->getId(),
+                    'nombre' => $elemento->getCategoria()->getNombre()
+                ];
+            }
+            
             $dataElementos[] = [
                 'id' => $elemento->getId(),
                 'nombre' => $elemento->getNombre(),
                 'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
                 'descripcion' => $elemento->getDescripcion(),
-                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s')
+                'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
+                'categoria' => $categoriaData
             ];
         }
 
@@ -146,23 +148,22 @@ class ElementoController extends AbstractController
         $elemento->setDescripcion($datosRecibidos['descripcion']);
         $elemento->setMomentoCreacion(new \DateTime());
         $elemento->setUsuario($usuario);
+        
+        if ($lista && $lista->getCategoria()) {
+            $elemento->setCategoria($lista->getCategoria());
+        }
 
         try {
             $entityManager->persist($elemento);
-            
-            if ($lista) {
-                $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
-                foreach ($listaCategorias as $listaCategoria) {
-                    $categoria = $listaCategoria->getCategoria();
-                    
-                    $elementoCategoria = new ElementoCategoria();
-                    $elementoCategoria->setElemento($elemento);
-                    $elementoCategoria->setCategoria($categoria);
-                    $entityManager->persist($elementoCategoria);
-                }
-            }
-            
             $entityManager->flush();
+
+            $categoriaData = null;
+            if ($elemento->getCategoria()) {
+                $categoriaData = [
+                    'id' => $elemento->getCategoria()->getId(),
+                    'nombre' => $elemento->getCategoria()->getNombre()
+                ];
+            }
 
             return new JsonResponse(
                 [
@@ -173,7 +174,8 @@ class ElementoController extends AbstractController
                         'nombre' => $elemento->getNombre(),
                         'fecha_aparicion' => $elemento->getFechaAparicion()->format('Y-m-d'),
                         'descripcion' => $elemento->getDescripcion(),
-                        'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s')
+                        'momento_creacion' => $elemento->getMomentoCreacion()->format('Y-m-d H:i:s'),
+                        'categoria' => $categoriaData
                     ]
                 ],
                 Response::HTTP_CREATED

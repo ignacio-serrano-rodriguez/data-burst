@@ -31,8 +31,8 @@
     <div class="lista-option-content">
       <span class="lista-nombre">{{ lista.nombre }}</span>
       
-      <span *ngIf="lista.categorias && lista.categorias.length > 0" class="lista-categoria-chip">
-        {{ lista.categorias[0].nombre }}
+      <span *ngIf="lista.categoria" class="lista-categoria-chip">
+        {{ lista.categoria.nombre }}
       </span>
       
       <span class="lista-icons">

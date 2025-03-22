@@ -9,7 +9,6 @@ use App\Entity\UsuarioElementoComentario;
 use App\Entity\Elemento;
 use App\Entity\Invitacion;
 use App\Entity\Categoria;
-use App\Entity\ListaCategoria;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,16 +58,27 @@ class ListaController extends AbstractController
         $nombreLista = $datosRecibidos['nombre'];
         $usuarioID = $datosRecibidos['usuarioID'];
         $publica = $datosRecibidos['publica'] ?? true;
-        $categoriaIds = $datosRecibidos['categorias'] ?? [];
+        $categoriaId = $datosRecibidos['categoria_id'] ?? null;
         
         $respuestaJson = null;
 
         try {
-            if (empty($categoriaIds)) {
+            if (empty($categoriaId)) {
                 return new JsonResponse(
                     [
                         "exito" => false,
-                        "mensaje" => "Debe seleccionar al menos una categoría para la lista."
+                        "mensaje" => "Debe seleccionar una categoría para la lista."
+                    ],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
+            if (!$categoria) {
+                return new JsonResponse(
+                    [
+                        "exito" => false,
+                        "mensaje" => "Categoría no encontrada."
                     ],
                     Response::HTTP_BAD_REQUEST
                 );
@@ -76,6 +86,7 @@ class ListaController extends AbstractController
 
             $lista = new Lista();
             $lista->setNombre($nombreLista);
+            $lista->setCategoria($categoria);
 
             $usuario = $entityManager->getRepository(Usuario::class)->find($usuarioID);
             if (!$usuario) {
@@ -96,30 +107,7 @@ class ListaController extends AbstractController
 
             $entityManager->persist($lista);
             $entityManager->persist($usuarioManipulaLista);
-            
-            foreach ($categoriaIds as $categoriaId) {
-                $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
-                
-                if (!$categoria) {
-                    continue;
-                }
-                
-                $listaCategoria = new ListaCategoria();
-                $listaCategoria->setLista($lista);
-                $listaCategoria->setCategoria($categoria);
-                
-                $entityManager->persist($listaCategoria);
-            }
-            
             $entityManager->flush();
-            
-            $categorias = [];
-            foreach ($lista->getListaCategorias() as $listaCategoria) {
-                $categorias[] = [
-                    'id' => $listaCategoria->getCategoria()->getId(),
-                    'nombre' => $listaCategoria->getCategoria()->getNombre()
-                ];
-            }
 
             $respuestaJson = new JsonResponse(
                 [
@@ -129,7 +117,10 @@ class ListaController extends AbstractController
                         "id" => $lista->getId(),
                         "nombre" => $lista->getNombre(),
                         "publica" => $usuarioManipulaLista->isPublica(),
-                        "categorias" => $categorias
+                        "categoria" => [
+                            'id' => $categoria->getId(),
+                            'nombre' => $categoria->getNombre()
+                        ]
                     ]
                 ],
                 Response::HTTP_CREATED
@@ -182,12 +173,11 @@ class ListaController extends AbstractController
                 $lista = $listaAsignada->getLista();
                 $compartida = count($entityManager->getRepository(UsuarioManipulaLista::class)->findBy(['lista' => $lista])) > 1;
                 
-                $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
-                $categorias = [];
+                $categoria = $lista->getCategoria();
+                $categoriaData = null;
                 
-                foreach ($listaCategorias as $listaCategoria) {
-                    $categoria = $listaCategoria->getCategoria();
-                    $categorias[] = [
+                if ($categoria) {
+                    $categoriaData = [
                         'id' => $categoria->getId(),
                         'nombre' => $categoria->getNombre()
                     ];
@@ -198,7 +188,7 @@ class ListaController extends AbstractController
                     'nombre' => $lista->getNombre(),
                     'publica' => $listaAsignada->isPublica(),
                     'compartida' => $compartida,
-                    'categorias' => $categorias
+                    'categoria' => $categoriaData
                 ];
             }
 
@@ -276,12 +266,11 @@ class ListaController extends AbstractController
                 );
             }
             
-            $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
-            $categorias = [];
+            $categoria = $lista->getCategoria();
+            $categoriaData = null;
             
-            foreach ($listaCategorias as $listaCategoria) {
-                $categoria = $listaCategoria->getCategoria();
-                $categorias[] = [
+            if ($categoria) {
+                $categoriaData = [
                     'id' => $categoria->getId(),
                     'nombre' => $categoria->getNombre()
                 ];
@@ -291,7 +280,7 @@ class ListaController extends AbstractController
                 'id' => $lista->getId(),
                 'nombre' => $lista->getNombre(),
                 'publica' => $usuarioManipulaLista->isPublica(),
-                'categorias' => $categorias
+                'categoria' => $categoriaData
             ];
 
             return new JsonResponse(
@@ -764,10 +753,10 @@ class ListaController extends AbstractController
     {
         $datosRecibidos = json_decode($request->getContent(), true);
         $listaId = $datosRecibidos['lista_id'] ?? null;
-        $categoriaIds = $datosRecibidos['categorias'] ?? [];
+        $categoriaId = $datosRecibidos['categoria_id'] ?? null;
         $usuarioId = $datosRecibidos['usuario_id'] ?? null;
 
-        if ($listaId === null || $usuarioId === null) {
+        if ($listaId === null || $usuarioId === null || $categoriaId === null) {
             return new JsonResponse(
                 [
                     "exito" => false,
@@ -815,53 +804,30 @@ class ListaController extends AbstractController
                 );
             }
 
-            $categoriasExistentes = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
-            foreach ($categoriasExistentes as $categoriaExistente) {
-                $entityManager->remove($categoriaExistente);
-            }
-            
-            if (empty($categoriaIds)) {
+            $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
+            if (!$categoria) {
                 return new JsonResponse(
                     [
                         "exito" => false,
-                        "mensaje" => "Debe seleccionar al menos una categoría para la lista."
+                        "mensaje" => "Categoría no encontrada."
                     ],
-                    Response::HTTP_BAD_REQUEST
+                    Response::HTTP_NOT_FOUND
                 );
             }
             
-            foreach ($categoriaIds as $categoriaId) {
-                $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
-                
-                if (!$categoria) {
-                    continue;
-                }
-                
-                $listaCategoria = new ListaCategoria();
-                $listaCategoria->setLista($lista);
-                $listaCategoria->setCategoria($categoria);
-                
-                $entityManager->persist($listaCategoria);
-            }
-            
+            $lista->setCategoria($categoria);
             $entityManager->flush();
             
-            $listaCategorias = $entityManager->getRepository(ListaCategoria::class)->findBy(['lista' => $lista]);
-            $categorias = [];
-            
-            foreach ($listaCategorias as $listaCategoria) {
-                $categoria = $listaCategoria->getCategoria();
-                $categorias[] = [
-                    'id' => $categoria->getId(),
-                    'nombre' => $categoria->getNombre()
-                ];
-            }
+            $categoriaData = [
+                'id' => $categoria->getId(),
+                'nombre' => $categoria->getNombre()
+            ];
 
             return new JsonResponse(
                 [
                     "exito" => true,
-                    "mensaje" => "Categorías de la lista actualizadas exitosamente.",
-                    "categorias" => $categorias
+                    "mensaje" => "Categoría de la lista actualizada exitosamente.",
+                    "categoria" => $categoriaData
                 ],
                 Response::HTTP_OK
             );
@@ -869,7 +835,7 @@ class ListaController extends AbstractController
             return new JsonResponse(
                 [
                     "exito" => false,
-                    "mensaje" => "Error al actualizar categorías: " . $th->getMessage()
+                    "mensaje" => "Error al actualizar categoría: " . $th->getMessage()
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

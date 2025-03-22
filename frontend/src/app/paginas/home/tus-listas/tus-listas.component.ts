@@ -69,7 +69,7 @@ export class TusListasComponent implements OnInit {
   categorias: Categoria[] = [];
   categoriasPrincipales: Categoria[] = [];
   categoriaSeleccionada: number | null = null;
-  categoriasSeleccionadas: Categoria[] = [];
+  categoriaSeleccionadaObj: Categoria | null = null;
 
   ngOnInit(): void {
     this.obtenerListas();
@@ -80,7 +80,7 @@ export class TusListasComponent implements OnInit {
     if (this.categoriaSeleccionada) {
       const categoria = this.categorias.find(cat => cat.id === this.categoriaSeleccionada);
       if (categoria) {
-        this.categoriasSeleccionadas = [categoria];
+        this.categoriaSeleccionadaObj = categoria;
         this.categoriaBusqueda = categoria.nombre;
       }
     }
@@ -92,7 +92,7 @@ export class TusListasComponent implements OnInit {
         if (data.exito) {
           this.categorias = data.categorias;
           this.categoriasPrincipales = this.categorias;
-          this.categoriasFiltradas = this.categorias; // Initialize filtered list
+          this.categoriasFiltradas = this.categorias;
         }
       },
       error: (error) => {
@@ -100,15 +100,6 @@ export class TusListasComponent implements OnInit {
         this.homeComponent.mostrarMensajeNegativo('Error al cargar categorías. Por favor, intente de nuevo.');
       }
     });
-  }
-
-  agregarCategoria() {
-    if (this.categoriaSeleccionada && !this.yaEstaSeleccionada(this.categoriaSeleccionada)) {
-      const categoria = this.categorias.find(cat => cat.id === this.categoriaSeleccionada);
-      if (categoria) {
-        this.categoriasSeleccionadas.push(categoria);
-      }
-    }
   }
 
   filtrarCategorias(busqueda: string) {
@@ -125,7 +116,7 @@ export class TusListasComponent implements OnInit {
     this.categoriaBusqueda = '';
     this.categoriasFiltradas = this.categorias;
     this.categoriaSeleccionada = null;
-    this.categoriasSeleccionadas = [];
+    this.categoriaSeleccionadaObj = null;
 
     if (this.categoriaInput) {
       this.categoriaInput.nativeElement.blur();
@@ -144,35 +135,17 @@ export class TusListasComponent implements OnInit {
 
     if (categoria) {
       this.categoriaSeleccionada = categoria.id;
-      this.categoriasSeleccionadas = [categoria];
+      this.categoriaSeleccionadaObj = categoria;
     }
   }
 
-  yaEstaSeleccionada(categoriaId: number): boolean {
-    return this.categoriasSeleccionadas.some(cat => cat.id === categoriaId);
-  }
-
-  eliminarCategoria(categoriaId: number) {
-    this.categoriasSeleccionadas = [];
-    this.categoriaSeleccionada = null;
+  tieneCategoriaSeleccionada(): boolean {
+    return this.categoriaSeleccionada !== null;
   }
 
   obtenerNombreCategoria(categoriaId: number): string {
     const categoria = this.categorias.find(cat => cat.id === categoriaId);
     return categoria ? categoria.nombre : '';
-  }
-
-  tieneCategoriaSeleccionada(): boolean {
-    return this.categoriasSeleccionadas.length > 0;
-  }
-
-  obtenerNombreCategoriaPadre(categoriaId: number): string {
-    const categoria = this.categorias.find(cat => cat.id === categoriaId);
-    if (categoria && categoria.categoria_padre_id) {
-      const categoriaPadre = this.categorias.find(cat => cat.id === categoria.categoria_padre_id);
-      return categoriaPadre ? categoriaPadre.nombre : '';
-    }
-    return '';
   }
 
   abrirDesplegable() {
@@ -191,7 +164,7 @@ export class TusListasComponent implements OnInit {
 
   crearAsignarLista() {
     const nombreLista = this.nombreLista.trim();
-    if (!nombreLista || this.categoriasSeleccionadas.length === 0) {
+    if (!nombreLista || !this.categoriaSeleccionada) {
       return;
     }
 
@@ -199,7 +172,7 @@ export class TusListasComponent implements OnInit {
       usuarioID: this.getUsuarioID(),
       nombre: nombreLista,
       publica: this.publica,
-      categorias: this.categoriasSeleccionadas.map(cat => cat.id) // Incluir categorías seleccionadas
+      categoria_id: this.categoriaSeleccionada
     };
 
     this.listasService.crearAsignarLista(objeto).subscribe({
@@ -209,15 +182,16 @@ export class TusListasComponent implements OnInit {
           this.publica = false;
 
           if (data.lista) {
-            if (!data.lista.categorias && this.categoriasSeleccionadas.length > 0) {
-              data.lista.categorias = this.categoriasSeleccionadas.map(cat => ({
-                id: cat.id,
-                nombre: cat.nombre
-              }));
+            if (!data.lista.categoria && this.categoriaSeleccionadaObj) {
+              data.lista.categoria = {
+                id: this.categoriaSeleccionadaObj.id,
+                nombre: this.categoriaSeleccionadaObj.nombre
+              };
             }
 
-            this.categoriasSeleccionadas = [];
             this.categoriaSeleccionada = null;
+            this.categoriaSeleccionadaObj = null;
+            this.categoriaBusqueda = '';
             this.obtenerListas();
             this.noSeEncontraronListas = false;
             this.seleccionarLista(data.lista);
@@ -225,6 +199,7 @@ export class TusListasComponent implements OnInit {
         }
       },
       error: (error) => {
+        console.error('Error al crear/asignar lista:', error);
       }
     });
   }
@@ -295,7 +270,7 @@ export class TusListasComponent implements OnInit {
     if (!nombreListaValido) {
       return "Ingrese un nombre para la lista";
     } else if (!tieneCategorias) {
-      return "Seleccione al menos una categoría";
+      return "Seleccione una categoría";
     } else if (listaExistente) {
       return "Asignar a lista existente";
     } else {

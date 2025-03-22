@@ -20,16 +20,16 @@ class Categoria
     #[ORM\Column(length: 255, unique: true)]
     private ?string $nombre = null;
 
-    #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: ElementoCategoria::class, orphanRemoval: true)]
-    private Collection $elementoCategorias;
+    #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: Elemento::class)]
+    private Collection $elementos;
 
-    #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: ListaCategoria::class, orphanRemoval: true)]
-    private Collection $listaCategorias;
+    #[ORM\OneToMany(mappedBy: 'categoria', targetEntity: Lista::class)]
+    private Collection $listas;
 
     public function __construct()
     {
-        $this->elementoCategorias = new ArrayCollection();
-        $this->listaCategorias = new ArrayCollection();
+        $this->elementos = new ArrayCollection();
+        $this->listas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,28 +50,28 @@ class Categoria
     }
 
     /**
-     * @return Collection<int, ElementoCategoria>
+     * @return Collection<int, Elemento>
      */
-    public function getElementoCategorias(): Collection
+    public function getElementos(): Collection
     {
-        return $this->elementoCategorias;
+        return $this->elementos;
     }
 
-    public function addElementoCategoria(ElementoCategoria $elementoCategoria): static
+    public function addElemento(Elemento $elemento): static
     {
-        if (!$this->elementoCategorias->contains($elementoCategoria)) {
-            $this->elementoCategorias->add($elementoCategoria);
-            $elementoCategoria->setCategoria($this);
+        if (!$this->elementos->contains($elemento)) {
+            $this->elementos->add($elemento);
+            $elemento->setCategoria($this);
         }
 
         return $this;
     }
 
-    public function removeElementoCategoria(ElementoCategoria $elementoCategoria): static
+    public function removeElemento(Elemento $elemento): static
     {
-        if ($this->elementoCategorias->removeElement($elementoCategoria)) {
-            if ($elementoCategoria->getCategoria() === $this) {
-                $elementoCategoria->setCategoria(null);
+        if ($this->elementos->removeElement($elemento)) {
+            if ($elemento->getCategoria() === $this) {
+                $elemento->setCategoria(null);
             }
         }
 
@@ -79,28 +79,28 @@ class Categoria
     }
 
     /**
-     * @return Collection<int, ListaCategoria>
+     * @return Collection<int, Lista>
      */
-    public function getListaCategorias(): Collection
+    public function getListas(): Collection
     {
-        return $this->listaCategorias;
+        return $this->listas;
     }
 
-    public function addListaCategoria(ListaCategoria $listaCategoria): static
+    public function addLista(Lista $lista): static
     {
-        if (!$this->listaCategorias->contains($listaCategoria)) {
-            $this->listaCategorias->add($listaCategoria);
-            $listaCategoria->setCategoria($this);
+        if (!$this->listas->contains($lista)) {
+            $this->listas->add($lista);
+            $lista->setCategoria($this);
         }
 
         return $this;
     }
 
-    public function removeListaCategoria(ListaCategoria $listaCategoria): static
+    public function removeLista(Lista $lista): static
     {
-        if ($this->listaCategorias->removeElement($listaCategoria)) {
-            if ($listaCategoria->getCategoria() === $this) {
-                $listaCategoria->setCategoria(null);
+        if ($this->listas->removeElement($lista)) {
+            if ($lista->getCategoria() === $this) {
+                $lista->setCategoria(null);
             }
         }
 
