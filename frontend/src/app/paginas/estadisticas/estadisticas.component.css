@@ -16,23 +16,11 @@
   max-width: 800px;
 }
 
-/* Botón y campo de entrada */
 .full-width {
   width: 100%;
   margin-bottom: 16px;
 }
 
-/* Estilo para el botón idéntico al de registro */
-.boton-estadisticas {
-  padding-top: 1.4em;
-  padding-bottom: 1.4em;
-  font-size: 1.2em;
-  color: #EEF1F2;
-  background-color: #61B300;
-  width: 100%;
-}
-
-/* Spinner de carga */
 .loading-spinner {
   display: flex;
   justify-content: center;
@@ -40,23 +28,19 @@
   margin: 20px 0;
 }
 
-/* Color personalizado para el spinner */
 .spinner-color ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
   stroke: #AE00CD;
 }
 
-/* Contenedor de la tabla */
 .tabla-container {
   margin-top: 20px;
   overflow-x: auto;
 }
 
-/* Estilos específicos de la tabla */
 .tabla-container table {
   width: 100%;
 }
 
-/* Mensaje cuando no hay datos */
 .no-data-message {
   text-align: center;
   margin-top: 20px;
@@ -64,10 +48,44 @@
   color: #666;
 }
 
-/* Contenedor para el paginador */
 .paginador-centrado {
   display: flex;
   justify-content: center;
   margin-top: 16px;
   margin-bottom: 16px;
+}
+
+::ng-deep .mat-mdc-option {
+  padding-right: 16px !important;
+}
+
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-autocomplete-panel {
+  max-height: 270px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper {
+  padding-left: 16px;
+}
+
+button[mat-icon-button] {
+  margin-right: 8px;
+}
+
+button[mat-icon-button]:hover {
+  text-decoration: none;
+}
+
+button[mat-icon-button]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
