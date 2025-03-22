@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule, MatAutocompleteTrigger, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
 import { EstadisticasService } from '../../servicios/estadisticas.service';
 
 interface Estadistica {
@@ -49,20 +51,25 @@ interface Categoria {
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    MatAutocompleteModule,
+    MatIconModule,
     FormsModule
   ],
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.css']
 })
-export class EstadisticasComponent implements OnInit, AfterViewInit {
+export class EstadisticasComponent implements OnInit {
   categorias: Categoria[] = [];
+  categoriasFiltradas: Categoria[] = [];
+  categoriaBusqueda: string = '';
   categoriaSeleccionada: number | null = null;
+  categoriaSeleccionadaObj: Categoria | null = null;
+
   displayedColumns: string[] = ['orden', 'masAgregado', 'masGustado', 'menosGustado'];
   dataSource = new MatTableDataSource<Estadistica>([]);
   noEstadisticas: boolean = true;
   isLoading: boolean = false;
 
-  // Propiedades para manejar la paginación del servidor
   totalItems: number = 0;
   pageSize: number = 10;
   pageIndex: number = 0;
@@ -70,15 +77,13 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
   busquedaRealizada: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('categoriaInput') categoriaInput!: ElementRef;
+  @ViewChild('autoCategoria') autocompleteCategorias!: MatAutocompleteTrigger;
 
   constructor(private estadisticasService: EstadisticasService) { }
 
   ngOnInit() {
     this.cargarCategorias();
-  }
-
-  ngAfterViewInit() {
-    // No asignamos paginator ya que usamos paginación en el servidor
   }
 
   cargarCategorias(): void {
@@ -87,6 +92,7 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
       next: (response) => {
         if (response.exito && response.categorias) {
           this.categorias = response.categorias;
+          this.categoriasFiltradas = this.categorias;
         } else {
           console.error('Error al cargar categorías:', response.mensaje);
         }
@@ -99,8 +105,42 @@ export class EstadisticasComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onCategoriaChange(): void {
-    if (this.categoriaSeleccionada !== null) {
+  filtrarCategorias(): void {
+    if (this.categoriaBusqueda) {
+      this.categoriasFiltradas = this.categorias.filter(
+        cat => cat.nombre.toLowerCase().includes(this.categoriaBusqueda.toLowerCase())
+      );
+    } else {
+      this.categoriasFiltradas = this.categorias;
+    }
+  }
+
+  limpiarCategoriaInput(): void {
+    this.categoriaBusqueda = '';
+    this.categoriasFiltradas = this.categorias;
+    this.categoriaSeleccionada = null;
+    this.categoriaSeleccionadaObj = null;
+    this.noEstadisticas = true;
+    this.busquedaRealizada = false;
+
+    if (this.categoriaInput) {
+      this.categoriaInput.nativeElement.blur();
+    }
+  }
+
+  abrirDesplegableCategoria(): void {
+    if (this.autocompleteCategorias) {
+      this.autocompleteCategorias.openPanel();
+    }
+  }
+
+  onCategoriaSelected(event: MatAutocompleteSelectedEvent): void {
+    const selectedName = event.option.value;
+    const categoria = this.categorias.find(cat => cat.nombre === selectedName);
+
+    if (categoria) {
+      this.categoriaSeleccionada = categoria.id;
+      this.categoriaSeleccionadaObj = categoria;
       this.obtenerEstadisticas(true);
     }
   }

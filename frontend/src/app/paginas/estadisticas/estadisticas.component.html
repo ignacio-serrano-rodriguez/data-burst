@@ -1,23 +1,32 @@
 <div class="estadisticas-container">
   <div class="estadisticas-content">
-    <!-- Selector de categorías -->
-    <mat-form-field appearance="fill" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>Selecciona una categoría</mat-label>
-      <mat-select [(ngModel)]="categoriaSeleccionada" (selectionChange)="onCategoriaChange()">
-        <mat-option *ngIf="categorias.length === 0" disabled>Cargando categorías...</mat-option>
-        <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">
-          {{ categoria.nombre }}
-        </mat-option>
-      </mat-select>
+      <input matInput 
+             id="categoriaInput" 
+             #categoriaInput
+             [(ngModel)]="categoriaBusqueda" 
+             (input)="filtrarCategorias()" 
+             [matAutocomplete]="autoCategoria" 
+             (focus)="abrirDesplegableCategoria()"
+             (keydown.escape)="limpiarCategoriaInput()">
+      <button mat-icon-button matPrefix (click)="limpiarCategoriaInput()" title="Limpiar">
+        <mat-icon>close</mat-icon>
+      </button>
       <mat-hint>Seleccione una categoría para ver sus estadísticas</mat-hint>
     </mat-form-field>
 
-    <!-- Spinner de carga con color morado -->
+    <mat-autocomplete #autoCategoria="matAutocomplete" (optionSelected)="onCategoriaSelected($event)">
+      <mat-option *ngIf="categoriasFiltradas.length === 0" disabled>No se encontraron categorías</mat-option>
+      <mat-option *ngFor="let categoria of categoriasFiltradas" [value]="categoria.nombre" [id]="categoria.id.toString()">
+        {{ categoria.nombre }}
+      </mat-option>
+    </mat-autocomplete>
+
     <div *ngIf="isLoading" class="loading-spinner">
       <mat-spinner diameter="40" class="spinner-color"></mat-spinner>
     </div>
 
-    <!-- Mostramos la tabla solo cuando hay datos y no está cargando -->
     <div *ngIf="!isLoading && !noEstadisticas" class="tabla-container">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
         <ng-container matColumnDef="orden">
@@ -39,8 +48,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-    
-      <!-- Paginador con clases personalizadas -->
+
       <div class="paginador-centrado">
         <mat-paginator 
           [length]="totalItems"
@@ -54,7 +62,6 @@
       </div>
     </div>
 
-    <!-- Mensaje cuando no hay datos y ya se realizó una búsqueda -->
     <div *ngIf="!isLoading && noEstadisticas && busquedaRealizada" class="no-data-message">
       No existen estadísticas para la categoría seleccionada.
     </div>
