@@ -440,14 +440,26 @@ VALUES
 (21, 31, 'Hay un error en el país de origen del autor.', '2023-07-08 10:30:00'),
 (24, 36, 'La descripción contiene spoilers importantes sin advertencia.', '2023-07-09 13:45:00');
 
-INSERT INTO usuario_gestiona_elemento (usuario_id, elemento_id, momento_gestion, nombre_antiguo, fecha_aparicion_antigua, descripcion_antigua)
+INSERT INTO usuario_reporta_elemento (id, usuario_id, elemento_id, nombre_reportado, fecha_aparicion_reportada, descripcion_reportada, momento_reporte, estado, moderador_id, momento_procesado, comentario_moderador)
 VALUES 
-(1, 2, '2023-08-01 09:30:00', 'El Padrino (The Godfather)', '1972-03-15', 'La historia de la familia Corleone y su papel en la mafia americana.'),
-(2, 4, '2023-08-02 11:45:00', '1984 - George Orwell', '1949-06-08', 'Novela distópica sobre un futuro totalitario.'),
-(1, 7, '2023-08-03 14:20:00', 'Stranger Things - Netflix', '2016-07-15', 'Serie de Netflix sobre fenómenos sobrenaturales en un pequeño pueblo.'),
-(1, 11, '2023-08-04 10:00:00', 'Cien años de soledad - Gabriel García Márquez', '1967-05-30', 'Historia de la familia Buendía en el pueblo de Macondo.'),
-(2, 21, '2023-08-05 15:30:00', 'Dune - Frank Herbert', '1965-08-01', 'Historia sobre el planeta desértico Arrakis y la especia melange.'),
-(1, 31, '2023-08-06 13:15:00', 'Pedro Páramo - Juan Rulfo', '1955-03-01', 'Historia de Juan Preciado buscando a su padre en Comala.');
+(1, 4, 2, 'El Padrino', '1972-03-24', NULL, '2023-07-01 14:20:00', 1, 2, '2023-07-15 10:30:00', 'Fecha corregida según IMDB'),
+(2, 6, 3, NULL, NULL, 'Serie de comedia sobre una familia disfuncional que vive en el pueblo ficticio de Springfield.', '2023-07-02 16:30:00', 1, 2, '2023-07-16 11:45:00', 'Corrección ortográfica aceptada'),
+(3, 7, 5, 'The Legend of Zelda: Breath of the Wild', NULL, NULL, '2023-07-03 10:15:00', 0, NULL, NULL, NULL),
+(4, 9, 11, NULL, '1967-06-05', NULL, '2023-07-04 09:30:00', 1, 1, '2023-07-17 14:20:00', 'Fecha verificada en la base de datos de la editorial'),
+(5, 12, 16, 'La sombra del viento - Carlos Ruiz Zafón', NULL, NULL, '2023-07-05 11:45:00', 2, 2, '2023-07-18 09:15:00', 'El nombre del autor es correcto en la base de datos'),
+(6, 15, 21, NULL, NULL, 'Epopeya de ciencia ficción que combina política, religión y ecología en un futuro lejano donde se disputa el control del planeta desértico Arrakis, fuente de la valiosa especia melange.', '2023-07-06 14:00:00', 1, 1, '2023-07-19 16:30:00', 'Ampliada la descripción'),
+(7, 18, 26, NULL, NULL, 'Historia de la humanidad basada en estudios antropológicos que explora cómo Homo sapiens pasó de ser una especie insignificante de simios en África a convertirse en la dominante del planeta.', '2023-07-07 16:15:00', 0, NULL, NULL, NULL),
+(8, 21, 31, 'Pedro Páramo - Juan Rulfo (México)', NULL, NULL, '2023-07-08 10:30:00', 1, 1, '2023-07-20 11:10:00', 'Añadido país de origen del autor'),
+(9, 24, 36, NULL, NULL, '[AVISO: CONTIENE SPOILERS] Novela sobre un hombre que busca a su padre en un pueblo fantasma habitado por almas en pena, donde descubrirá secretos sobre su propia identidad.', '2023-07-09 13:45:00', 2, 2, '2023-07-21 15:40:00', 'No consideramos necesario el aviso de spoilers para esta obra clásica');
+
+INSERT INTO usuario_gestiona_elemento (id, usuario_id, elemento_id, momento_gestion, nombre_antiguo, fecha_aparicion_antigua, descripcion_antigua, moderador_id, reporte_id)
+VALUES 
+(1, 1, 2, '2023-08-01 09:30:00', 'El Padrino (The Godfather)', '1972-03-15', 'La historia de la familia Corleone y su papel en la mafia americana.', 2, 1),
+(2, 2, 4, '2023-08-02 11:45:00', '1984 - George Orwell', '1949-06-08', 'Novela distópica sobre un futuro totalitario.', NULL, NULL),
+(3, 1, 7, '2023-08-03 14:20:00', 'Stranger Things - Netflix', '2016-07-15', 'Serie de Netflix sobre fenómenos sobrenaturales en un pequeño pueblo.', NULL, NULL),
+(4, 1, 11, '2023-08-04 10:00:00', 'Cien años de soledad - Gabriel García Márquez', '1967-05-30', 'Historia de la familia Buendía en el pueblo de Macondo.', 1, 4),
+(5, 2, 21, '2023-08-05 15:30:00', 'Dune - Frank Herbert', '1965-08-01', 'Historia sobre el planeta desértico Arrakis y la especia melange.', 1, 6),
+(6, 1, 31, '2023-08-06 13:15:00', 'Pedro Páramo - Juan Rulfo', '1955-03-01', 'Historia de Juan Preciado buscando a su padre en Comala.', 1, 8);
 
 INSERT INTO usuario_gestiona_usuario (usuario_normal_id, usuario_administrador_id, permiso_antiguo, momento_gestion)
 VALUES 

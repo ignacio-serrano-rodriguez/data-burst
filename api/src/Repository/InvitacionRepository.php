@@ -38,6 +38,4 @@ class InvitacionRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
-    // Añadir métodos personalizados si es necesario
 }

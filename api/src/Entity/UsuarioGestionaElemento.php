@@ -35,6 +35,14 @@ class UsuarioGestionaElemento
     #[ORM\JoinColumn(nullable: false)]
     private ?Elemento $elemento = null;
 
+    #[ORM\ManyToOne(targetEntity: Usuario::class)]
+    #[ORM\JoinColumn(name: "moderador_id", nullable: true)]
+    private ?Usuario $moderador = null;
+
+    #[ORM\ManyToOne(targetEntity: UsuarioReportaElemento::class, inversedBy: 'gestionesElemento')]
+    #[ORM\JoinColumn(name: "reporte_id", nullable: true)]
+    private ?UsuarioReportaElemento $reporte = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -115,6 +123,30 @@ class UsuarioGestionaElemento
     public function setElemento(?Elemento $elemento): static
     {
         $this->elemento = $elemento;
+
+        return $this;
+    }
+
+    public function getModerador(): ?Usuario
+    {
+        return $this->moderador;
+    }
+
+    public function setModerador(?Usuario $moderador): static
+    {
+        $this->moderador = $moderador;
+
+        return $this;
+    }
+
+    public function getReporte(): ?UsuarioReportaElemento
+    {
+        return $this->reporte;
+    }
+
+    public function setReporte(?UsuarioReportaElemento $reporte): static
+    {
+        $this->reporte = $reporte;
 
         return $this;
     }
