@@ -1,1 +1,214 @@
-<p>moderacion works!</p>
+<div id="moderacion-container">
+    <h1 class="titulo">Panel de Moderación</h1>
+    
+    <div *ngIf="cargando" class="cargando">
+      <mat-icon class="spinner">sync</mat-icon>
+      <p>Cargando reportes...</p>
+    </div>
+  
+    <div *ngIf="!cargando" class="contenido">
+      <mat-tab-group>
+        <mat-tab label="Pendientes ({{reportesPendientes.length}})">
+          <div class="tab-content">
+            <div *ngIf="reportesPendientes.length === 0" class="empty-state">
+              <mat-icon>check_circle</mat-icon>
+              <p>No hay reportes pendientes</p>
+            </div>
+            
+            <div *ngFor="let reporte of reportesPendientes" class="reporte-card">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>
+                    <span class="elemento-nombre">{{reporte.elemento.nombre}}</span>
+                    <mat-chip [ngClass]="getEstadoClase(reporte.estado)">
+                      {{getEstadoTexto(reporte.estado)}}
+                    </mat-chip>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    Reportado por {{reporte.usuario.nombre}} el {{reporte.momento_reporte | date:'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <mat-accordion>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>Detalles del reporte</mat-panel-title>
+                      </mat-expansion-panel-header>
+                      
+                      <div class="reporte-detalles">
+                        <h3>Datos actuales:</h3>
+                        <p><strong>Nombre:</strong> {{reporte.elemento.nombre}}</p>
+                        <p><strong>Fecha de aparición:</strong> {{reporte.elemento.fecha_aparicion | date:'dd/MM/yyyy'}}</p>
+                        <p><strong>Descripción:</strong> {{reporte.elemento.descripcion}}</p>
+                        
+                        <mat-divider></mat-divider>
+                        
+                        <h3>Cambios sugeridos:</h3>
+                        <div *ngIf="reporte.nombre_reportado">
+                          <p><strong>Nombre:</strong> <span class="cambio">{{reporte.nombre_reportado}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.fecha_aparicion_reportada">
+                          <p><strong>Fecha de aparición:</strong> <span class="cambio">{{reporte.fecha_aparicion_reportada | date:'dd/MM/yyyy'}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.descripcion_reportada">
+                          <p><strong>Descripción:</strong> <span class="cambio">{{reporte.descripcion_reportada}}</span></p>
+                        </div>
+                        
+                        <div *ngIf="reporte.comentario_moderador">
+                          <mat-divider></mat-divider>
+                          <h3>Motivo del reporte:</h3>
+                          <p>{{reporte.comentario_moderador}}</p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </mat-card-content>
+                
+                <mat-card-actions align="end">
+                  <button mat-button color="warn" (click)="abrirDialogoRechazo(reporte)">
+                    <mat-icon>cancel</mat-icon> Rechazar
+                  </button>
+                  <button mat-button color="primary" (click)="confirmarAprobacion(reporte)">
+                    <mat-icon>check_circle</mat-icon> Aprobar
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+          </div>
+        </mat-tab>
+        
+        <mat-tab label="Aprobados ({{reportesAprobados.length}})">
+          <div class="tab-content">
+            <div *ngIf="reportesAprobados.length === 0" class="empty-state">
+              <mat-icon>info</mat-icon>
+              <p>No hay reportes aprobados</p>
+            </div>
+            
+            <div *ngFor="let reporte of reportesAprobados" class="reporte-card">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>
+                    <span class="elemento-nombre">{{reporte.elemento.nombre}}</span>
+                    <mat-chip [ngClass]="getEstadoClase(reporte.estado)">
+                      {{getEstadoTexto(reporte.estado)}}
+                    </mat-chip>
+                    <mat-chip *ngIf="reporte.gestionado" color="primary">Cambios aplicados</mat-chip>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    Reportado por {{reporte.usuario.nombre}} el {{reporte.momento_reporte | date:'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <p *ngIf="reporte.moderador">
+                    <strong>Aprobado por:</strong> {{reporte.moderador.nombre}} el {{reporte.momento_procesado | date:'dd/MM/yyyy HH:mm'}}
+                  </p>
+                  
+                  <mat-accordion>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>Detalles del reporte</mat-panel-title>
+                      </mat-expansion-panel-header>
+                      
+                      <div class="reporte-detalles">
+                        <h3>Cambios aprobados:</h3>
+                        <div *ngIf="reporte.nombre_reportado">
+                          <p><strong>Nombre:</strong> <span class="cambio">{{reporte.nombre_reportado}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.fecha_aparicion_reportada">
+                          <p><strong>Fecha de aparición:</strong> <span class="cambio">{{reporte.fecha_aparicion_reportada | date:'dd/MM/yyyy'}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.descripcion_reportada">
+                          <p><strong>Descripción:</strong> <span class="cambio">{{reporte.descripcion_reportada}}</span></p>
+                        </div>
+                        
+                        <div *ngIf="reporte.comentario_moderador">
+                          <mat-divider></mat-divider>
+                          <h3>Comentarios:</h3>
+                          <p>{{reporte.comentario_moderador}}</p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </mat-tab>
+        
+        <mat-tab label="Rechazados ({{reportesRechazados.length}})">
+          <div class="tab-content">
+            <div *ngIf="reportesRechazados.length === 0" class="empty-state">
+              <mat-icon>info</mat-icon>
+              <p>No hay reportes rechazados</p>
+            </div>
+            
+            <div *ngFor="let reporte of reportesRechazados" class="reporte-card">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>
+                    <span class="elemento-nombre">{{reporte.elemento.nombre}}</span>
+                    <mat-chip [ngClass]="getEstadoClase(reporte.estado)">
+                      {{getEstadoTexto(reporte.estado)}}
+                    </mat-chip>
+                  </mat-card-title>
+                  <mat-card-subtitle>
+                    Reportado por {{reporte.usuario.nombre}} el {{reporte.momento_reporte | date:'dd/MM/yyyy HH:mm'}}
+                  </mat-card-subtitle>
+                </mat-card-header>
+                
+                <mat-card-content>
+                  <p *ngIf="reporte.moderador">
+                    <strong>Rechazado por:</strong> {{reporte.moderador.nombre}} el {{reporte.momento_procesado | date:'dd/MM/yyyy HH:mm'}}
+                  </p>
+                  
+                  <mat-accordion>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>Detalles del rechazo</mat-panel-title>
+                      </mat-expansion-panel-header>
+                      
+                      <div class="reporte-detalles">
+                        <h3>Cambios rechazados:</h3>
+                        <div *ngIf="reporte.nombre_reportado">
+                          <p><strong>Nombre:</strong> <span class="cambio-rechazado">{{reporte.nombre_reportado}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.fecha_aparicion_reportada">
+                          <p><strong>Fecha de aparición:</strong> <span class="cambio-rechazado">{{reporte.fecha_aparicion_reportada | date:'dd/MM/yyyy'}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.descripcion_reportada">
+                          <p><strong>Descripción:</strong> <span class="cambio-rechazado">{{reporte.descripcion_reportada}}</span></p>
+                        </div>
+                        
+                        <div *ngIf="reporte.comentario_moderador">
+                          <mat-divider></mat-divider>
+                          <h3>Motivo del rechazo:</h3>
+                          <p>{{reporte.comentario_moderador}}</p>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+  
+  <ng-template #rechazarReporteDialog>
+    <h2 mat-dialog-title>Rechazar reporte</h2>
+    <mat-dialog-content>
+      <p>Por favor, indique el motivo por el cual está rechazando este reporte:</p>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Motivo del rechazo</mat-label>
+        <textarea matInput [(ngModel)]="motivoRechazo" rows="5" placeholder="Explique por qué se rechaza este reporte..."></textarea>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancelar</button>
+      <button mat-button [mat-dialog-close]="true" color="warn" [disabled]="!motivoRechazo.trim()">Rechazar</button>
+    </mat-dialog-actions>
+  </ng-template>
