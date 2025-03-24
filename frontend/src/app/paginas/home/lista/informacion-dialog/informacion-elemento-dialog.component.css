@@ -1,3 +1,12 @@
 .spacer {
-    flex: 1 1 auto;
-  }
+  flex: 1 1 auto;
+}
+
+button[title="Reportar cambios"] {
+  color: #d32f2f;
+}
+
+mat-dialog-actions {
+  justify-content: space-between;
+  padding: 8px 16px;
+}

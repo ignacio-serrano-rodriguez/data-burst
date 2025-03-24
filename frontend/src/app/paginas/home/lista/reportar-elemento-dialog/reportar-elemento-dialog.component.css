@@ -1,0 +1,40 @@
+.full {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  
+  #titulo {
+    font-size: 1.4em;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #d32f2f;
+    text-align: center;
+  }
+  
+  .actions {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 0;
+  }
+  
+  mat-dialog-content {
+    padding-top: 8px;
+    max-height: 70vh;
+  }
+  
+  textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  /* Add a subtle separator at the top */
+  mat-dialog-content {
+    border-top: 1px solid rgba(0,0,0,0.08);
+    padding-top: 16px;
+  }
+  
+  :host {
+    display: block;
+    border-left: 4px solid #d32f2f;
+  }

@@ -55,4 +55,12 @@ export class ElementosService {
       { lista_id: listaId, elemento_id: elementoId, comentario, usuario_id: usuarioId }
     );
   }
+
+  reportarElemento(reporte: any): Observable<{ exito: boolean, mensaje: string }> {
+    const usuarioId = Number(localStorage.getItem('id')) || 0;
+    return this.http.post<{ exito: boolean, mensaje: string }>(
+      `${this.api}/reportar-elemento`,
+      { ...reporte, usuario_id: usuarioId }
+    );
+  }
 }

@@ -1,0 +1,31 @@
+<h1 mat-dialog-title id="titulo">Reporte</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field class="full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" placeholder="Deja vacío si no hay cambios">
+    </mat-form-field>
+    
+    <mat-form-field class="full">
+      <mat-label>Fecha de Aparición</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fechaAparicion" placeholder="Deja vacío si no hay cambios">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    
+    <mat-form-field class="full">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="descripcion" placeholder="Deja vacío si no hay cambios"></textarea>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <button mat-icon-button color="warn" (click)="cerrar()" title="Cancelar">
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <button mat-icon-button color="primary" (click)="enviarReporte()" [disabled]="!form.valid || !hayCambios()" title="Enviar reporte">
+    <mat-icon>send</mat-icon>
+  </button>
+</div>

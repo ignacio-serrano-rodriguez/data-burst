@@ -6,8 +6,7 @@ use App\Entity\Elemento;
 use App\Entity\Usuario;
 use App\Entity\Lista;
 use App\Entity\ListaContieneElemento;
-use App\Entity\ListaCategoria; 
-use App\Entity\ElementoCategoria; 
+use App\Entity\UsuarioReportaElemento;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -285,6 +284,108 @@ class ElementoController extends AbstractController
                 [
                     "exito" => false,
                     "mensaje" => "Error al quitar el elemento de la lista: " . $th->getMessage()
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route("/api/reportar-elemento", name: "reportar_elemento", methods: ["POST"])]
+    public function reportarElemento(Request $request, EntityManagerInterface $entityManager)
+    {
+        $datosRecibidos = json_decode($request->getContent(), true);
+        
+        if (!isset($datosRecibidos['elementoId']) || !isset($datosRecibidos['usuario_id'])) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Faltan datos requeridos."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        
+        $usuario = $entityManager->getRepository(Usuario::class)->find($datosRecibidos['usuario_id']);
+        $elemento = $entityManager->getRepository(Elemento::class)->find($datosRecibidos['elementoId']);
+        
+        if (!$usuario || !$elemento) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Usuario o elemento no encontrado."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        
+        $existingReport = $entityManager->getRepository(UsuarioReportaElemento::class)->findOneBy([
+            'usuario' => $usuario,
+            'elemento' => $elemento,
+            'estado' => UsuarioReportaElemento::ESTADO_PENDIENTE
+        ]);
+        
+        if ($existingReport) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Ya tienes un reporte pendiente para este elemento."
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        
+        $reporte = new UsuarioReportaElemento();
+        $reporte->setUsuario($usuario);
+        $reporte->setElemento($elemento);
+        $reporte->setNombreReportado($datosRecibidos['nombreReportado'] ?? null);
+        
+        if (isset($datosRecibidos['fechaAparicionReportada']) && $datosRecibidos['fechaAparicionReportada']) {
+            $fechaReportada = null;
+            
+            if ($datosRecibidos['fechaAparicionReportada'] instanceof \DateTime) {
+                $fechaReportada = $datosRecibidos['fechaAparicionReportada'];
+            } else {
+                try {
+                    $fechaReportada = new \DateTime($datosRecibidos['fechaAparicionReportada']);
+                } catch (\Exception $e) {
+                    return new JsonResponse(
+                        [
+                            "exito" => false,
+                            "mensaje" => "Formato de fecha inválido."
+                        ],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+            
+            $reporte->setFechaAparicionReportada($fechaReportada);
+        }
+        
+        $reporte->setDescripcionReportada($datosRecibidos['descripcionReportada'] ?? null);
+        $reporte->setMomentoReporte(new \DateTime());
+        $reporte->setEstado(UsuarioReportaElemento::ESTADO_PENDIENTE);
+        
+        if (isset($datosRecibidos['motivoCambio'])) {
+            $comentario = "MOTIVO DEL USUARIO: " . $datosRecibidos['motivoCambio'];
+            $reporte->setComentarioModerador($comentario);
+        }
+        
+        try {
+            $entityManager->persist($reporte);
+            $entityManager->flush();
+            
+            return new JsonResponse(
+                [
+                    "exito" => true,
+                    "mensaje" => "Reporte enviado correctamente. Un moderador revisará los cambios sugeridos."
+                ],
+                Response::HTTP_CREATED
+            );
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                [
+                    "exito" => false,
+                    "mensaje" => "Error al enviar el reporte: " . $th->getMessage()
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

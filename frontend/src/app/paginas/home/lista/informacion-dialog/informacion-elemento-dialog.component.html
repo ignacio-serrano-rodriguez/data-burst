@@ -8,6 +8,9 @@
   <button mat-icon-button (click)="cerrar()" title="Cerrar">
     <mat-icon>cancel</mat-icon>
   </button>
+  <button mat-icon-button (click)="reportarElemento()" title="Reportar cambios">
+    <mat-icon>flag</mat-icon>
+  </button>
   <span class="spacer"></span>
   <button *ngIf="data.mostrarBotonAgregar" mat-icon-button (click)="agregarElemento()" title="Añadir a la lista">
     <mat-icon>add</mat-icon>
