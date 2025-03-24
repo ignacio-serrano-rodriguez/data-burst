@@ -15,10 +15,8 @@ class AdministracionController extends AbstractController
     public function obtenerUsuarios(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         try {
-            // Obtener todos los usuarios sin tener en cuenta relaciones de amistad
             $usuarios = $entityManager->getRepository(Usuario::class)->findAll();
             
-            // Construir un arreglo con los datos de cada usuario
             $usuariosData = [];
             foreach ($usuarios as $usuario) {
                 $usuariosData[] = [

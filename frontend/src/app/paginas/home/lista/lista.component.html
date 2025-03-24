@@ -62,10 +62,27 @@
         <span>{{ colaborador.nombre }}</span>
         <mat-icon style="color: rgba(128, 128, 128, 0.6);">person</mat-icon>
       </mat-option>
-      <mat-option *ngFor="let amigo of amigosEncontrados" [value]="amigo.nombre" (click)="invitarAmigo(amigo.id, amigo.nombre)">
-        <span>{{ amigo.nombre }}</span>
-        <mat-icon>person_add</mat-icon>
-      </mat-option>
+      
+      <ng-container *ngFor="let amigo of amigosEncontrados">
+        <mat-option *ngIf="amigo.tieneInvitacion" [value]="amigo.nombre" [disabled]="true">
+          <div class="amigo-option-content">
+            <span>{{ amigo.nombre }}</span>
+            <div class="amigo-status">
+              <mat-icon style="color: #ffa726;">schedule</mat-icon>
+              <span class="invitacion-pendiente">Invitación pendiente</span>
+            </div>
+          </div>
+        </mat-option>
+        
+        <mat-option *ngIf="!amigo.tieneInvitacion" [value]="amigo.nombre" (onSelectionChange)="$event.isUserInput && invitarAmigo(amigo.id, amigo.nombre)">
+          <div class="amigo-option-content">
+            <span>{{ amigo.nombre }}</span>
+            <div class="amigo-status">
+              <mat-icon color="primary">person_add</mat-icon>
+            </div>
+          </div>
+        </mat-option>
+      </ng-container>
     </mat-autocomplete>
   </div>
 

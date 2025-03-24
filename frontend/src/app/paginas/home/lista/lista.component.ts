@@ -13,6 +13,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ListasService } from '../../../servicios/listas.service';
 import { ElementosService } from '../../../servicios/elementos.service';
@@ -39,7 +40,8 @@ import { InformacionElementoDialogComponent } from './informacion-dialog/informa
     MatButtonToggleModule,
     MatSlideToggleModule,
     MatChipsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSnackBarModule
   ],
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.css']
@@ -76,7 +78,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
     private listasService: ListasService,
     private elementosService: ElementosService,
     private amigosService: AmigosService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -423,9 +426,23 @@ export class ListaComponent implements OnInit, AfterViewInit {
   invitarAmigo(amigoId: number, amigoNombre: string): void {
     if (!this.lista) return;
 
+    const amigo = this.amigosEncontrados.find(a => a.id === amigoId);
+    if (amigo && amigo.tieneInvitacion) {
+      return;
+    }
+
     this.listasService.invitarAmigo(this.lista.id, amigoId, this.usuarioActual).subscribe({
       next: data => {
         if (data.exito) {
+          const amigo = this.amigosEncontrados.find(a => a.id === amigoId);
+          if (amigo) {
+            amigo.tieneInvitacion = true;
+          }
+
+          this.snackBar.open(`Invitación enviada a ${amigoNombre}`, 'Cerrar', {
+            duration: 3000
+          });
+
           this.resetFriendSearch();
         }
       },

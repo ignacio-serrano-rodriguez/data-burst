@@ -247,3 +247,51 @@
   font-size: 0.9em;
   padding: 4px 0;
 }
+
+.invitacion-pendiente {
+  font-size: 0.85em;
+  color: #ffa726;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+::ng-deep .mat-mdc-option {
+  display: flex !important;
+  align-items: center !important;
+}
+
+::ng-deep .mat-mdc-option[disabled] .mat-mdc-option-text {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+::ng-deep .mat-mdc-option[disabled] .invitacion-pendiente {
+  color: #ffa726 !important;
+  opacity: 1 !important;
+}
+
+.amigo-option-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.amigo-status {
+  display: flex;
+  align-items: center;
+}
+
+.invitacion-pendiente {
+  font-size: 0.85em;
+  color: #ffa726;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+::ng-deep .mat-mdc-option[disabled] .amigo-status {
+  opacity: 1 !important;
+}
+
+::ng-deep .mat-mdc-option:not([disabled]) {
+  cursor: pointer;
+}
