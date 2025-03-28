@@ -1,5 +1,5 @@
 :host {
-    overflow-x: hidden; /* Evitar scroll horizontal */
+    overflow-x: hidden;
 }
 
 #body {
@@ -10,8 +10,8 @@
     width: 100%;
     flex-grow: 1;
     padding: 2%;
-    overflow-y: auto; /* Permitir scroll vertical cuando el contenido sea mayor */
-    overflow-x: hidden; /* Evitar scroll horizontal */
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
 
 #mensajeInformativo {
@@ -39,7 +39,7 @@
     gap: 4%;
     width: 100%;
     margin-top: 2%;
-    flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
+    flex-grow: 1; 
 }
 
 .columna {
@@ -53,6 +53,15 @@
     max-width: 600px;
     margin: 2%;
 }
+
+.seccion-titulo {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #AE00CD;
+    text-align: center;
+    font-family: 'ShareTech';
+    font-weight: 500;
+  }
 
 @media (max-width: 768px) {
     .contenedor-listas-amigos {

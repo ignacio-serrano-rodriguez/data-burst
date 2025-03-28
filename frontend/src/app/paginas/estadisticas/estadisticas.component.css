@@ -89,3 +89,12 @@ button[mat-icon-button]:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.seccion-titulo {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #AE00CD;
+  text-align: center;
+  font-family: 'ShareTech';
+  font-weight: 500;
+}

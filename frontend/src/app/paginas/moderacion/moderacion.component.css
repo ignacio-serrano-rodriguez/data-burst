@@ -15,13 +15,6 @@
     width: 100%;
   }
   
-  .titulo {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #3f51b5;
-    text-align: center;
-  }
-  
   .cargando {
     display: flex;
     flex-direction: column;
@@ -119,4 +112,13 @@
   
   .full-width {
     width: 100%;
+  }
+
+  .seccion-titulo {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #AE00CD;
+    text-align: center;
+    font-family: 'ShareTech';
+    font-weight: 500;
   }

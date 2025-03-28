@@ -135,6 +135,15 @@
     text-align: center;
 }
 
+.seccion-titulo {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #AE00CD;
+    text-align: center;
+    font-family: 'ShareTech';
+    font-weight: 500;
+  }
+
 /* Móvil */
 @media (max-width: 480px) {
     #logoTitulo {

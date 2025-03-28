@@ -1,9 +1,9 @@
 :host {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Asegurar que ocupe al menos el 100% de la altura de la ventana */
-    width: 100%; /* Asegurar que ocupe el 100% del ancho */
-    overflow-x: hidden; /* Evitar scroll horizontal */
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 #perfil-container {
@@ -12,48 +12,57 @@
     align-items: center;
     justify-content: flex-start;
     flex-grow: 1;
-    padding: 1%; /* Reducir el padding */
-    width: 100%; /* Asegurar que ocupe el 100% del ancho */
-    overflow-y: hidden; /* Evitar scroll vertical */
-    overflow-x: hidden; /* Evitar scroll horizontal */
+    padding: 1%;
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 #mensajeInformativo {
     font-family: 'ShareTech';
-    font-size: 1.2em; /* Reducir el tamaño de la fuente */
+    font-size: 1.2em;
     text-align: center;
     align-items: center;
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 0.5%; /* Reducir el margen inferior */
+    margin-bottom: 0.5%;
 }
 
 .contenedor-solicitudes-datos {
     display: flex;
     justify-content: center;
-    gap: 2%; /* Reducir el espacio entre columnas */
+    gap: 2%;
     width: 100%;
-    margin-top: 1%; /* Reducir el margen superior */
-    flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
-    overflow-y: hidden; /* Evitar scroll vertical */
+    margin-top: 1%;
+    flex-grow: 1;
+    overflow-y: hidden;
 }
 
 .columna {
     flex: 1;
     display: flex;
     justify-content: center;
-    flex-direction: column; /* Asegurar que los elementos dentro de la columna se alineen verticalmente */
-    overflow-y: hidden; /* Evitar scroll vertical */
+    flex-direction: column;
+    overflow-y: hidden;
 }
 
 #solicitudes, #datos {
     width: 100%;
     max-width: 600px;
-    margin: 1%; /* Reducir el margen */
-    flex-grow: 1; /* Asegurar que ocupe el espacio disponible */
-    overflow-y: hidden; /* Evitar scroll vertical */
+    margin: 1%;
+    flex-grow: 1;
+    overflow-y: hidden;
 }
+
+.seccion-titulo {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #AE00CD;
+    text-align: center;
+    font-family: 'ShareTech';
+    font-weight: 500;
+  }
 
 @media (max-width: 768px) {
     .contenedor-solicitudes-datos {
