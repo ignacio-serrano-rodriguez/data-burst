@@ -7,6 +7,7 @@ use App\Entity\Categoria;
 use App\Entity\Usuario;
 use App\Entity\UsuarioReportaElemento;
 use App\Entity\UsuarioGestionaElemento;
+use App\Entity\ListaContieneElemento;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -155,8 +156,20 @@ class ModeracionController extends AbstractController
             $gestion->setFechaAparicionAntigua($elemento->getFechaAparicion());
             $gestion->setDescripcionAntigua($elemento->getDescripcion());
             
+            $categoryCategoryWillChange = false;
+            $oldCategoryId = null;
+            $newCategoryId = null;
+            
             if ($elemento->getCategoria()) {
                 $gestion->setCategoriaAntigua($elemento->getCategoria());
+                $oldCategoryId = $elemento->getCategoria()->getId();
+            }
+            
+            if ($reporte->getCategoriaReportada()) {
+                $newCategoryId = $reporte->getCategoriaReportada()->getId();
+                if ($oldCategoryId !== $newCategoryId) {
+                    $categoryCategoryWillChange = true;
+                }
             }
             
             if (isset($cambios['nombre']) && !empty($cambios['nombre'])) {
@@ -176,6 +189,22 @@ class ModeracionController extends AbstractController
             }
             
             if ($reporte->getCategoriaReportada()) {
+                if ($categoryCategoryWillChange) {
+                    $listasContieneElemento = $entityManager->getRepository(ListaContieneElemento::class)
+                        ->findBy(['elemento' => $elemento]);
+                    
+                    foreach ($listasContieneElemento as $listaContieneElemento) {
+                        $entityManager->remove($listaContieneElemento);
+                    }
+                    
+                    $listCount = count($listasContieneElemento);
+                    if ($listCount > 0) {
+                        $comentario = $reporte->getComentarioModerador() ?: '';
+                        $comentario .= "\n\nSe ha eliminado el elemento de $listCount lista(s) debido al cambio de categoría.";
+                        $reporte->setComentarioModerador($comentario);
+                    }
+                }
+                
                 $elemento->setCategoria($reporte->getCategoriaReportada());
             }
             
