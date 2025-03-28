@@ -17,6 +17,18 @@ interface Categoria {
     nombre: string;
 }
 
+interface HydraResponse {
+    'hydra:member': Array<{
+        id: number;
+        nombre: string;
+        '@type': string;
+        '@id': string;
+        elementos: string[];
+        listas: string[];
+    }>;
+    'hydra:totalItems': number;
+}
+
 @Component({
     selector: 'app-reportar-elemento-dialog',
     standalone: true,
@@ -63,9 +75,12 @@ export class ReportarElementoDialogComponent implements OnInit {
 
     cargarCategorias() {
         this.cargandoCategorias = true;
-        this.http.get<{ categorias: Categoria[] }>(`${configuracion_app.api}/categorias`).subscribe({
+        this.http.get<HydraResponse>(`${configuracion_app.api}/categorias`).subscribe({
             next: (response) => {
-                this.categorias = response.categorias;
+                this.categorias = response['hydra:member'].map(cat => ({
+                    id: cat.id,
+                    nombre: cat.nombre
+                }));
                 this.cargandoCategorias = false;
             },
             error: (error) => {
