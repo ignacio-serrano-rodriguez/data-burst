@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Elemento;
+use App\Entity\Categoria;
 use App\Entity\Usuario;
 use App\Entity\UsuarioReportaElemento;
 use App\Entity\UsuarioGestionaElemento;
@@ -38,6 +39,22 @@ class ModeracionController extends AbstractController
                     ];
                 }
                 
+                $categoriaReportada = null;
+                if ($reporte->getCategoriaReportada()) {
+                    $categoriaReportada = [
+                        'id' => $reporte->getCategoriaReportada()->getId(),
+                        'nombre' => $reporte->getCategoriaReportada()->getNombre()
+                    ];
+                }
+                
+                $categoriaElemento = null;
+                if ($reporte->getElemento()->getCategoria()) {
+                    $categoriaElemento = [
+                        'id' => $reporte->getElemento()->getCategoria()->getId(),
+                        'nombre' => $reporte->getElemento()->getCategoria()->getNombre()
+                    ];
+                }
+                
                 $reportesArray[] = [
                     'id' => $reporte->getId(),
                     'usuario' => [
@@ -48,12 +65,14 @@ class ModeracionController extends AbstractController
                         'id' => $reporte->getElemento()->getId(),
                         'nombre' => $reporte->getElemento()->getNombre(),
                         'fecha_aparicion' => $reporte->getElemento()->getFechaAparicion()->format('Y-m-d'),
-                        'descripcion' => $reporte->getElemento()->getDescripcion()
+                        'descripcion' => $reporte->getElemento()->getDescripcion(),
+                        'categoria' => $categoriaElemento
                     ],
                     'nombre_reportado' => $reporte->getNombreReportado(),
                     'fecha_aparicion_reportada' => $reporte->getFechaAparicionReportada() ? 
                         $reporte->getFechaAparicionReportada()->format('Y-m-d') : null,
                     'descripcion_reportada' => $reporte->getDescripcionReportada(),
+                    'categoria_reportada' => $categoriaReportada,
                     'momento_reporte' => $reporte->getMomentoReporte()->format('Y-m-d H:i:s'),
                     'estado' => $reporte->getEstado(),
                     'moderador' => $moderador,
@@ -136,6 +155,10 @@ class ModeracionController extends AbstractController
             $gestion->setFechaAparicionAntigua($elemento->getFechaAparicion());
             $gestion->setDescripcionAntigua($elemento->getDescripcion());
             
+            if ($elemento->getCategoria()) {
+                $gestion->setCategoriaAntigua($elemento->getCategoria());
+            }
+            
             if (isset($cambios['nombre']) && !empty($cambios['nombre'])) {
                 $elemento->setNombre($cambios['nombre']);
             }
@@ -150,6 +173,10 @@ class ModeracionController extends AbstractController
             
             if (isset($cambios['descripcion']) && !empty($cambios['descripcion'])) {
                 $elemento->setDescripcion($cambios['descripcion']);
+            }
+            
+            if ($reporte->getCategoriaReportada()) {
+                $elemento->setCategoria($reporte->getCategoriaReportada());
             }
             
             $entityManager->persist($gestion);

@@ -9,10 +9,18 @@ export interface Reporte {
         nombre: string;
         fecha_aparicion: string;
         descripcion: string;
+        categoria?: {
+            id: number;
+            nombre: string;
+        };
     };
     nombre_reportado: string | null;
     fecha_aparicion_reportada: string | null;
     descripcion_reportada: string | null;
+    categoria_reportada?: {
+        id: number;
+        nombre: string;
+    } | null;
     momento_reporte: string;
     estado: number;
     moderador: {

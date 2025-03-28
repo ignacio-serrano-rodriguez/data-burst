@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Elemento;
 use App\Entity\Usuario;
 use App\Entity\Lista;
+use App\Entity\Categoria;
 use App\Entity\ListaContieneElemento;
 use App\Entity\UsuarioReportaElemento;
 use Doctrine\ORM\EntityManagerInterface;
@@ -362,6 +363,17 @@ class ElementoController extends AbstractController
         }
         
         $reporte->setDescripcionReportada($datosRecibidos['descripcionReportada'] ?? null);
+        
+        // Handle category reporting with the new approach
+        if (isset($datosRecibidos['categoriaReportada']) && $datosRecibidos['categoriaReportada']) {
+            $categoriaId = $datosRecibidos['categoriaReportada'];
+            $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);
+            
+            if ($categoria) {
+                $reporte->setCategoriaReportada($categoria);
+            }
+        }
+        
         $reporte->setMomentoReporte(new \DateTime());
         $reporte->setEstado(UsuarioReportaElemento::ESTADO_PENDIENTE);
         

@@ -57,6 +57,10 @@ class UsuarioReportaElemento
     
     #[ORM\OneToMany(mappedBy: 'reporte', targetEntity: UsuarioGestionaElemento::class)]
     private Collection $gestionesElemento;
+
+    #[ORM\ManyToOne(targetEntity: Categoria::class)]
+    #[ORM\JoinColumn(name: "categoria_id_reportada", nullable: true)]
+    private ?Categoria $categoria_reportada = null;
     
     public function __construct()
     {
@@ -237,6 +241,18 @@ class UsuarioReportaElemento
                 $gestionElemento->setReporte(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategoriaReportada(): ?Categoria
+    {
+        return $this->categoria_reportada;
+    }
+
+    public function setCategoriaReportada(?Categoria $categoria): static
+    {
+        $this->categoria_reportada = $categoria;
 
         return $this;
     }

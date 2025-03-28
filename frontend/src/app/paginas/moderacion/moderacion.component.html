@@ -41,6 +41,7 @@
                         <p><strong>Nombre:</strong> {{reporte.elemento.nombre}}</p>
                         <p><strong>Fecha de aparición:</strong> {{reporte.elemento.fecha_aparicion | date:'dd/MM/yyyy'}}</p>
                         <p><strong>Descripción:</strong> {{reporte.elemento.descripcion}}</p>
+                        <p *ngIf="reporte.elemento.categoria"><strong>Categoría:</strong> {{reporte.elemento.categoria.nombre}}</p>
                         
                         <mat-divider></mat-divider>
                         
@@ -53,6 +54,9 @@
                         </div>
                         <div *ngIf="reporte.descripcion_reportada">
                           <p><strong>Descripción:</strong> <span class="cambio">{{reporte.descripcion_reportada}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.categoria_reportada">
+                          <p><strong>Categoría:</strong> <span class="cambio">{{reporte.categoria_reportada.nombre}}</span></p>
                         </div>
                         
                         <div *ngIf="reporte.comentario_moderador">
@@ -122,6 +126,9 @@
                         <div *ngIf="reporte.descripcion_reportada">
                           <p><strong>Descripción:</strong> <span class="cambio">{{reporte.descripcion_reportada}}</span></p>
                         </div>
+                        <div *ngIf="reporte.categoria_reportada">
+                          <p><strong>Categoría:</strong> <span class="cambio">{{reporte.categoria_reportada.nombre}}</span></p>
+                        </div>
                         
                         <div *ngIf="reporte.comentario_moderador">
                           <mat-divider></mat-divider>
@@ -179,6 +186,9 @@
                         </div>
                         <div *ngIf="reporte.descripcion_reportada">
                           <p><strong>Descripción:</strong> <span class="cambio-rechazado">{{reporte.descripcion_reportada}}</span></p>
+                        </div>
+                        <div *ngIf="reporte.categoria_reportada">
+                          <p><strong>Categoría:</strong> <span class="cambio-rechazado">{{reporte.categoria_reportada.nombre}}</span></p>
                         </div>
                         
                         <div *ngIf="reporte.comentario_moderador">

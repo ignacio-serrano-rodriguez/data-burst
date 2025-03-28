@@ -120,11 +120,15 @@ export class ModeracionComponent implements OnInit {
   confirmarAprobacion(reporte: Reporte) {
     this.reporteSeleccionado = reporte;
 
-    const cambios = {
+    const cambios: any = {
       nombre: reporte.nombre_reportado || reporte.elemento.nombre,
       fecha_aparicion: reporte.fecha_aparicion_reportada || reporte.elemento.fecha_aparicion,
       descripcion: reporte.descripcion_reportada || reporte.elemento.descripcion
     };
+
+    if (reporte.categoria_reportada) {
+      cambios.categoria_id = reporte.categoria_reportada.id;
+    }
 
     this.moderacionService.aprobarReporte(reporte.id, cambios).subscribe({
       next: (response) => {

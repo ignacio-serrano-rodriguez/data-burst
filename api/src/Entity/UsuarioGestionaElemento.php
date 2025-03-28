@@ -43,6 +43,10 @@ class UsuarioGestionaElemento
     #[ORM\JoinColumn(name: "reporte_id", nullable: true)]
     private ?UsuarioReportaElemento $reporte = null;
 
+    #[ORM\ManyToOne(targetEntity: Categoria::class)]
+    #[ORM\JoinColumn(name: "categoria_id_antigua", nullable: true)]
+    private ?Categoria $categoria_antigua = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,6 +151,18 @@ class UsuarioGestionaElemento
     public function setReporte(?UsuarioReportaElemento $reporte): static
     {
         $this->reporte = $reporte;
+
+        return $this;
+    }
+
+    public function getCategoriaAntigua(): ?Categoria
+    {
+        return $this->categoria_antigua;
+    }
+
+    public function setCategoriaAntigua(?Categoria $categoria): static
+    {
+        $this->categoria_antigua = $categoria;
 
         return $this;
     }
