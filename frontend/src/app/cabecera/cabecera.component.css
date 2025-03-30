@@ -246,3 +246,47 @@ mat-menu #verPerfil + button {
     margin-top: 0;
     padding-top: 0;
 }
+
+/* Add these styles to the cabecera component CSS */
+
+.notification-button {
+    position: relative;
+  }
+  
+  .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff4081;
+    color: white;
+    border-radius: 50%;
+    padding: 0 6px;
+    font-size: 12px;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+  }
+  
+  ::ng-deep .notifications-menu {
+    max-height: none !important;
+  }
+  
+  ::ng-deep .notifications-menu .mat-mdc-menu-content {
+    padding: 0 !important;
+  }
+  
+  .menu-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+  }
+  
+  .menu-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #AE00CD;
+    text-align: center;
+    font-family: 'ShareTech';
+  }

@@ -7,6 +7,7 @@ import { NotificacionesService } from '../servicios/notificaciones.service';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { RecargaService } from '../servicios/recarga.service';
 import { filter } from 'rxjs/operators';
+import { NotificacionesMenuComponent } from './notificaciones-menu/notificaciones-menu.component';
 
 @Component({
   selector: 'app-cabecera',
@@ -15,7 +16,8 @@ import { filter } from 'rxjs/operators';
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
-    CommonModule
+    CommonModule,
+    NotificacionesMenuComponent
   ],
   templateUrl: './cabecera.component.html',
   styleUrls: ['./cabecera.component.css']

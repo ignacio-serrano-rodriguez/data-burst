@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { SolicitudesService } from './solicitudes.service';
 
 @Injectable({
@@ -8,9 +8,13 @@ import { SolicitudesService } from './solicitudes.service';
 export class NotificacionesService {
   private nuevasSolicitudesSubject = new BehaviorSubject<number>(0);
   nuevasSolicitudes$ = this.nuevasSolicitudesSubject.asObservable();
+
+  private refreshNotificationsSubject = new Subject<void>();
+  refreshNotifications$ = this.refreshNotificationsSubject.asObservable();
+
   private intervalId: any;
 
-  constructor(private solicitudesService: SolicitudesService) {}
+  constructor(private solicitudesService: SolicitudesService) { }
 
   actualizarNumeroSolicitudes() {
     const usuarioId = Number(localStorage.getItem('id'));
@@ -18,6 +22,7 @@ export class NotificacionesService {
       this.solicitudesService.obtenerNumeroSolicitudes(usuarioId).subscribe({
         next: (data) => {
           this.nuevasSolicitudesSubject.next(data.nuevasSolicitudes);
+          this.refreshNotificationsSubject.next();
         },
         error: (error) => {
           console.error('Error al obtener el número de nuevas solicitudes:', error);
@@ -26,8 +31,8 @@ export class NotificacionesService {
     }
   }
 
-  iniciarRevisionPeriodica(intervalo: number = 60000) { // Intervalo en milisegundos, por defecto 1 minuto
-    this.detenerRevisionPeriodica(); // Detener cualquier revisión periódica existente
+  iniciarRevisionPeriodica(intervalo: number = 60000) {
+    this.detenerRevisionPeriodica();
     this.intervalId = setInterval(() => {
       this.actualizarNumeroSolicitudes();
     }, intervalo);

@@ -29,28 +29,11 @@
     margin-bottom: 0.5%;
 }
 
-.contenedor-solicitudes-datos {
+.contenedor-datos {
     display: flex;
     justify-content: center;
-    gap: 2%;
     width: 100%;
     margin-top: 1%;
-    flex-grow: 1;
-    overflow-y: hidden;
-}
-
-.columna {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    overflow-y: hidden;
-}
-
-#solicitudes, #datos {
-    width: 100%;
-    max-width: 600px;
-    margin: 1%;
     flex-grow: 1;
     overflow-y: hidden;
 }
@@ -62,19 +45,46 @@
     text-align: center;
     font-family: 'ShareTech';
     font-weight: 500;
-  }
+}
+
+button:hover {
+    text-decoration: underline;
+}
+
+.elementoFormulario {
+    width: 100%;
+}
+
+.etiquetaFormulario {
+    color: #717e84;
+}
+
+#formulario {
+    width: 100%;
+    max-width: 486px;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#boton {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    font-weight: bold;
+    font-size: 1em;
+    color: #EEF1F2;
+    background-color: #61B300;
+}
 
 @media (max-width: 768px) {
-    .contenedor-solicitudes-datos {
-        flex-direction: column;
-        align-items: center;
+    #formulario {
+        padding-left: 3%;
+        padding-right: 3%;
     }
+}
 
-    .columna {
-        width: 100%;
-    }
-
-    #solicitudes, #datos {
-        max-width: 90%;
+@media (max-width: 480px) {
+    #formulario {
+        padding-left: 2%;
+        padding-right: 2%;
     }
 }
