@@ -290,3 +290,37 @@ mat-menu #verPerfil + button {
     text-align: center;
     font-family: 'ShareTech';
   }
+
+::ng-deep .notifications-menu.mat-mdc-menu-panel {
+    max-width: 320px !important;
+    min-width: 320px !important;
+    width: 320px !important;
+    overflow: hidden !important;
+    max-height: none !important;
+    padding: 0 !important;
+  }
+  
+  ::ng-deep .notifications-menu .mat-mdc-menu-content {
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  .notification-button {
+    position: relative;
+  }
+  
+  .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff4081;
+    color: white;
+    border-radius: 50%;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    font-size: 12px;
+    padding: 0 4px;
+  }

@@ -32,16 +32,17 @@
     
     <div id="usuario-section">
         <button mat-icon-button [matMenuTriggerFor]="notificacionesMenu" class="notification-button">
-          <mat-icon>notifications</mat-icon>
-          <span class="badge" *ngIf="nuevasSolicitudes > 0">{{ nuevasSolicitudes }}</span>
-        </button>
-        
-        <mat-menu #notificacionesMenu="matMenu" class="notifications-menu" [hasBackdrop]="true" [overlapTrigger]="false">
-          <div class="menu-header">
-            <h3>Notificaciones</h3>
-          </div>
-          <app-notificaciones-menu></app-notificaciones-menu>
-        </mat-menu>
+            <mat-icon>notifications</mat-icon>
+            <span class="badge" *ngIf="nuevasSolicitudes > 0">{{ nuevasSolicitudes }}</span>
+          </button>
+          
+          <mat-menu #notificacionesMenu="matMenu" 
+            class="notifications-menu" 
+            [hasBackdrop]="true" 
+            [overlapTrigger]="false"
+            xPosition="before">
+            <app-notificaciones-menu></app-notificaciones-menu>
+          </mat-menu>
         
         <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
           <span id="nombreUsuario" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/perfil'}">{{nombreUsuario}}</span>

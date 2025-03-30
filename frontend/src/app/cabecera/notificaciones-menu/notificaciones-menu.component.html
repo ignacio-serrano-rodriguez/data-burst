@@ -1,0 +1,31 @@
+<div class="notificaciones-menu-container">
+  <div *ngIf="cargando" class="notificaciones-loading">
+    Cargando notificaciones...
+  </div>
+  
+  <div *ngIf="!cargando && notificaciones.length === 0" class="notificaciones-empty">
+    No tienes notificaciones pendientes
+  </div>
+  
+  <div *ngIf="!cargando && notificaciones.length > 0" class="notificaciones-list">
+    <div *ngFor="let notif of notificaciones" class="notificacion-item">
+      <div class="notificacion-icon">
+        <mat-icon [ngClass]="{'amistad-icon': notif.tipoNotificacion === 'amistad', 'lista-icon': notif.tipoNotificacion === 'lista'}">
+          {{ getTipoIcon(notif.tipoNotificacion) }}
+        </mat-icon>
+      </div>
+      <div class="notificacion-content">
+        <div class="notificacion-user">{{ notif.nombre }}</div>
+        <div class="notificacion-desc">{{ notif.descripcion }}</div>
+      </div>
+      <div class="notificacion-actions">
+        <button mat-icon-button color="primary" (click)="aceptarSolicitud(notif.nombre, notif.tipoNotificacion)" title="Aceptar">
+          <mat-icon>check_circle</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="denegarSolicitud(notif.nombre, notif.tipoNotificacion)" title="Rechazar">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
