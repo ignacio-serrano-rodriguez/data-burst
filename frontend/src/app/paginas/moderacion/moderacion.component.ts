@@ -14,6 +14,7 @@ import { MatDialogModule, MatDialog, MatDialogConfig } from '@angular/material/d
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Reporte } from '../../interfaces/Reporte';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -33,7 +34,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './moderacion.component.html',
   styleUrls: ['./moderacion.component.css']
