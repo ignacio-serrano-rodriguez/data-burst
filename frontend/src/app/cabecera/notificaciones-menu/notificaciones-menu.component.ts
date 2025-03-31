@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,9 @@ import { ObtenerSolicitudes } from '../../interfaces/ObtenerSolicitudes';
 import { Solicitud, RespuestaObtenerSolicitudes } from '../../interfaces/RespuestaObtenerSolicitudes';
 import { AplicarSolicitud } from '../../interfaces/AplicarSolicitud';
 import { Subscription } from 'rxjs';
+import { AmigosService } from '../../servicios/amigos.service';
+import { ListasService } from '../../servicios/listas.service';
+import { RecargaService } from '../../servicios/recarga.service';
 
 interface NotificacionCombinada extends Solicitud {
   tipoNotificacion: 'amistad' | 'lista';
@@ -27,10 +30,13 @@ export class NotificacionesMenuComponent implements OnInit, OnDestroy {
   private refreshSubscription: Subscription;
   hayNotificaciones = false;
 
-  constructor(
-    private solicitudesService: SolicitudesService,
-    private notificacionesService: NotificacionesService
-  ) {
+  private solicitudesService = inject(SolicitudesService);
+  private notificacionesService = inject(NotificacionesService);
+  private amigosService = inject(AmigosService);
+  private listasService = inject(ListasService);
+  private recargaService = inject(RecargaService);
+
+  constructor() {
     this.refreshSubscription = this.notificacionesService.refreshNotifications$.subscribe(() => {
       this.cargarNotificaciones();
     });
@@ -88,14 +94,25 @@ export class NotificacionesMenuComponent implements OnInit, OnDestroy {
   }
 
   aceptarSolicitud(nombre: string, tipo: string) {
+    const usuarioID = parseInt(localStorage.getItem('id')!, 10);
     let aplicarSolicitud: AplicarSolicitud = {
       nombre,
-      IDUsuario: parseInt(localStorage.getItem('id')!, 10),
+      IDUsuario: usuarioID,
       tipo
     };
+
     this.solicitudesService.aceptarSolicitud(aplicarSolicitud).subscribe({
       next: respuesta => {
         console.log('Solicitud aceptada:', respuesta.mensaje);
+
+        if (tipo === 'amistad') {
+          this.amigosService.obtenerAmigos(usuarioID).subscribe();
+        } else if (tipo === 'lista') {
+          this.listasService.obtenerListas(usuarioID).subscribe();
+        }
+
+        this.recargaService.recargarDataBurst();
+
         this.cargarNotificaciones();
         this.notificacionesService.actualizarNumeroSolicitudes();
       },

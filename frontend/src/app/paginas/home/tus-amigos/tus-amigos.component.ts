@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ElementRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,7 +12,7 @@ import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
 import { Amigo } from '../../../interfaces/Amigo';
 import { HomeComponent } from '../home.component';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { RecargaService } from '../../../servicios/recarga.service';
 
 @Component({
@@ -30,7 +30,7 @@ import { RecargaService } from '../../../servicios/recarga.service';
   templateUrl: './tus-amigos.component.html',
   styleUrls: ['./tus-amigos.component.css']
 })
-export class TusAmigosComponent implements OnInit {
+export class TusAmigosComponent implements OnInit, OnDestroy {
 
   private amigosService = inject(AmigosService);
   private homeComponent = inject(HomeComponent);
@@ -47,6 +47,7 @@ export class TusAmigosComponent implements OnInit {
   noSeEncontraronUsuarios = false;
 
   private searchSubject = new Subject<string>();
+  private reloadSubscription?: Subscription;
 
   ngOnInit(): void {
     this.obtenerAmigos();
@@ -65,9 +66,15 @@ export class TusAmigosComponent implements OnInit {
       this.buscarAmigosLocal(query);
     });
 
-    this.recargaService.recargarDataBurst$.subscribe(() => {
-      // No hacer nada para evitar la recarga del componente
+    this.reloadSubscription = this.recargaService.recargarDataBurst$.subscribe(() => {
+      this.obtenerAmigos();
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.reloadSubscription) {
+      this.reloadSubscription.unsubscribe();
+    }
   }
 
   onNombreUsuarioChange() {

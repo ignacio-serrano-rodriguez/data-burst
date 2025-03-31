@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, inject, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, inject, ElementRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,11 +13,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ViewChildren, QueryList } from '@angular/core';
 import { MatOption } from '@angular/material/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Subscription } from 'rxjs';
 
 import { ListasService } from '../../../servicios/listas.service';
 import { CrearAsignarLista } from '../../../interfaces/CrearAsignarLista';
 import { Lista } from '../../../interfaces/Lista';
 import { HomeComponent } from '../home.component';
+import { RecargaService } from '../../../servicios/recarga.service';
 
 interface Categoria {
   id: number;
@@ -45,10 +47,11 @@ interface Categoria {
   templateUrl: './tus-listas.component.html',
   styleUrls: ['./tus-listas.component.css']
 })
-export class TusListasComponent implements OnInit {
+export class TusListasComponent implements OnInit, OnDestroy {
 
   private listasService = inject(ListasService);
   private homeComponent = inject(HomeComponent);
+  private recargaService = inject(RecargaService);
 
   listas: Lista[] = [];
   listasFiltradas: Lista[] = [];
@@ -70,10 +73,21 @@ export class TusListasComponent implements OnInit {
   categoriasPrincipales: Categoria[] = [];
   categoriaSeleccionada: number | null = null;
   categoriaSeleccionadaObj: Categoria | null = null;
+  private reloadSubscription?: Subscription;
 
   ngOnInit(): void {
     this.obtenerListas();
     this.obtenerCategorias();
+
+    this.reloadSubscription = this.recargaService.recargarDataBurst$.subscribe(() => {
+      this.obtenerListas();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.reloadSubscription) {
+      this.reloadSubscription.unsubscribe();
+    }
   }
 
   seleccionarCategoria() {
