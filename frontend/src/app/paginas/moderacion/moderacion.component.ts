@@ -10,11 +10,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Reporte } from '../../interfaces/Reporte';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-moderacion',
@@ -48,13 +49,22 @@ export class ModeracionComponent implements OnInit {
   cargando = true;
   motivoRechazo = '';
   reporteSeleccionado: Reporte | null = null;
+  isMobile = false;
 
   constructor(
     private router: Router,
     private moderacionService: ModeracionService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) { }
+    private snackBar: MatSnackBar,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small
+    ]).subscribe(result => {
+      this.isMobile = result.matches;
+    });
+  }
 
   ngOnInit() {
     if (typeof localStorage !== 'undefined') {
@@ -161,9 +171,14 @@ export class ModeracionComponent implements OnInit {
     this.reporteSeleccionado = reporte;
     this.motivoRechazo = '';
 
-    const dialogRef = this.dialog.open(this.rechazarReporteDialog, {
-      width: '500px'
-    });
+    const dialogConfig: MatDialogConfig = {
+      width: this.isMobile ? '95%' : '500px',
+      maxWidth: this.isMobile ? '100vw' : '90vw',
+      maxHeight: this.isMobile ? '80vh' : '90vh',
+      disableClose: true
+    };
+
+    const dialogRef = this.dialog.open(this.rechazarReporteDialog, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && this.motivoRechazo.trim()) {
