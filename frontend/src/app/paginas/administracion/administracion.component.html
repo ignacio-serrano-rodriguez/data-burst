@@ -21,7 +21,7 @@
         </mat-form-field>
       </div>
 
-      <div class="table-wrapper">
+      <div class="table-wrapper desktop-view">
         <table mat-table [dataSource]="dataSource" class="admin-table">
           <ng-container matColumnDef="usuario">
             <th mat-header-cell *matHeaderCellDef>Usuario</th>
@@ -48,7 +48,7 @@
             <td mat-cell *matCellDef="let usuario">
               <div class="permission-selector">
                 <span *ngIf="usuario.id === 1" class="admin-badge">
-                  <mat-icon>security</mat-icon> Administrador Principal
+                  <mat-icon>security</mat-icon> <span class="badge-text">Administrador Principal</span>
                 </span>
                 <mat-form-field *ngIf="usuario.id !== 1" appearance="outline" class="permission-field">
                   <mat-select [(ngModel)]="usuario.permiso" 
@@ -60,7 +60,7 @@
                         <mat-icon *ngIf="usuario.permiso === '1'">person_outline</mat-icon>
                         <mat-icon *ngIf="usuario.permiso === '2'">verified_user</mat-icon>
                         <mat-icon *ngIf="usuario.permiso === '3'">admin_panel_settings</mat-icon>
-                        <span>{{ obtenerNombrePermiso(usuario.permiso) }}</span>
+                        <span class="permission-text">{{ obtenerNombrePermiso(usuario.permiso) }}</span>
                       </div>
                     </mat-select-trigger>
                     <mat-option value="0">
@@ -96,6 +96,72 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
+      </div>
+
+      <div class="mobile-view">
+        <div *ngFor="let usuario of dataSource.data" class="user-card mat-elevation-z1">
+          <div class="user-card-header">
+            <div class="user-card-name">
+              <mat-icon>person</mat-icon>
+              <span>{{usuario.usuario}}</span>
+            </div>
+            <div *ngIf="usuario.id === 1" class="admin-badge-mobile">
+              <mat-icon>security</mat-icon>
+            </div>
+          </div>
+          <div class="user-card-content">
+            <div class="user-card-email">
+              <mat-icon>email</mat-icon>
+              <span>{{usuario.mail}}</span>
+            </div>
+            <div class="user-card-permission">
+              <label>Permiso:</label>
+              <div *ngIf="usuario.id === 1" class="admin-badge">
+                <mat-icon>security</mat-icon>
+                <span class="badge-text">Administrador Principal</span>
+              </div>
+              <mat-form-field *ngIf="usuario.id !== 1" appearance="outline" class="permission-field-mobile">
+                <mat-select [(ngModel)]="usuario.permiso" 
+                            (selectionChange)="actualizarPermiso(usuario)"
+                            [panelClass]="'permission-panel-mobile'">
+                  <mat-select-trigger>
+                    <div class="permission-option">
+                      <mat-icon *ngIf="usuario.permiso === '0'">block</mat-icon>
+                      <mat-icon *ngIf="usuario.permiso === '1'">person_outline</mat-icon>
+                      <mat-icon *ngIf="usuario.permiso === '2'">verified_user</mat-icon>
+                      <mat-icon *ngIf="usuario.permiso === '3'">admin_panel_settings</mat-icon>
+                      <span>{{ obtenerNombrePermiso(usuario.permiso) }}</span>
+                    </div>
+                  </mat-select-trigger>
+                  <mat-option value="0">
+                    <div class="permission-option">
+                      <mat-icon>block</mat-icon>
+                      <span>Ninguno</span>
+                    </div>
+                  </mat-option>
+                  <mat-option value="1">
+                    <div class="permission-option">
+                      <mat-icon>person_outline</mat-icon>
+                      <span>Normal</span>
+                    </div>
+                  </mat-option>
+                  <mat-option value="2">
+                    <div class="permission-option">
+                      <mat-icon>verified_user</mat-icon>
+                      <span>Moderador</span>
+                    </div>
+                  </mat-option>
+                  <mat-option value="3">
+                    <div class="permission-option">
+                      <mat-icon>admin_panel_settings</mat-icon>
+                      <span>Administrador</span>
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div *ngIf="dataSource.data.length === 0 && !isLoading" class="no-results">

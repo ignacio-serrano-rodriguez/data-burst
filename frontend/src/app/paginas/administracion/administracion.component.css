@@ -6,7 +6,7 @@
 }
 
 .admin-dashboard {
-  padding: 24px;
+  padding: 20px;
   display: flex;
   justify-content: center;
 }
@@ -20,7 +20,7 @@
 }
 
 .admin-header {
-  padding: 24px;
+  padding: 24px 16px;
   background-color: #f9f9f9;
   border-bottom: 1px solid #eaeaea;
 }
@@ -51,6 +51,8 @@
 
 .search-container {
   margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
 }
 
 .search-field {
@@ -188,6 +190,88 @@
   background-color: #f9f9f9;
 }
 
+.mobile-view {
+  display: none;
+}
+
+.user-card {
+  background-color: white;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.user-card-header {
+  background-color: #f9f9f9;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.user-card-name {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.user-card-name mat-icon {
+  margin-right: 8px;
+  color: #666;
+}
+
+.admin-badge-mobile {
+  background-color: #AE00CD;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-card-content {
+  padding: 12px 16px;
+}
+
+.user-card-email {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+
+.user-card-email mat-icon {
+  margin-right: 8px;
+  flex-shrink: 0;
+  color: #666;
+}
+
+.user-card-permission {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-card-permission label {
+  font-weight: 500;
+  color: #666;
+}
+
+.permission-field-mobile {
+  width: 100%;
+}
+
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
 @media (min-width: 1201px) {
   .admin-dashboard {
     padding: 32px;
@@ -262,12 +346,11 @@
 
 @media (max-width: 576px) {
   .admin-dashboard {
-    padding: 8px 0;
+    padding: 8px;
   }
   
   .admin-container {
     border-radius: 0;
-    box-shadow: none;
   }
   
   .admin-header {
@@ -286,124 +369,63 @@
     margin-bottom: 12px;
   }
   
-  .user-info mat-icon, 
-  .email-info mat-icon {
+  .desktop-view {
     display: none;
   }
   
-  .admin-table .mat-column-usuario {
-    width: 30%;
-  }
-  
-  .admin-table .mat-column-mail {
-    width: 30%;
-  }
-  
-  .admin-table .mat-column-permiso {
-    width: 40%;
-  }
-  
-  .permission-field {
-    width: 120px;
-  }
-  
-  .admin-table .mat-mdc-cell {
-    padding: 12px 8px;
-    font-size: 13px;
-  }
-  
-  .admin-badge {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  .email-info span {
-    max-width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .mobile-view {
     display: block;
   }
   
-  .permission-option span {
-    font-size: 13px;
+  .admin-paginator ::ng-deep .mat-mdc-paginator-navigation-previous,
+  .admin-paginator ::ng-deep .mat-mdc-paginator-navigation-next,
+  .admin-paginator ::ng-deep .mat-mdc-paginator-navigation-first,
+  .admin-paginator ::ng-deep .mat-mdc-paginator-navigation-last {
+    min-width: 36px;
+    height: 36px;
+    line-height: 36px;
+  }
+  
+  .admin-paginator ::ng-deep .mat-mdc-icon-button {
+    padding: 6px;
   }
   
   .admin-paginator ::ng-deep .mat-mdc-paginator-range-label {
-    margin: 0 4px;
+    margin: 0 8px;
   }
 }
 
-@media (max-width: 420px) {
-  /* Permission column adjustments */
-  .admin-table .mat-column-permiso {
-    width: 15%;
-    min-width: 40px;
+@media (max-width: 375px) {
+  .admin-dashboard {
+    padding: 4px;
   }
   
-  .admin-table .mat-column-usuario {
-    width: 35%;
+  .admin-header h1 {
+    font-size: 20px;
   }
   
-  .admin-table .mat-column-mail {
-    width: 50%;
+  .admin-subheader {
+    font-size: 14px;
   }
   
-  .permission-field {
-    width: 40px;
-    min-width: 40px;
+  .admin-content {
+    padding: 6px;
   }
   
-  .permission-field .mat-mdc-select-value .permission-option span {
-    display: none;
+  .search-field ::ng-deep .mat-mdc-form-field-infix {
+    padding: 12px 0 !important;
+    min-height: 40px;
   }
   
-  .permission-field .permission-option {
-    justify-content: center;
-    padding: 0;
+  .user-card-header {
+    padding: 10px 12px;
   }
   
-  .permission-field .permission-option mat-icon {
-    margin: 0;
-    font-size: 18px;
-    height: 18px;
-    width: 18px;
+  .user-card-content {
+    padding: 10px 12px;
   }
   
-  .permission-field ::ng-deep .mat-mdc-form-field-infix {
-    padding: 8px 0;
-    min-height: 28px;
-    width: 40px !important;
-  }
-  
-  .mat-mdc-select-panel .permission-option span {
-    display: none !important;
-  }
-  
-  .mat-mdc-select-panel .permission-option {
-    justify-content: center !important;
-    padding: 0 8px;
-  }
-  
-  .admin-badge {
-    padding: 0;
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .admin-badge span {
-    display: none;
-  }
-  
-  .admin-badge mat-icon {
-    margin: 0;
-    font-size: 16px;
-    height: 16px;
-    width: 16px;
+  .admin-badge .badge-text {
+    font-size: 12px;
   }
 }
