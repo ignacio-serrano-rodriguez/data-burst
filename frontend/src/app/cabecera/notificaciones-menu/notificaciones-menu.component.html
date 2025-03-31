@@ -19,11 +19,11 @@
         <div class="notificacion-desc">{{ notif.descripcion }}</div>
       </div>
       <div class="notificacion-actions">
-        <button mat-icon-button color="primary" (click)="aceptarSolicitud(notif.nombre, notif.tipoNotificacion)" title="Aceptar">
-          <mat-icon>check_circle</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="denegarSolicitud(notif.nombre, notif.tipoNotificacion)" title="Rechazar">
+        <button mat-icon-button class="reject-button" (click)="denegarSolicitud(notif.nombre, notif.tipoNotificacion)" title="Rechazar">
           <mat-icon>cancel</mat-icon>
+        </button>
+        <button mat-icon-button class="accept-button" (click)="aceptarSolicitud(notif.nombre, notif.tipoNotificacion)" title="Aceptar">
+          <mat-icon>check_circle</mat-icon>
         </button>
       </div>
     </div>

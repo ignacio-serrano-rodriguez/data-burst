@@ -117,3 +117,13 @@
   line-height: 16px !important;
   box-sizing: border-box !important;
 }
+
+.accept-button {
+  color: white !important;
+  background-color: #61B300 !important;
+}
+
+.reject-button {
+  color: white !important;
+  background-color: #F44336 !important;
+}
