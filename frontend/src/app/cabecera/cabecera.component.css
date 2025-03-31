@@ -10,13 +10,24 @@ span, a, div, button {
     margin: 0;
     padding: 0;
     border: 0;
-
     color: #AE00CD;
     font-family: 'ShareTech';
 }
 
-.enlaces {
+.enlaces, #logoTitulo, .titulo-enlace {
     cursor: pointer;
+}
+
+.textoEnlace:hover {
+    text-decoration: underline;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.bold {
+    font-weight: 600;
 }
 
 #cabecera {
@@ -24,12 +35,11 @@ span, a, div, button {
     align-items: center;
     justify-content: space-between;
     text-align: center;
-
     height: 100%;
     background-color: #F4B3FF;
     width: 100%;
     overflow: hidden;
-    padding: 10px 10px;
+    padding: 10px;
 }
 
 #titulo {
@@ -40,7 +50,6 @@ span, a, div, button {
     width: 100%;
     justify-content: center;
     flex: 0;
-    width: 100%;
 }
 
 .titulo-enlace {
@@ -98,8 +107,70 @@ span, a, div, button {
     background-color: #F4B3FF;
 }
 
+#nombreUsuario {
+    font-size: 1.7em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+#avatarUsuario {
+    width: 2.5em;
+}
+
 button[mat-icon-button] {
     background-color: #F4B3FF; 
+}
+
+button[mat-icon-button]:hover mat-icon {
+    transform: scale(1.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.notification-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    width: 35px;
+}
+
+.badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background-color: #ff4081;
+    color: white;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    font-size: 12px;
+    padding: 0 4px;
+    font-weight: 500;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-actions {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+#hamburger-menu {
+    display: none;
+}
+
+.mobile-notification-button {
+    display: none;
+}
+
+.desktop-notification-button {
+    display: flex;
 }
 
 .botonMenuUsuario {
@@ -123,45 +194,64 @@ button[mat-icon-button] {
     text-align: center;
 }
 
-#nombreUsuario {
-    font-size: 1.7em;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-}
-
-#avatarUsuario {
-    width: 2.5em;
-}
-
 #verPerfil {
     width: 100%;
 }
 
-.textoEnlace:hover {
-    text-decoration: underline;
+mat-menu {
+    text-align: center;
 }
 
-button:hover {
-    cursor: pointer;
-}
-
-.bold {
-    font-weight: 600;
-}
-
-button[mat-icon-button]:hover mat-icon {
-    transform: scale(1.2);
-    transition: transform 0.3s ease-in-out;
-}
-
-#hamburger-menu {
-    display: none;
-}
-
-.mobile-actions {
-    display: none;
+mat-menu button {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+mat-menu button.botonMenuUsuario {
+    margin: 0;
+    padding: 0.5em 0;
+}
+
+mat-menu #verPerfil + button {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.menu-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+}
+  
+.menu-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #AE00CD;
+    text-align: center;
+    font-family: 'ShareTech';
+}
+
+::ng-deep .notifications-menu.mat-mdc-menu-panel {
+    max-width: 320px !important;
+    min-width: 320px !important;
+    width: 320px !important;
+    overflow: hidden !important;
+    max-height: none !important;
+    padding: 0 !important;
+}
+  
+::ng-deep .notifications-menu .mat-mdc-menu-content {
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+::ng-deep .notifications-menu {
+    max-height: none !important;
 }
 
 /* Mobile [350-430) */
@@ -187,6 +277,14 @@ button[mat-icon-button]:hover mat-icon {
         justify-content: center;
         align-items: center;
         border-radius: 15px;
+    }
+    
+    .mobile-notification-button {
+        display: flex;
+    }
+    
+    .desktop-notification-button {
+        display: none;
     }
 }
 
@@ -214,6 +312,14 @@ button[mat-icon-button]:hover mat-icon {
         align-items: center;
         border-radius: 15px;
     }
+    
+    .mobile-notification-button {
+        display: flex;
+    }
+    
+    .desktop-notification-button {
+        display: none;
+    }
 }
 
 /* Desktop [1280-infinito) */
@@ -237,109 +343,3 @@ button[mat-icon-button]:hover mat-icon {
         justify-content: flex-end; 
     }
 }
-
-mat-menu {
-    text-align: center;
-}
-
-mat-menu button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    text-align: center;
-}
-
-mat-menu button.botonMenuUsuario {
-    margin: 0;
-    padding: 0.5em 0;
-}
-
-mat-menu #verPerfil + button {
-    margin-top: 0;
-    padding-top: 0;
-}
-  
-  ::ng-deep .notifications-menu {
-    max-height: none !important;
-  }
-  
-  ::ng-deep .notifications-menu .mat-mdc-menu-content {
-    padding: 0 !important;
-  }
-  
-  .menu-header {
-    padding: 12px 16px;
-    border-bottom: 1px solid #e0e0e0;
-    background-color: #f5f5f5;
-  }
-  
-  .menu-header h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 500;
-    color: #AE00CD;
-    text-align: center;
-    font-family: 'ShareTech';
-  }
-
-::ng-deep .notifications-menu.mat-mdc-menu-panel {
-    max-width: 320px !important;
-    min-width: 320px !important;
-    width: 320px !important;
-    overflow: hidden !important;
-    max-height: none !important;
-    padding: 0 !important;
-  }
-  
-  ::ng-deep .notifications-menu .mat-mdc-menu-content {
-    padding: 0 !important;
-    overflow: hidden !important;
-    box-sizing: border-box !important;
-  }
-
-  #logoTitulo {
-    width: 3.6em;
-    cursor: pointer;
-    }
-
-  .titulo-enlace {
-    display: flex;
-    cursor: pointer;
-    }
-
-  .badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    background-color: #ff4081;
-    color: white;
-    border-radius: 50%;
-    min-width: 18px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-    font-size: 12px;
-    padding: 0 4px;
-    font-weight: 500;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .notification-button {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .mobile-notification-button,
-  .desktop-notification-button {
-    height: 35px;
-    width: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
