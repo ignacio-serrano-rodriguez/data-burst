@@ -16,27 +16,27 @@ span, a, div, button {
 }
 
 .enlaces {
-    cursor: pointer; /* Cambiar el cursor a pointer */
+    cursor: pointer;
 }
 
 #cabecera {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Distribuir los bloques con space-between */
+    justify-content: space-between;
     text-align: center;
 
     height: 100%;
     background-color: #F4B3FF;
-    width: 100%; /* Asegurar que ocupe el 100% del ancho */
-    overflow: hidden; /* Evitar desbordamiento */
-    padding: 10px 10px; /* Reducir el padding horizontal */
+    width: 100%;
+    overflow: hidden;
+    padding: 10px 10px;
 }
 
 #titulo {
     display: flex;
     align-items: center;
-    gap: 0.5em; /* Añadir más espacio entre el logo y el texto */
-    order: 0; /* Asegurar que el título esté en la primera fila */
+    gap: 0.5em;
+    order: 0;
     width: 100%;
     justify-content: center;
     flex: 0;
@@ -53,23 +53,23 @@ span, a, div, button {
 
 #textoTitulo {
     display: flex;
-    flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
-    text-align: center; /* Alinear el texto al centro */
-    justify-content: center; /* Asegurar que los elementos estén centrados */
+    flex-wrap: nowrap;
+    text-align: center;
+    justify-content: center;
     width: auto;
 }
 
 #textoTitulo span {
     font-size: 1.7em;
-    min-width: 100px; /* Reservar suficiente espacio para el texto en bold */
+    min-width: 100px;
 }
 
 #menu-section {
     display: flex;
-    justify-content: center; /* Asegurar que los elementos estén centrados */
+    justify-content: center;
     align-items: center;
-    gap: 20px; /* Añadir más espacio entre los elementos */
-    order: 1; /* Asegurar que el menú esté en la segunda fila si es necesario */
+    gap: 20px;
+    order: 1;
     width: 100%;
     flex: 1;
 }
@@ -77,16 +77,16 @@ span, a, div, button {
 #estadisticas, #moderacion, #administracion {
     font-size: 1.1em;
     width: auto;
-    text-align: center; /* Alinear el texto al centro */
+    text-align: center;
 }
 
 #usuario-section {
     display: flex;
     align-items: center;
-    flex-wrap: nowrap; /* No permitir que los elementos se envuelvan */
-    justify-content: flex-end; /* Alinear a la derecha */
-    gap: 5px; /* Reducir el espacio entre los elementos */
-    order: 2; /* Asegurar que la parte de usuario esté en la primera fila */
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    gap: 5px;
+    order: 2;
     flex: 0;
 }
 
@@ -146,10 +146,9 @@ button:hover {
 }
 
 .bold {
-    font-weight: 600; /* Semi-bold */
+    font-weight: 600;
 }
 
-/* Efecto de transición para el ícono de notificaciones */
 button[mat-icon-button]:hover mat-icon {
     transform: scale(1.2);
     transition: transform 0.3s ease-in-out;
@@ -157,6 +156,12 @@ button[mat-icon-button]:hover mat-icon {
 
 #hamburger-menu {
     display: none;
+}
+
+.mobile-actions {
+    display: none;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Mobile [350-430) */
@@ -168,6 +173,10 @@ button[mat-icon-button]:hover mat-icon {
 
     #menu-section, #usuario-section {
         display: none; 
+    }
+
+    .mobile-actions {
+        display: flex;
     }
 
     #hamburger-menu {
@@ -190,6 +199,10 @@ button[mat-icon-button]:hover mat-icon {
 
     #menu-section, #usuario-section {
         display: none;
+    }
+
+    .mobile-actions {
+        display: flex;
     }
 
     #hamburger-menu {
@@ -246,27 +259,6 @@ mat-menu #verPerfil + button {
     margin-top: 0;
     padding-top: 0;
 }
-
-/* Add these styles to the cabecera component CSS */
-
-.notification-button {
-    position: relative;
-  }
-  
-  .badge {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #ff4081;
-    color: white;
-    border-radius: 50%;
-    padding: 0 6px;
-    font-size: 12px;
-    min-width: 16px;
-    height: 16px;
-    line-height: 16px;
-    text-align: center;
-  }
   
   ::ng-deep .notifications-menu {
     max-height: none !important;
@@ -305,22 +297,49 @@ mat-menu #verPerfil + button {
     overflow: hidden !important;
     box-sizing: border-box !important;
   }
-  
-  .notification-button {
-    position: relative;
-  }
-  
+
+  #logoTitulo {
+    width: 3.6em;
+    cursor: pointer;
+    }
+
+  .titulo-enlace {
+    display: flex;
+    cursor: pointer;
+    }
+
   .badge {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -2px;
+    right: -2px;
     background-color: #ff4081;
     color: white;
     border-radius: 50%;
-    min-width: 16px;
-    height: 16px;
-    line-height: 16px;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px;
     text-align: center;
     font-size: 12px;
     padding: 0 4px;
+    font-weight: 500;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .notification-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .mobile-notification-button,
+  .desktop-notification-button {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }

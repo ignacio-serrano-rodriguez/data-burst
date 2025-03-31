@@ -11,9 +11,15 @@
                 <a>Data Burst</a>
             </span>
         </h2> 
-        <button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="hamburgerMenu" aria-label="Example icon-button with a menu">
-            <mat-icon>menu</mat-icon>
-        </button>
+        <div class="mobile-actions" (click)="$event.stopPropagation()">
+            <button mat-icon-button [matMenuTriggerFor]="notificacionesMenu" class="notification-button mobile-notification-button">
+                <mat-icon>notifications</mat-icon>
+                <span class="badge" *ngIf="nuevasSolicitudes > 0">{{ nuevasSolicitudes }}</span>
+            </button>
+            <button id="hamburger-menu" mat-icon-button [matMenuTriggerFor]="hamburgerMenu" aria-label="Example icon-button with a menu">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
     </div>
 
     <div id="menu-section">
@@ -31,18 +37,18 @@
     </div>
     
     <div id="usuario-section">
-        <button mat-icon-button [matMenuTriggerFor]="notificacionesMenu" class="notification-button">
+        <button mat-icon-button [matMenuTriggerFor]="notificacionesMenu" class="notification-button desktop-notification-button">
             <mat-icon>notifications</mat-icon>
             <span class="badge" *ngIf="nuevasSolicitudes > 0">{{ nuevasSolicitudes }}</span>
-          </button>
+        </button>
           
-          <mat-menu #notificacionesMenu="matMenu" 
+        <mat-menu #notificacionesMenu="matMenu" 
             class="notifications-menu" 
             [hasBackdrop]="true" 
             [overlapTrigger]="false"
             xPosition="before">
             <app-notificaciones-menu></app-notificaciones-menu>
-          </mat-menu>
+        </mat-menu>
         
         <button id="usuario" class="enlaces" mat-button [matMenuTriggerFor]="menu">
           <span id="nombreUsuario" class="textoEnlace" [ngClass]="{'bold': rutaActual === '/perfil'}">{{nombreUsuario}}</span>
