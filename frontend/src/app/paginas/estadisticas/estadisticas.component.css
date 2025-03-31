@@ -5,7 +5,7 @@
 }
 
 .estadisticas-container {
-  padding: 2%;
+  padding: 20px;
   width: 100%;
   box-sizing: border-box;
   position: relative;
@@ -13,39 +13,69 @@
 
 .estadisticas-content {
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 1000px;
+  width: 100%;
 }
 
-.full-width {
+.seccion-titulo {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #AE00CD;
+  text-align: left;
+  font-family: 'ShareTech', sans-serif;
+  font-weight: 500;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.categoria-field {
   width: 100%;
-  margin-bottom: 16px;
+  max-width: 500px;
+}
+
+.clear-button {
+  margin-right: 8px;
 }
 
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  margin: 32px 0;
 }
 
-.spinner-color ::ng-deep .mdc-circular-progress__indeterminate-circle-graphic {
-  stroke: #AE00CD;
+::ng-deep .mat-mdc-progress-spinner.mat-accent circle {
+  stroke: #AE00CD !important;
 }
 
 .tabla-container {
+  width: 100%;
   margin-top: 20px;
-  overflow-x: auto;
 }
 
-.tabla-container table {
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.full-width {
   width: 100%;
 }
 
-.no-data-message {
+table.mat-mdc-table {
+  width: 100%;
+  min-width: 500px;
+}
+
+.mat-column-orden {
+  width: 80px;
+  max-width: 80px;
   text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  color: #666;
 }
 
 .paginador-centrado {
@@ -53,6 +83,15 @@
   justify-content: center;
   margin-top: 16px;
   margin-bottom: 16px;
+}
+
+.no-data-message {
+  text-align: center;
+  margin-top: 32px;
+  padding: 24px;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 4px;
 }
 
 ::ng-deep .mat-mdc-option {
@@ -69,32 +108,178 @@
   max-height: 270px;
 }
 
-.mat-form-field {
-  width: 100%;
-}
-
 ::ng-deep .mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper {
   padding-left: 16px;
 }
 
-button[mat-icon-button] {
-  margin-right: 8px;
+.mobile-view {
+  display: none;
 }
 
-button[mat-icon-button]:hover {
-  text-decoration: none;
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
 }
 
-button[mat-icon-button]:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.stat-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.seccion-titulo {
-  font-size: 24px;
-  margin-bottom: 20px;
+.card-header {
+  background-color: #f5f5f5;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.card-position {
+  font-weight: bold;
+  font-size: 18px;
   color: #AE00CD;
-  text-align: center;
-  font-family: 'ShareTech';
+}
+
+.card-content {
+  padding: 12px 16px;
+}
+
+.stat-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.stat-row:last-child {
+  margin-bottom: 0;
+}
+
+.stat-label {
   font-weight: 500;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  padding: 4px 0;
+  word-break: break-word;
+}
+
+.desktop-view {
+  display: block;
+}
+
+.mobile-view {
+  display: none;
+}
+
+@media (min-width: 1201px) {
+  .estadisticas-container {
+    padding: 32px;
+  }
+  
+  .seccion-titulo {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 769px) {
+  .seccion-titulo {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 577px) {
+  .estadisticas-container {
+    padding: 16px;
+  }
+  
+  .seccion-titulo {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  
+  .tabla-container table {
+    min-width: 400px;
+  }
+}
+
+@media (max-width: 576px) {
+  .estadisticas-container {
+    padding: 12px;
+  }
+  
+  .seccion-titulo {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .categoria-field {
+    max-width: 100%;
+  }
+  
+  .desktop-view {
+    display: none;
+  }
+  
+  .mobile-view {
+    display: block;
+  }
+  
+  ::ng-deep .mat-mdc-paginator-navigation-previous,
+  ::ng-deep .mat-mdc-paginator-navigation-next,
+  ::ng-deep .mat-mdc-paginator-navigation-first,
+  ::ng-deep .mat-mdc-paginator-navigation-last {
+    min-width: 36px;
+    height: 36px;
+    line-height: 36px;
+  }
+  
+  ::ng-deep .mat-mdc-icon-button {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 375px) {
+  .estadisticas-container {
+    padding: 8px;
+  }
+  
+  .seccion-titulo {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .search-container {
+    margin-bottom: 16px;
+  }
+  
+  ::ng-deep .mat-mdc-form-field-infix {
+    min-height: 40px !important;
+  }
+  
+  .card-header {
+    padding: 10px 12px;
+  }
+  
+  .card-content {
+    padding: 10px 12px;
+  }
+  
+  .card-position {
+    font-size: 16px;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+  }
+  
+  .no-data-message {
+    padding: 16px;
+    font-size: 14px;
+  }
 }

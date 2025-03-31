@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule, MatAutocompleteTrigger, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { EstadisticasService } from '../../servicios/estadisticas.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 interface Estadistica {
   orden: number;
@@ -64,6 +65,8 @@ interface Categoria {
   styleUrls: ['./estadisticas.component.css']
 })
 export class EstadisticasComponent implements OnInit {
+  isMobile = false;
+
   categorias: Categoria[] = [];
   categoriasFiltradas: Categoria[] = [];
   categoriaBusqueda: string = '';
@@ -85,7 +88,17 @@ export class EstadisticasComponent implements OnInit {
   @ViewChild('categoriaInput') categoriaInput!: ElementRef;
   @ViewChild('autoCategoria') autocompleteCategorias!: MatAutocompleteTrigger;
 
-  constructor(private estadisticasService: EstadisticasService) { }
+  constructor(
+    private estadisticasService: EstadisticasService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small
+    ]).subscribe(result => {
+      this.isMobile = result.matches;
+    });
+  }
 
   ngOnInit() {
     this.cargarCategorias();
