@@ -65,7 +65,7 @@ export class NotificacionesMenuComponent implements OnInit, OnDestroy {
               const notificacionesLista = respuesta.solicitudes.lista.map(s => ({
                 ...s,
                 tipoNotificacion: 'lista' as const,
-                descripcion: 'te ha invitado a su lista'
+                descripcion: `${s.invitador} te ha invitado`
               }));
 
               this.notificaciones = [...notificacionesAmistad, ...notificacionesLista].slice(0, 4);
