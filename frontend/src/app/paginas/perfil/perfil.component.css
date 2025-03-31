@@ -4,87 +4,234 @@
     min-height: 100vh;
     width: 100%;
     overflow-x: hidden;
-}
-
-#perfil-container {
+  }
+  
+  .perfil-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    flex-grow: 1;
-    padding: 1%;
     width: 100%;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-
-#mensajeInformativo {
-    font-family: 'ShareTech';
-    font-size: 1.2em;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 0.5%;
-}
-
-.contenedor-datos {
+    flex-grow: 1;
+    padding: 2% 0;
+    box-sizing: border-box;
+  }
+  
+  .contenedor-formulario {
     display: flex;
     justify-content: center;
-    width: 100%;
-    margin-top: 1%;
-    flex-grow: 1;
-    overflow-y: hidden;
-}
-
-.seccion-titulo {
-    font-size: 24px;
-    margin-bottom: 20px;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .seccion-titulo {
+    font-size: 28px;
+    margin-bottom: 24px;
     color: #AE00CD;
-    text-align: center;
-    font-family: 'ShareTech';
+    text-align: left;
+    font-family: 'ShareTech', sans-serif;
     font-weight: 500;
-}
-
-button:hover {
-    text-decoration: underline;
-}
-
-.elementoFormulario {
+    width: 90%;
+    max-width: 500px;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  
+  .mensaje-container {
+    width: 90%;
+    max-width: 500px;
+    margin-bottom: 16px;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  
+  .mensaje-informativo {
+    font-family: 'ShareTech', sans-serif;
+    font-size: 16px;
+    color: #61B300;
+    display: block;
+    min-height: 24px;
+  }
+  
+  form {
     width: 100%;
-}
-
-.etiquetaFormulario {
+  }
+  
+  .campo-formulario {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  mat-label {
     color: #717e84;
-}
-
-#formulario {
+  }
+  
+  .boton-guardar {
     width: 100%;
-    max-width: 486px;
-    padding-left: 5%;
-    padding-right: 5%;
-}
-
-#boton {
-    padding-top: 1em;
-    padding-bottom: 1em;
-    font-weight: bold;
-    font-size: 1em;
-    color: #EEF1F2;
+    padding: 12px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #FFFFFF;
     background-color: #61B300;
-}
-
-@media (max-width: 768px) {
-    #formulario {
-        padding-left: 3%;
-        padding-right: 3%;
+    border-radius: 4px;
+    margin-top: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .boton-guardar:hover:not([disabled]) {
+    background-color: #549b00;
+    text-decoration: underline;
+  }
+  
+  .boton-guardar[disabled] {
+    background-color: #cccccc;
+    color: #666666;
+  }
+  
+  ::ng-deep .mat-mdc-form-field-flex {
+    background-color: #f5f5f5 !important;
+  }
+  
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: #f5f5f5 !important;
+  }
+  
+  @media (max-width: 768px) {
+    .seccion-titulo {
+      font-size: 24px;
+      width: 92%;
     }
-}
-
-@media (max-width: 480px) {
-    #formulario {
-        padding-left: 2%;
-        padding-right: 2%;
+    
+    .mensaje-container,
+    .contenedor-formulario {
+      width: 92%;
     }
-}
+  }
+  
+  @media (max-width: 480px) {
+    .seccion-titulo {
+      font-size: 22px;
+      width: 94%;
+    }
+    
+    .mensaje-container,
+    .contenedor-formulario {
+      width: 94%;
+      padding: 0 12px;
+    }
+    
+    .boton-guardar {
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .perfil-container {
+      padding: 1% 0;
+    }
+    
+    .seccion-titulo {
+      font-size: 20px;
+      margin-bottom: 16px;
+      padding: 0 8px;
+      width: 95%;
+    }
+    
+    .mensaje-container,
+    .contenedor-formulario {
+      padding: 0 8px;
+      width: 95%;
+    }
+    
+    .mensaje-informativo {
+      font-size: 14px;
+      min-height: 18px;
+    }
+    
+    .campo-formulario {
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    
+    ::ng-deep .mat-mdc-form-field-infix {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+    
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
+    
+    ::ng-deep .mat-mdc-form-field-flex {
+      height: 48px !important;
+    }
+  
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      padding: 0 10px !important;
+    }
+    
+    ::ng-deep .mat-mdc-form-field-error {
+      font-size: 12px !important;
+    }
+    
+    ::ng-deep .mat-mdc-icon-button {
+      width: 30px !important;
+      height: 30px !important;
+      padding: 2px !important;
+    }
+    
+    ::ng-deep .mat-icon {
+      font-size: 18px !important;
+      width: 18px !important;
+      height: 18px !important;
+    }
+    
+    .boton-guardar {
+      padding: 10px;
+      font-size: 13px;
+    }
+  }
+  
+  @media (max-width: 375px) {
+    .seccion-titulo,
+    .mensaje-container,
+    .contenedor-formulario {
+      width: 92%;
+      max-width: 320px;
+    }
+    
+    ::ng-deep .mat-mdc-input-element {
+      font-size: 14px !important;
+    }
+    
+    ::ng-deep .mat-mdc-form-field-label {
+      font-size: 14px !important;
+    }
+    
+    ::ng-deep .mat-mdc-icon-button {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    
+    ::ng-deep .mat-icon {
+      font-size: 16px !important;
+      width: 16px !important;
+      height: 16px !important;
+    }
+    
+    .boton-guardar {
+      margin-top: 4px;
+      height: 40px;
+      padding: 8px;
+      font-size: 13px;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .seccion-titulo,
+    .mensaje-container,
+    .contenedor-formulario {
+      max-width: 550px;
+    }
+  }

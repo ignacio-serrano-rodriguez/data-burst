@@ -1,45 +1,67 @@
-<div id="perfil-container">
+<div class="perfil-container">
     <h1 class="seccion-titulo">Perfil</h1>
-    <span id="mensajeInformativo"></span>
-    <div class="contenedor-datos">
-        <div id="formulario">
-            <form [formGroup]="formRegistro" (ngSubmit)="modificarDatosUsuario()">
-                <mat-form-field class="elementoFormulario">
-                    <mat-label class="etiquetaFormulario">Correo electrónico</mat-label>
-                    <input matInput formControlName="mail" required>
-                </mat-form-field>
-            
-                <mat-form-field class="elementoFormulario">
-                    <mat-label class="etiquetaFormulario">Nombre de usuario</mat-label>
-                    <input matInput formControlName="usuario" required>
-                </mat-form-field>
-            
-                <mat-form-field class="elementoFormulario">
-                    <mat-label class="etiquetaFormulario">Nueva contraseña</mat-label>
-                    <input matInput [type]="hideNuevaContrasenia ? 'password' : 'text'" formControlName="nuevaContrasenia">
-                    <button mat-icon-button matSuffix (click)="hideNuevaContrasenia = !hideNuevaContrasenia" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideNuevaContrasenia" type="button">
-                    <mat-icon>{{hideNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            
-                <mat-form-field class="elementoFormulario">
-                    <mat-label class="etiquetaFormulario">Repetir nueva contraseña</mat-label>
-                    <input matInput [type]="hideRepetirNuevaContrasenia ? 'password' : 'text'" formControlName="nuevaContraseniaRepetida">
-                    <button mat-icon-button matSuffix (click)="hideRepetirNuevaContrasenia = !hideRepetirNuevaContrasenia" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideRepetirNuevaContrasenia" type="button">
-                    <mat-icon>{{hideRepetirNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            
-                <mat-form-field class="elementoFormulario">
-                    <mat-label class="etiquetaFormulario">Contraseña actual</mat-label>
-                    <input matInput [type]="hideContraseniaActual ? 'password' : 'text'" formControlName="contraseniaActual" required>
-                    <button mat-icon-button matSuffix (click)="hideContraseniaActual = !hideContraseniaActual" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideContraseniaActual" type="button">
-                    <mat-icon>{{hideContraseniaActual ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                </mat-form-field>
-            
-                <button mat-raised-button id="boton" type="submit">Guardar cambios</button>
-            </form>
-        </div>
+    
+    <div class="mensaje-container">
+        <span id="mensajeInformativo" class="mensaje-informativo"></span>
+    </div>
+    
+    <div class="contenedor-formulario">
+        <form [formGroup]="formPerfil" (ngSubmit)="guardarCambios()">
+            <mat-form-field appearance="outline" class="campo-formulario">
+                <mat-label>Correo electrónico</mat-label>
+                <input matInput formControlName="mail" required>
+                <mat-error *ngIf="formPerfil.get('mail')?.hasError('required')">
+                    El correo electrónico es obligatorio
+                </mat-error>
+                <mat-error *ngIf="formPerfil.get('mail')?.hasError('email')">
+                    El correo electrónico no es válido
+                </mat-error>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline" class="campo-formulario">
+                <mat-label>Nombre de usuario</mat-label>
+                <input matInput formControlName="usuario" required>
+                <mat-error *ngIf="formPerfil.get('usuario')?.hasError('required')">
+                    El nombre de usuario es obligatorio
+                </mat-error>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline" class="campo-formulario">
+                <mat-label>Nueva contraseña</mat-label>
+                <input matInput [type]="hideNuevaContrasenia ? 'password' : 'text'" formControlName="nuevaContrasenia">
+                <button mat-icon-button matSuffix (click)="hideNuevaContrasenia = !hideNuevaContrasenia" 
+                        [attr.aria-label]="'Mostrar contraseña'" [attr.aria-pressed]="hideNuevaContrasenia" type="button">
+                <mat-icon>{{hideNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline" class="campo-formulario">
+                <mat-label>Repetir nueva contraseña</mat-label>
+                <input matInput [type]="hideRepetirNuevaContrasenia ? 'password' : 'text'" formControlName="nuevaContraseniaRepetida">
+                <button mat-icon-button matSuffix (click)="hideRepetirNuevaContrasenia = !hideRepetirNuevaContrasenia" 
+                        [attr.aria-label]="'Mostrar contraseña'" [attr.aria-pressed]="hideRepetirNuevaContrasenia" type="button">
+                <mat-icon>{{hideRepetirNuevaContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="formPerfil.hasError('passwordsMismatch')">
+                    Las contraseñas no coinciden
+                </mat-error>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline" class="campo-formulario">
+                <mat-label>Contraseña actual</mat-label>
+                <input matInput [type]="hideContraseniaActual ? 'password' : 'text'" formControlName="contraseniaActual" required>
+                <button mat-icon-button matSuffix (click)="hideContraseniaActual = !hideContraseniaActual" 
+                        [attr.aria-label]="'Mostrar contraseña'" [attr.aria-pressed]="hideContraseniaActual" type="button">
+                <mat-icon>{{hideContraseniaActual ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="formPerfil.get('contraseniaActual')?.hasError('required')">
+                    La contraseña actual es obligatoria
+                </mat-error>
+            </mat-form-field>
+        
+            <button mat-raised-button class="boton-guardar" type="submit" [disabled]="formPerfil.invalid">
+                Guardar cambios
+            </button>
+        </form>
     </div>
 </div>

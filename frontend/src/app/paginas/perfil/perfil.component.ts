@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RecargaService } from '../../servicios/recarga.service';
 import { NotificacionesService } from '../../servicios/notificaciones.service';
 import { DatosService } from '../../servicios/datos.service';
@@ -29,44 +29,59 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit, OnDestroy {
+  // Password visibility toggles
   hideNuevaContrasenia = true;
   hideRepetirNuevaContrasenia = true;
   hideContraseniaActual = true;
 
+  // Service injections
   private recargaService = inject(RecargaService);
   private notificacionesService = inject(NotificacionesService);
   private datosService = inject(DatosService);
-  public formBuild = inject(FormBuilder);
+  private formBuilder = inject(FormBuilder);
 
-  public formRegistro: FormGroup = this.formBuild.group({
-    mail: [this.getLocalStorageItem('mail') || ''],
-    usuario: [this.getLocalStorageItem('usuario') || ''],
+  // Form setup
+  formPerfil: FormGroup = this.formBuilder.group({
+    mail: [this.getLocalStorageItem('mail') || '', [Validators.required, Validators.email]],
+    usuario: [this.getLocalStorageItem('usuario') || '', [Validators.required]],
     nuevaContrasenia: [''],
     nuevaContraseniaRepetida: [''],
-    contraseniaActual: ['', Validators.required]
-  });
+    contraseniaActual: ['', [Validators.required]]
+  }, { validators: this.passwordMatchValidator });
 
   private recargaSubscription!: Subscription;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.recargaSubscription = this.recargaService.recargarPerfil$.subscribe(() => {
       this.recargarComponentes();
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.recargaSubscription) {
       this.recargaSubscription.unsubscribe();
     }
   }
 
-  recargarComponentes() {
-    this.recargar();
+  // Custom validator for password matching
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const nuevaContrasenia = control.get('nuevaContrasenia');
+    const nuevaContraseniaRepetida = control.get('nuevaContraseniaRepetida');
+
+    if (nuevaContrasenia?.value && nuevaContraseniaRepetida?.value &&
+      nuevaContrasenia.value !== nuevaContraseniaRepetida.value) {
+      return { passwordsMismatch: true };
+    }
+    return null;
+  }
+
+  recargarComponentes(): void {
+    this.recargarFormulario();
     this.notificacionesService.actualizarNumeroSolicitudes();
   }
 
-  recargar() {
-    this.formRegistro.setValue({
+  recargarFormulario(): void {
+    this.formPerfil.setValue({
       mail: this.getLocalStorageItem('mail') || '',
       usuario: this.getLocalStorageItem('usuario') || '',
       nuevaContrasenia: '',
@@ -75,16 +90,17 @@ export class PerfilComponent implements OnInit, OnDestroy {
     });
   }
 
-  modificarDatosUsuario() {
-    if (this.formRegistro.invalid) return;
+  guardarCambios(): void {
+    if (this.formPerfil.invalid) return;
 
+    const formValues = this.formPerfil.value;
     const objeto: ModificarDatosUsuario = {
       id: this.getLocalStorageItem('id') || '',
-      mail: this.formRegistro.value.mail,
-      usuario: this.formRegistro.value.usuario,
-      nueva_contrasenia: this.formRegistro.value.nuevaContrasenia,
-      nueva_contrasenia_repetida: this.formRegistro.value.nuevaContraseniaRepetida,
-      contrasenia_actual: this.formRegistro.value.contraseniaActual,
+      mail: formValues.mail,
+      usuario: formValues.usuario,
+      nueva_contrasenia: formValues.nuevaContrasenia,
+      nueva_contrasenia_repetida: formValues.nuevaContraseniaRepetida,
+      contrasenia_actual: formValues.contraseniaActual,
       nombre: '',
       apellido_1: '',
       apellido_2: '',
@@ -94,26 +110,26 @@ export class PerfilComponent implements OnInit, OnDestroy {
       fecha_nacimiento: ''
     };
 
-    if (objeto.nueva_contrasenia !== objeto.nueva_contrasenia_repetida) {
-      const mensajeInformativo = document.getElementById("mensajeInformativo");
-      if (mensajeInformativo) mensajeInformativo.innerText = "Las contraseñas no coinciden.";
-      return;
-    }
-
     this.datosService.modificarDatosUsuario(objeto).subscribe({
-      next: (data) => {
-        if (data.exito === true) {
-          const mensajeInformativo = document.getElementById("mensajeInformativo");
-          if (mensajeInformativo) mensajeInformativo.innerText = data.mensaje;
-          this.clearLocalStorage();
-          window.location.reload();
+      next: (response) => {
+        if (response.exito) {
+          this.mostrarMensaje(response.mensaje, true);
+          this.limpiarLocalStorage();
+          setTimeout(() => window.location.reload(), 1500);
         }
       },
       error: (error) => {
-        const mensajeInformativo = document.getElementById("mensajeInformativo");
-        if (mensajeInformativo) mensajeInformativo.innerText = error.error.mensaje;
+        this.mostrarMensaje(error.error?.mensaje || 'Error al guardar los cambios', false);
       }
     });
+  }
+
+  mostrarMensaje(mensaje: string, esExito: boolean): void {
+    const mensajeElement = document.getElementById('mensajeInformativo');
+    if (mensajeElement) {
+      mensajeElement.innerText = mensaje;
+      mensajeElement.style.color = esExito ? '#61B300' : '#f44336';
+    }
   }
 
   private getLocalStorageItem(key: string): string | null {
@@ -123,7 +139,7 @@ export class PerfilComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  private clearLocalStorage() {
+  private limpiarLocalStorage(): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.clear();
     }
