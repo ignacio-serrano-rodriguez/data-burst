@@ -973,4 +973,53 @@ class UsuarioController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/registro", name: "registro", methods: ["POST"])]
+     public function registro
+     (
+         Request $request, 
+         EntityManagerInterface $entityManager
+     )
+     {
+         $respuestaJson = null;
+         $datosRecibidos = json_decode($request->getContent(), true);
+ 
+         $nombreUsuario = $datosRecibidos['usuario'];
+         $mail = $datosRecibidos['mail'];
+         $contrasenia = $datosRecibidos['contrasenia'];
+ 
+         $usuario = new Usuario();
+         $usuario->setUsuario($nombreUsuario);
+         $usuario->setMail($mail);
+         $usuario->setContrasenia($contrasenia);
+ 
+         try 
+         {
+             $entityManager->persist($usuario);
+             $entityManager->flush();
+         
+             $respuestaJson = new JsonResponse
+             (
+                 [
+                     "exito" => true,
+                     "mensaje" => "Usuario creado exitosamente."
+                 ],
+                 Response::HTTP_CREATED
+             );
+         } 
+         
+         catch (\Throwable $th) 
+         {
+             $respuestaJson = new JsonResponse
+             (
+                 [
+                     "exito" => false,
+                     "mensaje" => "Registro fallido."
+                 ],
+                 Response::HTTP_BAD_REQUEST
+             );
+         }
+ 
+         return $respuestaJson;
+     }
 }
