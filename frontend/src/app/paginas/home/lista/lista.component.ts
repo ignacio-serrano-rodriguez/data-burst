@@ -274,7 +274,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   mostrarFormulario(): void {
-    const nombreElemento = this.nombreElementoBuscar?.trim() || '';
+    const nombreElemento = this.nombreElementoBuscar?.trim() === '__crear__' ? '' : (this.nombreElementoBuscar?.trim() || '');
     const dialogRef = this.dialog.open(CrearElementoDialogComponent, {
       width: '400px',
       data: { nombre: nombreElemento }
@@ -582,10 +582,8 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   mostrarColaboradores(): void {
-    // Reset the search results
     this.amigosEncontrados = [];
 
-    // Add all collaborators to the results list
     if (this.colaboradores && this.colaboradores.length > 0) {
       this.colaboradores.forEach(col => {
         this.amigosEncontrados.push({

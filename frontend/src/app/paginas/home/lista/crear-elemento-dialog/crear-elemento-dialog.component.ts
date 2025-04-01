@@ -37,8 +37,10 @@ export class CrearElementoDialogComponent {
     private dialogRef: MatDialogRef<CrearElementoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    const nombreInicial = data.nombre === '__crear__' ? '' : (data.nombre || '');
+
     this.form = this.fb.group({
-      nombre: [data.nombre || '', Validators.required],
+      nombre: [nombreInicial, Validators.required],
       fechaAparicion: ['', Validators.required],
       descripcion: ['', Validators.required]
     });

@@ -113,7 +113,7 @@
       <mat-option *ngIf="mostrarBotonCrear && !readOnly" [value]="'__crear__'">
         <div class="crear-option">
           <mat-icon>add_circle</mat-icon>
-          <span>Crear nuevo elemento: "{{ nombreElementoBuscar }}"</span>
+          <span>Crear nuevo elemento{{ nombreElementoBuscar.trim() ? ': "' + nombreElementoBuscar + '"' : '' }}</span>
         </div>
       </mat-option>
     </mat-autocomplete>
