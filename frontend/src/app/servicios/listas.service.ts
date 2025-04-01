@@ -12,6 +12,7 @@ import { RespuestaDesasignarLista } from '../interfaces/RespuestaDesasignarLista
 import { RespuestaCambiarVisibilidadLista } from '../interfaces/RespuestaCambiarVisibilidadLista';
 import { RespuestaInvitarAmigo } from '../interfaces/RespuestaInvitarAmigo';
 import { Elemento } from '../interfaces/Elemento';
+import { Lista } from '../interfaces/Lista';
 
 @Injectable({ providedIn: 'root' })
 export class ListasService {
@@ -109,5 +110,13 @@ export class ListasService {
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error);
     return throwError(() => new Error(error.error.mensaje || 'Something bad happened; please try again later.'));
+  }
+
+  obtenerListasPublicasAmigo(amigoId: number): Observable<{ exito: boolean, mensaje?: string, listas: Lista[] }> {
+    return this.http.get<{ exito: boolean, mensaje?: string, listas: Lista[] }>(
+      `${this.api}/obtener-listas-publicas-amigo/${amigoId}`
+    ).pipe(
+      catchError(this.handleError)
+    );
   }
 }

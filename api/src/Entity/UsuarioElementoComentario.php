@@ -60,7 +60,7 @@ class UsuarioElementoComentario
     public function setComentario(?string $comentario): static
     {
         $this->comentario = $comentario;
-        $this->momento_comentario = new \DateTime(); // Actualizar momento_comentario cuando cambie comentario
+        $this->momento_comentario = new \DateTime();
 
         return $this;
     }

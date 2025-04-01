@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { TusListasComponent } from "./tus-listas/tus-listas.component";
 import { TusAmigosComponent } from "./tus-amigos/tus-amigos.component";
 import { ListaComponent } from "./lista/lista.component";
+import { AmigoComponent } from "./amigo/amigo.component";
 import { CommonModule } from '@angular/common';
 import { RecargaService } from '../../servicios/recarga.service';
 import { Subscription } from 'rxjs';
@@ -14,7 +15,8 @@ import { Lista } from '../../interfaces/Lista';
     CommonModule,
     TusListasComponent,
     TusAmigosComponent,
-    ListaComponent
+    ListaComponent,
+    AmigoComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
@@ -28,7 +30,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   usuarioLogueado: string = '(usuario logueado)';
   mostrarListasYAmigos = true;
   mostrarListaComponent = false;
+  mostrarAmigoDetalle = false;
   listaSeleccionada: Lista | undefined = undefined;
+  amigoSeleccionado: { id: number, nombre: string } | undefined = undefined;
 
   constructor(private recargaService: RecargaService) { }
 
@@ -48,12 +52,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.listaSeleccionada = lista;
     this.mostrarListasYAmigos = false;
     this.mostrarListaComponent = true;
+    this.mostrarAmigoDetalle = false;
+  }
+
+  mostrarAmigo(amigo: { id: number, nombre: string }) {
+    this.amigoSeleccionado = amigo;
+    this.mostrarListasYAmigos = false;
+    this.mostrarListaComponent = false;
+    this.mostrarAmigoDetalle = true;
   }
 
   volverAListasYAmigos() {
     this.listaSeleccionada = undefined;
+    this.amigoSeleccionado = undefined;
     this.mostrarListasYAmigos = true;
     this.mostrarListaComponent = false;
+    this.mostrarAmigoDetalle = false;
   }
 
   mostrarMensajePositivo(mensaje: string) {

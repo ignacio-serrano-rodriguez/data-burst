@@ -7,9 +7,10 @@
                 <app-tus-listas id="tusListas" (listaSeleccionada)="mostrarLista($event)"></app-tus-listas>
             </div>
             <div class="columna">
-                <app-tus-amigos id="tusAmigos"></app-tus-amigos>
+                <app-tus-amigos id="tusAmigos" (amigoSeleccionado)="mostrarAmigo($event)"></app-tus-amigos>
             </div>
         </div>
     </div>
     <app-lista *ngIf="mostrarListaComponent" [lista]="listaSeleccionada!" (volverAListasYAmigos)="volverAListasYAmigos()"></app-lista>
+    <app-amigo-detalle *ngIf="mostrarAmigoDetalle" [amigo]="amigoSeleccionado!" (volverEvent)="volverAListasYAmigos()"></app-amigo-detalle>
 </div>

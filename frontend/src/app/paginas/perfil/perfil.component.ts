@@ -29,18 +29,15 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit, OnDestroy {
-  // Password visibility toggles
   hideNuevaContrasenia = true;
   hideRepetirNuevaContrasenia = true;
   hideContraseniaActual = true;
 
-  // Service injections
   private recargaService = inject(RecargaService);
   private notificacionesService = inject(NotificacionesService);
   private datosService = inject(DatosService);
   private formBuilder = inject(FormBuilder);
 
-  // Form setup
   formPerfil: FormGroup = this.formBuilder.group({
     mail: [this.getLocalStorageItem('mail') || '', [Validators.required, Validators.email]],
     usuario: [this.getLocalStorageItem('usuario') || '', [Validators.required]],
@@ -63,7 +60,6 @@ export class PerfilComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Custom validator for password matching
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const nuevaContrasenia = control.get('nuevaContrasenia');
     const nuevaContraseniaRepetida = control.get('nuevaContraseniaRepetida');

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, ElementRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +10,6 @@ import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material
 
 import { AmigosService } from '../../../servicios/amigos.service';
 import { AgregarUsuario } from '../../../interfaces/AgregarUsuario';
-import { Amigo } from '../../../interfaces/Amigo';
 import { HomeComponent } from '../home.component';
 import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { RecargaService } from '../../../servicios/recarga.service';
@@ -38,6 +37,7 @@ export class TusAmigosComponent implements OnInit, OnDestroy {
   private recargaService = inject(RecargaService);
   @ViewChild('nombreUsuarioInput') nombreUsuarioInput!: ElementRef;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
+  @Output() amigoSeleccionado = new EventEmitter<{ id: number, nombre: string }>();
   amigos: { id: number, nombre: string }[] = [];
   amigosFiltrados: { id: number, nombre: string }[] = [];
   usuariosNoAgregados: { id: number, nombre: string }[] = [];
@@ -165,7 +165,24 @@ export class TusAmigosComponent implements OnInit, OnDestroy {
   }
 
   verDetalleAmigo(nombre: string) {
-    this.router.navigate([`/${nombre}`], { state: { amigo: { nombre } } });
+    const amigo = this.amigos.find(a => a.nombre === nombre);
+    if (amigo) {
+      this.amigoSeleccionado.emit(amigo);
+    } else {
+      this.amigosService.obtenerAmigoPorNombre(nombre).subscribe({
+        next: (data) => {
+          if (data.exito && data.amigo) {
+            this.amigoSeleccionado.emit(data.amigo);
+          } else {
+            this.mostrarMensajeInformativo('No se pudo cargar la información del amigo');
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener información del amigo:', error);
+          this.mostrarMensajeInformativo('Error al cargar la información del amigo');
+        }
+      });
+    }
   }
 
   limpiarMensaje() {

@@ -51,7 +51,6 @@ export class InformacionElementoDialogComponent {
     }
 
     reportarElemento(): void {
-        // Get current dialog position
         const dialogElement = document.querySelector('.cdk-overlay-pane');
         let positionConfig = {};
 
@@ -66,17 +65,15 @@ export class InformacionElementoDialogComponent {
             };
         }
 
-        // Open the report dialog
         const dialogRef = this.dialog.open(ReportarElementoDialogComponent, {
             width: '450px',
             data: { elemento: this.data.elemento },
             ...positionConfig,
-            hasBackdrop: false // Allow interaction with original dialog
+            hasBackdrop: false
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                // Handle the report submission
                 this.elementosService.reportarElemento(result).subscribe({
                     next: (response) => {
                         if (response.exito) {

@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       this.isInicioRoute = event.urlAfterRedirects === '/';
       this.rutaActual = event.urlAfterRedirects;
-      this.cdr.detectChanges(); // Forzar la detección de cambios
+      this.cdr.detectChanges();
     });
   }
 }

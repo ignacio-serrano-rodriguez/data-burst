@@ -1,9 +1,37 @@
-<div>
-  <button mat-icon-button (click)="volver()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
+<div class="amigo-detalle-container">
+  <div class="header-container">
+    <button mat-icon-button (click)="volver()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2 class="amigo-nombre">Listas públicas de {{amigo.nombre}}</h2>
+  </div>
 
-  <h2>Amigo: {{ amigoNombre }}</h2>
-  <p>ID: {{ amigoID }}</p>
-  <button mat-button (click)="eliminarAmistad()">Eliminar Amistad</button>
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40" color="accent"></mat-spinner>
+    <p>Cargando listas...</p>
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{errorMessage}}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && listas.length === 0" class="empty-container">
+    <mat-icon>info</mat-icon>
+    <p>{{amigo.nombre}} no tiene listas públicas disponibles</p>
+  </div>
+
+  <mat-card *ngIf="!isLoading && !errorMessage && listas.length > 0" class="listas-container">
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let lista of listas" (click)="seleccionarLista(lista)" class="lista-item">
+          <span matListItemTitle>{{lista.nombre}}</span>
+          <span matListItemLine *ngIf="lista.categoria">
+            Categoría: {{lista.categoria.nombre}}
+          </span>
+          <mat-icon matListItemIcon>format_list_bulleted</mat-icon>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
 </div>

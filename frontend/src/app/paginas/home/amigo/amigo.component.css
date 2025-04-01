@@ -1,3 +1,75 @@
-:host {
-    height: 100%;
-}
+.amigo-detalle-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .back-button {
+    margin-right: 16px;
+  }
+  
+  .amigo-nombre {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #AE00CD;
+    font-family: 'ShareTech', sans-serif;
+  }
+  
+  .loading-container, .error-container, .empty-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    text-align: center;
+  }
+  
+  .loading-container p, .error-container p, .empty-container p {
+    margin-top: 16px;
+    color: #666;
+  }
+  
+  .error-container mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+  }
+  
+  .empty-container mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    color: #999;
+  }
+  
+  .listas-container {
+    margin-top: 16px;
+  }
+  
+  .lista-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  
+  .lista-item:hover {
+    background-color: rgba(174, 0, 205, 0.1);
+  }
+  
+  @media (max-width: 600px) {
+    .amigo-detalle-container {
+      padding: 12px;
+    }
+    
+    .amigo-nombre {
+      font-size: 1.3rem;
+    }
+  }

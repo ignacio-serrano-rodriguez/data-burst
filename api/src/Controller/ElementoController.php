@@ -364,7 +364,6 @@ class ElementoController extends AbstractController
         
         $reporte->setDescripcionReportada($datosRecibidos['descripcionReportada'] ?? null);
         
-        // Handle category reporting with the new approach
         if (isset($datosRecibidos['categoriaReportada']) && $datosRecibidos['categoriaReportada']) {
             $categoriaId = $datosRecibidos['categoriaReportada'];
             $categoria = $entityManager->getRepository(Categoria::class)->find($categoriaId);

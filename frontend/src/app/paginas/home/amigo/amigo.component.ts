@@ -1,71 +1,71 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AmigosService } from '../../../servicios/amigos.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { ListasService } from '../../../servicios/listas.service';
+import { Lista } from '../../../interfaces/Lista';
 
 @Component({
-  selector: 'app-amigo',
+  selector: 'app-amigo-detalle',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './amigo.component.html',
   styleUrls: ['./amigo.component.css']
 })
 export class AmigoComponent implements OnInit {
-  amigoNombre: string = '';
-  amigoID: number = 0;
-  private amigosService = inject(AmigosService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private listasService = inject(ListasService);
+
+  @Input() amigo!: { id: number, nombre: string };
+  @Output() volverEvent = new EventEmitter<void>();
+
+  listas: Lista[] = [];
+  isLoading = true;
+  errorMessage = '';
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.amigoNombre = params.get('nombreUsuario')!;
-      const usuarioLogueado = localStorage.getItem('usuario');
-      if (this.amigoNombre === usuarioLogueado) {
-        this.router.navigate(['/home']);
-      } else {
-        this.obtenerAmigoPorNombre(this.amigoNombre);
-      }
-    });
+    if (this.amigo && this.amigo.id) {
+      this.cargarListasPublicasAmigo();
+    }
   }
 
-  obtenerAmigoPorNombre(nombre: string) {
-    const usuarioID = Number(localStorage.getItem('id')) || 0;
-    this.amigosService.obtenerAmigoPorNombre(nombre).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          this.amigoID = data.amigo.id;
-          this.amigoNombre = data.amigo.nombre;
+  cargarListasPublicasAmigo(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.listasService.obtenerListasPublicasAmigo(this.amigo.id).subscribe({
+      next: (response) => {
+        if (response.exito) {
+          this.listas = response.listas;
         } else {
-          this.router.navigate(['/error']);
+          this.errorMessage = response.mensaje || 'No se pudieron cargar las listas';
         }
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error al obtener el amigo:', error);
-        this.router.navigate(['/error']);
+        console.error('Error al cargar listas públicas del amigo:', error);
+        this.errorMessage = 'Error al cargar las listas. Inténtalo de nuevo más tarde.';
+        this.isLoading = false;
       }
     });
   }
 
-  eliminarAmistad() {
-    const usuarioID = Number(localStorage.getItem('id')) || 0;
-    this.amigosService.eliminarAmistad(usuarioID, this.amigoID).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          this.router.navigate(['/home']);
-        } else {
-          console.error('Error al eliminar la amistad:', data.mensaje);
-        }
-      },
-      error: (error) => {
-        console.error('Error al eliminar la amistad:', error);
-      }
-    });
+  volver(): void {
+    this.volverEvent.emit();
   }
 
-  volver() {
-    this.router.navigate(['/home']);
+  seleccionarLista(lista: Lista): void {
+    this.volverEvent.emit();
   }
 }

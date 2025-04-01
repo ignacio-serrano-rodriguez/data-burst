@@ -5,5 +5,5 @@ export interface UsuarioManipulaLista {
   usuario_id: number;
   lista: Lista;
   publica: boolean;
-  momento_manipulacion: string; // Agregar la propiedad momento_manipulacion
+  momento_manipulacion: string;
 }

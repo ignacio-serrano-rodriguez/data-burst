@@ -22,7 +22,7 @@ export class ComentarioDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { elementoId: number, comentario: string }
   ) {
     this.comentario = data.comentario;
-    this.dialogRef.updateSize('500px', '400px'); // Ajustar el tamaño del diálogo
+    this.dialogRef.updateSize('500px', '400px');
   }
 
   onNoClick(): void {

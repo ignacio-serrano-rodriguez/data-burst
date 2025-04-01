@@ -87,7 +87,6 @@ export class LoginComponent {
         this.loading = false;
         let mensaje = "Error al iniciar sesión";
 
-        // Manejar respuesta de cuenta suspendida (código 403)
         if (error.status === 403) {
           mensaje = "Esta cuenta ha sido suspendida. Contacte con administración.";
         } else if (error.error && error.error.mensaje) {

@@ -66,7 +66,6 @@ export class RegistroComponent {
           this.mostrarMensajeExito(data.mensaje);
           this.limpiarFormulario();
 
-          // Lógica de inicio de sesión después del registro exitoso
           const loginObjeto: Login = {
             usuario: objeto.usuario,
             contrasenia: objeto.contrasenia
@@ -176,10 +175,10 @@ export class RegistroComponent {
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>+\-\/]/.test(password); // Aceptar todos los caracteres especiales y aritméticos
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>+\-\/]/.test(password);
     const isValidLength = password.length >= 6;
     if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar || !isValidLength) {
-      return { 
+      return {
         'passwordStrength': {
           hasUpperCase,
           hasLowerCase,

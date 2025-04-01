@@ -1,6 +1,6 @@
 export interface Solicitud {
     nombre: string;
-    invitador?: string; // Agregar la propiedad invitador como opcional
+    invitador?: string;
 }
 
 export interface Solicitudes {

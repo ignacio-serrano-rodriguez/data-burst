@@ -841,4 +841,59 @@ class ListaController extends AbstractController
             );
         }
     }
+
+    #[Route("/api/obtener-listas-publicas-amigo/{amigoId}", name: "obtener_listas_publicas_amigo", methods: ["GET"])]
+    public function obtenerListasPublicasAmigo(int $amigoId, EntityManagerInterface $entityManager): JsonResponse
+    {
+        try {
+            $amigo = $entityManager->getRepository(Usuario::class)->find($amigoId);
+            
+            if (!$amigo) {
+                return new JsonResponse([
+                    'exito' => false,
+                    'mensaje' => 'El usuario no existe'
+                ], Response::HTTP_NOT_FOUND);
+            }
+            
+            $usersLists = $entityManager->getRepository(UsuarioManipulaLista::class)
+                ->findBy(['usuario' => $amigo]);
+            
+            $listas = [];
+            foreach ($usersLists as $userList) {
+                $lista = $userList->getLista();
+                
+                if ($userList->isPublica()) {
+                    $categoria = $lista->getCategoria();
+                    $categoriaData = null;
+                    
+                    if ($categoria) {
+                        $categoriaData = [
+                            'id' => $categoria->getId(),
+                            'nombre' => $categoria->getNombre()
+                        ];
+                    }
+                    
+                    $listas[] = [
+                        'id' => $lista->getId(),
+                        'nombre' => $lista->getNombre(),
+                        'compartida' => count($entityManager->getRepository(UsuarioManipulaLista::class)
+                            ->findBy(['lista' => $lista])) > 1,
+                        'publica' => true,
+                        'categoria' => $categoriaData
+                    ];
+                }
+            }
+            
+            return new JsonResponse([
+                'exito' => true,
+                'listas' => $listas
+            ], Response::HTTP_OK);
+            
+        } catch (\Throwable $th) {
+            return new JsonResponse([
+                'exito' => false,
+                'mensaje' => 'Error al obtener las listas públicas: ' . $th->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
