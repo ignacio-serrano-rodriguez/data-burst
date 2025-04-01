@@ -1,22 +1,33 @@
+.lista-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 .lista-header {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .lista-header h2 {
   cursor: pointer;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  margin-bottom: 0.5rem;
+  word-break: break-word;
 }
 
 .lista-actions {
   margin-top: 8px;
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }
 
 .input-container {
   width: 100%;
-  min-width: 450px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .full-width {
@@ -38,14 +49,17 @@
   padding: 4px 12px; 
 }
 
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .mat-mdc-table {
   width: 100%;
-  min-width: 800px;
   margin: 12px 0;
   border-spacing: 0 12px !important;
   border-collapse: separate !important;
   box-shadow: none;
-  overflow-x: auto;
 }
 
 .mat-mdc-table .mdc-data-table__row:not(:last-child)::after,
@@ -55,7 +69,6 @@
 
 .mat-elevation-z8 {
   box-shadow: none;
-  overflow-x: auto;
   margin-bottom: 20px;
 }
 
@@ -76,18 +89,11 @@
 }
 
 .mat-column-acciones {
-  width: 380px;
-  min-width: 380px;
-  white-space: nowrap;
   text-align: right;
+  white-space: normal;
 }
 
 .mat-column-nombre {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: calc(100% - 380px);
-  padding-right: 16px;
   word-break: break-word;
 }
 
@@ -100,37 +106,27 @@
 .elemento-nombre {
   font-weight: 500;
   margin-bottom: 4px;
+  word-break: break-word;
 }
 
 .button-group {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 6px;
 }
 
 .button-group button[mat-icon-button] {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
   margin: 0;
   padding: 0;
 }
 
 .button-group button[mat-icon-button]:hover {
   opacity: 0.8;
-}
-
-.button-group .mat-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
 }
 
 .like-dislike-help-group {
@@ -140,31 +136,13 @@
   background-color: #f4f4f4;
   border-radius: 24px;
   padding: 2px 8px;
-  margin: 0 4px;
-  min-width: 152px;
+  margin: 4px;
 }
 
-.like-dislike-help-group button[mat-icon-button] {
-  width: 48px;
-  height: 48px;
-  margin: 0 1px;
-}
-
-.like-button { 
-  color: green; 
-}
-
-.dislike-button { 
-  color: red; 
-}
-
-.help-button { 
-  color: #ffaa00; 
-}
-
-.comment-button { 
-  color: #9900b4; 
-}
+.like-button { color: green; }
+.dislike-button { color: red; }
+.help-button { color: #ffaa00; }
+.comment-button { color: #9900b4; }
 
 .user-feedback-container {
   margin-top: 8px;
@@ -221,17 +199,9 @@
   align-items: center;
 }
 
-.like-icon {
-  color: green;
-}
-
-.dislike-icon {
-  color: red;
-}
-
-.neutral-icon {
-  color: #ffaa00;
-}
+.like-icon { color: green; }
+.dislike-icon { color: red; }
+.neutral-icon { color: #ffaa00; }
 
 .user-comment {
   font-style: italic;
@@ -280,24 +250,12 @@
   align-items: center;
 }
 
-.invitacion-pendiente {
-  font-size: 0.85em;
-  color: #ffa726;
-  margin-left: 8px;
-  font-style: italic;
-}
-
 ::ng-deep .mat-mdc-option[disabled] .amigo-status {
   opacity: 1 !important;
 }
 
 ::ng-deep .mat-mdc-option:not([disabled]) {
   cursor: pointer;
-}
-
-.read-only-mode .mat-column-acciones {
-  width: 60px !important;
-  min-width: 60px !important;
 }
 
 .read-only-badge {
@@ -318,4 +276,191 @@
 
 .friend-list-title h2 {
   margin-right: 8px;
+}
+
+.elemento-option, .crear-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.elemento-fecha {
+  color: #666;
+  white-space: nowrap;
+}
+
+@media (min-width: 992px) {
+  .button-group button[mat-icon-button] {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .button-group .mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .like-dislike-help-group button[mat-icon-button] {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .mat-column-acciones {
+    width: 300px;
+    min-width: 300px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .button-group button[mat-icon-button] {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .button-group .mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .like-dislike-help-group button[mat-icon-button] {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .mat-column-acciones {
+    width: 260px;
+    min-width: 260px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .button-group button[mat-icon-button] {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .button-group .mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .like-dislike-help-group button[mat-icon-button] {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .mat-mdc-table {
+    display: table;
+  }
+  
+  .mat-column-acciones {
+    width: 240px;
+    min-width: 240px;
+  }
+}
+
+@media (max-width: 575px) {
+  .mat-mdc-cell {
+    display: block;
+    width: 100%;
+    padding: 8px 4px;
+    text-align: left !important;
+    min-height: auto !important;
+  }
+  
+  .mat-column-nombre {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding-bottom: 12px !important;
+  }
+  
+  .mat-column-acciones {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding-top: 16px !important;
+    padding-bottom: 8px !important;
+    margin-top: 4px;
+  }
+  
+  .elemento-info {
+    margin-bottom: 0;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px 4px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    min-height: 60px;
+  }
+  
+  .mat-column-acciones::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0;
+    border-top: 8px solid transparent;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 375px) {
+  .button-group {
+    padding: 0;
+    gap: 4px;
+  }
+  
+  .button-group button[mat-icon-button] {
+    width: 36px;
+    height: 36px;
+    margin: 0 1px;
+  }
+  
+  .button-group .mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .like-dislike-help-group {
+    padding: 0 4px;
+    margin: 0;
+  }
+  
+  .like-dislike-help-group button[mat-icon-button] {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 320px) {
+  .button-group {
+    gap: 2px;
+  }
+  
+  .button-group button[mat-icon-button] {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .button-group .mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .like-dislike-help-group {
+    padding: 0 2px;
+  }
+  
+  .like-dislike-help-group button[mat-icon-button] {
+    width: 32px;
+    height: 32px;
+  }
 }

@@ -1,4 +1,4 @@
-<div>
+<div class="lista-container">
   <button mat-icon-button (click)="volver()" [title]="readOnly ? 'Volver a las listas del amigo' : 'Volver a mis listas'">
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -63,117 +63,119 @@
   </div>
 
   <div class="input-container">  
-  <mat-form-field class="full-width">
-    <mat-label>{{readOnly ? 'Buscar elemento' : 'Buscar elemento a añadir'}}</mat-label>
-    <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" 
-           (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" 
-           (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
-    <button mat-icon-button matPrefix (click)="resetBusquedaElemento()" [title]="obtenerTituloBotonCerrarElemento()">
-      <mat-icon>close</mat-icon>
-    </button>
-    <mat-hint *ngIf="readOnly">Solo puedes ver información de elementos</mat-hint>
-  </mat-form-field>
-  
-  <mat-autocomplete #autoElemento="matAutocomplete" (optionSelected)="handleElementoSeleccionado($event)">
-    <mat-option *ngIf="nombreElementoBuscar.length > 0 && nombreElementoBuscar.length < 3" disabled>
-      Escribe al menos 3 caracteres
-    </mat-option>
-    <mat-option *ngIf="elementosEncontrados.length === 0 && nombreElementoBuscar.length >= 3" disabled>
-      No se encontraron elementos
-    </mat-option>
-    <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre">
-      <div class="elemento-option">
-        <span>{{ elemento.nombre }}</span>
-        <small class="elemento-fecha" *ngIf="elemento.fecha_aparicion">
-          ({{ elemento.fecha_aparicion | date:'yyyy' }})
-        </small>
-      </div>
-    </mat-option>
-    <mat-option *ngIf="mostrarBotonCrear && !readOnly" [value]="'__crear__'">
-      <div class="crear-option">
-        <mat-icon>add_circle</mat-icon>
-        <span>Crear nuevo elemento: "{{ nombreElementoBuscar }}"</span>
-      </div>
-    </mat-option>
-  </mat-autocomplete>
-</div>
+    <mat-form-field class="full-width">
+      <mat-label>{{readOnly ? 'Buscar elemento' : 'Buscar elemento a añadir'}}</mat-label>
+      <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" 
+            (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" 
+            (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
+      <button mat-icon-button matPrefix (click)="resetBusquedaElemento()" [title]="obtenerTituloBotonCerrarElemento()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-hint *ngIf="readOnly">Solo puedes ver información de elementos</mat-hint>
+    </mat-form-field>
+    
+    <mat-autocomplete #autoElemento="matAutocomplete" (optionSelected)="handleElementoSeleccionado($event)">
+      <mat-option *ngIf="nombreElementoBuscar.length > 0 && nombreElementoBuscar.length < 3" disabled>
+        Escribe al menos 3 caracteres
+      </mat-option>
+      <mat-option *ngIf="elementosEncontrados.length === 0 && nombreElementoBuscar.length >= 3" disabled>
+        No se encontraron elementos
+      </mat-option>
+      <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre">
+        <div class="elemento-option">
+          <span>{{ elemento.nombre }}</span>
+          <small class="elemento-fecha" *ngIf="elemento.fecha_aparicion">
+            ({{ elemento.fecha_aparicion | date:'yyyy' }})
+          </small>
+        </div>
+      </mat-option>
+      <mat-option *ngIf="mostrarBotonCrear && !readOnly" [value]="'__crear__'">
+        <div class="crear-option">
+          <mat-icon>add_circle</mat-icon>
+          <span>Crear nuevo elemento: "{{ nombreElementoBuscar }}"</span>
+        </div>
+      </mat-option>
+    </mat-autocomplete>
+  </div>
 
-  <table mat-table [dataSource]="elementos" class="mat-elevation-z8">
-    <ng-container matColumnDef="nombre">
-      <td mat-cell *matCellDef="let elemento"> 
-        <div class="elemento-info">
-          <div class="elemento-nombre">{{ elemento.nombre }}</div>
-          
-          <div class="user-feedback-container" *ngIf="elemento.usuariosComentariosPuntuaciones?.length > 0">
-            <mat-expansion-panel class="user-feedback-panel">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon class="collaborators-icon">people</mat-icon>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              
-              <div class="user-feedback-list">
-                <div class="user-feedback-item" *ngFor="let feedback of elemento.usuariosComentariosPuntuaciones">
-                  <div class="user-feedback-header">
-                    <span class="user-name">{{ feedback.usuario }}</span>
-                    <div class="user-rating">
-                      <mat-icon *ngIf="feedback.puntuacion === true" class="like-icon">thumb_up</mat-icon>
-                      <mat-icon *ngIf="feedback.puntuacion === false" class="dislike-icon">thumb_down</mat-icon>
-                      <mat-icon *ngIf="feedback.puntuacion === null" class="neutral-icon">help_outline</mat-icon>
+  <div class="table-container">
+    <table mat-table [dataSource]="elementos" class="mat-elevation-z8">
+      <ng-container matColumnDef="nombre">
+        <td mat-cell *matCellDef="let elemento"> 
+          <div class="elemento-info">
+            <div class="elemento-nombre">{{ elemento.nombre }}</div>
+            
+            <div class="user-feedback-container" *ngIf="elemento.usuariosComentariosPuntuaciones?.length > 0">
+              <mat-expansion-panel class="user-feedback-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <mat-icon class="collaborators-icon">people</mat-icon>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                
+                <div class="user-feedback-list">
+                  <div class="user-feedback-item" *ngFor="let feedback of elemento.usuariosComentariosPuntuaciones">
+                    <div class="user-feedback-header">
+                      <span class="user-name">{{ feedback.usuario }}</span>
+                      <div class="user-rating">
+                        <mat-icon *ngIf="feedback.puntuacion === true" class="like-icon">thumb_up</mat-icon>
+                        <mat-icon *ngIf="feedback.puntuacion === false" class="dislike-icon">thumb_down</mat-icon>
+                        <mat-icon *ngIf="feedback.puntuacion === null" class="neutral-icon">help_outline</mat-icon>
+                      </div>
+                    </div>
+                    <div *ngIf="feedback.comentario" class="user-comment">
+                      "{{ feedback.comentario }}"
+                    </div>
+                    <div *ngIf="!feedback.comentario && feedback.puntuacion === null" class="user-no-opinion">
+                      Sin opinión
                     </div>
                   </div>
-                  <div *ngIf="feedback.comentario" class="user-comment">
-                    "{{ feedback.comentario }}"
-                  </div>
-                  <div *ngIf="!feedback.comentario && feedback.puntuacion === null" class="user-no-opinion">
-                    Sin opinión
-                  </div>
                 </div>
-              </div>
-            </mat-expansion-panel>
+              </mat-expansion-panel>
+            </div>
           </div>
-        </div>
-      </td>
-    </ng-container>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="acciones">
-      <td mat-cell *matCellDef="let elemento" class="mat-column-acciones">
-        <div class="button-group">
-          <button mat-icon-button (click)="mostrarInformacionElementoExistente(elemento)" title="Ver información">
-            <mat-icon>info</mat-icon>
-          </button>
-          
-          <div class="like-dislike-help-group" *ngIf="!readOnly">
-            <button mat-icon-button [ngClass]="{'like-button': elemento.puntuacion === true}" 
-                    (click)="elemento.puntuacion !== true && likeElemento(elemento)"
-                    [title]="obtenerTituloBotonLike(elemento)">
-              <mat-icon>thumb_up</mat-icon>
+      <ng-container matColumnDef="acciones">
+        <td mat-cell *matCellDef="let elemento" class="mat-column-acciones">
+          <div class="button-group">
+            <button mat-icon-button (click)="mostrarInformacionElementoExistente(elemento)" title="Ver información">
+              <mat-icon>info</mat-icon>
             </button>
-            <button mat-icon-button [ngClass]="{'dislike-button': elemento.puntuacion === false}" 
-                    (click)="elemento.puntuacion !== false && dislikeElemento(elemento)"
-                    [title]="obtenerTituloBotonDislike(elemento)">
-              <mat-icon>thumb_down</mat-icon>
+            
+            <div class="like-dislike-help-group" *ngIf="!readOnly">
+              <button mat-icon-button [ngClass]="{'like-button': elemento.puntuacion === true}" 
+                      (click)="elemento.puntuacion !== true && likeElemento(elemento)"
+                      [title]="obtenerTituloBotonLike(elemento)">
+                <mat-icon>thumb_up</mat-icon>
+              </button>
+              <button mat-icon-button [ngClass]="{'dislike-button': elemento.puntuacion === false}" 
+                      (click)="elemento.puntuacion !== false && dislikeElemento(elemento)"
+                      [title]="obtenerTituloBotonDislike(elemento)">
+                <mat-icon>thumb_down</mat-icon>
+              </button>
+              <button mat-icon-button [ngClass]="{'help-button': elemento.puntuacion === null}" 
+                      (click)="elemento.puntuacion !== null && resetLikeDislikeElemento(elemento)"
+                      [title]="obtenerTituloBotonHelp(elemento)">
+                <mat-icon>help_outline</mat-icon>
+              </button>
+            </div>
+            
+            <button mat-icon-button *ngIf="!readOnly" [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" 
+                    (click)="comentarElemento(elemento)"
+                    [title]="elemento.comentario && elemento.comentario.trim().length > 0 ? 'Editar comentario' : 'Añadir comentario'">
+              <mat-icon>comment</mat-icon>
             </button>
-            <button mat-icon-button [ngClass]="{'help-button': elemento.puntuacion === null}" 
-                    (click)="elemento.puntuacion !== null && resetLikeDislikeElemento(elemento)"
-                    [title]="obtenerTituloBotonHelp(elemento)">
-              <mat-icon>help_outline</mat-icon>
+            
+            <button mat-icon-button *ngIf="!readOnly" (click)="eliminarElemento(elemento.id)" title="Eliminar elemento">
+              <mat-icon>close</mat-icon>
             </button>
           </div>
-          
-          <button mat-icon-button *ngIf="!readOnly" [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" 
-                  (click)="comentarElemento(elemento)"
-                  [title]="elemento.comentario && elemento.comentario.trim().length > 0 ? 'Editar comentario' : 'Añadir comentario'">
-            <mat-icon>comment</mat-icon>
-          </button>
-          
-          <button mat-icon-button *ngIf="!readOnly" (click)="eliminarElemento(elemento.id)" title="Eliminar elemento">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </td>
-    </ng-container>
+        </td>
+      </ng-container>
 
-    <tr mat-row *matRowDef="let row; columns: ['nombre', 'acciones'];"></tr>
-  </table>
+      <tr mat-row *matRowDef="let row; columns: ['nombre', 'acciones'];"></tr>
+    </table>
+  </div>
 </div>
