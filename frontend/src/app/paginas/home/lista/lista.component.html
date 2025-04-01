@@ -51,14 +51,36 @@
     <div class="input-button-container">
       <mat-form-field class="full-width">
         <mat-label>Invitar amigos</mat-label>
-        <input matInput id="nombreAmigoBuscar" #nombreAmigoBuscarInput [(ngModel)]="nombreAmigoBuscar" (input)="onNombreAmigoBuscarChange()" [matAutocomplete]="auto" (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
+        <input matInput id="nombreAmigoBuscar" #nombreAmigoBuscarInput [(ngModel)]="nombreAmigoBuscar" 
+              (input)="onNombreAmigoBuscarChange()" [matAutocomplete]="auto" 
+              (focus)="abrirDesplegable()" (keydown.escape)="salirDelInput()">
         <button mat-icon-button matPrefix (click)="salirDelInput()" [title]="obtenerTituloBotonCerrarAmigo()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
     </div>
-
-    <mat-autocomplete #auto="matAutocomplete"></mat-autocomplete>
+    
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="invitarAmigo($event.option.value.id, $event.option.value.nombre)">
+      <mat-option *ngIf="nombreAmigoBuscar.length > 0 && nombreAmigoBuscar.length < 3" disabled>
+        Escribe al menos 3 caracteres
+      </mat-option>
+      <mat-option *ngIf="amigosEncontrados.length === 0 && nombreAmigoBuscar.length >= 3" disabled>
+        No se encontraron amigos
+      </mat-option>
+      <ng-container *ngFor="let amigo of amigosEncontrados">
+        <mat-option [value]="amigo" [disabled]="amigo.tieneInvitacion === 1 || amigo.esColaborador">
+          <div class="amigo-option-content">
+            <span>{{ amigo.nombre }}</span>
+            <ng-container *ngIf="amigo.tieneInvitacion === 1">
+              <span class="invitacion-pendiente">Invitación pendiente</span>
+            </ng-container>
+            <ng-container *ngIf="amigo.esColaborador">
+              <span class="es-colaborador">Ya colabora</span>
+            </ng-container>
+          </div>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
   </div>
 
   <div class="input-container">  

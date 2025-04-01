@@ -417,6 +417,21 @@ export class ListaComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: data => {
           this.amigosEncontrados = data.amigos;
+
+          const matchingColaboradores = this.colaboradores.filter(col =>
+            col.nombre.toLowerCase().includes(query.toLowerCase())
+          );
+
+          matchingColaboradores.forEach(col => {
+            if (!this.amigosEncontrados.some(a => a.id === col.id)) {
+              this.amigosEncontrados.push({
+                id: col.id,
+                nombre: col.nombre,
+                tieneInvitacion: 0,
+                esColaborador: true
+              });
+            }
+          });
         },
         error: () => {
           this.amigosEncontrados = [];
@@ -452,7 +467,11 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   onNombreAmigoBuscarChange(): void {
-    this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+    if (!this.nombreAmigoBuscar || this.nombreAmigoBuscar.trim() === '') {
+      this.mostrarColaboradores();
+    } else {
+      this.searchSubjectBuscar.next(this.nombreAmigoBuscar.trim());
+    }
     this.autocompleteTrigger?.openPanel();
   }
 
@@ -462,6 +481,9 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   abrirDesplegable(): void {
+    if (!this.nombreAmigoBuscar || this.nombreAmigoBuscar.trim() === '') {
+      this.mostrarColaboradores();
+    }
     this.autocompleteTrigger?.openPanel();
   }
 
@@ -557,5 +579,22 @@ export class ListaComponent implements OnInit, AfterViewInit {
       this.nombreElementoBuscar = '';
       this.mostrarBotonCrear = false;
     }, 100);
+  }
+
+  mostrarColaboradores(): void {
+    // Reset the search results
+    this.amigosEncontrados = [];
+
+    // Add all collaborators to the results list
+    if (this.colaboradores && this.colaboradores.length > 0) {
+      this.colaboradores.forEach(col => {
+        this.amigosEncontrados.push({
+          id: col.id,
+          nombre: col.nombre,
+          tieneInvitacion: 0,
+          esColaborador: true
+        });
+      });
+    }
   }
 }

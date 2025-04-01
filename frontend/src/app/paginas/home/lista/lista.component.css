@@ -533,3 +533,15 @@
 .edit-actions button[color="primary"] {
   color: black;
 }
+
+.es-colaborador {
+  font-size: 0.85em;
+  color: #4CAF50;
+  margin-left: 8px;
+  font-style: italic;
+}
+
+::ng-deep .mat-mdc-option[disabled] .es-colaborador {
+  color: #4CAF50 !important;
+  opacity: 1 !important;
+}
