@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
 import { accesoService } from '../../../servicios/acceso.service';
 import { Registro } from '../../../interfaces/Registro';
 import { Login } from '../../../interfaces/Login';
@@ -21,7 +20,8 @@ import { Login } from '../../../interfaces/Login';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    CommonModule
   ],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
@@ -30,21 +30,28 @@ export class RegistroComponent {
 
   hideContrasenia = true;
   hideRepetirContrasenia = true;
+  loading = false;
 
   private accesoService = inject(accesoService);
   private router = inject(Router);
   public formBuild = inject(FormBuilder);
 
   public formRegistro: FormGroup = this.formBuild.group({
-    mail: ['', [Validators.required, Validators.email, this.emailDomainValidator]],
+    mail: ['', [Validators.required, Validators.email]],
     usuario: ['', [Validators.required, this.minLettersValidator(5)]],
     contrasenia: ['', [Validators.required, this.passwordValidator]],
     contraseniaRepetida: ['', Validators.required]
   });
 
   registrarse() {
-    if (this.formRegistro.invalid) {
-      this.mostrarMensajeError(this.getErrorMessage());
+    if (this.formRegistro.invalid || this.formRegistro.value.contrasenia !== this.formRegistro.value.contraseniaRepetida) {
+      this.formRegistro.markAllAsTouched();
+
+      if (this.formRegistro.valid && this.formRegistro.value.contrasenia !== this.formRegistro.value.contraseniaRepetida) {
+        this.mostrarMensajeError("Las contraseñas no coinciden.");
+      } else if (this.formRegistro.invalid) {
+        this.mostrarMensajeError("Por favor, corrige los errores del formulario.");
+      }
       return;
     }
 
@@ -55,13 +62,11 @@ export class RegistroComponent {
       contraseniaRepetida: this.formRegistro.value.contraseniaRepetida
     };
 
-    if (objeto.contrasenia != objeto.contraseniaRepetida) {
-      this.mostrarMensajeError("Las contraseñas no coinciden.");
-      return;
-    }
+    this.loading = true;
 
     this.accesoService.registro(objeto).subscribe({
       next: (data) => {
+        this.loading = false;
         if (data.exito == true) {
           this.mostrarMensajeExito(data.mensaje);
           this.limpiarFormulario();
@@ -86,6 +91,7 @@ export class RegistroComponent {
         }
       },
       error: (error) => {
+        this.loading = false;
         this.mostrarMensajeError(error.error.mensaje);
       }
     });
@@ -97,9 +103,6 @@ export class RegistroComponent {
     }
     if (this.formRegistro.controls['mail'].hasError('email')) {
       return 'El formato del correo electrónico no es válido.';
-    }
-    if (this.formRegistro.controls['mail'].hasError('emailDomain')) {
-      return 'El dominio del correo electrónico no está permitido. Los dominios permitidos son: gmail, outlook, yahoo, protonmail, iesfernandoaguilar. Los subdominios permitidos son: .com, .es.';
     }
     if (this.formRegistro.controls['usuario'].hasError('required')) {
       return 'El nombre de usuario es obligatorio.';
@@ -130,26 +133,14 @@ export class RegistroComponent {
       }
       return errorMessage;
     }
-    if (this.formRegistro.controls['contraseniaRepetida'].hasError('required')) {
+    if (this.formRegistro.controls['contraseniaRepetida'].hasError('required') ||
+      this.formRegistro.value.contrasenia !== this.formRegistro.value.contraseniaRepetida) {
       return 'Repetir la contraseña es obligatorio.';
     }
     return '';
   }
 
   emailDomainValidator(control: any): { [key: string]: boolean } | null {
-    const email = control.value;
-    if (!email) {
-      return null;
-    }
-    const allowedDomains = ['gmail', 'outlook', 'yahoo', 'protonmail', 'iesfernandoaguilar'];
-    const allowedSubdomains = ['com', 'es'];
-    const domain = email.substring(email.lastIndexOf('@') + 1);
-    const domainParts = domain.split('.');
-    const mainDomain = domainParts[0];
-    const topLevelDomain = domainParts[1];
-    if (allowedDomains.indexOf(mainDomain) === -1 || allowedSubdomains.indexOf(topLevelDomain) === -1) {
-      return { 'emailDomain': true };
-    }
     return null;
   }
 

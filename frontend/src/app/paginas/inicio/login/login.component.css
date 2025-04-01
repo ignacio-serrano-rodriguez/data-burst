@@ -1,49 +1,73 @@
-*
-{
+* {
     margin: 0;
     padding: 0;
     border: 0;
+    box-sizing: border-box;
 }
 
-button:hover
-{
+button:hover {
     text-decoration: underline;
 }
 
-.elementoFormulario
-{
-    width: 100%;;
+.elementoFormulario {
+    width: 100%;
+    margin-bottom: 0.5rem;
 }
 
-.etiquetaFormulario
-{
+.etiquetaFormulario {
     color: #717e84;
 }
 
-#formulario-login
-{
-    width: 85%;
-    padding-left: 7.5%;
-    padding-right: 7.5%;
+#formulario-login {
+    width: 100%;
+    max-width: 400px;
+    padding: 0 0.5rem;
 }
 
-#boton-login
-{
-    padding-top: 1.4em;
-    padding-bottom: 1.4em;
+#boton-login {
+    padding: 0.6rem;
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
     color: #EEF1F2;
     background-color: #61B300;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
-/* Estilos para el botón deshabilitado */
 #boton-login:disabled {
-    opacity: 0.6; /* Añade transparencia */
-    cursor: not-allowed; /* Cambia el cursor para indicar que no está disponible */
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-/* Deshabilitar el subrayado en hover cuando el botón está deshabilitado */
 #boton-login:disabled:hover {
     text-decoration: none;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+    min-height: 40px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    height: 16px !important;
+}
+
+@media (max-width: 479px) {
+    #formulario-login {
+        padding: 0;
+    }
+    
+    #boton-login {
+        padding: 0.5rem;
+    }
+    
+    ::ng-deep .mat-mdc-form-field {
+        font-size: 16px;
+    }
 }

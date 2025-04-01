@@ -1,5 +1,4 @@
 <div id="inicio-container">
-
     <div id="inicio-header">
         <div id="inicio-header-container">
             <div id="titulo">
@@ -15,18 +14,16 @@
                         mat-raised-button
                         color="secondary" 
                         [disabled]=botonLoginVisible  
-                        
                         (click)="mostrarLoginOcultarRegistro()">Iniciar Sesión
                     </button>
                     <button 
                         mat-raised-button
                         color="secondary"
                         [disabled]=botonRegistroVisible   
-                        
                         (click)="mostrarRegistroOcultarLogin()">Registrarse
                     </button>
                 </div>
-                <span id="mensajeInformativo"></span>
+                <span id="mensajeInformativo" [class.mensaje-exito]="mensajeEsExito" [class.mensaje-error]="!mensajeEsExito && hayMensaje"></span>
                 <div id="loginRegistro">
                     <app-login 
                         id="login" 

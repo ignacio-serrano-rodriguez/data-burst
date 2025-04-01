@@ -1,53 +1,76 @@
 <form id="formulario-registro" [formGroup]="formRegistro">
-	<mat-form-field class="elementoFormulario">
-	  <mat-label class="etiquetaFormulario">Mail</mat-label>
-	  <input matInput id="mailInput" formControlName="mail">
-	</mat-form-field>
-  
-	<mat-form-field class="elementoFormulario">
-	  <mat-label class="etiquetaFormulario">Usuario</mat-label>
-	  <input matInput id="usuarioInput" formControlName="usuario">
-	</mat-form-field>
-  
-	<mat-form-field class="elementoFormulario">
-	  <mat-label class="etiquetaFormulario">Contraseña</mat-label>
-	  <input 
-		[type]="hideContrasenia ? 'password' : 'text'" 
-		matInput 
-		id="contraseniaInput" 
-		formControlName="contrasenia">
-	  <button 
-		mat-icon-button matSuffix 
-		(click)="hideContrasenia = !hideContrasenia" 
-		[attr.aria-label]="'Hide password'" 
-		[attr.aria-pressed]="hideContrasenia">
-		<mat-icon>{{hideContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
-	  </button>
-	</mat-form-field>
-  
-	<mat-form-field class="elementoFormulario">
-	  <mat-label class="etiquetaFormulario">Repetir contraseña</mat-label>
-	  <input 
-		[type]="hideRepetirContrasenia ? 'password' : 'text'" 
-		matInput id="contraseniaRepetidaInput" 
-		formControlName="contraseniaRepetida">
-	  <button 
-		mat-icon-button matSuffix 
-		(click)="hideRepetirContrasenia = !hideRepetirContrasenia" 
-		[attr.aria-label]="'Hide password'" 
-		[attr.aria-pressed]="hideRepetirContrasenia">
-		<mat-icon>{{hideRepetirContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
-	  </button>
-	</mat-form-field>
-  
-	<button 
-	  id="boton-registro" 
-	  class="elementoFormulario" 
-	  mat-flat-button 
-	  color="primary"
-	  (click)="registrarse()">
-	  Crear usuario
-	</button>
-  </form>
-  
-  <div id="mensajeInformativo" class="mensaje-informativo"></div>
+  <mat-form-field class="elementoFormulario" appearance="outline">
+    <mat-label class="etiquetaFormulario">Mail</mat-label>
+    <input matInput id="mailInput" formControlName="mail">
+    <mat-error *ngIf="formRegistro.controls['mail'].invalid && formRegistro.controls['mail'].touched">
+      <span *ngIf="formRegistro.controls['mail'].hasError('required')">El correo electrónico es obligatorio.</span>
+      <span *ngIf="formRegistro.controls['mail'].hasError('email')">El formato del correo electrónico no es válido.</span>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="elementoFormulario" appearance="outline">
+    <mat-label class="etiquetaFormulario">Usuario</mat-label>
+    <input matInput id="usuarioInput" formControlName="usuario">
+    <mat-error *ngIf="formRegistro.controls['usuario'].invalid && formRegistro.controls['usuario'].touched">
+      <span *ngIf="formRegistro.controls['usuario'].hasError('required')">El nombre de usuario es obligatorio.</span>
+      <span *ngIf="formRegistro.controls['usuario'].hasError('minLetters')">El nombre de usuario debe contener al menos 5 letras.</span>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="elementoFormulario" appearance="outline">
+    <mat-label class="etiquetaFormulario">Contraseña</mat-label>
+    <input 
+      [type]="hideContrasenia ? 'password' : 'text'" 
+      matInput 
+      id="contraseniaInput" 
+      formControlName="contrasenia">
+    <button 
+      mat-icon-button matSuffix 
+      (click)="hideContrasenia = !hideContrasenia" 
+      [attr.aria-label]="'Hide password'" 
+      [attr.aria-pressed]="hideContrasenia"
+      type="button">
+      <mat-icon>{{hideContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="formRegistro.controls['contrasenia'].invalid && formRegistro.controls['contrasenia'].touched">
+      <span *ngIf="formRegistro.controls['contrasenia'].hasError('required')">La contraseña es obligatoria.</span>
+      <span *ngIf="formRegistro.controls['contrasenia'].hasError('passwordStrength')">
+        6 caracteres, mayúscula, minúscula, número y carácter.
+      </span>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="elementoFormulario" appearance="outline">
+    <mat-label class="etiquetaFormulario">Repetir contraseña</mat-label>
+    <input 
+      [type]="hideRepetirContrasenia ? 'password' : 'text'" 
+      matInput id="contraseniaRepetidaInput" 
+      formControlName="contraseniaRepetida">
+    <button 
+      mat-icon-button matSuffix 
+      (click)="hideRepetirContrasenia = !hideRepetirContrasenia" 
+      [attr.aria-label]="'Hide password'" 
+      [attr.aria-pressed]="hideRepetirContrasenia"
+      type="button">
+      <mat-icon>{{hideRepetirContrasenia ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="formRegistro.controls['contraseniaRepetida'].touched && 
+                     (formRegistro.controls['contraseniaRepetida'].hasError('required') || 
+                      formRegistro.value.contrasenia !== formRegistro.value.contraseniaRepetida)">
+      Repetir la contraseña es obligatorio.
+    </mat-error>
+  </mat-form-field>
+
+  <button 
+    id="boton-registro" 
+    class="elementoFormulario" 
+    mat-flat-button 
+    color="primary"
+    [disabled]="formRegistro.invalid || loading || formRegistro.value.contrasenia !== formRegistro.value.contraseniaRepetida"
+    (click)="registrarse()"
+    type="submit">
+    Crear usuario
+  </button>
+</form>
+
+<div id="mensajeInformativo" class="mensaje-informativo"></div>

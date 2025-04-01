@@ -1,17 +1,16 @@
 :host {
     height: 100%;
+    display: block;
 }
 
-*
-{
+* {
     margin: 0;
     padding: 0;
     border: 0;
     box-sizing: border-box;
 }
 
-#inicio-container
-{
+#inicio-container {
     background-image: url("../../../assets/images/inicioBackground.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -20,141 +19,168 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+    min-height: 100vh;
+    width: 100%;
 }
 
 #inicio-header {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    height: 100%;
+    flex: 0 1 auto;
+    padding: 1rem 1rem 0.5rem;
 }
 
 #inicio-header-container {
     display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 100%;
 }
 
-#titulo
-{
+#titulo {
     display: flex;
     flex-wrap: wrap;
-    text-align: center;
     align-items: center;
     justify-content: center;
-    margin-bottom: 3em;
-    padding-top: 2%;
+    margin-bottom: 1rem;
+    padding-top: 0.5rem;
 }
 
-#logoTitulo
-{
-    width: 14em;
-    margin-top: 0.5em;
-    margin-right: 2%;
-    margin-left: 2%;
+#logoTitulo {
+    width: clamp(6rem, 12vw, 10rem);
+    height: auto;
+    margin: 0 0.5rem;
 }
 
-#textoTitulo
-{
+#textoTitulo {
     display: flex;
     flex-wrap: wrap;
-    font-family: 'ShareTech';
-    font-size: 7em;
+    font-family: 'ShareTech', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 5rem);
     color: #AE00CD;
     text-align: center;
     align-items: center;
     justify-content: center;
-    margin-right: 2%;
-    margin-left: 2%;
 }
 
-#textoTitulo span
-{
-    margin: 0.1em;
-    margin-top: 0.5em;
+#textoTitulo span {
+    margin: 0.05em;
 }
 
-#botonesLoginRegistro
-{
+#botonesLoginRegistro {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
-#botones
-{
+#botones {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
+    margin-bottom: 0.5rem;
 }
 
-#botones button
-{
-    padding-left: 1em;
-    padding-right: 1em;
-    margin: 0.3em;
-    margin-bottom: 1.5em;
+#botones button {
+    padding: 0.4rem 1rem;
+    margin: 0.2rem;
+    font-size: clamp(0.8rem, 1.8vw, 1rem);
 }
 
-#mensajeInformativo
-{
-    font-family: 'ShareTech';
-    font-size: 1.5em;
+#mensajeInformativo {
+    font-family: 'ShareTech', sans-serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
     text-align: center;
-    align-items: center;
-    justify-content: center;
     display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 1%;
+    margin: 0.3rem 0;
+    min-height: 1.5rem;
+    width: 100%;
+    justify-content: center;
+    padding: 0 1rem;
 }
 
-.mensaje-exito
-{
+.mensaje-exito {
     color: #61B300;
 }
 
-.mensaje-error 
-{
+.mensaje-error {
     color: #F5A201;
 }
 
-#loginRegistro
-{
+#loginRegistro {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding-top: 2em;
-    padding-bottom: 2em;
-    margin: auto;
-    width: 28%;
-    min-width: 26em;
+    padding: 1rem;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 450px;
     background-color: #D2D9DC;
-    box-shadow: 2px 2px 1px grey;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
     align-items: center;
-    text-align: center;
 }
 
 .seccion-titulo {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    margin-bottom: 0.8rem;
     color: #AE00CD;
     text-align: center;
-    font-family: 'ShareTech';
+    font-family: 'ShareTech', sans-serif;
     font-weight: 500;
-  }
+}
 
-/* Móvil */
-@media (max-width: 480px) {
-    #logoTitulo {
-        width: 10em;
+@media (min-width: 768px) and (max-width: 1023px) {
+    #loginRegistro {
+        width: 80%;
     }
+}
 
-    #textoTitulo {
-        font-size: 5em;
+@media (min-width: 480px) and (max-width: 767px) {
+    #inicio-header {
+        padding: 1rem 1rem 0.5rem;
     }
+    
+    #loginRegistro {
+        width: 90%;
+        padding: 1rem;
+    }
+}
 
-    #inicio-header-container {
+@media (max-width: 479px) {
+    #inicio-header {
+        padding: 0.75rem 0.5rem 0.5rem;
+    }
+    
+    #titulo {
         flex-direction: column;
+        margin-bottom: 1rem;
+    }
+    
+    #logoTitulo {
+        margin-bottom: 0.3rem;
+    }
+    
+    #textoTitulo {
+        font-size: 2.5rem;
+    }
+    
+    #botones {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #botones button {
+        width: 80%;
+        margin: 0.2rem 0;
+    }
+    
+    #loginRegistro {
+        width: 95%;
+        padding: 0.75rem;
     }
 }

@@ -12,8 +12,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-inicio',
   imports: [
-    PieComponent, 
-    LoginComponent, 
+    PieComponent,
+    LoginComponent,
     RegistroComponent,
     MatIconModule,
     MatDividerModule,
@@ -23,16 +23,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./inicio.component.css'],
   standalone: true
 })
-export class InicioComponent implements OnInit, OnDestroy {  
+export class InicioComponent implements OnInit, OnDestroy {
   botonLoginVisible: boolean = true;
   loginStyleDisplay: string = "revert";
 
   botonRegistroVisible: boolean = false;
   registroStyleDisplay: string = "none";
+  mensajeEsExito: boolean = false;
+  hayMensaje: boolean = false;
 
   private recargaSubscription!: Subscription;
 
-  constructor(private router: Router, private recargaService: RecargaService) {}
+  constructor(private router: Router, private recargaService: RecargaService) { }
 
   ngOnInit() {
     if (typeof localStorage !== 'undefined') {
@@ -41,7 +43,7 @@ export class InicioComponent implements OnInit, OnDestroy {
         localStorage.setItem("refrescar", "true");
       }
 
-      this.recargaSubscription = this.recargaService.cerrarSesion$.subscribe(() => {});
+      this.recargaSubscription = this.recargaService.cerrarSesion$.subscribe(() => { });
     }
   }
 
@@ -60,18 +62,20 @@ export class InicioComponent implements OnInit, OnDestroy {
 
     if (typeof document !== 'undefined') {
       document.getElementById("mensajeInformativo")!.innerText = "";
+      this.hayMensaje = false;
     }
   }
 
   mostrarLoginOcultarRegistro() {
     this.botonLoginVisible = true;
     this.loginStyleDisplay = "revert";
-    
+
     this.botonRegistroVisible = false;
     this.registroStyleDisplay = "none";
 
     if (typeof document !== 'undefined') {
       document.getElementById("mensajeInformativo")!.innerText = "";
+      this.hayMensaje = false;
     }
   }
 }

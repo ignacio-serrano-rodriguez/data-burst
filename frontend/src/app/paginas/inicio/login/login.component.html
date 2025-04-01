@@ -1,36 +1,35 @@
 <form id="formulario-login" [formGroup]="formLogin">
-    <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Usuario</mat-label>
-      <input matInput formControlName="usuario">
-    </mat-form-field>
-    <mat-form-field class="elementoFormulario">
-      <mat-label class="etiquetaFormulario">Contraseña</mat-label>
-      <input 
-        [type]="hide ? 'password' : 'text'" 
-        matInput 
-        formControlName="contrasenia" 
-        type="password"
-      />
-      <button
-        title="{{hide ? 'Mostrar contraseña' : 'Ocultar contraseña'}}"
-        mat-icon-button 
-        matSuffix 
-        (click)="hide = !hide" 
-        [attr.aria-label]="'Hide password'" 
-        [attr.aria-pressed]="hide"
-        type="button"
-      >
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
-    <button 
-      id="boton-login" 
-      class="elementoFormulario" 
-      mat-flat-button color="primary"
-      [disabled]="formLogin.invalid || loading"
-      (click)="iniciarSesion()"
-      type="submit"
+  <mat-form-field class="elementoFormulario" appearance="outline">
+    <mat-label class="etiquetaFormulario">Usuario</mat-label>
+    <input matInput formControlName="usuario">
+  </mat-form-field>
+  <mat-form-field class="elementoFormulario" appearance="outline">
+    <mat-label class="etiquetaFormulario">Contraseña</mat-label>
+    <input 
+      [type]="hide ? 'password' : 'text'" 
+      matInput 
+      formControlName="contrasenia"
+    />
+    <button
+      title="{{hide ? 'Mostrar contraseña' : 'Ocultar contraseña'}}"
+      mat-icon-button 
+      matSuffix 
+      (click)="hide = !hide" 
+      [attr.aria-label]="'Hide password'" 
+      [attr.aria-pressed]="hide"
+      type="button"
     >
-      Acceder
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
-  </form>
+  </mat-form-field>
+  <button 
+    id="boton-login" 
+    class="elementoFormulario" 
+    mat-flat-button color="primary"
+    [disabled]="formLogin.invalid || loading"
+    (click)="iniciarSesion()"
+    type="submit"
+  >
+    Acceder
+  </button>
+</form>
