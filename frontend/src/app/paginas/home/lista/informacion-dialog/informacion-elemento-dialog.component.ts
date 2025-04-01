@@ -51,25 +51,10 @@ export class InformacionElementoDialogComponent {
     }
 
     reportarElemento(): void {
-        const dialogElement = document.querySelector('.cdk-overlay-pane');
-        let positionConfig = {};
-
-        if (dialogElement) {
-            const rect = dialogElement.getBoundingClientRect();
-            positionConfig = {
-                position: {
-                    top: `${rect.top}px`,
-                    left: `${rect.right + 15}px`
-                },
-                panelClass: 'reporte-dialog'
-            };
-        }
-
         const dialogRef = this.dialog.open(ReportarElementoDialogComponent, {
-            width: '450px',
-            data: { elemento: this.data.elemento },
-            ...positionConfig,
-            hasBackdrop: false
+            width: '90%',
+            maxWidth: '500px',
+            data: { elemento: this.data.elemento }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -90,7 +75,7 @@ export class InformacionElementoDialogComponent {
                     },
                     error: (error) => {
                         console.error('Error sending report:', error);
-                        this.snackBar.open('Error al enviar el reporte. Inténtalo de nuevo.', 'Cerrar', {
+                        this.snackBar.open('Ya ha enviado un reporte para este elemento.', 'Cerrar', {
                             duration: 5000,
                             panelClass: 'error-snackbar'
                         });

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Información del Elemento</h1>
 <div mat-dialog-content>
   <p><strong>Nombre:</strong> {{ data.elemento.nombre }}</p>
-  <p><strong>Fecha de Aparición:</strong> {{ data.elemento.fecha_aparicion }}</p>
+  <p><strong>Fecha de Aparición:</strong> {{ data.elemento.fecha_aparicion | date:'dd-MM-yyyy' }}</p>
   <p><strong>Descripción:</strong> {{ data.elemento.descripcion }}</p>
 </div>
 <div mat-dialog-actions>
