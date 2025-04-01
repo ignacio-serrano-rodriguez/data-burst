@@ -1,24 +1,12 @@
 <div>
-  <button mat-icon-button (click)="volver()" title="Volver a mis listas">
+  <button mat-icon-button (click)="volver()" [title]="readOnly ? 'Volver a las listas del amigo' : 'Volver a mis listas'">
     <mat-icon>arrow_back</mat-icon>
   </button>
 
   <div class="lista-header">
-    <h2 *ngIf="!editandoNombre" (click)="editarNombre()">
+    <h2>
       {{ lista?.nombre }}
     </h2>
-    <div *ngIf="editandoNombre">
-      <mat-form-field>
-        <mat-label>Nombre de la Lista</mat-label>
-        <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()">
-      </mat-form-field>
-      <button mat-icon-button (click)="cancelarEdicion()" title="Cancelar edición">
-        <mat-icon>cancel</mat-icon>
-      </button>
-      <button mat-icon-button (click)="guardarNombre()" title="Guardar nuevo nombre">
-        <mat-icon>save</mat-icon>
-      </button>
-    </div>
     
     <ng-container *ngIf="lista && lista.categoria">
       <div class="lista-categoria">
@@ -30,7 +18,7 @@
       </div>
     </ng-container>
     
-    <div class="lista-actions">
+    <div class="lista-actions" *ngIf="!readOnly">
       <button mat-icon-button (click)="toggleEditarNombre()" [title]="editandoNombre ? 'Cancelar edición' : 'Editar nombre'">
         <mat-icon>{{ editandoNombre ? 'cancel' : 'edit' }}</mat-icon>
       </button>
@@ -46,7 +34,20 @@
     </div>
   </div>
 
-  <div *ngIf="mostrarColaborarComponent">
+  <div *ngIf="editandoNombre && !readOnly">
+    <mat-form-field>
+      <mat-label>Nombre de la Lista</mat-label>
+      <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()">
+    </mat-form-field>
+    <button mat-icon-button (click)="cancelarEdicion()" title="Cancelar edición">
+      <mat-icon>cancel</mat-icon>
+    </button>
+    <button mat-icon-button (click)="guardarNombre()" title="Guardar nuevo nombre">
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="mostrarColaborarComponent && !readOnly">
     <div class="input-button-container">
       <mat-form-field class="full-width">
         <mat-label>Invitar amigos</mat-label>
@@ -58,54 +59,44 @@
     </div>
 
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let colaborador of colaboradores" [value]="colaborador.nombre" [disabled]="true">
-        <span>{{ colaborador.nombre }}</span>
-        <mat-icon style="color: rgba(128, 128, 128, 0.6);">person</mat-icon>
-      </mat-option>
-      
-      <ng-container *ngFor="let amigo of amigosEncontrados">
-        <mat-option *ngIf="amigo.tieneInvitacion" [value]="amigo.nombre" [disabled]="true">
-          <div class="amigo-option-content">
-            <span>{{ amigo.nombre }}</span>
-            <div class="amigo-status">
-              <mat-icon style="color: #ffa726;">schedule</mat-icon>
-              <span class="invitacion-pendiente">Invitación pendiente</span>
-            </div>
-          </div>
-        </mat-option>
-        
-        <mat-option *ngIf="!amigo.tieneInvitacion" [value]="amigo.nombre" (onSelectionChange)="$event.isUserInput && invitarAmigo(amigo.id, amigo.nombre)">
-          <div class="amigo-option-content">
-            <span>{{ amigo.nombre }}</span>
-            <div class="amigo-status">
-              <mat-icon color="primary">person_add</mat-icon>
-            </div>
-          </div>
-        </mat-option>
-      </ng-container>
     </mat-autocomplete>
   </div>
 
   <div class="input-container">  
-    <mat-form-field class="full-width">
-      <mat-label>Buscar elemento a añadir</mat-label>
-      <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
-      <button mat-icon-button matPrefix (click)="resetBusquedaElemento()" [title]="obtenerTituloBotonCerrarElemento()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>{{readOnly ? 'Buscar elemento' : 'Buscar elemento a añadir'}}</mat-label>
+    <input matInput id="nombreElementoBuscar" #nombreElementoBuscarInput [(ngModel)]="nombreElementoBuscar" 
+           (input)="onNombreElementoBuscarChange()" [matAutocomplete]="autoElemento" 
+           (focus)="abrirDesplegableElemento()" (keydown.escape)="salirDelInputElemento()">
+    <button mat-icon-button matPrefix (click)="resetBusquedaElemento()" [title]="obtenerTituloBotonCerrarElemento()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-hint *ngIf="readOnly">Solo puedes ver información de elementos</mat-hint>
+  </mat-form-field>
   
-    <mat-autocomplete #autoElemento="matAutocomplete" (optionSelected)="agregarElementoSinEscribir($event)">
-      <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre" (click)="mostrarInformacionElemento(elemento)">
-        <mat-icon>info</mat-icon>
+  <mat-autocomplete #autoElemento="matAutocomplete" (optionSelected)="handleElementoSeleccionado($event)">
+    <mat-option *ngIf="nombreElementoBuscar.length > 0 && nombreElementoBuscar.length < 3" disabled>
+      Escribe al menos 3 caracteres
+    </mat-option>
+    <mat-option *ngIf="elementosEncontrados.length === 0 && nombreElementoBuscar.length >= 3" disabled>
+      No se encontraron elementos
+    </mat-option>
+    <mat-option *ngFor="let elemento of elementosEncontrados" [value]="elemento.nombre">
+      <div class="elemento-option">
         <span>{{ elemento.nombre }}</span>
-      </mat-option>
-      <mat-option *ngIf="mostrarBotonCrear" (click)="mostrarFormulario()">
-        <span>¿Elemento inexistente? Crear</span>
+        <small class="elemento-fecha" *ngIf="elemento.fecha_aparicion">
+          ({{ elemento.fecha_aparicion | date:'yyyy' }})
+        </small>
+      </div>
+    </mat-option>
+    <mat-option *ngIf="mostrarBotonCrear && !readOnly" [value]="'__crear__'">
+      <div class="crear-option">
         <mat-icon>add_circle</mat-icon>
-      </mat-option>
-    </mat-autocomplete>
-  </div>
+        <span>Crear nuevo elemento: "{{ nombreElementoBuscar }}"</span>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+</div>
 
   <table mat-table [dataSource]="elementos" class="mat-elevation-z8">
     <ng-container matColumnDef="nombre">
@@ -151,7 +142,8 @@
           <button mat-icon-button (click)="mostrarInformacionElementoExistente(elemento)" title="Ver información">
             <mat-icon>info</mat-icon>
           </button>
-          <div class="like-dislike-help-group">
+          
+          <div class="like-dislike-help-group" *ngIf="!readOnly">
             <button mat-icon-button [ngClass]="{'like-button': elemento.puntuacion === true}" 
                     (click)="elemento.puntuacion !== true && likeElemento(elemento)"
                     [title]="obtenerTituloBotonLike(elemento)">
@@ -168,12 +160,14 @@
               <mat-icon>help_outline</mat-icon>
             </button>
           </div>
-          <button mat-icon-button [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" 
+          
+          <button mat-icon-button *ngIf="!readOnly" [ngClass]="{'comment-button': elemento.comentario && elemento.comentario.trim().length > 0}" 
                   (click)="comentarElemento(elemento)"
                   [title]="elemento.comentario && elemento.comentario.trim().length > 0 ? 'Editar comentario' : 'Añadir comentario'">
             <mat-icon>comment</mat-icon>
           </button>
-          <button mat-icon-button (click)="eliminarElemento(elemento.id)" title="Eliminar elemento">
+          
+          <button mat-icon-button *ngIf="!readOnly" (click)="eliminarElemento(elemento.id)" title="Eliminar elemento">
             <mat-icon>close</mat-icon>
           </button>
         </div>

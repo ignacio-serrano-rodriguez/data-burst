@@ -48,7 +48,6 @@
   overflow-x: auto;
 }
 
-/* Remove default table borders and separators */
 .mat-mdc-table .mdc-data-table__row:not(:last-child)::after,
 .mat-mdc-table .mat-mdc-cell {
   border-bottom: none !important;
@@ -294,4 +293,29 @@
 
 ::ng-deep .mat-mdc-option:not([disabled]) {
   cursor: pointer;
+}
+
+.read-only-mode .mat-column-acciones {
+  width: 60px !important;
+  min-width: 60px !important;
+}
+
+.read-only-badge {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #666;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.friend-list-title {
+  display: flex;
+  align-items: center;
+}
+
+.friend-list-title h2 {
+  margin-right: 8px;
 }

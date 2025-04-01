@@ -54,6 +54,7 @@ export class ListaComponent implements OnInit, AfterViewInit {
   @ViewChild('nombreElementoBuscarInput') nombreElementoBuscarInput!: ElementRef;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   @ViewChild('autoElemento', { read: MatAutocompleteTrigger }) autocompleteTriggerElemento!: MatAutocompleteTrigger;
+  @Input() readOnly: boolean = false;
 
   elementos: Elemento[] = [];
   colaboradores: any[] = [];
@@ -529,15 +530,32 @@ export class ListaComponent implements OnInit, AfterViewInit {
   }
 
   agregarElementoSinEscribir(event: any): void {
+    this.handleElementoSeleccionado(event);
+  }
+
+  handleElementoSeleccionado(event: any): void {
     const selectedElementName = event.option.value;
+
+    if (selectedElementName === '__crear__' && !this.readOnly) {
+      this.mostrarFormulario();
+      return;
+    }
+
     const selectedElement = this.elementosEncontrados.find(
       elemento => elemento.nombre === selectedElementName
     );
 
     if (selectedElement) {
-      this.mostrarInformacionElemento(selectedElement);
-    } else if (this.mostrarBotonCrear) {
-      this.mostrarFormulario();
+      if (this.readOnly) {
+        this.mostrarInformacionElementoExistente(selectedElement);
+      } else {
+        this.mostrarInformacionElemento(selectedElement);
+      }
     }
+
+    setTimeout(() => {
+      this.nombreElementoBuscar = '';
+      this.mostrarBotonCrear = false;
+    }, 100);
   }
 }

@@ -30,6 +30,7 @@ export class AmigoComponent implements OnInit {
 
   @Input() amigo!: { id: number, nombre: string };
   @Output() volverEvent = new EventEmitter<void>();
+  @Output() listaSeleccionada = new EventEmitter<Lista>();
 
   listas: Lista[] = [];
   isLoading = true;
@@ -66,6 +67,6 @@ export class AmigoComponent implements OnInit {
   }
 
   seleccionarLista(lista: Lista): void {
-    this.volverEvent.emit();
+    this.listaSeleccionada.emit(lista);
   }
 }

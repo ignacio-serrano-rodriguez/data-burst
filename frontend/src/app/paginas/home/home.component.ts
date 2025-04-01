@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   mostrarAmigoDetalle = false;
   listaSeleccionada: Lista | undefined = undefined;
   amigoSeleccionado: { id: number, nombre: string } | undefined = undefined;
+  modoLectura = false;
 
   constructor(private recargaService: RecargaService) { }
 
@@ -53,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.mostrarListasYAmigos = false;
     this.mostrarListaComponent = true;
     this.mostrarAmigoDetalle = false;
+    this.modoLectura = false;
   }
 
   mostrarAmigo(amigo: { id: number, nombre: string }) {
@@ -62,12 +64,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.mostrarAmigoDetalle = true;
   }
 
+  mostrarListaAmigo(lista: Lista) {
+    this.listaSeleccionada = lista;
+    this.mostrarListasYAmigos = false;
+    this.mostrarListaComponent = true;
+    this.mostrarAmigoDetalle = false;
+    this.modoLectura = true;
+  }
+
   volverAListasYAmigos() {
     this.listaSeleccionada = undefined;
     this.amigoSeleccionado = undefined;
     this.mostrarListasYAmigos = true;
     this.mostrarListaComponent = false;
     this.mostrarAmigoDetalle = false;
+    this.modoLectura = false;
+  }
+
+  volverAAmigo() {
+    if (this.amigoSeleccionado) {
+      this.mostrarAmigo(this.amigoSeleccionado);
+    } else {
+      this.volverAListasYAmigos();
+    }
   }
 
   mostrarMensajePositivo(mensaje: string) {

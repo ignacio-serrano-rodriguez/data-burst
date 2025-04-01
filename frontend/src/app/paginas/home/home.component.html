@@ -11,6 +11,16 @@
             </div>
         </div>
     </div>
-    <app-lista *ngIf="mostrarListaComponent" [lista]="listaSeleccionada!" (volverAListasYAmigos)="volverAListasYAmigos()"></app-lista>
-    <app-amigo-detalle *ngIf="mostrarAmigoDetalle" [amigo]="amigoSeleccionado!" (volverEvent)="volverAListasYAmigos()"></app-amigo-detalle>
+    <app-lista 
+        *ngIf="mostrarListaComponent" 
+        [lista]="listaSeleccionada!" 
+        [readOnly]="modoLectura"
+        (volverAListasYAmigos)="modoLectura ? volverAAmigo() : volverAListasYAmigos()">
+    </app-lista>
+    <app-amigo-detalle 
+        *ngIf="mostrarAmigoDetalle" 
+        [amigo]="amigoSeleccionado!" 
+        (volverEvent)="volverAListasYAmigos()"
+        (listaSeleccionada)="mostrarListaAmigo($event)">
+    </app-amigo-detalle>
 </div>
