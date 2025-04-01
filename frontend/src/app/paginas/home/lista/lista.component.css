@@ -111,10 +111,12 @@
 
 .button-group {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
+  gap: 3px;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .button-group button[mat-icon-button] {
@@ -290,6 +292,12 @@
 }
 
 @media (min-width: 992px) {
+  
+  .lista-container {
+    min-width: 1000px;
+    max-width: 1200px;
+  }
+  
   .button-group button[mat-icon-button] {
     width: 56px;
     height: 56px;
