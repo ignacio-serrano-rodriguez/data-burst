@@ -4,14 +4,27 @@
   </button>
 
   <div class="lista-header">
-    <h2>
-      {{ lista?.nombre }}
-    </h2>
+    <div class="lista-nombre-container">
+      <h2 *ngIf="!editandoNombre">{{ lista?.nombre }}</h2>
+      <div class="inline-edit-container" *ngIf="editandoNombre && !readOnly">
+        <mat-form-field class="inline-edit-field">
+          <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" 
+                 (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()"
+                 class="inline-edit-input">
+        </mat-form-field>
+        <div class="edit-actions">
+          <button mat-icon-button color="primary" (click)="guardarNombre()" title="Guardar nombre">
+            <mat-icon>check</mat-icon>
+          </button>
+
+        </div>
+      </div>
+    </div>
     
     <ng-container *ngIf="lista && lista.categoria">
       <div class="lista-categoria">
         <mat-chip-set>
-          <mat-chip color="accent" highlighted disabled aria-label="Categoría de la lista (información)">
+          <mat-chip color="accent" highlighted disabled aria-label="Categoría de la lista">
             {{ lista.categoria.nombre }}
           </mat-chip>
         </mat-chip-set>
@@ -34,19 +47,6 @@
     </div>
   </div>
 
-  <div *ngIf="editandoNombre && !readOnly">
-    <mat-form-field>
-      <mat-label>Nombre de la Lista</mat-label>
-      <input matInput #nombreListaInput [(ngModel)]="nuevoNombreLista" (keydown.enter)="guardarNombre()" (keydown.escape)="cancelarEdicion()">
-    </mat-form-field>
-    <button mat-icon-button (click)="cancelarEdicion()" title="Cancelar edición">
-      <mat-icon>cancel</mat-icon>
-    </button>
-    <button mat-icon-button (click)="guardarNombre()" title="Guardar nuevo nombre">
-      <mat-icon>save</mat-icon>
-    </button>
-  </div>
-
   <div *ngIf="mostrarColaborarComponent && !readOnly">
     <div class="input-button-container">
       <mat-form-field class="full-width">
@@ -58,8 +58,7 @@
       </mat-form-field>
     </div>
 
-    <mat-autocomplete #auto="matAutocomplete">
-    </mat-autocomplete>
+    <mat-autocomplete #auto="matAutocomplete"></mat-autocomplete>
   </div>
 
   <div class="input-container">  
