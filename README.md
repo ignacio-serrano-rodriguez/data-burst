@@ -1,58 +1,65 @@
 # Data Burst
 
-## Descripción
+## Description
 
-Red social de creación de listas donde se contienen elementos valorables.
+Data Burst is a social platform for collaborative list creation, where users can create, share, and rate items within customizable lists.
 
-## Algunas características
+## Key Features
 
-- Los elementos y sus características asociadas son creados por los propios usuarios.
-- Las listas públicas o privadas creadas por los usuarios pueden contener cualquier elemento.
-- Las contenciones de elementos son valorables con 3 estados distintos y están asociadas a cada usuario.
-- Los usuarios pueden modificar su información, agregar a otros usuarios, ver perfiles de usuarios agregados y reportar elementos con características erróneas y hacer listas colaborativas con amigos.
-- Los administradores pueden modificar las características de los elementos en función de los reportes de los usuarios y suspender cuentas de usuario.
-- Estadísticas son generadas en función de los elementos, las contenciones de elementos, los usuarios y los nombres de las listas.
-- Las contraseñas están hasheadas en la base de datos.
+- Users create items and define their associated properties.
+- Lists can be public or private and can contain any items defined by users.
+- Item ratings have three distinct states and are user-specific.
+- Users can:
+  - Modify their profile information
+  - Add other users as friends
+  - View profiles of added friends
+  - Report items with incorrect properties
+  - Create collaborative lists with friends
+- Administrators can:
+  - Edit item properties based on user reports
+  - Suspend user accounts
+- Statistics are generated based on items, item ratings, users, and list names.
+- Passwords are securely hashed in the database.
 
-## Tecnologías
+## Technologies
 
-- **MariaDB** como base de datos.
-- **Symfony** como API de Backend.
-- **Angular** como Frontend.
-- **Powershell** para los scripts de arranque de la aplicación en desarrollo local (Windows 11 pro).
-- **Docker** como infraestructura de despliegue.
+- **MariaDB** as the database
+- **Symfony** for the backend API
+- **Angular** for the frontend
+- **PowerShell** for local development startup scripts (Windows 11 Pro)
+- **Docker** for deployment infrastructure
 
-## Requisitos para el arranque de la aplicación en desarrollo local (Windows 11 pro)
+## Local Development Requirements (Windows 11 Pro)
 
-- **Servicio MariaDB Server 11.4.5 en ejecución**.
-- **PowerShell 7.4.6**.
-- **angular-cli para Angular 17**.
-- **php 8.3.17 y composer**
-- **Symfony Console 7.1**.
-- Han de estar descomentadas las lineas de '**extension=pdo_mysql**' y '**extension=sodium**' en **php.ini**.
-- **Generar las claves pública y privada con OpenSSL y JWT_PASSPHRASE**.
-  - **privada** openssl genpkey -algorithm RSA -out config/jwt/private.pem -aes256 -pass pass:'JWT_PASSPHRASE'
-  - **pública** openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:'JWT_PASSPHRASE'
-- [JWT para api platform](https://api-platform.com/docs/core/jwt/)
+- **MariaDB Server 11.4.5 running**
+- **PowerShell 7.4.6**
+- **angular-cli for Angular 17**
+- **PHP 8.3.17 and Composer**
+- **Symfony Console 7.1**
+- Ensure the following lines are uncommented in **php.ini**:  
+  - `extension=pdo_mysql`  
+  - `extension=sodium`
+- Generate public/private keys with OpenSSL and set `JWT_PASSPHRASE`:
+  - Private key:  
+    `openssl genpkey -algorithm RSA -out config/jwt/private.pem -aes256 -pass pass:'JWT_PASSPHRASE'`
+  - Public key:  
+    `openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout -passin pass:'JWT_PASSPHRASE'`
+- [Learn more about JWT for API Platform](https://api-platform.com/docs/core/jwt/)
 
-## Scripts de arranque de la aplicación en desarrollo local (Windows 11 pro)
+## Local Development Startup Scripts (Windows 11 Pro)
 
-#### [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/iniciar.ps1)
+- [`iniciar.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/iniciar.ps1):  
+  Starts the web application, checks the MariaDB service, regenerates necessary database migrations, launches Symfony and Angular services in separate terminals, updates the database schema, and displays access information.
 
-Inicia la aplicación web comprobando el servicio MariaDB, regenerando las migraciones de base de datos necesarias. Lanza los servicios de Symfony y Angular en terminales independientes, actualiza el esquema de la base de datos y muestra información de acceso.
+- [`finalizar.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/finalizar.ps1):  
+  Stops the web application, terminates Angular and Symfony processes, deletes the migrations directory, and notes that the local MariaDB database remains running.
 
-#### [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/finalizar.ps1)
+- [`obtener-esquema-sql.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/obtener-esquema-sql.ps1):  
+  Automatically extracts the local database schema (excluding data) using mysqldump, saves it to `data_burst_schema.sql`, detects the MySQL/MariaDB executable, tests connections, and provides error handling with troubleshooting suggestions.
 
-Finaliza la aplicación web. Detiene los procesos de Angular y Symfony, elimina el directorio de migraciones y deja una nota informando que la base de datos MariaDB local permanece en ejecución.
+- [`eliminar-bd.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/eliminar-bd.ps1):  
+  Deletes the local MariaDB `data_burst` database, automatically detects `mysql.exe`, verifies the database exists before deleting, uses default credentials (root/root), and provides feedback on the operation.
 
-#### [obtener-esquema-sql.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/obtener-esquema-sql.ps1)
+## Development Workflow
 
-Extrae automáticamente el esquema de la base de datos local (sin datos) utilizando mysqldump y lo guarda en 'data_burst_schema.sql'. Incluye detección automática del ejecutable MySQL/MariaDB, pruebas de conexión y manejo de errores con sugerencias de solución.
-
-#### [eliminar-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/eliminar-bd.ps1)
-
-Elimina la base de datos 'data_burst' de MariaDB local mediante detección automática del ejecutable mysql.exe. Verifica la existencia de la base de datos antes de eliminarla, utiliza credenciales predeterminadas (root/root) y proporciona retroalimentación sobre el resultado.
-
-## Funcionalidades del desarrollo
-
-Para aplicar cambios en la BD desde el ORM, es necesario [finalizar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/finalizar.ps1), [eliminar-bd.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/eliminar-bd.ps1) e [iniciar.ps1](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/iniciar.ps1) de nuevo.
+To apply changes to the database from the ORM, run [`finalizar.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/finalizar.ps1), [`eliminar-bd.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/eliminar-bd.ps1), and then [`iniciar.ps1`](https://github.com/ignacioserranorodriguez/DataBurst/blob/main/scripts/iniciar.ps1) again.
